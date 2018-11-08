@@ -1,2 +1,2 @@
 # Teach-Assist
-An app for the YRDSB Teach Assist website
+An android app for the YRDSB Teach Assist website
