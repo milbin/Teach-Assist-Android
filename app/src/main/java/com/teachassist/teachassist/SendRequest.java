@@ -4,19 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
+//import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class SendRequest {
 
-    private static final String USER_AGENT = "Mozilla/5.0";
-
-    private static final String GET_URL = "http://localhost:9090/SpringMVCExample";
-
-    private static final String POST_URL = "http://localhost:9090/SpringMVCExample/home";
 
 
 
+/*
     public static void main(String[] args) throws IOException {
 
         sendGET();
@@ -24,15 +22,27 @@ public class SendRequest {
         sendPOST();
         System.out.println("POST DONE");
     }
+*/
+    private static void sendGET(String GET_URL, List<String> HeaderKeys, List<String> HeaderValues) throws IOException {
+        String USER_AGENT = "Mozilla/5.0";
 
-    private static void sendGET() throws IOException {
+        //String GET_URL = "http://localhost:9090/SpringMVCExample";
+
+
         URL obj = new URL(GET_URL);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", USER_AGENT);
+        for(String Key:HeaderKeys){
+            int index = HeaderKeys.indexOf(Key);
+            String Value = HeaderValues.get(index);
+            con.setRequestProperty(Key, Value);
+
+        }
+
         int responseCode = con.getResponseCode();
         System.out.println("GET Response Code :: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+        if (responseCode == HttpsURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     con.getInputStream()));
             String inputLine;
@@ -51,11 +61,20 @@ public class SendRequest {
 
     }
 
-    private static void sendPOST() throws IOException {
+    private static void sendPOST(String POST_URL, List<String> HeaderKeys, List<String> HeaderValues) throws IOException {
+        //String POST_URL = "http://localhost:9090/SpringMVCExample/home";
+        String USER_AGENT = "Mozilla/5.0";
+
         URL obj = new URL(POST_URL);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("User-Agent", USER_AGENT);
+        for(String Key:HeaderKeys){
+            int index = HeaderKeys.indexOf(Key);
+            String Value = HeaderValues.get(index);
+            con.setRequestProperty(Key, Value);
+
+        }
 
         // For POST only - START
         con.setDoOutput(true);
@@ -67,7 +86,7 @@ public class SendRequest {
         int responseCode = con.getResponseCode();
         System.out.println("POST Response Code :: " + responseCode);
 
-        if (responseCode == HttpURLConnection.HTTP_OK) { //success
+        if (responseCode == HttpsURLConnection.HTTP_OK) { //success
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     con.getInputStream()));
             String inputLine;
