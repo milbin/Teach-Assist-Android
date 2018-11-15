@@ -1,18 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:gravity="center_horizontal">
 
-    <TextView
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/white"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="50dp"
+        android:paddingLeft="50dp"
+
+        >
+
+        <ProgressBar
+            android:id="@+id/AverageBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:progress="80"
+            android:progressDrawable="@drawable/circle"
+            android:padding="0dp"
+
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:text="88.6"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_weight="4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="top"
+        android:background="@drawable/white"
+        >
 
-</android.support.constraint.ConstraintLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@drawable/white">
+
+
+            <Button
+
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:background="@drawable/button_bg_rectangle_solid"
+                android:shadowColor="#333333"
+                android:shadowDx="10"
+                android:shadowDy="10"
+                android:shadowRadius="6"
+                android:paddingTop="10dp"
+
+                />
+
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@drawable/white">
+
+
+            <Button
+
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:background="@drawable/button_bg_rectangle_solid"
+                android:shadowColor="#333333"
+                android:shadowDx="10"
+                android:shadowDy="10"
+                android:shadowRadius="6"
+                />
+
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@drawable/white">
+
+
+            <Button
+
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:background="@drawable/button_bg_rectangle_solid"
+                android:shadowColor="#333333"
+                android:shadowDx="10"
+                android:shadowDy="10"
+                android:shadowRadius="6"
+                />
+
+
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+
+
+</LinearLayout>

@@ -1,16 +1,26 @@
 package com.teachassist.teachassist;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Calls {
-    public static void main(String args[]){
+    public static void main(String args[]) {
 
 
         TA ta = new TA();
         String username = "335525291";
         String password = "6rx8836f";
-        String response = ta.Get_session_token_and_student_ID(username, password);
-        //System.out.print(response);
+        HashMap<String, List<String>> response = ta.GetTAData(username, password);
+        double Average = ta.GetAverage(response);
+        System.out.println(Average);
+
+
+    }
+}
+
         /*
         tests test = new tests();
         try {
@@ -23,5 +33,3 @@ public class Calls {
 
     }*/
 
-    }
-}

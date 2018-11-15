@@ -107,8 +107,8 @@ public class SendRequest {
                 returnList[TAcookies.indexOf(i)+1] = i;
             }
 
-            System.out.println(Arrays.toString(returnList)+
-            "\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^REQUEST SENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+            //System.out.println(Arrays.toString(returnList)+
+            //"\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^REQUEST SENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
             return returnList;
 
