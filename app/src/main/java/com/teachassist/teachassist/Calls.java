@@ -3,6 +3,7 @@ package com.teachassist.teachassist;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +14,8 @@ public class Calls {
         TA ta = new TA();
         String username = "335525291";
         String password = "6rx8836f";
-        HashMap<String, List<String>> response = ta.GetTAData(username, password);
-        double Average = ta.GetAverage(response);
-        System.out.println(Average);
+        LinkedHashMap<String, List<String>> response = ta.GetTAData(username, password);
+        System.out.println(response);
 
 
     }

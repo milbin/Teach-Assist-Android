@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +76,7 @@ public class TA {
         }
 
     }
-    public HashMap GetTAData(String Username, String Password){
+    public LinkedHashMap GetTAData(String Username, String Password){
         try {
             //get sesison token and studentID
             String url = "https://ta.yrdsb.ca/live/index.php?";
@@ -100,7 +101,7 @@ public class TA {
 
             String[] resp = sr.send(url, headers, parameters, cookies, path);
 
-            HashMap<String, List<String>> Marks = new HashMap();
+            LinkedHashMap<String, List<String>> Marks = new LinkedHashMap();
 
             for(String i :resp[0].split("<td>")){
                 if(i.contains("current mark =  ")){
@@ -139,7 +140,7 @@ public class TA {
         catch(IOException e) {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
-            HashMap<String, String> returnMap = new HashMap<>();
+            LinkedHashMap<String, String> returnMap = new LinkedHashMap<>();
             return returnMap;
         }
 

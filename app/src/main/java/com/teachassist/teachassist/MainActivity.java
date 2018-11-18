@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.Dimension;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String username = "335525291";
-        String password = "6rx8836f";
+
+        String username = "335525168";
+        String password = "416349kc";
         new GetTaData().execute(username, password);
 
     }
@@ -45,18 +48,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private class GetTaData extends AsyncTask<String, Integer, HashMap<String, List<String>>>{
+    private class GetTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
         }
 
         @Override
-        protected HashMap<String, List<String>> doInBackground(String... params){
+        protected LinkedHashMap<String, List<String>> doInBackground(String... params){
             TA ta = new TA();
             String username = params[0];
             String password = params[1];
-            HashMap<String, List<String>> response = ta.GetTAData(username, password);
+            LinkedHashMap<String, List<String>> response = ta.GetTAData(username, password);
+
             return response;
 
         }
@@ -64,13 +68,12 @@ public class MainActivity extends AppCompatActivity {
         protected void onProgressUpdate(Integer... progress) {}
 
 
-        protected void onPostExecute(HashMap<String, List<String>> response) {
+        protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
             RunTasks(response);
 
         }
-        private void RunTasks(HashMap<String, List<String>> response){
-            Average average = new Average();
-            average.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+        private void RunTasks(LinkedHashMap<String, List<String>> response){
+            new Average().execute(response);
 
             Subject subject = new Subject();
             subject.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,  response);
@@ -152,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             Float Mark = 0f;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 Mark =  Float.parseFloat(entry.getValue().get(0));
+
             }
 
             try {
@@ -210,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 1) {
                     Mark = Float.parseFloat(entry.getValue().get(0));
+
                 }
                 counter++;
             }
@@ -271,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 2) {
                     Mark = Float.parseFloat(entry.getValue().get(0));
+
                 }
                 counter++;
             }
@@ -328,9 +334,9 @@ public class MainActivity extends AppCompatActivity {
             TA ta = new TA();
 
             Float Mark = 0f;
-            int counter = 3;
+            int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 1) {
+                if(counter == 3) {
                     Mark = Float.parseFloat(entry.getValue().get(0));
                 }
                 counter++;
