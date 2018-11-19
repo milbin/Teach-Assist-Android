@@ -1,141 +1,429 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:background="@color/Background"
+    android:theme="@android:style/Theme.Black.NoTitleBar"
+    android:fillViewport="true">
 
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/white"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:paddingRight="50dp"
-        android:paddingLeft="50dp"
-
-        >
-
-        <ProgressBar
-            android:id="@+id/AverageBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:progress="80"
-            android:progressDrawable="@drawable/circle"
-            android:padding="0dp"
-
-            />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/circle"
-            android:gravity="center"
-            android:text="88.6"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_weight="4"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:background="@drawable/white"
+        android:gravity="center_horizontal"
+        android:background="@color/Background"
+
         >
 
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@drawable/white">
+            android:background="@color/colorPrimary"
+            android:elevation="10dp"
+            android:minHeight="@dimen/Toolbar_Height">
 
-
-            <Button
-
-                android:id="@+id/button"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:textColor="@color/TextColor"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:background="@drawable/button_bg_rectangle_solid"
-                android:shadowColor="#333333"
-                android:shadowDx="10"
-                android:shadowDy="10"
-                android:shadowRadius="6"
-                android:paddingTop="10dp"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_gravity="center"
+                 />
+
+
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <!--Average-->
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:background="@color/Background"
+            android:paddingBottom="5dp"
+            android:paddingTop="0dp"
+            android:paddingRight="50dp"
+            android:paddingLeft="50dp"
+            android:layout_marginBottom="10dp"
+            android:minHeight="@dimen/Average_Row_Height"
+            >
+
+
+            <TextView
+                android:id="@+id/AverageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/circle"
+                android:text="@string/Average"
+                android:textColor="@color/AverageTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingTop="2dp"
 
                 />
 
 
+            <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                android:id="@+id/AverageBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AverageText"
+                android:layout_marginTop="5dp"
+                app:max="101"
+                app:ringColor="@color/Background"
+                app:ringProgressColor="@color/AverageBarColor"
+                app:ringWidth="10dp"
+                app:style="STROKE"
+                app:textColor="@color/TextColor"
+                app:textIsShow="false"
+                app:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/AverageInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AverageText"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="40dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
 
         </RelativeLayout>
+
+        <!--Ta buttons-->
+
+
         <RelativeLayout
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@drawable/white">
+            android:background="@drawable/button_bg_rectangle_solid"
+            android:minHeight="@dimen/Row_Height"
+            android:clickable="true"
+            android:elevation="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
+            >
 
 
-            <Button
 
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
+
+            <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                android:id="@+id/SubjectBar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:background="@drawable/button_bg_rectangle_solid"
-                android:shadowColor="#333333"
-                android:shadowDx="10"
-                android:shadowDy="10"
-                android:shadowRadius="6"
-                />
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                app:max="101"
+                app:ringColor="#ffffff"
+                app:ringProgressColor="@color/BarColor1"
+                app:ringWidth="10dp"
+                app:style="STROKE"
+                app:textColor="@color/TextColor"
+                app:textIsShow="false"
+                app:textSize="16sp" />
 
 
+            <TextView
+                android:id="@+id/SubjectInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignStart="@id/SubjectBar"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginStart="20dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/SubjectAbrv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/SubjectName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SubjectAbrv"
+                android:layout_alignStart="@id/SubjectAbrv"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textColor="@color/SecondaryTextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="italic" />
         </RelativeLayout>
+
+
         <RelativeLayout
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@drawable/white">
+            android:background="@drawable/button_bg_rectangle_solid"
+            android:minHeight="@dimen/Row_Height"
+            android:clickable="true"
+            android:elevation="3dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
+            >
 
 
-            <Button
 
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
+
+            <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                android:id="@+id/SubjectBar1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:background="@drawable/button_bg_rectangle_solid"
-                android:shadowColor="#333333"
-                android:shadowDx="10"
-                android:shadowDy="10"
-                android:shadowRadius="6"
-                />
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                app:max="101"
+                app:ringColor="#ffffff"
+                app:ringProgressColor="@color/BarColor2"
+                app:ringWidth="10dp"
+                app:style="STROKE"
+                app:textColor="@color/TextColor"
+                app:textIsShow="false"
+                app:textSize="16sp" />
 
 
+            <TextView
+                android:id="@+id/SubjectInt1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignStart="@id/SubjectBar1"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginStart="20dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/SubjectAbrv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/SubjectName1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SubjectAbrv1"
+                android:layout_alignStart="@id/SubjectAbrv1"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textColor="@color/SecondaryTextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="italic" />
 
 
         </RelativeLayout>
-    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg_rectangle_solid"
+            android:minHeight="@dimen/Row_Height"
+            android:clickable="true"
+            android:elevation="3dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
+            >
 
 
 
 
+            <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                android:id="@+id/SubjectBar2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                app:max="101"
+                app:ringColor="#ffffff"
+                app:ringProgressColor="@color/BarColor3"
+                app:ringWidth="10dp"
+                app:style="STROKE"
+                app:textColor="@color/TextColor"
+                app:textIsShow="false"
+                app:textSize="16sp" />
 
-</LinearLayout>
+
+            <TextView
+                android:id="@+id/SubjectInt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignStart="@id/SubjectBar2"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginStart="20dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/SubjectAbrv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/SubjectName2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SubjectAbrv2"
+                android:layout_alignStart="@id/SubjectAbrv2"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textColor="@color/SecondaryTextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="italic" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg_rectangle_solid"
+            android:minHeight="@dimen/Row_Height"
+            android:clickable="true"
+            android:elevation="3dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
+            >
+
+
+
+
+            <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                android:id="@+id/SubjectBar3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                app:max="101"
+                app:ringColor="#ffffff"
+                app:ringProgressColor="@color/BarColor4"
+                app:ringWidth="10dp"
+                app:style="STROKE"
+                app:textColor="@color/TextColor"
+                app:textIsShow="false"
+                app:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/SubjectInt3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignStart="@id/SubjectBar3"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginStart="20dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/SubjectAbrv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/SubjectName3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SubjectAbrv3"
+                android:layout_alignStart="@id/SubjectAbrv3"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textColor="@color/SecondaryTextColor"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto"
+                android:textStyle="italic" />
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+</ScrollView>

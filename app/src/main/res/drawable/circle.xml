@@ -4,7 +4,7 @@
     android:innerRadiusRatio="10"
     android:thickness="10dp"
     android:useLevel="true">
-    <solid android:color="@color/colorAccent"/>
+    <solid android:color="@color/BarColor1"/>
 
 
 </shape>
