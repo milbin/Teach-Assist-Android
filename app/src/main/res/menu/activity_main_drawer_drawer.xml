@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout_icon"
+            android:title="Logout" />
+    </group>
+
+    <group android:checkableBehavior="single">
+
+    <item android:title="Contact">
+        <menu>
+        <item
+            android:id="@+id/nav_bug_report"
+            android:icon="@drawable/ic_bug_report_black_24dp"
+            android:title="Bug report" />
+
+        <item
+            android:id="@+id/nav_email"
+            android:icon="@drawable/ic_email_black_24dp"
+            android:title="Email" />
+
+        </menu>
+
+    </item>
+    </group>
+
+
+
+
+
+
+
+</menu>

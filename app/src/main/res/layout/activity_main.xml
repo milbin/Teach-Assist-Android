@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -27,7 +33,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             android:elevation="10dp"
             android:minHeight="@dimen/Toolbar_Height">
@@ -39,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:fontFamily="@font/roboto_mono"
                 android:layout_gravity="center"
                  />
@@ -72,6 +78,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/circle"
+                android:fontFamily="@font/roboto_mono"
                 android:text="@string/Average"
                 android:textColor="@color/AverageTextColor"
                 android:textSize="16sp"
@@ -85,16 +92,19 @@
                 android:id="@+id/AverageBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="115dp"
                 android:layout_below="@id/AverageText"
                 android:layout_marginTop="5dp"
+                android:elevation="15dp"
                 app:max="101"
+                app:ringDiameter="115"
                 app:ringColor="@color/Background"
                 app:ringProgressColor="@color/AverageBarColor"
-                app:ringWidth="10dp"
+                app:ringWidth="12dp"
                 app:style="STROKE"
                 app:textColor="@color/TextColor"
                 app:textIsShow="false"
-                app:textSize="16sp" />
+                app:textSize="26sp" />
 
 
             <TextView
@@ -103,8 +113,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/AverageText"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="@font/roboto_mono"
-                android:layout_marginTop="40dp"
+                android:fontFamily="@font/roboto"
+                android:layout_marginTop="47dp"
                 android:text=""
                 android:textColor="@color/TextColor"
                 android:textSize="20sp"
@@ -116,6 +126,8 @@
         <!--Ta buttons-->
 
 
+
+
         <RelativeLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -124,13 +136,25 @@
             android:minHeight="@dimen/Row_Height"
             android:clickable="true"
             android:elevation="3dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="4dp"
             >
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="20sp"
+                android:text="Period 1"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/SecondaryTextColor"
+                />
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -140,10 +164,12 @@
                 android:layout_centerInParent="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:elevation="5dp"
                 app:max="101"
                 app:ringColor="#ffffff"
+                app:ringDiameter="90"
                 app:ringProgressColor="@color/BarColor1"
-                app:ringWidth="10dp"
+                app:ringWidth="9dp"
                 app:style="STROKE"
                 app:textColor="@color/TextColor"
                 app:textIsShow="false"
@@ -156,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignStart="@id/SubjectBar"
-                android:fontFamily="@font/roboto_mono"
+                android:fontFamily="@font/roboto"
                 android:layout_marginStart="20dp"
                 android:text=""
                 android:textColor="@color/TextColor"
@@ -207,7 +233,19 @@
             android:layout_marginBottom="4dp"
             >
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="20sp"
+                android:text="Period 2"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/SecondaryTextColor"
+                />
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -217,8 +255,10 @@
                 android:layout_centerInParent="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:elevation="5dp"
                 app:max="101"
                 app:ringColor="#ffffff"
+                app:ringDiameter="90"
                 app:ringProgressColor="@color/BarColor2"
                 app:ringWidth="10dp"
                 app:style="STROKE"
@@ -233,7 +273,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignStart="@id/SubjectBar1"
-                android:fontFamily="@font/roboto_mono"
+                android:fontFamily="@font/roboto"
                 android:layout_marginStart="20dp"
                 android:text=""
                 android:textColor="@color/TextColor"
@@ -284,7 +324,19 @@
             android:layout_marginBottom="4dp"
             >
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="20sp"
+                android:text="Period 3"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/SecondaryTextColor"
+                />
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -294,8 +346,10 @@
                 android:layout_centerInParent="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:elevation="5dp"
                 app:max="101"
                 app:ringColor="#ffffff"
+                app:ringDiameter="90"
                 app:ringProgressColor="@color/BarColor3"
                 app:ringWidth="10dp"
                 app:style="STROKE"
@@ -310,7 +364,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignStart="@id/SubjectBar2"
-                android:fontFamily="@font/roboto_mono"
+                android:fontFamily="@font/roboto"
                 android:layout_marginStart="20dp"
                 android:text=""
                 android:textColor="@color/TextColor"
@@ -360,7 +414,19 @@
             android:layout_marginBottom="4dp"
             >
 
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="20sp"
+                android:text="Period 4"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/SecondaryTextColor"
+                />
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -370,8 +436,10 @@
                 android:layout_centerInParent="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:elevation="5dp"
                 app:max="101"
                 app:ringColor="#ffffff"
+                app:ringDiameter="90"
                 app:ringProgressColor="@color/BarColor4"
                 app:ringWidth="10dp"
                 app:style="STROKE"
@@ -386,7 +454,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignStart="@id/SubjectBar3"
-                android:fontFamily="@font/roboto_mono"
+                android:fontFamily="@font/roboto"
                 android:layout_marginStart="20dp"
                 android:text=""
                 android:textColor="@color/TextColor"
@@ -427,3 +495,4 @@
     </LinearLayout>
 
 </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

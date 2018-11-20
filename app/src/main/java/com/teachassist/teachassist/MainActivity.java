@@ -4,11 +4,19 @@ import android.annotation.TargetApi;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -21,7 +29,11 @@ import java.util.Map;
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class MainActivity extends AppCompatActivity {
-
+    String username = "335525168";
+    String password = "4a6349kc";
+    Boolean Refresh = false;
+    SwipeRefreshLayout SwipeRefresh;
+    private DrawerLayout mDrawerLayout;
 
 
 
@@ -31,20 +43,80 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
 
-        String username = "335525168";
-        String password = "4a6349kc";
 
 
-        new GetTaData().execute(username, password);
+
+
+
+        // Refresh
+        SwipeRefresh =  findViewById(R.id.swipeRefresh);
+        SwipeRefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("REFRESH", "onRefresh called from MainActivity");
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        Refresh = true;
+                        String Username = username;
+                        String Password = password;
+                        new GetTaData().execute(Username, Password);
+
+                    }
+                }
+        );
+
+        //setup toolbar for nav bar drawer
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Nav bar Drawer
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        /*
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
+                */
+
+
+
+        // Setup toolbar text
+        TextView ToolbarText =  findViewById(R.id.toolbar_title);
+        ToolbarText.setText("Student Report for: "+ username);
+        String Username = username;
+        String Password = password;
+        new GetTaData().execute(Username, Password);
 
 
     }
 
-
-
-
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
 
@@ -59,15 +131,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
             TA ta = new TA();
-            String username = params[0];
-            String password = params[1];
-            TextView ToolbarText =  findViewById(R.id.toolbar_title);
-            ToolbarText.setText("Student Report for: "+ username);
+            String Username = params[0];
+            String Password = params[1];
 
-
-
-
-            LinkedHashMap<String, List<String>> response = ta.GetTAData(username, password);
+            LinkedHashMap<String, List<String>> response = ta.GetTAData(Username, Password);
 
             return response;
 
@@ -78,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
             // Set Average Text
-            System.out.println(response);
             TA ta = new TA();
             double average = ta.GetAverage(response);
             Float Average = (float) average;
@@ -179,11 +245,14 @@ public class MainActivity extends AppCompatActivity {
         private void RunTasks(LinkedHashMap<String, List<String>> response){
 
                 new Average().execute(response);
-
                 new MainActivity.Subject().execute(response);
                 new Subject1().execute(response);
                 new Subject2().execute(response);
                 new Subject3().execute(response);
+                if(Refresh.equals(true)) {
+                    SwipeRefresh.setRefreshing(false);
+                    Refresh = false;
+                }
 
             /*
             MainActivity.Subject subject = new MainActivity.Subject();

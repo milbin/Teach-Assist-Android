@@ -76,7 +76,7 @@ public class TA {
         }
 
     }
-    public LinkedHashMap GetTAData(String Username, String Password){
+    public LinkedHashMap<String, List<String>> GetTAData(String Username, String Password){
         try {
             //get sesison token and studentID
             String url = "https://ta.yrdsb.ca/live/index.php?";
@@ -140,7 +140,8 @@ public class TA {
         catch(IOException e) {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
-            LinkedHashMap<String, String> returnMap = new LinkedHashMap<>();
+            LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
+            System.out.println("ERROR");
             return returnMap;
         }
 

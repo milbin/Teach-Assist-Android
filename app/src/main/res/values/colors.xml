@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#66bb6a</color>
-    <color name="colorPrimaryDark">#338a3e</color>
-    <color name="colorAccent">#98ee99</color>
-    <color name="BarColor1">#ff77a9</color>
-    <color name="BarColor2">#ff77a9</color>
-    <color name="BarColor3">#ff77a9</color>
-    <color name="BarColor4">#ff77a9</color>
-    <color name="AverageBarColor">#ec407a</color>
+    <!--Material design pallet: pink500, Green400-->
+    <color name="colorPrimary">#4caf50</color>
+    <color name="colorPrimaryDark">#087f23</color>
+    <color name="colorAccent">#80e27e</color>
+    <color name="AverageBarColor">#e91e63</color>
+    <color name="BarColor1">#4caf50</color>
+    <color name="BarColor2">#4caf50</color>
+    <color name="BarColor3">#4caf50</color>
+    <color name="BarColor4">#4caf50</color>
     <color name="TextColor">#000000</color>
     <color name="SecondaryTextColor">#C7C7C7</color>
     <color name="AverageTextColor">#BAB9B9</color>

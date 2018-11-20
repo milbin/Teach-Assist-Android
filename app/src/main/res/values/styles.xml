@@ -1,8 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Theme.Design" parent="Base.Theme.Design">
-    </style>
+    <style name="Theme.Design" parent="Base.Theme.Design"></style>
 
     <style name="Base.Theme.Design" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -20,9 +19,9 @@
         <item name="android:fontFamily">@font/roboto</item>
     </style>
 
+    <style name="Theme.Design.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-
-
+    <style name="Theme.Design.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>
