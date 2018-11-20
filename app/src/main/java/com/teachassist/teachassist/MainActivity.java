@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         //setup toolbar for nav bar drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+/*
         // Nav bar Drawer
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        /*
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -99,8 +99,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Setup toolbar text
-        TextView ToolbarText =  findViewById(R.id.toolbar_title);
-        ToolbarText.setText("Student Report for: "+ username);
+        //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
+        //ToolbarText.setText("Student Report for: "+ username);
+        getSupportActionBar().setTitle("Student Report for: "+ username);
+
         String Username = username;
         String Password = password;
         new GetTaData().execute(Username, Password);
@@ -108,15 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 
 
