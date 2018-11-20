@@ -16,9 +16,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.HashMap;
@@ -34,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
     private DrawerLayout drawer;
+    RelativeLayout relativeLayout;
+    RelativeLayout relativeLayout1;
+    RelativeLayout relativeLayout2;
+    RelativeLayout relativeLayout3;
 
 
 
@@ -42,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
+
+        //4 course relative layouts
+       relativeLayout = findViewById(R.id.relativeLayout);
+       relativeLayout1 = findViewById(R.id.relativeLayout1);
+       relativeLayout2 = findViewById(R.id.relativeLayout2);
+       relativeLayout3 = findViewById(R.id.relativeLayout3);
+
 
 
         // Refresh
@@ -103,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup toolbar text
         //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
         //ToolbarText.setText("Student Report for: "+ username);
-        getSupportActionBar().setTitle("Student Report for: "+ username);
+        getSupportActionBar().setTitle("Student: "+ username);
 
 
         String Username = username;
@@ -113,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    //close drawer when back button pressed
     @Override
     public void onBackPressed(){
         if(drawer.isDrawerOpen(GravityCompat.START)){
@@ -120,6 +137,32 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             super.onBackPressed();
+        }
+    }
+
+    //2 methods below for edit button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_button, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                getSupportActionBar().setTitle("Drag to delete items and see how your average changes");
+                //relativeLayout.setVisibility(View.GONE);
+
+                return true;
+
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
         }
     }
 
