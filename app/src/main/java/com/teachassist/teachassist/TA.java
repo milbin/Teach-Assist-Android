@@ -105,15 +105,17 @@ public class TA {
 
             for(String i :resp[0].split("<td>")){
                 if(i.contains("current mark =  ")){
-                    //System.out.println(i);
+                    System.out.println(i);
                     String Subject_id = i.split("subject_id=")[1].split("&")[0];
                     String Current_mark = i.split("current mark =  ")[1].split("%")[0];
                     String Course_Name = i.split(":")[0];
                     String Course_code = i.split(":")[1].split("<br>")[0];
+                    String Room_Number = i.split("rm. ")[1].split("</td>")[0];
                     List Stats = new ArrayList<>();
                     Stats.add(Current_mark);
                     Stats.add(Course_Name);
                     Stats.add(Course_code);
+                    Stats.add(Room_Number);
 
 
                     Marks.put(Subject_id, Stats);

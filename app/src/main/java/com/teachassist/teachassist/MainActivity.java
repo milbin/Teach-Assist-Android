@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     String password = "4a6349kc";
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout drawer;
 
 
 
@@ -42,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
-
-
-
-
 
 
         // Refresh
@@ -70,8 +66,14 @@ public class MainActivity extends AppCompatActivity {
         //setup toolbar for nav bar drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
+
         // Nav bar Drawer
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        /*
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
@@ -103,11 +105,22 @@ public class MainActivity extends AppCompatActivity {
         //ToolbarText.setText("Student Report for: "+ username);
         getSupportActionBar().setTitle("Student Report for: "+ username);
 
+
         String Username = username;
         String Password = password;
         new GetTaData().execute(Username, Password);
 
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
 
@@ -143,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             Float Average = (float) average;
             TextView AverageInt = findViewById(R.id.AverageInt);
             AverageInt.setText(Average.toString()+"%");
+            System.out.println(response);
 
 
 
@@ -151,11 +165,13 @@ public class MainActivity extends AppCompatActivity {
             int counter = 0;
             String SubjectAbrvString = "";
             String SubjectNameString = "";
+            String RoomNumber  = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter == 0) {
                     Mark = Float.parseFloat(entry.getValue().get(0));
                     SubjectAbrvString =  entry.getValue().get(1);
                     SubjectNameString =  entry.getValue().get(2);
+                    RoomNumber  = entry.getValue().get(3);
                 }
                 counter++;
             }
@@ -167,16 +183,20 @@ public class MainActivity extends AppCompatActivity {
             SubjectName.setText(SubjectNameString);
 
 
+            TextView roomNumber  = findViewById(R.id.RoomNumber);
+            roomNumber .setText("Room " + RoomNumber );
             //Set Subject1 Text
             Float Mark1 = 0f;
             int counter1 = 0;
             String SubjectAbrvString1 = "";
             String SubjectNameString1 = "";
+            String RoomNumber1 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter1 == 1) {
                     Mark1 = Float.parseFloat(entry.getValue().get(0));
                     SubjectAbrvString1 =  entry.getValue().get(1);
                     SubjectNameString1 =  entry.getValue().get(2);
+                    RoomNumber1 = entry.getValue().get(3);
                 }
                 counter1++;
             }
@@ -186,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
             SubjectAbrv1.setText(SubjectAbrvString1);
             TextView SubjectName1 = findViewById(R.id.SubjectName1);
             SubjectName1.setText(SubjectNameString1);
+            TextView roomNumber1 = findViewById(R.id.RoomNumber1);
+            roomNumber1.setText("Room " + RoomNumber1);
 
 
             //Set Subject2 Text
@@ -193,11 +215,13 @@ public class MainActivity extends AppCompatActivity {
             int counter2 = 0;
             String SubjectAbrvString2 = "";
             String SubjectNameString2 = "";
+            String RoomNumber2 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter2 == 2) {
                     Mark2 = Float.parseFloat(entry.getValue().get(0));
                     SubjectAbrvString2 =  entry.getValue().get(1);
                     SubjectNameString2 =  entry.getValue().get(2);
+                    RoomNumber2 = entry.getValue().get(3);
                 }
                 counter2++;
             }
@@ -207,6 +231,8 @@ public class MainActivity extends AppCompatActivity {
             SubjectAbrv2.setText(SubjectAbrvString2);
             TextView SubjectName2 = findViewById(R.id.SubjectName2);
             SubjectName2.setText(SubjectNameString2);
+            TextView roomNumber2 = findViewById(R.id.RoomNumber2);
+            roomNumber2.setText("Room " + RoomNumber2);
 
 
             //Set Subject3 Text
@@ -214,11 +240,13 @@ public class MainActivity extends AppCompatActivity {
             int counter3 = 0;
             String SubjectAbrvString3 = "";
             String SubjectNameString3 = "";
+            String RoomNumber3 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter3 == 3) {
                     Mark3 = Float.parseFloat(entry.getValue().get(0));
                     SubjectAbrvString3 =  entry.getValue().get(1);
                     SubjectNameString3 =  entry.getValue().get(2);
+                    RoomNumber3 = entry.getValue().get(3);
                 }
                 counter3++;
             }
@@ -228,6 +256,8 @@ public class MainActivity extends AppCompatActivity {
             SubjectAbrv3.setText(SubjectAbrvString3);
             TextView SubjectName3 = findViewById(R.id.SubjectName3);
             SubjectName3.setText(SubjectNameString3);
+            TextView roomNumber3 = findViewById(R.id.RoomNumber3);
+            roomNumber3.setText("Room " + RoomNumber3);
 
 
 

@@ -8,8 +8,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
+
     >
+
 
 
 
@@ -166,6 +167,7 @@
             >
 
             <TextView
+                android:id="@+id/Period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -173,10 +175,24 @@
                 android:fontFamily="@font/roboto_mono"
                 android:layout_marginTop="3dp"
                 android:textSize="20sp"
-                android:text="Period 1"
+                android:text="Period 1:"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/SecondaryTextColor"
+                />
+            <TextView
+                android:id="@+id/RoomNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Period"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="15sp"
+                android:text=""
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/TextColor"
                 />
 
 
@@ -216,10 +232,10 @@
                 android:id="@+id/SubjectAbrv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentTop="false"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:text=""
                 android:textColor="@color/TextColor"
                 android:textSize="15sp"
@@ -257,6 +273,7 @@
             >
 
             <TextView
+                android:id="@+id/Period1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -264,10 +281,24 @@
                 android:fontFamily="@font/roboto_mono"
                 android:layout_marginTop="3dp"
                 android:textSize="20sp"
-                android:text="Period 2"
+                android:text="Period 2:"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/SecondaryTextColor"
+                />
+            <TextView
+                android:id="@+id/RoomNumber1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Period1"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="15sp"
+                android:text=""
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/TextColor"
                 />
 
 
@@ -306,10 +337,10 @@
                 android:id="@+id/SubjectAbrv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentTop="false"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:text=""
                 android:textColor="@color/TextColor"
                 android:textSize="15sp"
@@ -348,6 +379,7 @@
             >
 
             <TextView
+                android:id="@+id/Period2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -355,10 +387,24 @@
                 android:fontFamily="@font/roboto_mono"
                 android:layout_marginTop="3dp"
                 android:textSize="20sp"
-                android:text="Period 3"
+                android:text="Period 3:"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/SecondaryTextColor"
+                />
+            <TextView
+                android:id="@+id/RoomNumber2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Period2"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="15sp"
+                android:text=""
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/TextColor"
                 />
 
 
@@ -397,10 +443,10 @@
                 android:id="@+id/SubjectAbrv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentTop="false"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:text=""
                 android:textColor="@color/TextColor"
                 android:textSize="15sp"
@@ -438,6 +484,7 @@
             >
 
             <TextView
+                android:id="@+id/Period3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -445,11 +492,26 @@
                 android:fontFamily="@font/roboto_mono"
                 android:layout_marginTop="3dp"
                 android:textSize="20sp"
-                android:text="Period 4"
+                android:text="Period 4:"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/SecondaryTextColor"
                 />
+            <TextView
+                android:id="@+id/RoomNumber3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Period3"
+                android:textStyle="normal"
+                android:fontFamily="@font/roboto_mono"
+                android:layout_marginTop="3dp"
+                android:textSize="15sp"
+                android:text=""
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/TextColor"
+                />
+
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -488,10 +550,10 @@
                 android:id="@+id/SubjectAbrv3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentTop="false"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:text=""
                 android:textColor="@color/TextColor"
                 android:textSize="15sp"
@@ -510,7 +572,7 @@
                 android:textColor="@color/SecondaryTextColor"
                 android:textSize="15sp"
                 android:fontFamily="@font/roboto"
-                android:textStyle="italic" />
+                android:textStyle="bold" />
         </RelativeLayout>
 
 
