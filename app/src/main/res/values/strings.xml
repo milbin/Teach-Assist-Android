@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">TeachAssist</string>
+    <string name="edit_activity">Edit</string>
     <string name="Average">Average</string>
     <string name="title_activity_nav__drawer">Nav_Drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -11,6 +12,9 @@
     <string name="title_activity_drawer">Drawer</string>
     <string name="title_activity_main__drawer">Main_Drawer</string>
     <string name="title_activity_main_drawer">MainDrawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

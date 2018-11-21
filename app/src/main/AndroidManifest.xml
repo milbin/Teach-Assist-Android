@@ -18,6 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:label="@string/edit_activity" android:name="EditActivity"/>
         <activity
             android:name=".MainDrawer"
             android:label="@string/title_activity_main_drawer"

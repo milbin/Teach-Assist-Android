@@ -1,6 +1,7 @@
 package com.teachassist.teachassist;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     String username = "335525168";
     String password = "4a6349kc";
     Boolean Refresh = false;
@@ -152,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                getSupportActionBar().setTitle("Drag to delete items and see how your average changes");
+                Intent myIntent = new Intent(MainActivity.this, EditActivity.class);
+                //myIntent.putExtra("key", value); //Optional parameters
+                MainActivity.this.startActivity(myIntent);
                 //relativeLayout.setVisibility(View.GONE);
 
                 return true;
