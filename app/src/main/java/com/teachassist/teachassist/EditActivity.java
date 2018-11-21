@@ -105,17 +105,49 @@ public class EditActivity extends AppCompatActivity {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             int dragEvent = event.getAction();
+            final View view = (View) event.getLocalState();
+
 
             switch (dragEvent){
+
                 case DragEvent.ACTION_DRAG_STARTED:
+
+
+                    if(view.getId() == R.id.relativeLayout) {
+                        view.setVisibility(View.GONE);
+                    }
+                    if(view.getId() == R.id.relativeLayout1) {
+                        view.setVisibility(View.GONE);
+                    }
+                    if(view.getId() == R.id.relativeLayout2) {
+                        view.setVisibility(View.GONE);
+                    }
+                    if(view.getId() == R.id.relativeLayout3) {
+                        view.setVisibility(View.GONE);
+                    }
 
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
+                    if(view.getId() == R.id.relativeLayout) {
+                        view.setVisibility(View.VISIBLE);
+
+                    }
+                    if(view.getId() == R.id.relativeLayout1) {
+                        view.setVisibility(View.VISIBLE);
+
+                    }
+                    if(view.getId() == R.id.relativeLayout2) {
+                        view.setVisibility(View.VISIBLE);
+
+                    }
+                    if(view.getId() == R.id.relativeLayout3) {
+                        view.setVisibility(View.VISIBLE);
+
+                    }
                     break;
                 case DragEvent.ACTION_DROP:
-                    final View view = (View) event.getLocalState();
 
                     if(view.getId() == R.id.relativeLayout) {
                         view.setVisibility(View.GONE);

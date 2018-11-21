@@ -1,5 +1,7 @@
 package com.teachassist.teachassist;
 
+import android.view.View;
+
 import org.decimal4j.util.DoubleRounder;
 
 import java.io.IOException;
@@ -18,19 +20,6 @@ public class Calls {
         String password = "4a6349kc";
         LinkedHashMap<String, List<String>> response = ta.GetTAData(username, password);
         System.out.println(response);
-        double Average = 0;
-        double[] grades = new double[4];
-        int i = 0;
-
-        grades[i] = 1.1;
-
-
-
-        for (double value:grades)
-            Average += value;
-        Average = DoubleRounder.round(Average/grades.length, 1);
-        System.out.print(Average);
-
 
     }
 }

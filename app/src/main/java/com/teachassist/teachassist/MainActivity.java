@@ -41,7 +41,7 @@ import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     String username = "335525168";
     String password = "4a6349kc";
     Boolean Refresh = false;
@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity  {
     List<String> removed = new ArrayList<>();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,15 +62,14 @@ public class MainActivity extends AppCompatActivity  {
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
 
         //4 course relative layouts
-       relativeLayout = findViewById(R.id.relativeLayout);
-       relativeLayout1 = findViewById(R.id.relativeLayout1);
-       relativeLayout2 = findViewById(R.id.relativeLayout2);
-       relativeLayout3 = findViewById(R.id.relativeLayout3);
-
+        relativeLayout = findViewById(R.id.relativeLayout);
+        relativeLayout1 = findViewById(R.id.relativeLayout1);
+        relativeLayout2 = findViewById(R.id.relativeLayout2);
+        relativeLayout3 = findViewById(R.id.relativeLayout3);
 
 
         // Refresh
-        SwipeRefresh =  findViewById(R.id.swipeRefresh);
+        SwipeRefresh = findViewById(R.id.swipeRefresh);
         SwipeRefresh.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity  {
         // Setup toolbar text
         //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
         //ToolbarText.setText("Student Report for: "+ username);
-        getSupportActionBar().setTitle("Student: "+ username);
+        getSupportActionBar().setTitle("Student: " + username);
 
 
         String Username = username;
@@ -116,11 +114,10 @@ public class MainActivity extends AppCompatActivity  {
 
     //close drawer when back button pressed
     @Override
-    public void onBackPressed(){
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -160,30 +157,33 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case 10101: // see MainActivity.this.startActivityForResult(myIntent, 10101); line(140)
-                if(resultCode == Activity.RESULT_OK){
+                if (resultCode == Activity.RESULT_OK) {
                     removed = data.getStringArrayListExtra("list");
                     System.out.println(removed);
 
+
                     double average = 0;
+
                     int y = 0;
                     for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                         if (entry.getKey() != "NA") {
                             y++;
                         }
                     }
-                    double[] grades = new double[y];
+                    int size = y - removed.size();
+                    double[] grades = new double[size+1];
 
-                    System.out.println(grades.length);
+                    System.out.println(response);
 
 
-
-                    for(String i:removed) {
+                    for (String i : removed) {
 
                         if (i.equals("0")) {
                             relativeLayout.setVisibility(View.GONE);
                         } else {
+                            relativeLayout.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                                 if (x == 0)
@@ -195,9 +195,8 @@ public class MainActivity extends AppCompatActivity  {
                         if (i.equals("1")) {
                             relativeLayout1.setVisibility(View.GONE);
 
-                            }
-
-                        else {
+                        } else {
+                            relativeLayout1.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                                 if (x == 1)
@@ -210,9 +209,8 @@ public class MainActivity extends AppCompatActivity  {
                             relativeLayout2.setVisibility(View.GONE);
 
 
-
-                        }
-                        else {
+                        } else {
+                            relativeLayout2.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                                 if (x == 2)
@@ -222,8 +220,8 @@ public class MainActivity extends AppCompatActivity  {
                         }
                         if (i.equals("3")) {
                             relativeLayout3.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
+                            relativeLayout3.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                                 if (x == 3)
@@ -234,21 +232,25 @@ public class MainActivity extends AppCompatActivity  {
                     }
 
 
-                        for (double value:grades)
-                            average += value;
-                        average = DoubleRounder.round(average/grades.length, 1);
-                        Float Average = (float) average;
-                        TextView AverageInt = findViewById(R.id.AverageInt);
-                        AverageInt.setText(Average.toString()+"%");
-                        final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-                        ProgressBarAverage.setProgress(Math.round(Average));
-
-
+                    for (double value : grades) {
+                        average += value;
+                        System.out.println(value);
                     }
+                    System.out.println(size);
+                    average = DoubleRounder.round(average / size, 1);
+                    Float Average = (float) average;
+                    TextView AverageInt = findViewById(R.id.AverageInt);
+                    AverageInt.setText(Average.toString() + "%");
+                    final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+                    ProgressBarAverage.setProgress(Math.round(Average));
+
 
                 }
 
         }
+
+    }
+
 
 
     private class GetTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
