@@ -1,10 +1,12 @@
 package com.teachassist.teachassist;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -26,6 +28,12 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import org.decimal4j.util.DoubleRounder;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,6 +51,8 @@ public class MainActivity extends AppCompatActivity  {
     RelativeLayout relativeLayout1;
     RelativeLayout relativeLayout2;
     RelativeLayout relativeLayout3;
+    LinkedHashMap<String, List<String>> response;
+    List<String> removed = new ArrayList<>();
 
 
 
@@ -89,32 +99,6 @@ public class MainActivity extends AppCompatActivity  {
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        /*
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
-                        return true;
-                    }
-                });
-                */
-
-
 
         // Setup toolbar text
         //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
@@ -154,8 +138,11 @@ public class MainActivity extends AppCompatActivity  {
         switch (item.getItemId()) {
             case R.id.action_edit:
                 Intent myIntent = new Intent(MainActivity.this, EditActivity.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                MainActivity.this.startActivity(myIntent);
+                Gson gson = new Gson();
+                String list = gson.toJson(response);
+                myIntent.putExtra("key", list); //Optional parameters
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                MainActivity.this.startActivityForResult(myIntent, 10101); //random int i set
                 //relativeLayout.setVisibility(View.GONE);
 
                 return true;
@@ -170,9 +157,101 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 10101: // see MainActivity.this.startActivityForResult(myIntent, 10101); line(140)
+                if(resultCode == Activity.RESULT_OK){
+                    removed = data.getStringArrayListExtra("list");
+                    System.out.println(removed);
+
+                    double average = 0;
+                    int y = 0;
+                    for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                        if (entry.getKey() != "NA") {
+                            y++;
+                        }
+                    }
+                    double[] grades = new double[y];
+
+                    System.out.println(grades.length);
 
 
-        private class GetTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
+
+                    for(String i:removed) {
+
+                        if (i.equals("0")) {
+                            relativeLayout.setVisibility(View.GONE);
+                        } else {
+                            int x = 0;
+                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                                if (x == 0)
+                                    grades[0] = Double.parseDouble(entry.getValue().get(0));
+                                x++;
+                            }
+                        }
+
+                        if (i.equals("1")) {
+                            relativeLayout1.setVisibility(View.GONE);
+
+                            }
+
+                        else {
+                            int x = 0;
+                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                                if (x == 1)
+                                    grades[1] = Double.parseDouble(entry.getValue().get(0));
+                                x++;
+
+                            }
+                        }
+                        if (i.equals("2")) {
+                            relativeLayout2.setVisibility(View.GONE);
+
+
+
+                        }
+                        else {
+                            int x = 0;
+                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                                if (x == 2)
+                                    grades[2] = Double.parseDouble(entry.getValue().get(0));
+                                x++;
+                            }
+                        }
+                        if (i.equals("3")) {
+                            relativeLayout3.setVisibility(View.GONE);
+                        }
+                        else {
+                            int x = 0;
+                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                                if (x == 3)
+                                    grades[3] = Double.parseDouble(entry.getValue().get(0));
+                                x++;
+                            }
+                        }
+                    }
+
+
+                        for (double value:grades)
+                            average += value;
+                        average = DoubleRounder.round(average/grades.length, 1);
+                        Float Average = (float) average;
+                        TextView AverageInt = findViewById(R.id.AverageInt);
+                        AverageInt.setText(Average.toString()+"%");
+                        final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+                        ProgressBarAverage.setProgress(Math.round(Average));
+
+
+                    }
+
+                }
+
+        }
+
+
+    private class GetTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
 
 
         @Override
@@ -186,7 +265,7 @@ public class MainActivity extends AppCompatActivity  {
             String Username = params[0];
             String Password = params[1];
 
-            LinkedHashMap<String, List<String>> response = ta.GetTAData(Username, Password);
+            response = ta.GetTAData(Username, Password);
 
             return response;
 

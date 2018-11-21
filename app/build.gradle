@@ -33,4 +33,5 @@ dependencies {
     implementation 'org.decimal4j:decimal4j:1.0.3'
     implementation 'com.android.support:design:28.0.0'
     implementation project(':Ring Library')
+    implementation 'com.google.code.gson:gson:2.6.2'
 }

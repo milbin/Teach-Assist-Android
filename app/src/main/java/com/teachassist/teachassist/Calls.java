@@ -1,5 +1,7 @@
 package com.teachassist.teachassist;
 
+import org.decimal4j.util.DoubleRounder;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,10 +14,22 @@ public class Calls {
 
 
         TA ta = new TA();
-        String username = "335525291";
-        String password = "6rx8836f";
+        String username = "335525168";
+        String password = "4a6349kc";
         LinkedHashMap<String, List<String>> response = ta.GetTAData(username, password);
         System.out.println(response);
+        double Average = 0;
+        double[] grades = new double[4];
+        int i = 0;
+
+        grades[i] = 1.1;
+
+
+
+        for (double value:grades)
+            Average += value;
+        Average = DoubleRounder.round(Average/grades.length, 1);
+        System.out.print(Average);
 
 
     }

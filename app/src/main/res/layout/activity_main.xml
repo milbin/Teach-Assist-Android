@@ -68,33 +68,82 @@
             android:uiOptions="splitActionBarWhenNarrow">
 
 
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:textColor="@color/TextColor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textStyle="bold"
-                android:textSize="17sp"
-                android:fontFamily="@font/roboto_mono"
-                android:layout_gravity="center"
-                 />
-
-
-
-
         </android.support.v7.widget.Toolbar>
 
 
 
         <!--Average-->
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:name="com.teachassist.teachassist.Average"
-            />
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            tools:context=".Average"
+
+            android:id="@+id/relativeLayoutAverage"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:background="@color/Background"
+            android:paddingBottom="5dp"
+            android:paddingTop="0dp"
+            android:paddingRight="50dp"
+            android:paddingLeft="50dp"
+            android:layout_marginBottom="10dp"
+            android:minHeight="@dimen/Average_Row_Height"
+            >
+
+
+            <TextView
+                android:id="@+id/AverageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/circle"
+                android:fontFamily="@font/roboto_mono"
+                android:text="@string/Average"
+                android:textColor="@color/AverageTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingTop="2dp"
+
+                />
+
+
+            <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                android:id="@+id/AverageBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="115dp"
+                android:layout_below="@id/AverageText"
+                android:layout_marginTop="5dp"
+                android:elevation="15dp"
+                app:max="101"
+                app:ringDiameter="115"
+                app:ringColor="@color/Background"
+                app:ringProgressColor="@color/AverageBarColor"
+                app:ringWidth="12dp"
+                app:style="STROKE"
+                app:textColor="@color/TextColor"
+                app:textIsShow="false"
+                app:textSize="26sp" />
+
+
+            <TextView
+                android:id="@+id/AverageInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AverageText"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/roboto"
+                android:layout_marginTop="47dp"
+                android:text=""
+                android:textColor="@color/TextColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
 
 
         <!--Ta buttons-->

@@ -154,7 +154,13 @@ public class TA {
 
         //Get average
         double Average = 0;
-        double[] grades = new double[4];
+        int x = 0;
+        for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
+            if (entry.getKey() != "NA") {
+                x++;
+            }
+        }
+        double[] grades = new double[x];
         int i = 0;
         for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
             if (entry.getKey() != "NA") {
