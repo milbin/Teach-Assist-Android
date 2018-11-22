@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
                         int y = 0;
                         for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                            if (entry.getKey() != "NA") {
+                            if (!entry.getKey().equals("NA")) {
                                 y++;
 
                             }
@@ -504,7 +504,9 @@ public class MainActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 0) {
-                    Mark = Float.parseFloat(entry.getValue().get(0));
+                    if(!entry.getKey().equals("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+                    }
                 }
                 counter++;
 
@@ -562,7 +564,9 @@ public class MainActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 1) {
-                    Mark = Float.parseFloat(entry.getValue().get(0));
+                    if(!entry.getKey().equals("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+                    }
 
                 }
                 counter++;
@@ -620,7 +624,9 @@ public class MainActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 2) {
-                    Mark = Float.parseFloat(entry.getValue().get(0));
+                    if(!entry.getKey().equals("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+                    }
 
                 }
                 counter++;
@@ -678,7 +684,15 @@ public class MainActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 3) {
-                    Mark = Float.parseFloat(entry.getValue().get(0));
+                    if(!entry.getKey().equals("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+                    }
+                    else {
+                        TextView EmptyCourse = findViewById(R.id.EmptyCourse);
+                        EmptyCourse.setText(R.string.EmptyText);
+                        return -1f;
+
+                    }
                 }
                 counter++;
             }
@@ -708,6 +722,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onProgressUpdate(Integer... progress) {
+
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
             ProgressBarAverage.setProgress(progress[0]);
 

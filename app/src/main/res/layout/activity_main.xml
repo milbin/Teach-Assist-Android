@@ -194,6 +194,18 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/TextColor"
                 />
+            <TextView
+                android:id="@+id/EmptyCourse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RoomNumber"
+
+android:gravity="center"                android:layout_centerHorizontal="true"
+                android:text="Please See Teacher For Current Achievement In This Course"
+                     android:textStyle="bold"
+                android:textSize="16sp"
+
+                />
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -300,6 +312,19 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/TextColor"
+                />
+            <TextView
+                android:id="@+id/EmptyCourse1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RoomNumber1"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:fontFamily="@font/robotomono_regular"
+                android:textStyle="bold"
+                android:textSize="16sp"
+
                 />
 
 
@@ -408,6 +433,19 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/TextColor"
                 />
+            <TextView
+                android:id="@+id/EmptyCourse2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RoomNumber2"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:fontFamily="@font/robotomono_regular"
+                android:textStyle="bold"
+                android:textSize="16sp"
+
+                />
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -513,6 +551,19 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/TextColor"
+                />
+            <TextView
+                android:id="@+id/EmptyCourse3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RoomNumber3"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:fontFamily="@font/robotomono_regular"
+                android:textStyle="bold"
+                android:textSize="16sp"
+
                 />
 
 

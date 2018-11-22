@@ -2,6 +2,8 @@
     <string name="app_name">TeachAssist</string>
     <string name="edit_activity">Edit</string>
     <string name="Average">Average</string>
+    <string name="EmptyText">Please See Teacher For Current Achievement In This Course</string>
+
     <string name="title_activity_nav__drawer">Nav_Drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
