@@ -198,11 +198,13 @@
                 android:id="@+id/EmptyCourse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="20dp"
                 android:layout_below="@id/RoomNumber"
-
-android:gravity="center"                android:layout_centerHorizontal="true"
-                android:text="Please See Teacher For Current Achievement In This Course"
-                     android:textStyle="bold"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:textStyle="bold"
                 android:textSize="16sp"
 
                 />
