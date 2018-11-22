@@ -42,6 +42,10 @@ public class EditActivity extends AppCompatActivity {
 
     LinkedHashMap<String, List<String>> response;
     ArrayList<String> removed = new ArrayList();
+    FloatingActionButton fab;
+    Boolean fab_animated = false;
+
+
 
 
 
@@ -59,7 +63,7 @@ public class EditActivity extends AppCompatActivity {
 
 
         //FAB
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnDragListener(dragListener);
 
 
@@ -68,7 +72,8 @@ public class EditActivity extends AppCompatActivity {
         //setup toolbar for delete button and set title
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Drag and Drop to delete");
+        getSupportActionBar().setTitle("");
+
 
         RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
         RelativeLayout relativeLayout1 = findViewById(R.id.relativeLayout1);
@@ -105,74 +110,97 @@ public class EditActivity extends AppCompatActivity {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             int dragEvent = event.getAction();
+
             final View view = (View) event.getLocalState();
 
 
-            switch (dragEvent){
+            switch (dragEvent) {
 
                 case DragEvent.ACTION_DRAG_STARTED:
 
 
-                    if(view.getId() == R.id.relativeLayout) {
-                        view.setVisibility(View.GONE);
+                    if (view.getId() == R.id.relativeLayout) {
+                        view.setVisibility(View.INVISIBLE);
                     }
-                    if(view.getId() == R.id.relativeLayout1) {
-                        view.setVisibility(View.GONE);
+                    if (view.getId() == R.id.relativeLayout1) {
+                        view.setVisibility(View.INVISIBLE);
                     }
-                    if(view.getId() == R.id.relativeLayout2) {
-                        view.setVisibility(View.GONE);
+                    if (view.getId() == R.id.relativeLayout2) {
+                        view.setVisibility(View.INVISIBLE);
                     }
-                    if(view.getId() == R.id.relativeLayout3) {
-                        view.setVisibility(View.GONE);
+                    if (view.getId() == R.id.relativeLayout3) {
+                        view.setVisibility(View.INVISIBLE);
                     }
 
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
+                    fab.animate().scaleYBy(1.25f).scaleXBy(1.25f).setDuration(100).start();
+                    fab_animated =  true;
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
-                    if(view.getId() == R.id.relativeLayout) {
-                        view.setVisibility(View.VISIBLE);
-
+                    fab.animate().scaleYBy(-1.25f).scaleXBy(-1.25f).setDuration(100).start();
+                    fab_animated = false;
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    final boolean dropped = event.getResult();
+                    if(fab_animated){
+                        fab.animate().scaleYBy(-1.25f).scaleXBy(-1.25f).setDuration(100).start();
+                        fab_animated = false;
                     }
-                    if(view.getId() == R.id.relativeLayout1) {
-                        view.setVisibility(View.VISIBLE);
+                    if (dropped) {System.out.println("DROPPED TRUE");}
+                    else {
 
-                    }
-                    if(view.getId() == R.id.relativeLayout2) {
-                        view.setVisibility(View.VISIBLE);
 
-                    }
-                    if(view.getId() == R.id.relativeLayout3) {
-                        view.setVisibility(View.VISIBLE);
+                        if (view.getId() == R.id.relativeLayout) {
+                            view.setVisibility(View.VISIBLE);
 
+                        }
+                        if (view.getId() == R.id.relativeLayout1) {
+                            view.setVisibility(View.VISIBLE);
+
+                        }
+                        if (view.getId() == R.id.relativeLayout2) {
+                            view.setVisibility(View.VISIBLE);
+
+                        }
+                        if (view.getId() == R.id.relativeLayout3) {
+                            view.setVisibility(View.VISIBLE);
+                        }
                     }
+
                     break;
                 case DragEvent.ACTION_DROP:
 
-                    if(view.getId() == R.id.relativeLayout) {
-                        view.setVisibility(View.GONE);
-                        removed.add("0");
-                    }
-                    if(view.getId() == R.id.relativeLayout1) {
-                        view.setVisibility(View.GONE);
-                        removed.add("1");
-                    }
-                    if(view.getId() == R.id.relativeLayout2) {
-                        view.setVisibility(View.GONE);
-                        removed.add("2");
-                    }
-                    if(view.getId() == R.id.relativeLayout3) {
-                        view.setVisibility(View.GONE);
-                        removed.add("3");
+
+                        if (view.getId() == R.id.relativeLayout) {
+                            view.setVisibility(View.GONE);
+                            removed.add("0");
+                        }
+                        if (view.getId() == R.id.relativeLayout1) {
+                            view.setVisibility(View.GONE);
+                            removed.add("1");
+                        }
+                        if (view.getId() == R.id.relativeLayout2) {
+                            view.setVisibility(View.GONE);
+                            removed.add("2");
+                        }
+                        if (view.getId() == R.id.relativeLayout3) {
+                            view.setVisibility(View.GONE);
+                            removed.add("3");
+                        }
+
+
+
+                        break;
+
+
                     }
 
-                    break;
+                    System.out.print("DROP EVENT TRUE");
 
-
+                    return true;
             }
 
-            return true;
-        }
     };
 
     //2 methods below for edit button

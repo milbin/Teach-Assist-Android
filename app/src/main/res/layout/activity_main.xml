@@ -575,7 +575,7 @@
                 android:textColor="@color/SecondaryTextColor"
                 android:textSize="15sp"
                 android:fontFamily="@font/roboto"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
         </RelativeLayout>
 
 

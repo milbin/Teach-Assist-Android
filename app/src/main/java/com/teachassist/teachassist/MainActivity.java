@@ -42,8 +42,8 @@ import java.util.Map;
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class MainActivity extends AppCompatActivity {
-    String username = "335525168";
-    String password = "4a6349kc";
+    String username = "335525291";
+    String password = "6rx8836f";
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
     private DrawerLayout drawer;
@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
                         Refresh = true;
+                        relativeLayout.setVisibility(View.VISIBLE);
+                        relativeLayout1.setVisibility(View.VISIBLE);
+                        relativeLayout2.setVisibility(View.VISIBLE);
+                        relativeLayout3.setVisibility(View.VISIBLE);
                         String Username = username;
                         String Password = password;
                         new GetTaData().execute(Username, Password);
@@ -133,7 +137,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.action_edit:
+
                 Intent myIntent = new Intent(MainActivity.this, EditActivity.class);
                 Gson gson = new Gson();
                 String list = gson.toJson(response);
@@ -162,87 +168,93 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     removed = data.getStringArrayListExtra("list");
                     System.out.println(removed);
-
-
-                    double average = 0;
-
-                    int y = 0;
-                    for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                        if (entry.getKey() != "NA") {
-                            y++;
-                        }
+                    if(removed.isEmpty()){
+                        //do nothing
                     }
-                    int size = y - removed.size();
-                    double[] grades = new double[size+1];
+                    else{
 
-                    System.out.println(response);
+                        double average = 0;
+
+                        int y = 0;
+                        for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                            if (entry.getKey() != "NA") {
+                                y++;
+
+                            }
+                        }
+                        int size = y - removed.size();
+                        List<Double> grades = new ArrayList<>();
+
+                        System.out.println(removed);
 
 
-                    for (String i : removed) {
-
-                        if (i.equals("0")) {
+                        if(removed.contains("0")){
                             relativeLayout.setVisibility(View.GONE);
-                        } else {
+                        }
+                        else {
                             relativeLayout.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 0)
-                                    grades[0] = Double.parseDouble(entry.getValue().get(0));
+                                if (x == 0) {
+                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
+                                }
                                 x++;
                             }
                         }
-
-                        if (i.equals("1")) {
+                        if(removed.contains("1")){
                             relativeLayout1.setVisibility(View.GONE);
-
-                        } else {
+                        }
+                        else {
                             relativeLayout1.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 1)
-                                    grades[1] = Double.parseDouble(entry.getValue().get(0));
+                                if (x == 1) {
+                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
+                                }
                                 x++;
-
                             }
                         }
-                        if (i.equals("2")) {
+                        if(removed.contains("2")){
                             relativeLayout2.setVisibility(View.GONE);
-
-
-                        } else {
+                        }
+                        else {
                             relativeLayout2.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 2)
-                                    grades[2] = Double.parseDouble(entry.getValue().get(0));
+                                if (x == 2) {
+                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
+                                }
                                 x++;
                             }
                         }
-                        if (i.equals("3")) {
+                        if(removed.contains("3")){
                             relativeLayout3.setVisibility(View.GONE);
-                        } else {
+                        }
+                        else {
                             relativeLayout3.setVisibility(View.VISIBLE);
                             int x = 0;
                             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 3)
-                                    grades[3] = Double.parseDouble(entry.getValue().get(0));
+                                if (x == 3) {
+                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
+                                }
                                 x++;
                             }
                         }
-                    }
 
 
-                    for (double value : grades) {
-                        average += value;
-                        System.out.println(value);
+
+                        for (double value : grades) {
+                            average += value;
+
+                        }
+                        System.out.println(size);
+                        average = DoubleRounder.round(average / size, 1);
+                        Float Average = (float) average;
+                        TextView AverageInt = findViewById(R.id.AverageInt);
+                        AverageInt.setText(Average.toString() + "%");
+                        final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+                        ProgressBarAverage.setProgress(Math.round(Average));
                     }
-                    System.out.println(size);
-                    average = DoubleRounder.round(average / size, 1);
-                    Float Average = (float) average;
-                    TextView AverageInt = findViewById(R.id.AverageInt);
-                    AverageInt.setText(Average.toString() + "%");
-                    final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-                    ProgressBarAverage.setProgress(Math.round(Average));
 
 
                 }
@@ -489,13 +501,18 @@ public class MainActivity extends AppCompatActivity {
         protected Float doInBackground(HashMap<String, List<String>>... response){
             TA ta = new TA();
             Float Mark = 0f;
+            int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                Mark =  Float.parseFloat(entry.getValue().get(0));
+                if(counter == 0) {
+                    Mark = Float.parseFloat(entry.getValue().get(0));
+                }
+                counter++;
 
             }
 
             try {
                 final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
+                System.out.println(Mark);
                 for (int i = 0; i < Math.round(Mark); i+=4) {
                     publishProgress (i);
                     Thread.sleep(0, 50);
