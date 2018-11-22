@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorPrimaryDark"/>
+            <!--
+            <gradient
+                android:angle="135"
+                android:endColor="#E9ABC0"
+                android:startColor="@color/AverageBarColor"
+                android:type="linear"
+                />
+                -->
+            <!--corners allow us to make the rounded corners button-->
+            <corners android:radius="50dp" />
+        </shape>
+    </item>
 </selector>

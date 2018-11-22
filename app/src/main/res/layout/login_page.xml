@@ -7,27 +7,27 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_background">
 
-
     <ImageView
-        android:id="@+id/imageView_login"
+        android:id="@+id/imageView"
         android:layout_width="200dp"
         android:layout_height="250dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        app:srcCompat="@drawable/teach_assist_logo" />
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/teach_assist_logo"
+        />
 
     <RelativeLayout
-        android:id="@+id/usename_input"
+        android:id="@+id/username"
         android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/imageView_login"
-        android:layout_marginTop="40dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop = "50dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:background="@drawable/login_background_input"
-        android:elevation="3dp"
+        android:elevation="10dp"
         >
+        <!--android:background="@drawable/rounded_corner"-->
 
         <EditText
             android:id="@+id/editText1"
@@ -35,25 +35,28 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:textColor="@color/White"
+            android:background="#1100"
+            android:textColor="@color/colorPrimaryDark"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:ems="10"
+            android:fontFamily="@font/nunito_light"
             android:inputType="textPersonName"
-            android:text="Username" />
+            android:text="@string/Username" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/password"
         android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/usename_input"
+        android:layout_height="50dp"
+        android:layout_below="@id/username"
+        android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:background="@drawable/login_background_input"
-        android:elevation="3dp"
+        android:elevation="10dp"
         >
+        <!--android:background="@drawable/rounded_corner"-->
 
         <EditText
             android:id="@+id/editText2"
@@ -61,15 +64,28 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-
-            android:textColor="@color/White"
+            android:background="#1100"
+            android:textColor="@color/colorPrimaryDark"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Password" />
+            android:fontFamily="@font/nunito_light"
+            android:text="@string/Password" />
 
     </RelativeLayout>
-
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="75dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/password"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounded_corner"
+        android:elevation="10dp"
+        android:text="LOGIN"
+        android:textSize="25dp"
+        android:textColor="@color/White"
+        android:fontFamily="@font/nunito_bold"
+        />
 
 </RelativeLayout>
