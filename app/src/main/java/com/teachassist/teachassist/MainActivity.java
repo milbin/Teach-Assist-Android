@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,8 +44,8 @@ import java.util.Map;
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class MainActivity extends AppCompatActivity {
-    String username = "335525291";
-    String password = "6rx8836f";
+    //String username = "335525291";
+    //String password = "6rx8836f";
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
     private DrawerLayout drawer;
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout relativeLayout3;
     LinkedHashMap<String, List<String>> response;
     List<String> removed = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+
         //setup toolbar for nav bar drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -115,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void showToast(String text){
+        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+    }
 
     //close drawer when back button pressed
     @Override
