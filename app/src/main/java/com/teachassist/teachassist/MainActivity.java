@@ -44,8 +44,12 @@ import java.util.Map;
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class MainActivity extends AppCompatActivity {
-    String username = "335525291";
-    String password = "6rx8836f";
+    //String username = "335525168";
+    //String password = "4a6349kc";
+
+    String username = login.getUser();
+    String password = login.getPass();
+
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
     private DrawerLayout drawer;
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout1 = findViewById(R.id.relativeLayout1);
         relativeLayout2 = findViewById(R.id.relativeLayout2);
         relativeLayout3 = findViewById(R.id.relativeLayout3);
+
 
 
         // Refresh

@@ -13,17 +13,48 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
+                <action android:name="android.intent.action.OVERVIEW" />
+
+                <category android:name="android.intent.category.OVERVIEW" />
+                <!--
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                 Accepts URIs that begin with "java-lang-programming://android-app-google-plus-demo"
+                <data
+                    android:host="https"
+                    android:scheme="ta.yrdsb.ca"/>
+                    -->
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".login">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <!-- Accepts URIs that begin with "java-lang-programming://android-app-google-plus-demo" -->
+                <data
+                    android:host="https"
+                    android:scheme="ta.yrdsb.ca"/>
+
+
+
             </intent-filter>
         </activity>
 
         <activity android:label="@string/edit_activity" android:name="EditActivity"/>
-        <activity
-            android:name=".MainDrawer"
-            android:label="@string/title_activity_main_drawer"
-            android:theme="@style/AppTheme"></activity>
+
+
+
     </application>
 
 </manifest>
