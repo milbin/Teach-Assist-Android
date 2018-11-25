@@ -25,9 +25,27 @@ public class login extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 
         usernameInput = (EditText) findViewById(R.id.editText1);
         passwordInput = (EditText) findViewById(R.id.editText2);
+
+        usernameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    usernameInput.setHint("");
+                else
+                    usernameInput.setHint("Your hint");
+            }
+        });
+        passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    passwordInput.setHint("");
+                else
+                    passwordInput.setHint("Your hint");
+            }
+        });
 
         submit_button = (Button) findViewById(R.id.login_button);
         //submit_button = new Button(this);
