@@ -1,5 +1,6 @@
 package com.teachassist.teachassist;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,7 +36,7 @@ public class login extends AppCompatActivity {
                 if (hasFocus)
                     usernameInput.setHint("");
                 else
-                    usernameInput.setHint("Your hint");
+                    usernameInput.setHint("Username");
             }
         });
         passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -43,7 +44,7 @@ public class login extends AppCompatActivity {
                 if (hasFocus)
                     passwordInput.setHint("");
                 else
-                    passwordInput.setHint("Your hint");
+                    passwordInput.setHint("Password");
             }
         });
 
@@ -58,6 +59,9 @@ public class login extends AppCompatActivity {
         @Override
         public void onClick(View v){
             submit_buttonClicked();
+            ProgressDialog dialog = ProgressDialog.show(login.this, "",
+                    "Signing in...", true);
+
             //return;
         }
     }
