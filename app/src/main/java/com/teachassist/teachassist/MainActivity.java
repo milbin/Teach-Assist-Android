@@ -44,8 +44,8 @@ import java.util.Map;
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class MainActivity extends AppCompatActivity {
-    //String username = "335525291";
-    //String password = "6rx8836f";
+    String username = "335525291";
+    String password = "6rx8836f";
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
     private DrawerLayout drawer;
