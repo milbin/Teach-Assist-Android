@@ -115,9 +115,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Student: " + username);
 
 
-        String Username = username;
-        String Password = password;
-        new GetTaData().execute(Username, Password);
+
 
 
     }
