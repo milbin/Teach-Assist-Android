@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class TA {
 
-
+    /*
     public String Get_session_token_and_student_ID(String Username, String Password) {
         try {
         //get sesison token and studentID
@@ -46,6 +46,7 @@ public class TA {
         }
 
 
+
         }
 
     public String Login(String session_token, String student_id, String Username, String Password){
@@ -76,6 +77,7 @@ public class TA {
         }
 
     }
+    */
     public LinkedHashMap<String, List<String>> GetTAData(String Username, String Password){
         try {
             //get sesison token and studentID
