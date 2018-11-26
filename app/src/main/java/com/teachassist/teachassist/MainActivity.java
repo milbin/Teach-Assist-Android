@@ -32,9 +32,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.decimal4j.util.DoubleRounder;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -47,8 +49,10 @@ public class MainActivity extends AppCompatActivity {
     //String username = "335525168";
     //String password = "4a6349kc";
 
-    String username = login.getUser();
-    String password = login.getPass();
+    //String username = login.getUser();
+    //String password = login.getPass();
+    String username;
+    String password;
 
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
@@ -65,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
+
+        Intent intent = getIntent();
+
+        // get params
+        username = intent.getStringExtra("username");
+        password = intent.getStringExtra("password");
 
         //4 course relative layouts
         relativeLayout = findViewById(R.id.relativeLayout);

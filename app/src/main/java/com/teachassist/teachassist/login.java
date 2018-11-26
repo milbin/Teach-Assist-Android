@@ -13,7 +13,7 @@ public class login extends AppCompatActivity {
     EditText usernameInput;
     EditText passwordInput;
     Button submit_button;
-    private static String username, password;
+    String username, password;
 
     private void submit_buttonClicked(){
         username = usernameInput.getText().toString();
@@ -59,16 +59,17 @@ public class login extends AppCompatActivity {
         @Override
         public void onClick(View v){
             submit_buttonClicked();
-            ProgressDialog dialog = ProgressDialog.show(login.this, "",
-                    "Signing in...", true);
+            //ProgressDialog dialog = ProgressDialog.show(login.this, "",
+            //        "Signing in...", true);
+            Intent myIntent = new Intent(login.this, MainActivity.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            System.out.println(username);
+            System.out.println(password);
+            //login.this.startActivityForResult(myIntent, 10101010); //random int i set
+            startActivity(myIntent);
 
             //return;
         }
-    }
-    public static String getUser() {
-        return username;
-    }
-    public static String getPass(){
-        return password;
     }
 }
