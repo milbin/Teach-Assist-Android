@@ -26,8 +26,6 @@
         >
 
 
-
-
         <EditText
             android:id="@+id/editText1"
             android:layout_width="wrap_content"
@@ -35,14 +33,16 @@
             android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
             android:inputType="textPersonName"
-            android:background="@android:color/transparent"
+            android:background="#1100"
             android:theme="@style/EditTextTheme"
             android:ems="10"
-            android:textColorHint="@color/White"
+            android:fontFamily="nunito_light"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:textColor="@color/White"
             android:elevation="5dp"
             android:padding="12dp"
+            android:gravity="center"
             android:drawablePadding="12dp"
-            android:drawableLeft="@drawable/ic_person_black_24dp"
             android:hint="Username"
             />
 
@@ -60,15 +60,17 @@
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:inputType="textPassword"
-            android:background="@android:color/transparent"
+            android:background="#1100"
             android:theme="@style/EditTextTheme"
+            android:fontFamily="nunito_light"
+            android:gravity="center"
             android:ems="10"
-            android:textColorHint="@color/White"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:textColor="@color/White"
             android:elevation="5dp"
             android:padding="12dp"
             android:hint="Password"
             android:drawablePadding="12dp"
-            android:drawableLeft="@drawable/ic_lock_black_24dp"
 
             />
 
