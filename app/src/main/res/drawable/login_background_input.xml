@@ -4,10 +4,10 @@
     <item>
         <shape android:shape="rectangle">
 
-            <stroke android:color="@color/colorPrimaryDark" android:width="4dp" />
+            <solid android:color="#47a54b"/>
+            <stroke android:color="@android:color/transparent" android:width="4dp" />
             <!--corners allow us to make the rounded corners button-->
             <corners android:radius="40dp" />
         </shape>
-
     </item>
 </ripple>

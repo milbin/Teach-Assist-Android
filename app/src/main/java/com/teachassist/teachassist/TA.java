@@ -94,8 +94,9 @@ public class TA {
             SendRequest sr = new SendRequest();
             String[] response = sr.send(url, headers, parameters, cookies, path);
 
+            try {
+                String session_token = response[1].split("=")[1].split(";")[0];
 
-            String session_token = response[1].split("=")[1].split(";")[0];
             String student_id = response[2].split("=")[1].split(";")[0];
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
@@ -134,8 +135,14 @@ public class TA {
                 }
             }
 
-
             return Marks;
+
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                e.printStackTrace();
+                LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
+                return returnMap;
+            }
 
 
 
@@ -145,7 +152,6 @@ public class TA {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
             LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
-            System.out.println("ERROR");
             return returnMap;
         }
 

@@ -2,6 +2,7 @@ package com.teachassist.teachassist;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -36,6 +37,10 @@ import com.google.gson.reflect.TypeToken;
 
 import org.decimal4j.util.DoubleRounder;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,18 +68,50 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout relativeLayout3;
     LinkedHashMap<String, List<String>> response;
     List<String> removed = new ArrayList<>();
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //progress dialog
+        dialog = ProgressDialog.show(MainActivity.this, "",
+                "Loading...", true);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
 
+        //intent
         Intent intent = getIntent();
-
-        // get params
         username = intent.getStringExtra("username");
         password = intent.getStringExtra("password");
+
+        // Open file with username and password
+        String filename = "Credentials.txt";
+        final File path = getFilesDir();
+        File file = new File(path, filename);
+        ArrayList<String> credentials = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+                credentials.add(line.split(":")[0]);
+                credentials.add(line.split(":")[1]);
+            }
+            br.close();
+        }
+        catch (IOException e) {
+            //TODO add proper error handling for corrupt file or smth
+        }
+
+
+        System.out.println(credentials);
+        username = credentials.get(0);
+        password = credentials.get(1);
+
+
+
 
         //4 course relative layouts
         relativeLayout = findViewById(R.id.relativeLayout);
@@ -123,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
         //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
         //ToolbarText.setText("Student Report for: "+ username);
         getSupportActionBar().setTitle("Student: " + username);
+
+
+        String Username = username;
+        String Password = password;
+        new GetTaData().execute(Username, Password);
 
 
 
@@ -416,8 +458,7 @@ public class MainActivity extends AppCompatActivity {
             TextView roomNumber3 = findViewById(R.id.RoomNumber3);
             roomNumber3.setText("Room " + RoomNumber3);
 
-
-
+            dialog.dismiss();
             RunTasks(response);
 
         }

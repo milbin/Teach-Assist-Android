@@ -1,17 +1,22 @@
 package com.teachassist.teachassist;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,10 +66,24 @@ public class login extends AppCompatActivity {
             }
         });
 
+
+
         checkbox = findViewById(R.id.checkbox);
         checkbox.setChecked(true);
         submit_button = (Button) findViewById(R.id.login_button);
         submit_button.setOnClickListener(new submit_buttonClick());
+
+        // on enter press submit form
+        passwordInput.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    submit_button.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -74,8 +93,7 @@ public class login extends AppCompatActivity {
         public void onClick(View v){
             submit_buttonClicked();
 
-            ProgressDialog dialog = ProgressDialog.show(login.this, "",
-                    "Signing in...", true);
+
             String Username = username;
             String Password = password;
 
@@ -83,17 +101,15 @@ public class login extends AppCompatActivity {
             new login.GetTaData().execute(Username, Password);
 
 
-            Intent myIntent = new Intent(login.this, MainActivity.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            dialog.dismiss();
-            startActivity(myIntent);
+
 
 
         }
     }
 
     private class GetTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>> {
+        ProgressDialog dialog = ProgressDialog.show(login.this, "",
+                "Signing in...", true);
 
 
         @Override
@@ -116,27 +132,54 @@ public class login extends AppCompatActivity {
         protected void onProgressUpdate(Integer... progress) {}
 
 
-        protected void onPostExecute(LinkedHashMap<String, List<String>> response){
-            if(checkbox.isChecked()){
+        protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
 
-                String filename = "Credentials.txt";
-                String fileContents = username+":"+password;
+            final EditText usernameInput = (EditText) findViewById(R.id.editText1);
+            final EditText passwordInput = (EditText) findViewById(R.id.editText2);
+            System.out.println(response);
+            if (response.isEmpty()) {
+                dialog.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
+                builder.setTitle("Sign in Failure")
+                .setMessage("We could not reach TeachAssist, please check your Username, Password and Internet connection")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        usernameInput.getText().clear();
+                        passwordInput.getText().clear();
+                    }
+                    }).show();
 
-                // Get the directory of private Ta app storage.
-                final File path = getFilesDir();
-
-                File file = new File(path, filename);
-
-                FileOutputStream outputStream;
-                try {
-                    outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                    outputStream.write(fileContents.getBytes());
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    System.out.println("INVALID LOGIN");
             }
-        System.out.println(response);
+            else {
+                if (checkbox.isChecked()) {
+
+                    String filename = "Credentials.txt";
+                    String fileContents = username + ":" + password;
+
+                    // Get the directory of private Ta app storage.
+                    final File path = getFilesDir();
+
+                    File file = new File(path, filename);
+
+                    FileOutputStream outputStream;
+                    try {
+                        outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                        outputStream.write(fileContents.getBytes());
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    Intent myIntent = new Intent(login.this, MainActivity.class);
+                    myIntent.putExtra("username", username);
+                    myIntent.putExtra("password", password);
+                    startActivity(myIntent);
+                    dialog.dismiss();
+                    finish();
+                }
+                System.out.println(response);
+            }
         }
     }
 
