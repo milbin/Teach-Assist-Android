@@ -85,6 +85,8 @@ public class login extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     class submit_buttonClick implements View.OnClickListener {
@@ -149,17 +151,14 @@ public class login extends AppCompatActivity {
                     }
                     }).show();
 
-                    System.out.println("INVALID LOGIN");
+
             }
             else {
                 if (checkbox.isChecked()) {
 
                     String filename = "Credentials.txt";
                     String fileContents = username + ":" + password;
-
-                    // Get the directory of private Ta app storage.
                     final File path = getFilesDir();
-
                     File file = new File(path, filename);
 
                     FileOutputStream outputStream;
@@ -171,14 +170,29 @@ public class login extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    Intent myIntent = new Intent(login.this, MainActivity.class);
-                    myIntent.putExtra("username", username);
-                    myIntent.putExtra("password", password);
-                    startActivity(myIntent);
-                    dialog.dismiss();
-                    finish();
                 }
-                System.out.println(response);
+                else{
+
+                    String filename = "Credentials.txt";
+                    final File path = getFilesDir();
+                    File file = new File(path, filename);
+
+                    FileOutputStream outputStream;
+                    try {
+                        outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                        outputStream.write("".getBytes());
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                Intent myIntent = new Intent(login.this, MainActivity.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                startActivity(myIntent);
+                dialog.dismiss();
+                finish();
             }
         }
     }

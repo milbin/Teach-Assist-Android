@@ -14,6 +14,11 @@ import java.util.Map;
 public class Calls {
     public static void main(String args[]) {
 
+        String test = "NA";
+        if(!test.equals("NA")){
+
+        }
+
 
         TA ta = new TA();
         String username = "335525168";

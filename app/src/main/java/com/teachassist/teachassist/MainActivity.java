@@ -80,37 +80,20 @@ public class MainActivity extends AppCompatActivity {
                 "Loading...", true);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
 
+        //hide progress bars so that they dont cover text view
+        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
+        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage1 =  findViewById(R.id.SubjectBar1);
+        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage2 =  findViewById(R.id.SubjectBar2);
+        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
+        ProgressBarAverage.setVisibility(View.INVISIBLE);
+
         //intent
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
         password = intent.getStringExtra("password");
-
-        // Open file with username and password
-        String filename = "Credentials.txt";
-        final File path = getFilesDir();
-        File file = new File(path, filename);
-        ArrayList<String> credentials = new ArrayList<>();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-                credentials.add(line.split(":")[0]);
-                credentials.add(line.split(":")[1]);
-            }
-            br.close();
-        }
-        catch (IOException e) {
-            //TODO add proper error handling for corrupt file or smth
-        }
-
-
-        System.out.println(credentials);
-        username = credentials.get(0);
-        password = credentials.get(1);
-
-
 
 
         //4 course relative layouts
@@ -367,15 +350,23 @@ public class MainActivity extends AppCompatActivity {
             String RoomNumber  = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter == 0) {
-                    Mark = Float.parseFloat(entry.getValue().get(0));
-                    SubjectAbrvString =  entry.getValue().get(1);
-                    SubjectNameString =  entry.getValue().get(2);
-                    RoomNumber  = entry.getValue().get(3);
+                    if (!entry.getKey().equals("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+                        TextView SubjectInt = findViewById(R.id.SubjectInt);
+                        SubjectInt.setText(Mark.toString()+"%");
+                        SubjectAbrvString =  entry.getValue().get(1);
+                        SubjectNameString =  entry.getValue().get(2);
+                        RoomNumber  = entry.getValue().get(3);
+                    }
+                    else {
+                        SubjectAbrvString = entry.getValue().get(0);
+                        SubjectNameString = entry.getValue().get(1);
+                        RoomNumber = entry.getValue().get(2);
+                    }
                 }
                 counter++;
             }
-            TextView SubjectInt = findViewById(R.id.SubjectInt);
-            SubjectInt.setText(Mark.toString()+"%");
+
             TextView SubjectAbrv = findViewById(R.id.SubjectAbrv);
             SubjectAbrv.setText(SubjectAbrvString);
             TextView SubjectName = findViewById(R.id.SubjectName);
@@ -392,15 +383,23 @@ public class MainActivity extends AppCompatActivity {
             String RoomNumber1 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter1 == 1) {
-                    Mark1 = Float.parseFloat(entry.getValue().get(0));
-                    SubjectAbrvString1 =  entry.getValue().get(1);
-                    SubjectNameString1 =  entry.getValue().get(2);
-                    RoomNumber1 = entry.getValue().get(3);
+                    if (!entry.getKey().equals("NA")) {
+                        Mark1 = Float.parseFloat(entry.getValue().get(0));
+                        TextView SubjectInt1 = findViewById(R.id.SubjectInt1);
+                        SubjectInt1.setText(Mark1.toString() + "%");
+                        SubjectAbrvString1 = entry.getValue().get(1);
+                        SubjectNameString1 = entry.getValue().get(2);
+                        RoomNumber1 = entry.getValue().get(3);
+                    }
+                    else{
+                        SubjectAbrvString1 = entry.getValue().get(0);
+                        SubjectNameString1 = entry.getValue().get(1);
+                        RoomNumber1 = entry.getValue().get(2);
+                    }
                 }
                 counter1++;
             }
-            TextView SubjectInt1 = findViewById(R.id.SubjectInt1);
-            SubjectInt1.setText(Mark1.toString()+"%");
+
             TextView SubjectAbrv1 = findViewById(R.id.SubjectAbrv1);
             SubjectAbrv1.setText(SubjectAbrvString1);
             TextView SubjectName1 = findViewById(R.id.SubjectName1);
@@ -417,15 +416,24 @@ public class MainActivity extends AppCompatActivity {
             String RoomNumber2 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter2 == 2) {
-                    Mark2 = Float.parseFloat(entry.getValue().get(0));
-                    SubjectAbrvString2 =  entry.getValue().get(1);
-                    SubjectNameString2 =  entry.getValue().get(2);
-                    RoomNumber2 = entry.getValue().get(3);
+                    if (!entry.getKey().equals("NA")) {
+                        Mark2 = Float.parseFloat(entry.getValue().get(0));
+                        TextView SubjectInt2 = findViewById(R.id.SubjectInt2);
+                        SubjectInt2.setText(Mark2.toString()+"%");
+
+                        SubjectAbrvString2 =  entry.getValue().get(1);
+                        SubjectNameString2 =  entry.getValue().get(2);
+                        RoomNumber2 = entry.getValue().get(3);
+                    }
+                    else{
+                        SubjectAbrvString2 =  entry.getValue().get(0);
+                        SubjectNameString2 =  entry.getValue().get(1);
+                        RoomNumber2 = entry.getValue().get(2);
+                    }
                 }
                 counter2++;
             }
-            TextView SubjectInt2 = findViewById(R.id.SubjectInt2);
-            SubjectInt2.setText(Mark2.toString()+"%");
+
             TextView SubjectAbrv2 = findViewById(R.id.SubjectAbrv2);
             SubjectAbrv2.setText(SubjectAbrvString2);
             TextView SubjectName2 = findViewById(R.id.SubjectName2);
@@ -442,15 +450,24 @@ public class MainActivity extends AppCompatActivity {
             String RoomNumber3 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter3 == 3) {
-                    Mark3 = Float.parseFloat(entry.getValue().get(0));
-                    SubjectAbrvString3 =  entry.getValue().get(1);
-                    SubjectNameString3 =  entry.getValue().get(2);
-                    RoomNumber3 = entry.getValue().get(3);
+                    if (!entry.getKey().equals("NA")) {
+                        Mark3 = Float.parseFloat(entry.getValue().get(0));
+                        TextView SubjectInt3 = findViewById(R.id.SubjectInt3);
+                        SubjectInt3.setText(Mark3.toString() + "%");
+
+                        SubjectAbrvString3 = entry.getValue().get(1);
+                        SubjectNameString3 = entry.getValue().get(2);
+                        RoomNumber3 = entry.getValue().get(3);
+                    }
+                    else{
+                        SubjectAbrvString3 = entry.getValue().get(0);
+                        SubjectNameString3 = entry.getValue().get(1);
+                        RoomNumber3 = entry.getValue().get(2);
+                    }
                 }
                 counter3++;
             }
-            TextView SubjectInt3 = findViewById(R.id.SubjectInt3);
-            SubjectInt3.setText(Mark3.toString()+"%");
+
             TextView SubjectAbrv3 = findViewById(R.id.SubjectAbrv3);
             SubjectAbrv3.setText(SubjectAbrvString3);
             TextView SubjectName3 = findViewById(R.id.SubjectName3);
@@ -565,6 +582,12 @@ public class MainActivity extends AppCompatActivity {
                 if(counter == 0) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
+                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
+                        ProgressBarAverage.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        return -1f;
+
                     }
                 }
                 counter++;
@@ -603,6 +626,11 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
+                EmptyCourse.setText(R.string.EmptyText);
+            }
 
 
         }
@@ -625,6 +653,12 @@ public class MainActivity extends AppCompatActivity {
                 if(counter == 1) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
+                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
+                        ProgressBarAverage.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        return -1f;
+
                     }
 
                 }
@@ -662,6 +696,11 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse1);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
+                EmptyCourse.setText(R.string.EmptyText);
+            }
 
 
         }
@@ -685,7 +724,14 @@ public class MainActivity extends AppCompatActivity {
                 if(counter == 2) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
+                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
+                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
+                    else {
+                        return -1f;
+
+                    }
+
 
                 }
                 counter++;
@@ -722,6 +768,11 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse2);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
+                EmptyCourse.setText(R.string.EmptyText);
+            }
 
 
         }
@@ -745,10 +796,10 @@ public class MainActivity extends AppCompatActivity {
                 if(counter == 3) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
+                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
+                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
-                        TextView EmptyCourse = findViewById(R.id.EmptyCourse);
-                        EmptyCourse.setText(R.string.EmptyText);
                         return -1f;
 
                     }
@@ -788,6 +839,12 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
+                EmptyCourse.setText(R.string.EmptyText);
+                //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in
+            }
 
 
         }

@@ -108,7 +108,6 @@ public class TA {
 
             for(String i :resp[0].split("<td>")){
                 if(i.contains("current mark =  ")){
-                    System.out.println(i);
                     String Subject_id = i.split("subject_id=")[1].split("&")[0];
                     String Current_mark = i.split("current mark =  ")[1].split("%")[0];
                     String Course_Name = i.split(":")[0];
@@ -127,8 +126,10 @@ public class TA {
                     List<String> Stats = new ArrayList<>();
                     String Course_Name = i.split(":")[0];
                     String Course_code = i.split(":")[1].split("<br>")[0];
+                    String Room_Number = i.split("rm. ")[1].split("</td>")[0];
                     Stats.add(Course_Name);
                     Stats.add(Course_code);
+                    Stats.add(Room_Number);
 
 
                     Marks.put("NA", Stats);
@@ -164,19 +165,18 @@ public class TA {
         double Average = 0;
         int x = 0;
         for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-            if (entry.getKey() != "NA") {
+            if (!entry.getKey().equals("NA")) {
                 x++;
             }
         }
         double[] grades = new double[x];
         int i = 0;
         for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-            if (entry.getKey() != "NA") {
+            if (!entry.getKey().equals("NA")) {
                 grades[i] = Double.parseDouble(entry.getValue().get(0));
-
-
+                i++;
             }
-            i++;
+
 
         }
         for (double value:grades)
