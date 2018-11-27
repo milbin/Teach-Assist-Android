@@ -84,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
         ProgressBarAverage.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage1 =  findViewById(R.id.SubjectBar1);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage1.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage2 =  findViewById(R.id.SubjectBar2);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage2.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage3.setVisibility(View.INVISIBLE);
 
         //intent
         Intent intent = getIntent();
@@ -215,17 +215,25 @@ public class MainActivity extends AppCompatActivity {
                         //do nothing
                     }
                     else{
-
+                        ArrayList Empty_course_list = new ArrayList();
                         double average = 0;
 
+                        int counter = 0;
                         int y = 0;
                         for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                             if (!entry.getKey().equals("NA")) {
                                 y++;
+                                counter++;
 
                             }
+                            else{
+                                Empty_course_list.add(counter);
+                                counter++;
+                            }
                         }
-                        int size = y - removed.size();
+
+
+                        int size = y - removed.size()+Empty_course_list.size();
                         List<Double> grades = new ArrayList<>();
 
                         System.out.println(removed);
@@ -576,22 +584,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Float doInBackground(HashMap<String, List<String>>... response){
             TA ta = new TA();
+
             Float Mark = 0f;
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 0) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
+
                     }
                     else {
                         return -1f;
 
                     }
+
                 }
                 counter++;
-
             }
 
             try {
@@ -621,6 +629,9 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
             ProgressBarAverage.setProgress(progress[0]);
 
         }
@@ -653,8 +664,6 @@ public class MainActivity extends AppCompatActivity {
                 if(counter == 1) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
                         return -1f;
@@ -691,6 +700,9 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
             ProgressBarAverage.setProgress(progress[0]);
 
         }
@@ -724,8 +736,7 @@ public class MainActivity extends AppCompatActivity {
                 if(counter == 2) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
+
                     }
                     else {
                         return -1f;
@@ -763,6 +774,9 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
             ProgressBarAverage.setProgress(progress[0]);
 
         }
@@ -796,8 +810,7 @@ public class MainActivity extends AppCompatActivity {
                 if(counter == 3) {
                     if(!entry.getKey().equals("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
+
                     }
                     else {
                         return -1f;
@@ -834,6 +847,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onProgressUpdate(Integer... progress) {
 
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE) {
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
             ProgressBarAverage.setProgress(progress[0]);
 
         }
