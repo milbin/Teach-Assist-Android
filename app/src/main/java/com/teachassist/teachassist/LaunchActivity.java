@@ -30,7 +30,6 @@ public class LaunchActivity extends AppCompatActivity {
                 String line;
 
                 while ((line = br.readLine()) != null) {
-                    System.out.println(line + "HERE 1");
                     credentials.add(line.split(":")[0]);
                     credentials.add(line.split(":")[1]);
                 }
@@ -52,7 +51,6 @@ public class LaunchActivity extends AppCompatActivity {
                 String line;
 
                 while ((line = br.readLine()) != null) {
-                    System.out.println(line + "HERE<-----");
                 }
                 br.close();
             } catch (IOException e) {

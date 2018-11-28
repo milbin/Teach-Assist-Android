@@ -21,27 +21,23 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
+                <!-- Accepts URIs that begin with "java-lang-programming://android-app-google-plus-demo" -->
+                <data android:host="ta.yrdsb.ca"/>
+                <data android:host="www.ta.yrdsb.ca"/>
+                <data android:scheme="https"/>
+                <data android:scheme="http"/>
+            </intent-filter>
 
         </activity>
 
         <activity android:name=".MainActivity"></activity>
 
-        <activity android:name=".login">
-
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <!-- Accepts URIs that begin with "java-lang-programming://android-app-google-plus-demo" -->
-                <data
-                    android:host="https"
-                    android:scheme="ta.yrdsb.ca"/>
-            </intent-filter>
-        </activity>
+        <activity android:name=".login"></activity>
 
         <activity android:label="@string/edit_activity" android:name="EditActivity"/>
 

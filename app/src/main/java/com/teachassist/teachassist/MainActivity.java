@@ -3,10 +3,14 @@ package com.teachassist.teachassist;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -20,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,8 +44,10 @@ import org.decimal4j.util.DoubleRounder;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +57,7 @@ import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //String username = "335525168";
     //String password = "4a6349kc";
 
@@ -69,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     LinkedHashMap<String, List<String>> response;
     List<String> removed = new ArrayList<>();
     ProgressDialog dialog;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Nav bar Drawer
         drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -157,6 +168,66 @@ public class MainActivity extends AppCompatActivity {
 
     private void showToast(String text){
         Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    // on navigation drawer item selection
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.nav_logout:
+
+                String filename = "Credentials.txt";
+                String fileContents = "";
+                final File path = getFilesDir();
+                File file = new File(path, filename);
+
+                FileOutputStream outputStream;
+                try {
+                    outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                    outputStream.write(fileContents.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Intent myIntent = new Intent(MainActivity.this, login.class);
+                startActivity(myIntent);
+                break;
+
+            case R.id.nav_home:
+                drawer.closeDrawer(Gravity.START);
+                break;
+
+            case R.id.nav_email:
+                String mailto = "mailto:Benjamintran0684@gmail.com";
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse(mailto));
+
+                try {
+                    startActivity(emailIntent);
+                } catch (ActivityNotFoundException e) {
+                    showToast("No email app currently installed");
+                }
+                break;
+
+            case R.id.nav_bug_report:
+                String mailtoBug = "mailto:Benjamintran0684@gmail.com";
+
+                Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
+                BugIntent.setData(Uri.parse(mailtoBug));
+
+                try {
+                    startActivity(BugIntent);
+                } catch (ActivityNotFoundException e) {
+                    showToast("No email app currently installed");
+                }
+                break;
+
+        }
+
+
+        return false;
     }
 
     //close drawer when back button pressed
