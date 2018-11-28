@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_settings:
                 showToast("Coming soon");
-                break
+                break;
 
             case R.id.nav_email:
                 String mailto = "mailto:Benjamintran0684@gmail.com";
