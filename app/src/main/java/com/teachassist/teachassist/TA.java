@@ -111,11 +111,11 @@ public class TA {
             int numberOfEmptyCourses = 0;
             for(String i :resp[0].split("<td>")){
                 if(i.contains("current mark =  ")){
-                    String Subject_id = i.split("subject_id=")[1].split("&")[0];
-                    String Current_mark = i.split("current mark =  ")[1].split("%")[0];
-                    String Course_Name = i.split(":")[0];
-                    String Course_code = i.split(":")[1].split("<br>")[0];
-                    String Room_Number = i.split("rm. ")[1].split("</td>")[0];
+                    String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
+                    String Current_mark = i.split("current mark =  ")[1].split("%")[0].trim();
+                    String Course_Name = i.split(":")[0].trim();
+                    String Course_code = i.split(":")[1].split("<br>")[0].trim();
+                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
                     List Stats = new ArrayList<>();
                     Stats.add(Current_mark);
                     Stats.add(Course_Name);
@@ -128,9 +128,9 @@ public class TA {
                 if(i.contains("Please see teacher for current status regarding achievement in the course")){
                     System.out.println("Please see teacher for current status regarding achievement in the course");
                     ArrayList<String> Stats = new ArrayList<>();
-                    String Course_Name = i.split(":")[0];
-                    String Course_code = i.split(":")[1].split("<br>")[0];
-                    String Room_Number = i.split("rm. ")[1].split("</td>")[0];
+                    String Course_Name = i.split(":")[0].trim();
+                    String Course_code = i.split(":")[1].split("<br>")[0].trim();
+                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
                     Stats.add(Course_Name);
                     Stats.add(Course_code);
                     Stats.add(Room_Number);
