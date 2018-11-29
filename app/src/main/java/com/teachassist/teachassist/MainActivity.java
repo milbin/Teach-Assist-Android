@@ -199,7 +199,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_settings:
-                showToast("Coming soon");
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 break;
 
             case R.id.nav_email:
@@ -406,6 +407,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String Password = params[1];
 
             response = ta.GetTAData(Username, Password);
+            ta.GetMarks("283003");
 
             return response;
 

@@ -12,6 +12,8 @@ import java.util.Map;
 
 
 public class TA {
+    String student_id;
+    String session_token;
 
     /*
     public String Get_session_token_and_student_ID(String Username, String Password) {
@@ -95,9 +97,9 @@ public class TA {
             String[] response = sr.send(url, headers, parameters, cookies, path);
 
             try {
-                String session_token = response[1].split("=")[1].split(";")[0];
 
-            String student_id = response[2].split("=")[1].split(";")[0];
+            session_token = response[1].split("=")[1].split(";")[0];
+            student_id = response[2].split("=")[1].split(";")[0];
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
             parameters.put("student_id ", student_id);
@@ -183,6 +185,37 @@ public class TA {
             Average += value;
         Average = DoubleRounder.round(Average/grades.length, 1);
         return Average;
+
+    }
+
+    public LinkedHashMap GetMarks(String subject_id){
+        try {
+            String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
+            String path = "/live/students/viewReport.php?";
+            HashMap<String, String> headers = new HashMap<>();
+            HashMap<String, String> parameters = new HashMap<>();
+            HashMap<String, String> cookies = new HashMap<>();
+            parameters.put("subject_id", "283003");
+            parameters.put("student_id", student_id);
+            cookies.put("session_token", session_token);
+            cookies.put("student_id", student_id);
+
+
+            //get response
+            SendRequest sr = new SendRequest();
+            String[] response = sr.send(url, headers, parameters, cookies, path);
+            for(String i:response){
+                System.out.println("HERE"+i);
+            }
+            LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
+            return returnMap;
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+            //String[] returnString = {"ERROR! Check in SendRequest"};
+            LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
+            return returnMap;
+        }
 
     }
 

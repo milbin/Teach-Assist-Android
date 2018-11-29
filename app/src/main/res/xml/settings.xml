@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="Notifications"
+        android:title="Notifications">
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="All Notifications"
+        android:summary="Send notifications for all courses when a new assignment is posted"
+        android:title="All Notifications" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="Course 1"
+            android:summary="placeholder"
+            android:title="placeholder" />
+
+
+    </PreferenceCategory>
+</PreferenceScreen>
