@@ -282,7 +282,7 @@ public class EditActivity extends AppCompatActivity {
             String RoomNumber  = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter == 0) {
-                    if (!entry.getKey().equals("NA")) {
+                    if (!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
                         TextView SubjectInt = findViewById(R.id.SubjectInt);
                         SubjectInt.setText(Mark.toString()+"%");
@@ -315,7 +315,7 @@ public class EditActivity extends AppCompatActivity {
             String RoomNumber1 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter1 == 1) {
-                    if (!entry.getKey().equals("NA")) {
+                    if (!entry.getKey().contains("NA")) {
                         Mark1 = Float.parseFloat(entry.getValue().get(0));
                         TextView SubjectInt1 = findViewById(R.id.SubjectInt1);
                         SubjectInt1.setText(Mark1.toString() + "%");
@@ -348,7 +348,7 @@ public class EditActivity extends AppCompatActivity {
             String RoomNumber2 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter2 == 2) {
-                    if (!entry.getKey().equals("NA")) {
+                    if (!entry.getKey().contains("NA")) {
                         Mark2 = Float.parseFloat(entry.getValue().get(0));
                         TextView SubjectInt2 = findViewById(R.id.SubjectInt2);
                         SubjectInt2.setText(Mark2.toString()+"%");
@@ -382,7 +382,7 @@ public class EditActivity extends AppCompatActivity {
             String RoomNumber3 = "";
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter3 == 3) {
-                    if (!entry.getKey().equals("NA")) {
+                    if (!entry.getKey().contains("NA")) {
                         Mark3 = Float.parseFloat(entry.getValue().get(0));
                         TextView SubjectInt3 = findViewById(R.id.SubjectInt3);
                         SubjectInt3.setText(Mark3.toString() + "%");
@@ -487,7 +487,7 @@ public class EditActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 0) {
-                    if(!entry.getKey().equals("NA")) {
+                    if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
                         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
                         ProgressBarAverage.setVisibility(View.VISIBLE);
@@ -558,7 +558,7 @@ public class EditActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 1) {
-                    if(!entry.getKey().equals("NA")) {
+                    if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
                         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
                         ProgressBarAverage.setVisibility(View.VISIBLE);
@@ -629,7 +629,7 @@ public class EditActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 2) {
-                    if(!entry.getKey().equals("NA")) {
+                    if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
                         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
                         ProgressBarAverage.setVisibility(View.VISIBLE);
@@ -701,7 +701,7 @@ public class EditActivity extends AppCompatActivity {
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
                 if(counter == 3) {
-                    if(!entry.getKey().equals("NA")) {
+                    if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
                         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
                         ProgressBarAverage.setVisibility(View.VISIBLE);

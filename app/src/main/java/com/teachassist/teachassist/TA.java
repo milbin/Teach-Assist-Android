@@ -108,6 +108,7 @@ public class TA {
 
             LinkedHashMap<String, List<String>> Marks = new LinkedHashMap();
 
+            int numberOfEmptyCourses = 0;
             for(String i :resp[0].split("<td>")){
                 if(i.contains("current mark =  ")){
                     String Subject_id = i.split("subject_id=")[1].split("&")[0];
@@ -125,7 +126,8 @@ public class TA {
                     Marks.put(Subject_id, Stats);
                 }
                 if(i.contains("Please see teacher for current status regarding achievement in the course")){
-                    List<String> Stats = new ArrayList<>();
+                    System.out.println("Please see teacher for current status regarding achievement in the course");
+                    ArrayList<String> Stats = new ArrayList<>();
                     String Course_Name = i.split(":")[0];
                     String Course_code = i.split(":")[1].split("<br>")[0];
                     String Room_Number = i.split("rm. ")[1].split("</td>")[0];
@@ -133,11 +135,10 @@ public class TA {
                     Stats.add(Course_code);
                     Stats.add(Room_Number);
 
-
-                    Marks.put("NA", Stats);
+                    numberOfEmptyCourses++;
+                    Marks.put("NA"+numberOfEmptyCourses, Stats);
                 }
             }
-
             return Marks;
 
             }
@@ -167,14 +168,14 @@ public class TA {
         double Average = 0;
         int x = 0;
         for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-            if (!entry.getKey().equals("NA")) {
+            if (!entry.getKey().contains("NA")) {
                 x++;
             }
         }
         double[] grades = new double[x];
         int i = 0;
         for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-            if (!entry.getKey().equals("NA")) {
+            if (!entry.getKey().contains("NA")) {
                 grades[i] = Double.parseDouble(entry.getValue().get(0));
                 i++;
             }
