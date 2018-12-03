@@ -38,7 +38,13 @@
         <activity android:name=".MainActivity"></activity>
 
         <activity android:name=".login"></activity>
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity">
+            <intent-filter android:label="settings">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.PREFERENCE" />
+            </intent-filter>
+        </activity>
+
 
         <activity android:label="@string/edit_activity" android:name="EditActivity"/>
 
