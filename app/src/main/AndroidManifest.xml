@@ -40,6 +40,9 @@
 
         <activity android:name=".SettingsActivity"
             android:theme="@style/preferenceTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.teachassist.teachassist.MainActivity" />
             <intent-filter android:label="settings">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.PREFERENCE" />

@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()){
             case R.id.nav_logout:
-
+                drawer.closeDrawer(Gravity.START);
                 String filename = "Credentials.txt";
                 String fileContents = "";
                 final File path = getFilesDir();
@@ -199,11 +199,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_settings:
+                drawer.closeDrawer(Gravity.START);
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
 
             case R.id.nav_email:
+                drawer.closeDrawer(Gravity.START);
+
                 String mailto = "mailto:Benjamintran0684@gmail.com";
 
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
@@ -217,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_bug_report:
+                drawer.closeDrawer(Gravity.START);
                 String mailtoBug = "mailto:Benjamintran0684@gmail.com";
 
                 Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
@@ -243,6 +247,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+    // dismisses dialog so when user resume is smooth
+    public void onPause() {
+        super.onPause();
+        dialog.dismiss();
+
+    }
+    public void onResume() {
+        super.onResume();
+
     }
 
     //2 methods below for edit button
