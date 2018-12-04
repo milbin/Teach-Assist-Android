@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,8 +31,12 @@ public class login extends AppCompatActivity {
     EditText passwordInput;
     Button submit_button;
     CheckBox checkbox;
-
     String username, password;
+
+    public static final String SHARED_PREFS = "sharedPrefes";
+    public static final String USERNAME = "USERNAME";
+    public static final String PASSWORD = "PASSWORD";
+    public static final String REMEMBERME = "REMEMBERME";
 
     private void submit_buttonClicked(){
         username = usernameInput.getText().toString();
@@ -155,36 +160,25 @@ public class login extends AppCompatActivity {
             }
             else {
                 if (checkbox.isChecked()) {
+                    //add username and password to shared preferances
+                    System.out.println("CHECBOX IS CHECKED");
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor =   sharedPreferences.edit();
+                    editor.putString(USERNAME, username);
+                    editor.putString(PASSWORD, password);
+                    editor.putBoolean(REMEMBERME, true);
+                    editor.apply();
 
-                    String filename = "Credentials.txt";
-                    String fileContents = username + ":" + password;
-                    final File path = getFilesDir();
-                    File file = new File(path, filename);
-
-                    FileOutputStream outputStream;
-                    try {
-                        outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                        outputStream.write(fileContents.getBytes());
-                        outputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
 
                 }
                 else{
 
-                    String filename = "Credentials.txt";
-                    final File path = getFilesDir();
-                    File file = new File(path, filename);
-
-                    FileOutputStream outputStream;
-                    try {
-                        outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                        outputStream.write("".getBytes());
-                        outputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor =   sharedPreferences.edit();
+                    editor.putString(USERNAME, username);
+                    editor.putString(PASSWORD, password);
+                    editor.putBoolean(REMEMBERME, false);
+                    editor.apply();
 
                 }
                 Intent myIntent = new Intent(login.this, MainActivity.class);

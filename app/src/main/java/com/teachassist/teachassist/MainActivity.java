@@ -6,10 +6,12 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -78,10 +80,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProgressDialog dialog;
     NavigationView navigationView;
 
+    public static final String SHARED_PREFS = "sharedPrefes";
+    public static final String USERNAME = "USERNAME";
+    public static final String PASSWORD = "PASSWORD";
+    public static final String REMEMBERME = "REMEMBERME";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        System.out.println(sharedPreferences.getString(USERNAME, ""));
+        System.out.println(sharedPreferences.getString(PASSWORD, ""));
+        System.out.println(sharedPreferences.getBoolean(REMEMBERME, false));
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",
@@ -176,19 +188,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(menuItem.getItemId()){
             case R.id.nav_logout:
                 drawer.closeDrawer(Gravity.START);
-                String filename = "Credentials.txt";
-                String fileContents = "";
-                final File path = getFilesDir();
-                File file = new File(path, filename);
 
-                FileOutputStream outputStream;
-                try {
-                    outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                    outputStream.write(fileContents.getBytes());
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor =   sharedPreferences.edit();
+                editor.putString(USERNAME, "");
+                editor.putString(PASSWORD, "");
+                editor.putBoolean(REMEMBERME, false);
 
                 Intent myIntent = new Intent(MainActivity.this, login.class);
                 startActivity(myIntent);
@@ -239,26 +245,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    //close drawer when back button pressed
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-    // dismisses dialog so when user resume is smooth
-    public void onPause() {
-        super.onPause();
-        dialog.dismiss();
-
-    }
-    public void onResume() {
-        super.onResume();
-
-    }
-
     //2 methods below for edit button
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -291,6 +277,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
+    //close drawer when back button pressed
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+    // dismisses dialog so when user resume is smooth
+    public void onPause() {
+        super.onPause();
+        dialog.dismiss();
+
+    }
+    public void onResume() {
+        super.onResume();
+
+    }
+
+
 
 
     @Override
@@ -956,6 +964,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
+
 
 
 }
