@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<String> removed = new ArrayList<>();
     ProgressDialog dialog;
     NavigationView navigationView;
+    Menu menu;
 
     public static final String SHARED_PREFS = "sharedPrefes";
     public static final String USERNAME = "USERNAME";
@@ -109,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ProgressBarAverage2.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
         ProgressBarAverage3.setVisibility(View.INVISIBLE);
+
+
 
         //intent
         Intent intent = getIntent();
@@ -151,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //setup toolbar for nav bar drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         // Nav bar Drawer
         drawer = findViewById(R.id.drawer_layout);
@@ -248,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //2 methods below for edit button
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_button, menu);
         return super.onCreateOptionsMenu(menu);
@@ -256,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
 
             case R.id.action_edit:
 
@@ -276,6 +282,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+    //show and hide menu so that app does not crash is user presses edit button before main view is fully loaded
+    public void showMenu(boolean show){
+        if(menu == null){
+            System.out.println("NULL MENU");
+            return;
+        }
+        menu.setGroupVisible(R.id.main_menu_group, show);
     }
 
     //close drawer when back button pressed
@@ -594,32 +608,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new Subject1().execute(response);
                 new Subject2().execute(response);
                 new Subject3().execute(response);
+                //hide menu
+                showMenu(false);
                 if(Refresh.equals(true)) {
                     SwipeRefresh.setRefreshing(false);
                     Refresh = false;
                 }
 
-            /*
-            MainActivity.Subject subject = new MainActivity.Subject();
-                subject.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-
-
-                Subject1 subject1 = new Subject1();
-                subject1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-
-
-                Subject2 subject2 = new Subject2();
-                subject2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-
-
-                Subject3 subject3 = new Subject3();
-                subject3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                */
-
-
-
-
         }
+
 
     }
     //---------------------------------------------------------------------------------------------------------------------------------------
@@ -960,6 +957,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 EmptyCourse.setText(R.string.EmptyText);
                 //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in
             }
+            //hide menu
+            showMenu(true);
 
 
         }
