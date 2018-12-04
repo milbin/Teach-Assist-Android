@@ -32,13 +32,14 @@
                 <data android:scheme="https"/>
                 <data android:scheme="http"/>
             </intent-filter>
-
         </activity>
 
         <activity android:name=".MainActivity"></activity>
 
         <activity android:name=".login"></activity>
-        <activity android:name=".SettingsActivity">
+
+        <activity android:name=".SettingsActivity"
+            android:theme="@style/preferenceTheme">
             <intent-filter android:label="settings">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.PREFERENCE" />

@@ -35,4 +35,5 @@ dependencies {
     implementation project(':Ring Library')
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.android.support:preference-v7:23.4.0'
+    implementation 'com.android.support:percent:23.3.0'
 }

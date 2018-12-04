@@ -1,54 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-<android.support.v4.widget.DrawerLayout
+<android.support.percent.PercentFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    >
-
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:background="@color/Background"
-                >
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary"
-                    android:elevation="10dp"
-                    android:minHeight="@dimen/Toolbar_Height"
-                    android:uiOptions="splitActionBarWhenNarrow">
-
-
-                </android.support.v7.widget.Toolbar>
-
-
-
-            </LinearLayout>
-
-
+    android:fitsSystemWindows="true">
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/dynamic_fragment_frame_layout"
+        android:layout_gravity="top"
+        android:layout_marginTop="20dp"
+        app:layout_widthPercent="100%"
+        app:layout_heightPercent="100%"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="10dp"
+        android:minHeight="@dimen/Toolbar_Height"
+        android:uiOptions="splitActionBarWhenNarrow">
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main_drawer"
-        app:menu="@menu/activity_main_drawer" />
 
-</android.support.v4.widget.DrawerLayout>
+    </android.support.v7.widget.Toolbar>
+
+</android.support.percent.PercentFrameLayout>
