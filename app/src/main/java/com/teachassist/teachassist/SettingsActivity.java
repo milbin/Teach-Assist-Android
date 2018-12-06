@@ -87,53 +87,42 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            Preference notifications1 = (Preference) findPreference("All Notifications");
+            Preference notifications1 = (Preference) findPreference("Notification1");
             notifications1.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, false);
+                    editor.putBoolean(ALLNOTIFICATIONS, true);
                     editor.putBoolean(NOTIFICATION1, false);
-                    editor.putBoolean(NOTIFICATION2, false);
-                    editor.putBoolean(NOTIFICATION3, false);
-                    editor.putBoolean(NOTIFICATION4, false);
 
                     return true;
                 }
             });
-            Preference notifications2 = (Preference) findPreference("All Notifications");
+            Preference notifications2 = (Preference) findPreference("Notification2");
             notifications2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, false);
-                    editor.putBoolean(NOTIFICATION1, false);
+                    editor.putBoolean(ALLNOTIFICATIONS, true);
                     editor.putBoolean(NOTIFICATION2, false);
-                    editor.putBoolean(NOTIFICATION3, false);
-                    editor.putBoolean(NOTIFICATION4, false);
+
 
                     return true;
                 }
             });
-            Preference notifications3 = (Preference) findPreference("All Notifications");
+            Preference notifications3 = (Preference) findPreference("Notification3");
             notifications3.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, false);
-                    editor.putBoolean(NOTIFICATION1, false);
-                    editor.putBoolean(NOTIFICATION2, false);
+                    editor.putBoolean(ALLNOTIFICATIONS, true);
                     editor.putBoolean(NOTIFICATION3, false);
-                    editor.putBoolean(NOTIFICATION4, false);
 
                     return true;
                 }
             });
-            Preference notifications4= (Preference) findPreference("All Notifications");
+            Preference notifications4= (Preference) findPreference("Notification4");
             notifications4.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, false);
-                    editor.putBoolean(NOTIFICATION1, false);
-                    editor.putBoolean(NOTIFICATION2, false);
-                    editor.putBoolean(NOTIFICATION3, false);
+                    editor.putBoolean(ALLNOTIFICATIONS, true);
                     editor.putBoolean(NOTIFICATION4, false);
 
                     return true;
