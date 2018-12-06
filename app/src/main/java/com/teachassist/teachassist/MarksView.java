@@ -64,15 +64,7 @@ public class MarksView extends AppCompatActivity {
     String password;
     int subject_number;
     LinkedHashMap<String,List<HashMap<String,String>>> marks;
-    public void getMarks(){
-        //get response
-        TA ta = new TA();
-        System.out.println(username);
-        System.out.println(password);
-        ta.GetTAData(username,password);
-        marks = ta.GetMarks(subject_number);
-        System.out.println(marks);
-    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +76,31 @@ public class MarksView extends AppCompatActivity {
         username = intent.getStringExtra("username").replaceAll("\\s+","");
         password = intent.getStringExtra("password").replaceAll("\\s+","");
         subject_number = intent.getIntExtra("subject",0);
-        getMarks();
+        new GetMarks().execute();
+
+    }
+
+    private class GetMarks extends AsyncTask<String, Integer, Float>{
+        @Override
+        protected void onPreExecute(){super.onPreExecute();}
+
+        @Override
+        protected Float doInBackground(String... temp){
+            TA ta = new TA();
+            System.out.println(username);
+            System.out.println(password);
+            ta.GetTAData(username,password);
+            marks = ta.GetMarks(subject_number);
+            System.out.println(marks);
+            return 1f;
+
+        }
+
+        protected void onProgressUpdate(Integer... temp) {
+            super.onProgressUpdate();
+        }
+        @Override
+        protected void onPostExecute(Float temp) {super.onPostExecute(1f);}
 
     }
 }
