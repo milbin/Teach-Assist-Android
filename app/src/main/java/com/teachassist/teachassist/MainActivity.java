@@ -92,9 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        System.out.println(sharedPreferences.getString(USERNAME, ""));
-        System.out.println(sharedPreferences.getString(PASSWORD, ""));
-        System.out.println(sharedPreferences.getBoolean(REMEMBERME, false));
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",

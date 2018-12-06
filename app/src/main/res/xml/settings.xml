@@ -12,9 +12,28 @@
             android:title="All Notifications" />
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="Course 1"
-            android:summary="placeholder"
-            android:title="placeholder" />
+            android:dependency="All Notifications"
+            android:key="Notifications 1"
+            android:summary="Disable notifications for period 1 class"
+            android:title="Period 1" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 2"
+            android:summary="Disable notifications for period 2 class"
+            android:title="Period 2" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 3"
+            android:summary="Disable notifications for period 3 class"
+            android:title="Period 3" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 4"
+            android:summary="Disable notifications for period 4class"
+            android:title="Period 4" />
 
 
     </PreferenceCategory>
