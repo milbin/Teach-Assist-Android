@@ -32,7 +32,7 @@
             android:defaultValue="true"
             android:dependency="All Notifications"
             android:key="Notifications 4"
-            android:summary="Disable notifications for period 4class"
+            android:summary="Disable notifications for period 4 class"
             android:title="Period 4" />
 
 

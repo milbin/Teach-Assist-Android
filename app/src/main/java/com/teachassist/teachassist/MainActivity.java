@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Menu menu;
 
-    public static final String SHARED_PREFS = "sharedPrefes";
+    public static final String SHARED_PREFS = "credentials";
     public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
     public static final String REMEMBERME = "REMEMBERME";
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",
@@ -440,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String Password = params[1];
 
             response = ta.GetTAData(Username, Password);
-            ta.GetMarks("283003");
+            //ta.GetMarks("283003");
 
             return response;
 
