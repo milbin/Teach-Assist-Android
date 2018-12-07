@@ -63,7 +63,7 @@ public class MarksView extends AppCompatActivity {
     String username;
     String password;
     int subject_number;
-    LinkedHashMap<String,List<HashMap<String,String>>> marks;
+    LinkedHashMap<String,List<Map<String,String>>> marks;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

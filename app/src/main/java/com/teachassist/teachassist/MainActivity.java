@@ -1,26 +1,21 @@
 package com.teachassist.teachassist;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,30 +26,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.decimal4j.util.DoubleRounder;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +64,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Menu menu;
 
-    public static final String SHARED_PREFS = "credentials";
+    public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
+    public static final String RESPONSE = "RESPONSE";
     public static final String PASSWORD = "PASSWORD";
     public static final String REMEMBERME = "REMEMBERME";
 
@@ -91,9 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",
@@ -208,11 +188,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(Gravity.START);
 
 
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
                 SharedPreferences.Editor editor =   sharedPreferences.edit();
                 editor.putString(USERNAME, "");
                 editor.putString(PASSWORD, "");
                 editor.putBoolean(REMEMBERME, false);
+                editor.apply();
 
                 Intent myIntent = new Intent(MainActivity.this, login.class);
                 startActivity(myIntent);
@@ -461,6 +442,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             response = ta.GetTAData(Username, Password);
             ta.GetMarks(0);
+
+            Gson gson = new Gson();
+            String list = gson.toJson(response);
+            SharedPreferences sharedPreferences = getSharedPreferences(RESPONSE, MODE_PRIVATE);
+            SharedPreferences.Editor editor =   sharedPreferences.edit();
+            editor.putString(RESPONSE, list);
+            editor.apply();
+
 
             return response;
 

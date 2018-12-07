@@ -22,6 +22,7 @@ public class SendNotifications extends ContextWrapper {
     private NotificationManagerCompat notificationManager;
 
 
+
     public static final String channel1ID = "Channel1ID";
     public static final String channel1Name = "Course1";
     public static final String channel2ID = "Channel2ID";
@@ -44,14 +45,12 @@ public class SendNotifications extends ContextWrapper {
     }
 
 
-    public Notification sendOnChannel(String channel, String title, String body){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    public Notification sendOnChannel(String channel, int id, String title, String body){
         Notification notification = new NotificationCompat.Builder(this, channel)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(body)
                 .build();//TODO add real icon
-        notificationManager.notify(1, notification);
         return notification;
 
     }

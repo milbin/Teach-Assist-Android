@@ -191,7 +191,7 @@ public class TA {
 
     }
 
-    public LinkedHashMap<String,List<HashMap<String,String>>> GetMarks(int subject_number){
+    public LinkedHashMap<String,List<Map<String,String>>> GetMarks(int subject_number){
         try {
             String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
             String path = "/live/students/viewReport.php?";
@@ -301,12 +301,12 @@ public class TA {
             }
             System.out.println(marks);
             LinkedHashMap<String,List<HashMap<String,String>>> returnMap = new LinkedHashMap<>();
-            return returnMap;
+            return marks;
         }
         catch(IOException e) {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
-            LinkedHashMap<String,List<HashMap<String,String>>> returnMap = new LinkedHashMap<>();
+            LinkedHashMap<String,List<Map<String,String>>> returnMap = new LinkedHashMap<>();
             return returnMap;
         }
 

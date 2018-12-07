@@ -16,11 +16,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.teachassist.teachassist.MainActivity.CREDENTIALS;
+
 public class LaunchActivity extends AppCompatActivity {
     String username;
     String password;
     boolean RemeberMe;
-    public static final String SHARED_PREFS = "credentials";
+    public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
     public static final String REMEMBERME = "REMEMBERME";
@@ -30,7 +32,7 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Open file with username and password
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
         username = sharedPreferences.getString(USERNAME, "");
         password = sharedPreferences.getString(PASSWORD, "");
         RemeberMe = sharedPreferences.getBoolean(REMEMBERME, false);
