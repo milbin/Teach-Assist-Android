@@ -69,7 +69,6 @@ public class MarksView extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.marks_view);
-        System.out.println("hahah");
 
         //get intents
         Intent intent = getIntent();

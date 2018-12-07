@@ -1,8 +1,12 @@
 package com.teachassist.teachassist;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -30,9 +34,7 @@ public class LaunchActivity extends AppCompatActivity {
         username = sharedPreferences.getString(USERNAME, "");
         password = sharedPreferences.getString(PASSWORD, "");
         RemeberMe = sharedPreferences.getBoolean(REMEMBERME, false);
-        System.out.println(username.isEmpty());
-        System.out.println(password.isEmpty());
-        System.out.println(RemeberMe);
+
 
 
 

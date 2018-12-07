@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 drawer.closeDrawer(Gravity.START);
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                //add names of courses to list for settings summaries
                 ArrayList list = new ArrayList<String>();
                 for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                     list.add(entry.getValue().get(1));
@@ -306,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //show and hide menu so that app does not crash is user presses edit button before main view is fully loaded
     public void showMenu(boolean show){
         if(menu == null){
-            System.out.println("NULL MENU");
             return;
         }
         menu.setGroupVisible(R.id.main_menu_group, show);
@@ -342,7 +342,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 10101: // see MainActivity.this.startActivityForResult(myIntent, 10101); line(140)
                 if (resultCode == Activity.RESULT_OK) {
                     removed = data.getStringArrayListExtra("list");
-                    System.out.println(removed);
                     if(removed.isEmpty()){
                         //do nothing
                     }
@@ -368,7 +367,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         int size = y - removed.size()+Empty_course_list.size();
                         List<Double> grades = new ArrayList<>();
 
-                        System.out.println(removed);
 
 
                         if(removed.contains("0")){
@@ -430,7 +428,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             average += value;
 
                         }
-                        System.out.println(size);
                         average = DoubleRounder.round(average / size, 1);
                         Float Average = (float) average;
                         TextView AverageInt = findViewById(R.id.AverageInt);
@@ -720,7 +717,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             try {
                 final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-                System.out.println(Mark);
                 for (int i = 0; i < Math.round(Mark); i+=4) {
                     publishProgress (i);
                     Thread.sleep(0, 50);
