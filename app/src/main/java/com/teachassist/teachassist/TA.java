@@ -14,6 +14,7 @@ import java.util.Map;
 public class TA {
     String student_id;
     String session_token;
+    ArrayList<String> subjects = new ArrayList<>();
 
     /*
     public String Get_session_token_and_student_ID(String Username, String Password) {
@@ -122,6 +123,7 @@ public class TA {
                     Stats.add(Course_code);
                     Stats.add(Room_Number);
 
+                    subjects.add(Subject_id);
 
                     Marks.put(Subject_id, Stats);
                 }
@@ -189,32 +191,122 @@ public class TA {
 
     }
 
-    public LinkedHashMap GetMarks(String subject_id){
+    public LinkedHashMap<String,List<HashMap<String,String>>> GetMarks(int subject_number){
         try {
             String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
             String path = "/live/students/viewReport.php?";
             HashMap<String, String> headers = new HashMap<>();
             HashMap<String, String> parameters = new HashMap<>();
             HashMap<String, String> cookies = new HashMap<>();
-            parameters.put("subject_id", subject_id);
+            parameters.put("subject_id", subjects.get(subject_number));
             parameters.put("student_id", student_id);
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
 
+            Map<String,String> fields = new HashMap<>();
+            fields.put("knowledge","ffffaa");
+            fields.put("thinking","c0fea4");
+            fields.put("communication","afafff");
+            fields.put("application","ffd490");
+            fields.put("other","#dedede");
 
             //get response
             SendRequest sr = new SendRequest();
             String[] response = sr.send(url, headers, parameters, cookies, path);
-            for(String i:response){
-                System.out.println("HERE"+i);
+
+            LinkedHashMap<String,List<Map<String,String>>> marks = new LinkedHashMap<>();
+            System.out.println("knowledge = "+fields.get("knowledge"));
+
+            for(String i:response[0].split("rowspan")){
+                ArrayList<Map<String,String>> stats = new ArrayList<>();
+                if (i.charAt(0) == '=') {
+                    System.out.println("HERE"+i);
+                    String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é");
+                    String knowledge;
+                    String thinking;
+                    String communication;
+                    String application;
+                    String other;
+                    try {
+                        Map<String, String> mark = new HashMap<>();
+                        if (i.split("bgcolor=\"" + fields.get("knowledge"))[1].split("</td>")[0].contains("border")) {
+                            knowledge = i.split("bgcolor=\"" + fields.get("knowledge"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        } else {
+                            knowledge = "";
+                        }
+                        mark.put("knowledge",knowledge);
+                        stats.add(mark);
+                    }
+                    catch (ArrayIndexOutOfBoundsException e){
+                        System.out.println("eek");
+                    }
+                    try {
+                        Map<String, String> mark = new HashMap<>();
+                        if (i.split("bgcolor=\"" + fields.get("thinking"))[1].split("</td>")[0].contains("border")) {
+                            thinking = i.split("bgcolor=\"" + fields.get("thinking"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        } else {
+                            thinking = "";
+                        }
+                        mark.put("thinking",thinking);
+                        stats.add(mark);
+                    }
+                    catch (ArrayIndexOutOfBoundsException e){
+
+                    }
+                    try {
+                        Map<String, String> mark = new HashMap<>();
+                        if (i.split("bgcolor=\"" + fields.get("communication"))[1].split("</td>")[0].contains("border")) {
+                            communication = i.split("bgcolor=\"" + fields.get("communication"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        } else {
+                            communication = "";
+                        }
+                        mark.put("communication",communication);
+                        stats.add(mark);
+                    }
+                    catch (ArrayIndexOutOfBoundsException e){
+
+                    }
+                    try {
+                        Map<String, String> mark = new HashMap<>();
+                        if (i.split("bgcolor=\"" + fields.get("application"))[1].split("</td>")[0].contains("border")) {
+                            application = i.split("bgcolor=\"" + fields.get("application"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        } else {
+                            application = "";
+                        }
+                        mark.put("application",application);
+                        stats.add(mark);
+                    }
+                    catch (ArrayIndexOutOfBoundsException e) {
+
+                    }
+                    try {
+                        Map<String, String> mark = new HashMap<>();
+                        if (i.split("bgcolor=\"" + fields.get("other"))[1].split("</td>")[0].contains("border")) {
+                            //System.out.println("FUCK "+i.split("bgcolor=\"" + fields.get("other"))[2]);
+                            //System.out.println("CUCK = "+ i.split("bgcolor=\""+fields.get("other"))[2].split("id=")[1].split(">")[1]);
+                            other = i.split("bgcolor=\"" + fields.get("other"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            //other = "";
+                        } else {
+                            other = "";
+                        }
+                        mark.put("other",other);
+                        stats.add(mark);
+                    }
+                    catch (ArrayIndexOutOfBoundsException e){
+                    }
+
+                    marks.put(assignment, stats);
+                }
+
             }
-            LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
+            System.out.println(marks);
+            LinkedHashMap<String,List<HashMap<String,String>>> returnMap = new LinkedHashMap<>();
             return returnMap;
         }
         catch(IOException e) {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
-            LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
+            LinkedHashMap<String,List<HashMap<String,String>>> returnMap = new LinkedHashMap<>();
             return returnMap;
         }
 

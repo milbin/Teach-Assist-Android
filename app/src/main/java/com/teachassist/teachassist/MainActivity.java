@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //4 course relative layouts
         relativeLayout = findViewById(R.id.relativeLayout);
+        relativeLayout.setOnClickListener(new subject_click());
         relativeLayout1 = findViewById(R.id.relativeLayout1);
         relativeLayout2 = findViewById(R.id.relativeLayout2);
         relativeLayout3 = findViewById(R.id.relativeLayout3);
@@ -183,6 +184,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void showToast(String text){
         Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    public class subject_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject",0);
+            startActivity(myIntent);
+            dialog.dismiss();
+            finish();
+        }
     }
 
     // on navigation drawer item selection
@@ -448,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String Password = params[1];
 
             response = ta.GetTAData(Username, Password);
-            //ta.GetMarks("283003");
+            ta.GetMarks(0);
 
             return response;
 

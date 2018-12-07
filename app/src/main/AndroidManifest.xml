@@ -51,6 +51,7 @@
 
 
         <activity android:label="@string/edit_activity" android:name="EditActivity"/>
+        <activity android:label="@string/edit_activity" android:name="MarksView"/>
 
 
 
