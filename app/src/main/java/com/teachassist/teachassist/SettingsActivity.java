@@ -25,17 +25,25 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String SHARED_PREFS = "sharedPrefes";
     public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
     public static final String REMEMBERME = "REMEMBERME";
+    public static ArrayList<String> courses;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+        Intent intent = getIntent();
+        courses =  intent.getStringArrayListExtra("key");
+
+
 
         //setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -80,6 +88,16 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             // Load the preferences from an XML resource
             setPreferencesFromResource(R.xml.settings, rootKey);
+
+            //checkbox summaries
+            Preference notificationSummary1 = findPreference("Notifications 1");
+            Preference notificationSummary2 = findPreference("Notifications 2");
+            Preference notificationSummary3 = findPreference("Notifications 3");
+            Preference notificationSummary4 = findPreference("Notifications 4");
+            notificationSummary1.setSummary("Disable Notifications for: " + courses.get(0));
+            notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
+            notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
+            notificationSummary4.setSummary("Disable Notifications for: " + courses.get(3));
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             Preference all_notifications = getPreferenceManager().findPreference("All Notifications");
             all_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

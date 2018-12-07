@@ -54,6 +54,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -209,6 +210,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 drawer.closeDrawer(Gravity.START);
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                ArrayList list = new ArrayList<String>();
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    list.add(entry.getValue().get(1));
+                }
+                settingsIntent.putStringArrayListExtra("key", list); //Optional parameters
+
                 startActivity(settingsIntent);
                 break;
 
