@@ -43,7 +43,7 @@ public class App extends Application {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime()/* + AlarmManager.INTERVAL_HOUR*/, 1000, pendingIntent);
+                    SystemClock.elapsedRealtime()/* + AlarmManager.INTERVAL_HOUR*/, AlarmManager.INTERVAL_HOUR, pendingIntent);
 
         }
     }

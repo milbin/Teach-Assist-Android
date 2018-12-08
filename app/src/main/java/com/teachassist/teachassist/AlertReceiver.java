@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,6 @@ import static com.teachassist.teachassist.LaunchActivity.USERNAME;
 public class AlertReceiver extends BroadcastReceiver {
 
     LinkedHashMap<String, List<String>> response;
-    ArrayList toSend = new ArrayList<String>();
     String username;
     String password;
     Context Globalcontext;
@@ -79,33 +79,37 @@ public class AlertReceiver extends BroadcastReceiver {
 
 
         protected void onPostExecute(LinkedHashMap<String, List<String>> newresponse) {
+            LinkedList toSend = new LinkedList<String>();
+
             int course = 0;
-            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+            LinkedHashMap NotificationMap = new LinkedHashMap();
+            for (LinkedHashMap.Entry<String, List<String>> entry : response.entrySet()) {
                 if(entry.getKey().contains("NA")){
                     toSend.add(entry.getKey());
                 }
                 else{
                     toSend.add(entry.getValue().get(0));
-                }
+                    }
                 course++;
             }
-            course = 0;
-            for (Map.Entry<String, List<String>> entry : newresponse.entrySet()) {
+            int newcourse = 0;
+            for (LinkedHashMap.Entry<String, List<String>> entry : newresponse.entrySet()) {
                 if(entry.getKey().contains("NA")){
-                    toSend.remove(entry.getKey());
+                    //toSend.remove(entry.getKey());
                 }
                 else{
-                    if(!entry.getValue().equals(toSend.get(course)) || toSend.get(course).toString().contains("NA")) { // idk why u gotta add toString here
-                        toSend.add(entry.getValue().get(0));
+                    if(!entry.getValue().get(0).equals(toSend.get(newcourse)) || toSend.get(newcourse).toString().contains("NA")) { // idk why u gotta add toString here
+                        SendNotifications sendNotifications = new SendNotifications(Globalcontext);
+                        String courseName = entry.getValue().get(1);
+                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
+                                1, "Your Marks for: "+ courseName+" Have Been Updated",
+                                "You Average is Now: " + toSend.get(newcourse) + " Click here for more information");
+                        sendNotifications.getManager().notify(1 , notification);
                     }
-
                 }
-                course++;
+                newcourse++;
             }
-            System.out.println(toSend);
-            SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-            Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID, 1, "title", "body");
-            sendNotifications.getManager().notify(1 , notification);
+
         }
 
 
