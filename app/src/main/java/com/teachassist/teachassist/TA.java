@@ -191,7 +191,7 @@ public class TA {
 
     }
 
-    public LinkedHashMap<String,List<HashMap<String,String>>> GetMarks(int subject_number){
+    public LinkedHashMap<String,List<Map<String,String>>> GetMarks(int subject_number){
         try {
             String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
             String path = "/live/students/viewReport.php?";
@@ -220,7 +220,7 @@ public class TA {
             for(String i:response[0].split("rowspan")){
                 ArrayList<Map<String,String>> stats = new ArrayList<>();
                 if (i.charAt(0) == '=') {
-                    System.out.println("HERE"+i);
+                    //System.out.println("HERE"+i);
                     String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é");
                     String knowledge;
                     String thinking;
@@ -238,7 +238,7 @@ public class TA {
                         stats.add(mark);
                     }
                     catch (ArrayIndexOutOfBoundsException e){
-                        System.out.println("eek");
+                        //System.out.println("eek");
                     }
                     try {
                         Map<String, String> mark = new HashMap<>();
@@ -299,14 +299,14 @@ public class TA {
                 }
 
             }
-            System.out.println(marks);
-            LinkedHashMap<String,List<HashMap<String,String>>> returnMap = new LinkedHashMap<>();
-            return returnMap;
+            //System.out.println("OOGA BOOGA " + marks);
+            LinkedHashMap<String,List<Map<String,String>>> returnMap = new LinkedHashMap<>();
+            return marks;
         }
         catch(IOException e) {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
-            LinkedHashMap<String,List<HashMap<String,String>>> returnMap = new LinkedHashMap<>();
+            LinkedHashMap<String,List<Map<String,String>>> returnMap = new LinkedHashMap<>();
             return returnMap;
         }
 

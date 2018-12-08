@@ -31,11 +31,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,13 +66,12 @@ public class MarksView extends AppCompatActivity {
     String username;
     String password;
     int subject_number;
-    LinkedHashMap<String,List<HashMap<String,String>>> marks;
+    LinkedHashMap<String,List<Map<String,String>>> marks;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.marks_view);
-        System.out.println("hahah");
 
         //get intents
         Intent intent = getIntent();
@@ -80,19 +82,18 @@ public class MarksView extends AppCompatActivity {
 
     }
 
-    private class GetMarks extends AsyncTask<String, Integer, Float>{
+    private class GetMarks extends AsyncTask<String, Integer, LinkedHashMap<String,List<Map<String,String>>>>{
         @Override
         protected void onPreExecute(){super.onPreExecute();}
 
         @Override
-        protected Float doInBackground(String... temp){
+        protected LinkedHashMap<String,List<Map<String,String>>> doInBackground(String... temp){
             TA ta = new TA();
             System.out.println(username);
             System.out.println(password);
             ta.GetTAData(username,password);
             marks = ta.GetMarks(subject_number);
-            System.out.println(marks);
-            return 1f;
+            return marks;
 
         }
 
@@ -100,7 +101,60 @@ public class MarksView extends AppCompatActivity {
             super.onProgressUpdate();
         }
         @Override
-        protected void onPostExecute(Float temp) {super.onPostExecute(1f);}
+        protected void onPostExecute(LinkedHashMap<String,List<Map<String,String>>> marks) {
+            //create table
+            TableLayout ll = (TableLayout) findViewById(R.id.marks_table);
+
+            int i = 0;
+            int rows = 0;
+            System.out.println(marks + " <-- MARKS");
+
+        for (String key : marks.keySet()) {
+
+            // add initial descriptive columns
+            if (i == 0) {
+                TableRow row = new TableRow(MarksView.this);
+                TextView assignment = new TextView(MarksView.this);
+                assignment.setText("Assignment");
+                //assignment.setWidth(100);
+                row.addView(assignment);
+                for (Map<String, String> column : marks.get(key)) {
+                    TextView mark_type = new TextView(MarksView.this);
+                    String text = column.keySet().iterator().next();
+                    System.out.println(text);
+                    mark_type.setText(text);
+                    //mark_type.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    //mark_type.requestLayout();
+                    row.addView(mark_type);
+                    rows++;
+                }
+                row.setBackgroundColor(255);
+                ll.addView(row,i);
+                i++;
+            }
+
+            //add marks data
+            TableRow row = new TableRow(MarksView.this);
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+            row.setLayoutParams(lp);
+            TextView assignment = new TextView(MarksView.this);
+            assignment.setText(key);
+            assignment.setPadding(5,10,10,5);
+            //assignment.setWidth(100);
+            row.addView(assignment);
+            for (Map<String, String> column : marks.get(key)){
+                TextView mark = new TextView(MarksView.this);
+                mark.setPadding(5,10,10,5);
+                String mark_key = column.keySet().iterator().next();
+                String text = column.get(mark_key);
+                mark.setText(text);
+                row.addView(mark);
+            }
+            row.setBackgroundColor(255);
+            ll.addView(row,i);
+            i++;
+        }
+        }
 
     }
 }
