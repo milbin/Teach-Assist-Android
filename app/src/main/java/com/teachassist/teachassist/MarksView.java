@@ -66,7 +66,9 @@ public class MarksView extends AppCompatActivity {
     String username;
     String password;
     int subject_number;
+    String subject;
     LinkedHashMap<String,List<Map<String,String>>> marks;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +80,8 @@ public class MarksView extends AppCompatActivity {
         username = intent.getStringExtra("username").replaceAll("\\s+","");
         password = intent.getStringExtra("password").replaceAll("\\s+","");
         subject_number = intent.getIntExtra("subject",0);
+        //progress dialog
+        dialog = ProgressDialog.show(MarksView.this, "", "Loading...", true);
         new GetMarks().execute();
 
     }
@@ -93,6 +97,7 @@ public class MarksView extends AppCompatActivity {
             System.out.println(password);
             ta.GetTAData(username,password);
             marks = ta.GetMarks(subject_number);
+            subject = ta.GetCourse(subject_number);
             return marks;
 
         }
@@ -108,52 +113,57 @@ public class MarksView extends AppCompatActivity {
             int i = 0;
             int rows = 0;
             System.out.println(marks + " <-- MARKS");
+            TextView course = findViewById(R.id.subjectTitle);
+            course.setText(subject);
 
-        for (String key : marks.keySet()) {
+            for (String key : marks.keySet()) {
 
-            // add initial descriptive columns
-            if (i == 0) {
+                // add initial descriptive columns
+                if (i == 0) {
+                    TableRow row = new TableRow(MarksView.this);
+                    TextView assignment = new TextView(MarksView.this);
+                    assignment.setText("Assignment");
+                    assignment.setPadding(5,10,10,5);
+                    //assignment.setWidth(100);
+                    row.addView(assignment);
+                    for (Map<String, String> column : marks.get(key)) {
+                        TextView mark_type = new TextView(MarksView.this);
+                        String text = column.keySet().iterator().next();
+                        System.out.println(text);
+                        mark_type.setText(text);
+                        mark_type.setPadding(5,10,10,5);
+                        //mark_type.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        //mark_type.requestLayout();
+                        row.addView(mark_type);
+                        rows++;
+                    }
+                    row.setBackgroundColor(255);
+                    ll.addView(row,i);
+                    i++;
+                }
+
+                //add marks data
                 TableRow row = new TableRow(MarksView.this);
+                TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+                row.setLayoutParams(lp);
                 TextView assignment = new TextView(MarksView.this);
-                assignment.setText("Assignment");
+                assignment.setText(key);
+                assignment.setPadding(5,10,10,5);
                 //assignment.setWidth(100);
                 row.addView(assignment);
-                for (Map<String, String> column : marks.get(key)) {
-                    TextView mark_type = new TextView(MarksView.this);
-                    String text = column.keySet().iterator().next();
-                    System.out.println(text);
-                    mark_type.setText(text);
-                    //mark_type.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    //mark_type.requestLayout();
-                    row.addView(mark_type);
-                    rows++;
+                for (Map<String, String> column : marks.get(key)){
+                    TextView mark = new TextView(MarksView.this);
+                    mark.setPadding(5,10,10,5);
+                    String mark_key = column.keySet().iterator().next();
+                    String text = column.get(mark_key);
+                    mark.setText(text);
+                    row.addView(mark);
                 }
                 row.setBackgroundColor(255);
                 ll.addView(row,i);
                 i++;
             }
-
-            //add marks data
-            TableRow row = new TableRow(MarksView.this);
-            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-            row.setLayoutParams(lp);
-            TextView assignment = new TextView(MarksView.this);
-            assignment.setText(key);
-            assignment.setPadding(5,10,10,5);
-            //assignment.setWidth(100);
-            row.addView(assignment);
-            for (Map<String, String> column : marks.get(key)){
-                TextView mark = new TextView(MarksView.this);
-                mark.setPadding(5,10,10,5);
-                String mark_key = column.keySet().iterator().next();
-                String text = column.get(mark_key);
-                mark.setText(text);
-                row.addView(mark);
-            }
-            row.setBackgroundColor(255);
-            ll.addView(row,i);
-            i++;
-        }
+            dialog.dismiss();
         }
 
     }

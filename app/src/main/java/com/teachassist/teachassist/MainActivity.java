@@ -123,8 +123,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setOnClickListener(new subject_click());
         relativeLayout1 = findViewById(R.id.relativeLayout1);
+        relativeLayout1.setOnClickListener(new subject1_click());
         relativeLayout2 = findViewById(R.id.relativeLayout2);
+        relativeLayout2.setOnClickListener(new subject2_click());
         relativeLayout3 = findViewById(R.id.relativeLayout3);
+        relativeLayout3.setOnClickListener(new subject3_click());
 
 
 
@@ -195,6 +198,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("username", username);
             myIntent.putExtra("password", password);
             myIntent.putExtra("subject",0);
+            startActivity(myIntent);
+            dialog.dismiss();
+            finish();
+        }
+    }
+    public class subject1_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject",1);
+            startActivity(myIntent);
+            dialog.dismiss();
+            finish();
+        }
+    }
+    public class subject2_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject",2);
+            startActivity(myIntent);
+            dialog.dismiss();
+            finish();
+        }
+    }
+    public class subject3_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject",3);
             startActivity(myIntent);
             dialog.dismiss();
             finish();
