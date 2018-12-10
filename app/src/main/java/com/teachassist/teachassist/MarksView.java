@@ -63,7 +63,7 @@ import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
-public class MarksView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MarksView extends AppCompatActivity{
     String username;
     String password;
     int subject_number;
@@ -91,25 +91,11 @@ public class MarksView extends AppCompatActivity implements NavigationView.OnNav
         dialog = ProgressDialog.show(MarksView.this, "", "Loading...", true);
         new GetMarks().execute();
 
-        //setup toolbar for nav bar drawer
-        Toolbar toolbar = findViewById(R.id.mv_toolbar);
+        //setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        // Nav bar Drawer
-        drawer = findViewById(R.id.mv_drawer_layout);
-        navigationView = findViewById(R.id.mv_nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        // Setup toolbar text
-        //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
-        //ToolbarText.setText("Student Report for: "+ username);
-        getSupportActionBar().setTitle("Student: " + username);
+        getSupportActionBar().setTitle("Marks");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //back button
 
     }
     private void showToast(String text){
@@ -207,67 +193,14 @@ public class MarksView extends AppCompatActivity implements NavigationView.OnNav
         }
 
     }
-    // on navigation drawer item selection
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch(menuItem.getItemId()){
-            case R.id.nav_logout:
-                drawer.closeDrawer(Gravity.START);
-
-
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                SharedPreferences.Editor editor =   sharedPreferences.edit();
-                editor.putString(USERNAME, "");
-                editor.putString(PASSWORD, "");
-                editor.putBoolean(REMEMBERME, false);
-
-                Intent myIntent = new Intent(MarksView.this, login.class);
-                startActivity(myIntent);
-                break;
-
-            case R.id.nav_home:
-                drawer.closeDrawer(Gravity.START);
-                finish();
-                break;
-
-            case R.id.nav_settings:
-                drawer.closeDrawer(Gravity.START);
-                Intent settingsIntent = new Intent(MarksView.this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                break;
-
-            case R.id.nav_email:
-                drawer.closeDrawer(Gravity.START);
-
-                String mailto = "mailto:Benjamintran0684@gmail.com";
-
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse(mailto));
-
-                try {
-                    startActivity(emailIntent);
-                } catch (ActivityNotFoundException e) {
-                    showToast("No email app currently installed");
-                }
-                break;
-
-            case R.id.nav_bug_report:
-                drawer.closeDrawer(Gravity.START);
-                String mailtoBug = "mailto:Benjamintran0684@gmail.com";
-
-                Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
-                BugIntent.setData(Uri.parse(mailtoBug));
-
-                try {
-                    startActivity(BugIntent);
-                } catch (ActivityNotFoundException e) {
-                    showToast("No email app currently installed");
-                }
-                break;
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-
-        return false;
     }
 }
