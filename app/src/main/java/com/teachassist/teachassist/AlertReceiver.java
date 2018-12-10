@@ -138,25 +138,25 @@ public class AlertReceiver extends BroadcastReceiver {
                             String courseName = entry.getValue().get(1);
                             if (course == 0) {
                                 Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
-                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        MarksView.class, 0, "Your Marks for: " + courseName + " Have Been Updated",
                                         "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
                                 sendNotifications.getManager().notify(1, notification);
                                 System.out.println("SENT NOTIFICATION");
                             } else if (course == 1) {
                                 Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
-                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        MarksView.class, 1, "Your Marks for: " + courseName + " Have Been Updated",
                                         "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
                                 sendNotifications.getManager().notify(2, notification);
                                 System.out.println("SENT NOTIFICATION");
                             } else if (course == 2) {
                                 Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
-                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        MarksView.class, 2, "Your Marks for: " + courseName + " Have Been Updated",
                                         "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
                                 sendNotifications.getManager().notify(3, notification);
                                 System.out.println("SENT NOTIFICATION");
                             } else if (course == 3) {
                                 Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
-                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        MarksView.class, 3, "Your Marks for: " + courseName + " Have Been Updated",
                                         "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
                                 sendNotifications.getManager().notify(4, notification);
                                 System.out.println("SENT NOTIFICATION");

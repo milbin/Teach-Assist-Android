@@ -52,7 +52,7 @@ public class SendNotifications extends ContextWrapper {
     }
 
 
-    public Notification sendOnChannel(String channel, final Class<? extends Activity> activityToOpen, String title, String body){
+    public Notification sendOnChannel(String channel, final Class<? extends Activity> activityToOpen, int subject, String title, String body){
         Intent activityIntent = new Intent(this, activityToOpen);
 
         SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
@@ -61,6 +61,7 @@ public class SendNotifications extends ContextWrapper {
 
         activityIntent.putExtra("username", username);
         activityIntent.putExtra("password", password);
+        activityIntent.putExtra("subject",subject);
         PendingIntent contentIntent= PendingIntent.getActivity(this, 0, activityIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, channel)
