@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("subject",0);
             startActivity(myIntent);
             dialog.dismiss();
-            finish();
         }
     }
     public class subject1_click implements View.OnClickListener{
@@ -213,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("subject",1);
             startActivity(myIntent);
             dialog.dismiss();
-            finish();
+
         }
     }
     public class subject2_click implements View.OnClickListener{
@@ -226,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("subject",2);
             startActivity(myIntent);
             dialog.dismiss();
-            finish();
         }
     }
     public class subject3_click implements View.OnClickListener{
@@ -239,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("subject",3);
             startActivity(myIntent);
             dialog.dismiss();
-            finish();
         }
     }
 

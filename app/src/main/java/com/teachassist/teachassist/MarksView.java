@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -62,13 +63,19 @@ import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
-public class MarksView extends AppCompatActivity {
+public class MarksView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     String username;
     String password;
     int subject_number;
     String subject;
     LinkedHashMap<String,List<Map<String,String>>> marks;
     ProgressDialog dialog;
+    NavigationView navigationView;
+    private DrawerLayout drawer;
+    public static final String SHARED_PREFS = "sharedPrefes";
+    public static final String USERNAME = "USERNAME";
+    public static final String PASSWORD = "PASSWORD";
+    public static final String REMEMBERME = "REMEMBERME";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +91,29 @@ public class MarksView extends AppCompatActivity {
         dialog = ProgressDialog.show(MarksView.this, "", "Loading...", true);
         new GetMarks().execute();
 
+        //setup toolbar for nav bar drawer
+        Toolbar toolbar = findViewById(R.id.mv_toolbar);
+        setSupportActionBar(toolbar);
+
+
+        // Nav bar Drawer
+        drawer = findViewById(R.id.mv_drawer_layout);
+        navigationView = findViewById(R.id.mv_nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Setup toolbar text
+        //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
+        //ToolbarText.setText("Student Report for: "+ username);
+        getSupportActionBar().setTitle("Student: " + username);
+
+    }
+    private void showToast(String text){
+        Toast.makeText(MarksView.this, text, Toast.LENGTH_SHORT).show();
     }
 
     private class GetMarks extends AsyncTask<String, Integer, LinkedHashMap<String,List<Map<String,String>>>>{
@@ -176,5 +206,68 @@ public class MarksView extends AppCompatActivity {
             dialog.dismiss();
         }
 
+    }
+    // on navigation drawer item selection
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.nav_logout:
+                drawer.closeDrawer(Gravity.START);
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor =   sharedPreferences.edit();
+                editor.putString(USERNAME, "");
+                editor.putString(PASSWORD, "");
+                editor.putBoolean(REMEMBERME, false);
+
+                Intent myIntent = new Intent(MarksView.this, login.class);
+                startActivity(myIntent);
+                break;
+
+            case R.id.nav_home:
+                drawer.closeDrawer(Gravity.START);
+                finish();
+                break;
+
+            case R.id.nav_settings:
+                drawer.closeDrawer(Gravity.START);
+                Intent settingsIntent = new Intent(MarksView.this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
+
+            case R.id.nav_email:
+                drawer.closeDrawer(Gravity.START);
+
+                String mailto = "mailto:Benjamintran0684@gmail.com";
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse(mailto));
+
+                try {
+                    startActivity(emailIntent);
+                } catch (ActivityNotFoundException e) {
+                    showToast("No email app currently installed");
+                }
+                break;
+
+            case R.id.nav_bug_report:
+                drawer.closeDrawer(Gravity.START);
+                String mailtoBug = "mailto:Benjamintran0684@gmail.com";
+
+                Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
+                BugIntent.setData(Uri.parse(mailtoBug));
+
+                try {
+                    startActivity(BugIntent);
+                } catch (ActivityNotFoundException e) {
+                    showToast("No email app currently installed");
+                }
+                break;
+
+        }
+
+
+        return false;
     }
 }
