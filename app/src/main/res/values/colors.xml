@@ -14,5 +14,10 @@
     <color name="AverageTextColor">#BAB9B9</color>
     <color name="Background">#FAFAFA</color>
     <color name="White">#ffffff</color>
+    <color name="knowledge">#E7CB00</color>
+    <color name="thinking">#85E700</color>
+    <color name="communication">#007BE7</color>
+    <color name="application">#E76900</color>
+    <color name="other">#dedede</color>
 
 </resources>

@@ -102,8 +102,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setOnClickListener(new subject_click());
         relativeLayout1 = findViewById(R.id.relativeLayout1);
+        relativeLayout1.setOnClickListener(new subject1_click());
         relativeLayout2 = findViewById(R.id.relativeLayout2);
+        relativeLayout2.setOnClickListener(new subject2_click());
         relativeLayout3 = findViewById(R.id.relativeLayout3);
+        relativeLayout3.setOnClickListener(new subject3_click());
 
 
 
@@ -122,9 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         relativeLayout1.setVisibility(View.VISIBLE);
                         relativeLayout2.setVisibility(View.VISIBLE);
                         relativeLayout3.setVisibility(View.VISIBLE);
-                        String Username = username;
-                        String Password = password;
-                        new GetTaData().execute(Username, Password);
+                        new GetTaData().execute();
 
                     }
                 }
@@ -152,9 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle("Student: " + username);
 
 
-        String Username = username;
-        String Password = password;
-        new GetTaData().execute(Username, Password);
+        new GetTaData().execute();
 
 
 
@@ -176,7 +175,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("subject",0);
             startActivity(myIntent);
             dialog.dismiss();
-            finish();
+        }
+    }
+    public class subject1_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject",1);
+            startActivity(myIntent);
+            dialog.dismiss();
+        }
+    }
+    public class subject2_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject",2);
+            startActivity(myIntent);
+            dialog.dismiss();
+        }
+    }
+    public class subject3_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject",3);
+            startActivity(myIntent);
+            dialog.dismiss();
         }
     }
 
@@ -437,10 +471,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
             TA ta = new TA();
-            String Username = params[0];
-            String Password = params[1];
 
-            response = ta.GetTAData(Username, Password);
+            response = ta.GetTAData(username, password);
             ta.GetMarks(0);
 
             Gson gson = new Gson();

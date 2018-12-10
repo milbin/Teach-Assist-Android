@@ -15,6 +15,7 @@ public class TA {
     String student_id;
     String session_token;
     ArrayList<String> subjects = new ArrayList<>();
+    LinkedHashMap<String, List<String>> Marks;
 
     /*
     public String Get_session_token_and_student_ID(String Username, String Password) {
@@ -107,7 +108,7 @@ public class TA {
 
             String[] resp = sr.send(url, headers, parameters, cookies, path);
 
-            LinkedHashMap<String, List<String>> Marks = new LinkedHashMap();
+            Marks = new LinkedHashMap();
 
             int numberOfEmptyCourses = 0;
             for(String i :resp[0].split("<td>")){
@@ -191,6 +192,13 @@ public class TA {
 
     }
 
+    public String GetCourse(int subject_number){
+        String subject_id = subjects.get(subject_number);
+        String course = Marks.get(subject_id).get(1);
+        return course;
+    }
+
+
     public LinkedHashMap<String,List<Map<String,String>>> GetMarks(int subject_number){
         try {
             String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
@@ -220,7 +228,7 @@ public class TA {
             for(String i:response[0].split("rowspan")){
                 ArrayList<Map<String,String>> stats = new ArrayList<>();
                 if (i.charAt(0) == '=') {
-                    System.out.println("HERE"+i);
+                    //System.out.println("HERE"+i);
                     String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é");
                     String knowledge;
                     String thinking;
@@ -238,7 +246,7 @@ public class TA {
                         stats.add(mark);
                     }
                     catch (ArrayIndexOutOfBoundsException e){
-                        System.out.println("eek");
+                        //System.out.println("eek");
                     }
                     try {
                         Map<String, String> mark = new HashMap<>();
@@ -299,8 +307,11 @@ public class TA {
                 }
 
             }
-            System.out.println(marks);
-            LinkedHashMap<String,List<HashMap<String,String>>> returnMap = new LinkedHashMap<>();
+
+
+
+
+
             return marks;
         }
         catch(IOException e) {
