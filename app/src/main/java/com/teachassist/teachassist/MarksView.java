@@ -68,7 +68,7 @@ public class MarksView extends AppCompatActivity {
     int subject_number;
 
     String subject;
-    LinkedHashMap<String,List<Map<String,String>>> marks;
+    LinkedHashMap<String,List<LinkedHashMap<String, String>>> marks;
     ProgressDialog dialog;
 
     @Override
@@ -87,12 +87,12 @@ public class MarksView extends AppCompatActivity {
 
     }
 
-    private class GetMarks extends AsyncTask<String, Integer, LinkedHashMap<String,List<Map<String,String>>>>{
+    private class GetMarks extends AsyncTask<String, Integer, LinkedHashMap<String,List<LinkedHashMap<String, String>>>>{
         @Override
         protected void onPreExecute(){super.onPreExecute();}
 
         @Override
-        protected LinkedHashMap<String,List<Map<String,String>>> doInBackground(String... temp){
+        protected LinkedHashMap<String,List<LinkedHashMap<String,String>>> doInBackground(String... temp){
             TA ta = new TA();
             System.out.println(username);
             System.out.println(password);
@@ -107,7 +107,7 @@ public class MarksView extends AppCompatActivity {
             super.onProgressUpdate();
         }
         @Override
-        protected void onPostExecute(LinkedHashMap<String,List<Map<String,String>>> marks) {
+        protected void onPostExecute(LinkedHashMap<String,List<LinkedHashMap<String, String>>> marks) {
             //create table
             TableLayout ll = (TableLayout) findViewById(R.id.marks_table);
 

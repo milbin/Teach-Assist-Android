@@ -199,19 +199,19 @@ public class TA {
     }
 
 
-    public LinkedHashMap<String,List<Map<String,String>>> GetMarks(int subject_number){
+    public LinkedHashMap<String,List<LinkedHashMap<String,String>>> GetMarks(int subject_number){
         try {
             String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
             String path = "/live/students/viewReport.php?";
-            HashMap<String, String> headers = new HashMap<>();
-            HashMap<String, String> parameters = new HashMap<>();
-            HashMap<String, String> cookies = new HashMap<>();
+            LinkedHashMap<String, String> headers = new LinkedHashMap<>();
+            LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
+            LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
             parameters.put("subject_id", subjects.get(subject_number));
             parameters.put("student_id", student_id);
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
 
-            Map<String,String> fields = new HashMap<>();
+            LinkedHashMap<String,String> fields = new LinkedHashMap<>();
             fields.put("knowledge","ffffaa");
             fields.put("thinking","c0fea4");
             fields.put("communication","afafff");
@@ -222,11 +222,11 @@ public class TA {
             SendRequest sr = new SendRequest();
             String[] response = sr.send(url, headers, parameters, cookies, path);
 
-            LinkedHashMap<String,List<Map<String,String>>> marks = new LinkedHashMap<>();
+            LinkedHashMap<String,List<LinkedHashMap<String,String>>> marks = new LinkedHashMap<>();
             System.out.println("knowledge = "+fields.get("knowledge"));
 
             for(String i:response[0].split("rowspan")){
-                ArrayList<Map<String,String>> stats = new ArrayList<>();
+                ArrayList<LinkedHashMap<String,String>> stats = new ArrayList<>();
                 if (i.charAt(0) == '=') {
                     //System.out.println("HERE"+i);
                     String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é");
@@ -236,7 +236,7 @@ public class TA {
                     String application;
                     String other;
                     try {
-                        Map<String, String> mark = new HashMap<>();
+                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
                         if (i.split("bgcolor=\"" + fields.get("knowledge"))[1].split("</td>")[0].contains("border")) {
                             knowledge = i.split("bgcolor=\"" + fields.get("knowledge"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                         } else {
@@ -249,7 +249,7 @@ public class TA {
                         //System.out.println("eek");
                     }
                     try {
-                        Map<String, String> mark = new HashMap<>();
+                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
                         if (i.split("bgcolor=\"" + fields.get("thinking"))[1].split("</td>")[0].contains("border")) {
                             thinking = i.split("bgcolor=\"" + fields.get("thinking"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                         } else {
@@ -262,7 +262,7 @@ public class TA {
 
                     }
                     try {
-                        Map<String, String> mark = new HashMap<>();
+                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
                         if (i.split("bgcolor=\"" + fields.get("communication"))[1].split("</td>")[0].contains("border")) {
                             communication = i.split("bgcolor=\"" + fields.get("communication"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                         } else {
@@ -275,7 +275,7 @@ public class TA {
 
                     }
                     try {
-                        Map<String, String> mark = new HashMap<>();
+                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
                         if (i.split("bgcolor=\"" + fields.get("application"))[1].split("</td>")[0].contains("border")) {
                             application = i.split("bgcolor=\"" + fields.get("application"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                         } else {
@@ -288,7 +288,7 @@ public class TA {
 
                     }
                     try {
-                        Map<String, String> mark = new HashMap<>();
+                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
                         if (i.split("bgcolor=\"" + fields.get("other"))[1].split("</td>")[0].contains("border")) {
                             //System.out.println("FUCK "+i.split("bgcolor=\"" + fields.get("other"))[2]);
                             //System.out.println("CUCK = "+ i.split("bgcolor=\""+fields.get("other"))[2].split("id=")[1].split(">")[1]);
@@ -311,13 +311,12 @@ public class TA {
 
 
 
-
             return marks;
         }
         catch(IOException e) {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
-            LinkedHashMap<String,List<Map<String,String>>> returnMap = new LinkedHashMap<>();
+                LinkedHashMap<String,List<LinkedHashMap<String,String>>> returnMap = new LinkedHashMap<>();
             return returnMap;
         }
 
