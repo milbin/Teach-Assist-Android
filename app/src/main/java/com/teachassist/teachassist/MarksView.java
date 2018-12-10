@@ -110,6 +110,12 @@ public class MarksView extends AppCompatActivity {
             //create table
             TableLayout ll = (TableLayout) findViewById(R.id.marks_table);
 
+            LinkedHashMap<String,String> colors = new LinkedHashMap<>();
+            colors.put("knowledge",Integer.toString(getResources().getColor(R.color.knowledge)));
+            colors.put("thinking",Integer.toString(getResources().getColor(R.color.thinking)));
+            colors.put("communication",Integer.toString(getResources().getColor(R.color.communication)));
+            colors.put("application",Integer.toString(getResources().getColor(R.color.application)));
+            colors.put("other",Integer.toString(getResources().getColor(R.color.other)));
             int i = 0;
             int rows = 0;
             System.out.println(marks + " <-- MARKS");
@@ -129,11 +135,14 @@ public class MarksView extends AppCompatActivity {
                     for (Map<String, String> column : marks.get(key)) {
                         TextView mark_type = new TextView(MarksView.this);
                         String text = column.keySet().iterator().next();
-                        System.out.println(text);
+                        text = text.replaceFirst(text.toCharArray()[0]+"",(text.toCharArray()[0]+"").toUpperCase());
                         mark_type.setText(text);
                         mark_type.setPadding(5,10,10,5);
                         //mark_type.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
                         //mark_type.requestLayout();
+                        System.out.println("key = "+column.keySet().iterator().next());
+                        mark_type.setBackgroundColor(Integer.parseInt(colors.get(column.keySet().iterator().next())));
+                        mark_type.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         row.addView(mark_type);
                         rows++;
                     }
@@ -157,6 +166,7 @@ public class MarksView extends AppCompatActivity {
                     String mark_key = column.keySet().iterator().next();
                     String text = column.get(mark_key);
                     mark.setText(text);
+                    mark.setBackgroundColor(Integer.parseInt(colors.get(mark_key)));
                     row.addView(mark);
                 }
                 row.setBackgroundColor(255);
