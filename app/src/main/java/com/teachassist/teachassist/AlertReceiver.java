@@ -116,10 +116,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 calendar3.add(Calendar.DATE, 1);
 
                 Date currentTime = calendar3.getTime();
-                System.out.println(currentTime.after(calendarStart.getTime()));
-                System.out.println(currentTime.before(calendarEnd.getTime()));
-                System.out.println(calendarStart.getTime());
-                System.out.println(calendarEnd.getTime());
+
                 if (currentTime.after(calendarStart.getTime()) && currentTime.before(calendarEnd.getTime())) {
 
 
@@ -136,42 +133,38 @@ public class AlertReceiver extends BroadcastReceiver {
                     for (LinkedHashMap.Entry<String, List<String>> entry : newresponse.entrySet()) {
                         if (entry.getKey().contains("NA")) {
                             //toSend.remove(entry.getKey());
-                        } else {
-                            if (!entry.getValue().get(0).equals(toSend.get(course)) || toSend.get(course).toString().contains("NA")) { // idk why u gotta add toString here
-                                SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                String courseName = entry.getValue().get(1);
-                                if(course == 0) {
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
-                                            1, "Your Marks for: " + courseName + " Have Been Updated",
-                                            "You Average is Now: " + toSend.get(course) + " Click here for more information");
-                                    sendNotifications.getManager().notify(1, notification);
-                                    System.out.println("SENT NOTIFICATION");
-                                }
-                                else if(course == 1){
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
-                                            1, "Your Marks for: " + courseName + " Have Been Updated",
-                                            "You Average is Now: " + toSend.get(course) + " Click here for more information");
-                                    sendNotifications.getManager().notify(1, notification);
-                                    System.out.println("SENT NOTIFICATION");
-                                }
-                                else if(course == 2){
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
-                                            1, "Your Marks for: " + courseName + " Have Been Updated",
-                                            "You Average is Now: " + toSend.get(course) + " Click here for more information");
-                                    sendNotifications.getManager().notify(1, notification);
-                                    System.out.println("SENT NOTIFICATION");
-                                }
-                                else if(course == 3){
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
-                                            1, "Your Marks for: " + courseName + " Have Been Updated",
-                                            "You Average is Now: " + toSend.get(course) + " Click here for more information");
-                                    sendNotifications.getManager().notify(1, notification);
-                                    System.out.println("SENT NOTIFICATION");
-                                }
+                        } else if (!entry.getValue().get(0).equals(toSend.get(course)) || toSend.get(course).toString().contains("NA")) { // idk why u gotta add toString here
+                            SendNotifications sendNotifications = new SendNotifications(Globalcontext);
+                            String courseName = entry.getValue().get(1);
+                            if (course == 0) {
+                                Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
+                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
+                                sendNotifications.getManager().notify(1, notification);
+                                System.out.println("SENT NOTIFICATION");
+                            } else if (course == 1) {
+                                Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
+                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
+                                sendNotifications.getManager().notify(2, notification);
+                                System.out.println("SENT NOTIFICATION");
+                            } else if (course == 2) {
+                                Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
+                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
+                                sendNotifications.getManager().notify(3, notification);
+                                System.out.println("SENT NOTIFICATION");
+                            } else if (course == 3) {
+                                Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
+                                        MainActivity.class, "Your Marks for: " + courseName + " Have Been Updated",
+                                        "You Average is Now: " + entry.getValue().get(0) + " Click here for more information");
+                                sendNotifications.getManager().notify(4, notification);
+                                System.out.println("SENT NOTIFICATION");
                             }
                         }
                         course++;
                     }
+
                 }
 
             } catch (ParseException e) {

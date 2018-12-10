@@ -1,11 +1,15 @@
 package com.teachassist.teachassist;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -17,6 +21,9 @@ import android.view.View;
 import java.util.Calendar;
 
 import static com.teachassist.teachassist.App.CHANNEL_1_ID;
+import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
+import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
+import static com.teachassist.teachassist.LaunchActivity.USERNAME;
 
 public class SendNotifications extends ContextWrapper {
     private NotificationManagerCompat notificationManager;
@@ -45,11 +52,22 @@ public class SendNotifications extends ContextWrapper {
     }
 
 
-    public Notification sendOnChannel(String channel, int id, String title, String body){
+    public Notification sendOnChannel(String channel, final Class<? extends Activity> activityToOpen, String title, String body){
+        Intent activityIntent = new Intent(this, activityToOpen);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
+        String username = sharedPreferences.getString(USERNAME, "");
+        String password = sharedPreferences.getString(PASSWORD, "");
+
+        activityIntent.putExtra("username", username);
+        activityIntent.putExtra("password", password);
+        PendingIntent contentIntent= PendingIntent.getActivity(this, 0, activityIntent, 0);
+
         Notification notification = new NotificationCompat.Builder(this, channel)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setContentIntent(contentIntent)
                 .build();//TODO add real icon
         return notification;
 
