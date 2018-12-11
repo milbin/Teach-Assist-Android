@@ -1,21 +1,26 @@
 package com.teachassist.teachassist;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,14 +31,26 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.decimal4j.util.DoubleRounder;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -177,48 +194,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",0);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 0);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch(Exception e){
+
+            }
         }
     }
     public class subject1_click implements View.OnClickListener{
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",1);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 1);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch (Exception e){
+
+            }
+
         }
     }
     public class subject2_click implements View.OnClickListener{
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",2);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 2);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch (Exception e){
+
+            }
         }
     }
     public class subject3_click implements View.OnClickListener{
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",3);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 3);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch (Exception e){
+
+            }
         }
     }
 
@@ -330,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //show and hide menu so that app does not crash is user presses edit button before main view is fully loaded
     public void showMenu(boolean show){
         if(menu == null){
+            System.out.println("NULL MENU");
             return;
         }
         menu.setGroupVisible(R.id.main_menu_group, show);
@@ -365,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 10101: // see MainActivity.this.startActivityForResult(myIntent, 10101); line(140)
                 if (resultCode == Activity.RESULT_OK) {
                     removed = data.getStringArrayListExtra("list");
+                    System.out.println(removed);
                     if(removed.isEmpty()){
                         //do nothing
                     }
@@ -390,6 +430,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         int size = y - removed.size()+Empty_course_list.size();
                         List<Double> grades = new ArrayList<>();
 
+                        System.out.println(removed);
 
 
                         if(removed.contains("0")){
@@ -451,6 +492,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             average += value;
 
                         }
+                        System.out.println(size);
                         average = DoubleRounder.round(average / size, 1);
                         Float Average = (float) average;
                         TextView AverageInt = findViewById(R.id.AverageInt);

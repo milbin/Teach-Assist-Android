@@ -198,8 +198,7 @@ public class TA {
         return course;
     }
 
-
-    public LinkedHashMap<String,List<LinkedHashMap<String,String>>> GetMarks(int subject_number){
+    public LinkedHashMap<String,List<Map<String,List<String>>>> GetMarks(int subject_number){
         try {
             String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
             String path = "/live/students/viewReport.php?";
@@ -211,96 +210,252 @@ public class TA {
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
 
-            LinkedHashMap<String,String> fields = new LinkedHashMap<>();
-            fields.put("knowledge","ffffaa");
-            fields.put("thinking","c0fea4");
-            fields.put("communication","afafff");
-            fields.put("application","ffd490");
-            fields.put("other","#dedede");
+            Map<String,String> colors = new HashMap<>();
+            colors.put("knowledge","ffffaa");
+            colors.put("thinking","c0fea4");
+            colors.put("communication","afafff");
+            colors.put("application","ffd490");
+            colors.put("other","#dedede");
 
             //get response
             SendRequest sr = new SendRequest();
             String[] response = sr.send(url, headers, parameters, cookies, path);
 
-            LinkedHashMap<String,List<LinkedHashMap<String,String>>> marks = new LinkedHashMap<>();
-            System.out.println("knowledge = "+fields.get("knowledge"));
+            LinkedHashMap<String,List<Map<String,List<String>>>> marks = new LinkedHashMap<>();
+            System.out.println("knowledge = "+colors.get("knowledge"));
 
             for(String i:response[0].split("rowspan")){
-                ArrayList<LinkedHashMap<String,String>> stats = new ArrayList<>();
+                ArrayList<Map<String,List<String>>> stats = new ArrayList<>();
                 if (i.charAt(0) == '=') {
-                    //System.out.println("HERE"+i);
-                    String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é");
-                    String knowledge;
-                    String thinking;
-                    String communication;
-                    String application;
-                    String other;
+                    System.out.println("HERE"+i);
+                    String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é").replaceAll("&#039;","'");
+                    ArrayList knowledge = new ArrayList<>();
+                    ArrayList thinking = new ArrayList<>();
+                    ArrayList communication = new ArrayList<>();
+                    ArrayList application = new ArrayList<>();
+                    ArrayList other = new ArrayList<>();
+
                     try {
-                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
-                        if (i.split("bgcolor=\"" + fields.get("knowledge"))[1].split("</td>")[0].contains("border")) {
-                            knowledge = i.split("bgcolor=\"" + fields.get("knowledge"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                        } else {
-                            knowledge = "";
+                        String weight;
+                        String field;
+                        Map<String, List<String>> mark = new HashMap<>();
+
+                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
+                            field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                         }
+                        else {
+                            field = "";
+                            weight = "";
+                        }
+
+                        knowledge.add(field);
+                        knowledge.add(weight);
+
                         mark.put("knowledge",knowledge);
                         stats.add(mark);
                     }
                     catch (ArrayIndexOutOfBoundsException e){
-                        //System.out.println("eek");
+                        String weight;
+                        String field;
+
+                        try{
+                            Map<String, List<String>> mark = new HashMap<>();
+
+                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
+                                field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            } else {
+                                field = "";
+                                weight = "";
+                            }
+
+                            knowledge.add(field);
+                            knowledge.add(weight);
+
+                            mark.put("knowledge",knowledge);
+                            stats.add(mark);
+
+                        }
+                        catch(ArrayIndexOutOfBoundsException e1){
+
+                        }
                     }
                     try {
-                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
-                        if (i.split("bgcolor=\"" + fields.get("thinking"))[1].split("</td>")[0].contains("border")) {
-                            thinking = i.split("bgcolor=\"" + fields.get("thinking"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        String weight;
+                        String field;
+                        Map<String, List<String>> mark = new HashMap<>();
+
+                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
+                            field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                         } else {
-                            thinking = "";
+                            field = "";
+                            weight = "";
                         }
+
+                        thinking.add(field);
+                        thinking.add(weight);
+
                         mark.put("thinking",thinking);
                         stats.add(mark);
                     }
                     catch (ArrayIndexOutOfBoundsException e){
+                        String weight;
+                        String field;
+                        System.out.println("BADBAD");
+                        try{
+                            Map<String, List<String>> mark = new HashMap<>();
+                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
+                                field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            } else {
+                                field = "";
+                                weight = "";
+                            }
+
+                            thinking.add(field);
+                            thinking.add(weight);
+
+                            mark.put("thinking",thinking);
+                            stats.add(mark);
+
+                        }
+                        catch(ArrayIndexOutOfBoundsException e1){
+
+                        }
 
                     }
                     try {
-                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
-                        if (i.split("bgcolor=\"" + fields.get("communication"))[1].split("</td>")[0].contains("border")) {
-                            communication = i.split("bgcolor=\"" + fields.get("communication"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        String weight;
+                        String field;
+                        Map<String, List<String>> mark = new HashMap<>();
+                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
+                            field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                         } else {
-                            communication = "";
+                            field = "";
+                            weight = "";
                         }
+
+                        communication.add(field);
+                        communication.add(weight);
+
                         mark.put("communication",communication);
                         stats.add(mark);
                     }
                     catch (ArrayIndexOutOfBoundsException e){
+                        String weight;
+                        String field;
+                        try {
+                            Map<String, List<String>> mark = new HashMap<>();
+                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
+                                field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            } else {
+                                field = "";
+                                weight = "";
+                            }
 
-                    }
-                    try {
-                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
-                        if (i.split("bgcolor=\"" + fields.get("application"))[1].split("</td>")[0].contains("border")) {
-                            application = i.split("bgcolor=\"" + fields.get("application"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                        } else {
-                            application = "";
+                            communication.add(field);
+                            communication.add(weight);
+
+                            mark.put("communication",communication);
+                            stats.add(mark);
                         }
+                        catch (ArrayIndexOutOfBoundsException e1) {
+
+                            }
+                        }
+
+
+                    try {
+                        String weight;
+                        String field;
+                        Map<String, List<String>> mark = new HashMap<>();
+                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
+                            field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+
+                        } else {
+                            field = "";
+                            weight = "";
+                        }
+
+                        application.add(field);
+                        application.add(weight);
+
                         mark.put("application",application);
                         stats.add(mark);
                     }
                     catch (ArrayIndexOutOfBoundsException e) {
+                        String weight;
+                        String field;
+                        try{
+                            Map<String, List<String>> mark = new HashMap<>();
+                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
+                                field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            } else {
+                                field = "";
+                                weight = "";
+                            }
 
+                            application.add(field);
+                            application.add(weight);
+
+                            mark.put("application",application);
+                            stats.add(mark);
+
+                        }
+                        catch(ArrayIndexOutOfBoundsException e1){
+
+                        }
                     }
                     try {
-                        LinkedHashMap<String, String> mark = new LinkedHashMap<>();
-                        if (i.split("bgcolor=\"" + fields.get("other"))[1].split("</td>")[0].contains("border")) {
-                            //System.out.println("FUCK "+i.split("bgcolor=\"" + fields.get("other"))[2]);
-                            //System.out.println("CUCK = "+ i.split("bgcolor=\""+fields.get("other"))[2].split("id=")[1].split(">")[1]);
-                            other = i.split("bgcolor=\"" + fields.get("other"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        String weight;
+                        String field;
+                        Map<String, List<String>> mark = new HashMap<>();
+                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
+                            //System.out.println("FUCK "+i.split("bgcolor=\"" + colors.get("other"))[2]);
+                            //System.out.println("CUCK = "+ i.split("bgcolor=\""+colors.get("other"))[2].split("id=")[1].split(">")[1]);
+                            field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             //other = "";
                         } else {
-                            other = "";
+                            field = "";
+                            weight = "";
                         }
+
+                        other.add(field);
+                        other.add(weight);
+
                         mark.put("other",other);
                         stats.add(mark);
                     }
                     catch (ArrayIndexOutOfBoundsException e){
+                        String weight;
+                        String field;
+                        try{
+                            Map<String, List<String>> mark = new HashMap<>();
+                            if (i.split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
+                                field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            } else {
+                                field = "";
+                                weight = "";
+                            }
+
+                            other.add(field);
+                            other.add(weight);
+
+                            mark.put("other",other);
+                            stats.add(mark);
+
+                        }
+                        catch(ArrayIndexOutOfBoundsException e1){
+
+                        }
                     }
 
                     marks.put(assignment, stats);
@@ -316,7 +471,7 @@ public class TA {
         catch(IOException e) {
             e.printStackTrace();
             //String[] returnString = {"ERROR! Check in SendRequest"};
-                LinkedHashMap<String,List<LinkedHashMap<String,String>>> returnMap = new LinkedHashMap<>();
+            LinkedHashMap<String,List<Map<String,List<String>>>> returnMap = new LinkedHashMap<>();
             return returnMap;
         }
 
