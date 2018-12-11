@@ -91,9 +91,9 @@ public class AlertReceiver extends BroadcastReceiver {
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params) {
             TA ta = new TA();
-            //LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
-            ta.GetTAData(username, password);
-
+            LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
+            //ta.GetTAData(username, password);
+            /*
             ArrayList list1 = new ArrayList<>(Arrays.asList("66.7", "AVI3M1-01", "Visual Arts", "169"));
             ArrayList list2 = new ArrayList<>(Arrays.asList("93.1", "SPH3U1-01", "Physics", "167"));
             ArrayList list3 = new ArrayList<>(Arrays.asList("83.0", "FIF3U1-01", "", "214"));
@@ -103,6 +103,7 @@ public class AlertReceiver extends BroadcastReceiver {
             newResponse.put("283003", list2);
             newResponse.put("283001", list3);
             newResponse.put("283152", list4);
+            */
 
 
 
