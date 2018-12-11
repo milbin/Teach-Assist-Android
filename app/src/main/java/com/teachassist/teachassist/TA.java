@@ -264,7 +264,7 @@ public class TA {
 
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
                                 field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             } else {
                                 field = "";
                                 weight = "";
@@ -308,7 +308,7 @@ public class TA {
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
                                 field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             } else {
                                 field = "";
                                 weight = "";
@@ -351,7 +351,7 @@ public class TA {
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
                                 field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             } else {
                                 field = "";
                                 weight = "";
@@ -395,7 +395,7 @@ public class TA {
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
                                 field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             } else {
                                 field = "";
                                 weight = "";
@@ -440,7 +440,7 @@ public class TA {
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
                                 field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             } else {
                                 field = "";
                                 weight = "";
