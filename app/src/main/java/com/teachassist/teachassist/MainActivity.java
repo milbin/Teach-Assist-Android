@@ -194,24 +194,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",0);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 0);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch(Exception e){
+
+            }
         }
     }
     public class subject1_click implements View.OnClickListener{
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",1);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 1);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch (Exception e){
+
+            }
 
         }
     }
@@ -219,24 +229,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",2);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 2);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch (Exception e){
+
+            }
         }
     }
     public class subject3_click implements View.OnClickListener{
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksView.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            myIntent.putExtra("subject",3);
-            startActivity(myIntent);
-            dialog.dismiss();
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 3);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch (Exception e){
+
+            }
         }
     }
 

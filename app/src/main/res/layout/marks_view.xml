@@ -48,7 +48,7 @@
                         />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/subjectheader"
                 android:layout_marginStart="10dp"
@@ -68,8 +68,16 @@
                     </TableRow>
                 </TableLayout>
             </RelativeLayout>
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="600dp"
+                android:id="@+id/graphs"
+                android:orientation="vertical"
+                    >
+            </LinearLayout>
 
         </LinearLayout>
+
 
 
     </HorizontalScrollView>
