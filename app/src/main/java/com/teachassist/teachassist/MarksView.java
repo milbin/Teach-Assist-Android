@@ -80,10 +80,6 @@ public class MarksView extends AppCompatActivity{
     ProgressDialog dialog;
     NavigationView navigationView;
     private DrawerLayout drawer;
-    public static final String SHARED_PREFS = "sharedPrefes";
-    public static final String USERNAME = "USERNAME";
-    public static final String PASSWORD = "PASSWORD";
-    public static final String REMEMBERME = "REMEMBERME";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,6 +106,7 @@ public class MarksView extends AppCompatActivity{
         Toast.makeText(MarksView.this, text, Toast.LENGTH_SHORT).show();
     }
 
+
     private class GetMarks extends AsyncTask<String, Integer, LinkedHashMap<String,List<Map<String,List<String>>>>>{
         LineChart lineChart;
 
@@ -122,7 +119,9 @@ public class MarksView extends AppCompatActivity{
             System.out.println(username);
             System.out.println(password);
             ta.GetTAData(username,password);
+            System.out.println(subject_number);
             marks = ta.GetMarks(subject_number);
+            System.out.println(subject_number);
             subject = ta.GetCourse(subject_number);
             return marks;
 
@@ -144,7 +143,6 @@ public class MarksView extends AppCompatActivity{
             colors.put("other", Integer.toString(getResources().getColor(R.color.other)));
             int i = 0;
             int rows = 0;
-            System.out.println(marks + " <-- MARKS");
             TextView course = findViewById(R.id.subjectTitle);
             course.setText(subject);
 
@@ -214,7 +212,6 @@ public class MarksView extends AppCompatActivity{
                         mark_type.setPadding(5, 10, 10, 5);
                         //mark_type.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
                         //mark_type.requestLayout();
-                        System.out.println("key = " + column.keySet().iterator().next());
                         mark_type.setBackgroundColor(Integer.parseInt(colors.get(column.keySet().iterator().next())));
                         mark_type.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         row.addView(mark_type);
@@ -240,7 +237,6 @@ public class MarksView extends AppCompatActivity{
                     mark.setPadding(5, 10, 10, 5);
                     String mark_key = column.keySet().iterator().next();
                     String text = column.get(mark_key).get(0);
-                    System.out.println("NEWMARK = "+text);
                     mark.setText(text);
                     mark.setBackgroundColor(Integer.parseInt(colors.get(mark_key)));
                     row.addView(mark);
@@ -257,7 +253,6 @@ public class MarksView extends AppCompatActivity{
             //go Through every subject
             for (Map<String, List<String>> column : marks.get(marks.keySet().iterator().next())) {
                 String subject = column.keySet().iterator().next();
-                System.out.println("SUBJECT = "+subject);
 
                 //lineChart = (LineChart) findViewById(R.id.lineChart);
                 lineChart = new LineChart(MarksView.this);
@@ -278,7 +273,6 @@ public class MarksView extends AppCompatActivity{
                         numDataPoints++;
                     }
                     catch (Exception e) {
-                        System.out.println("nuh uh");
                     }
                 }
 
@@ -286,7 +280,6 @@ public class MarksView extends AppCompatActivity{
                 int index = 0;
                 for (String key : marks.keySet()) {
                     try {
-                        System.out.println(marks.get(key).get(0).get(subject).get(0).split("=")[1].split("%")[0]);
                         float y = Float.parseFloat(marks.get(key).get(0).get(subject).get(0).split("=")[1].split("%")[0]);
                         x = x + (x / numDataPoints);
                         yAxis.add(new Entry(y, index));
@@ -294,7 +287,7 @@ public class MarksView extends AppCompatActivity{
                         index++;
                     }
                     catch (Exception e) {
-                        System.out.println("nuh uh");
+
                     }
                 }
                 //convert Array to String[]

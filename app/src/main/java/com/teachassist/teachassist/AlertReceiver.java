@@ -36,6 +36,9 @@ import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
 import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
 import static com.teachassist.teachassist.LaunchActivity.USERNAME;
 import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.ALLNOTIFICATIONS;
+import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION1;
+import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION2;
+import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION3;
 import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION4;
 
 public class AlertReceiver extends BroadcastReceiver {
@@ -91,19 +94,19 @@ public class AlertReceiver extends BroadcastReceiver {
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params) {
             TA ta = new TA();
-            LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
-            //ta.GetTAData(username, password);
-            /*
-            ArrayList list1 = new ArrayList<>(Arrays.asList("66.7", "AVI3M1-01", "Visual Arts", "169"));
-            ArrayList list2 = new ArrayList<>(Arrays.asList("93.1", "SPH3U1-01", "Physics", "167"));
-            ArrayList list3 = new ArrayList<>(Arrays.asList("83.0", "FIF3U1-01", "", "214"));
-            ArrayList list4 = new ArrayList<>(Arrays.asList("87.0", "MCR3U1-01", "Functions and Relations", "142"));
+            //LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
+
+            ta.GetTAData(username, password);
+            ArrayList list1 = new ArrayList<>(Arrays.asList("63.2", "AVI3M1-01", "Visual Arts", "169"));
+            ArrayList list2 = new ArrayList<>(Arrays.asList("92.1", "SPH3U1-01", "Physics", "167"));
+            ArrayList list3 = new ArrayList<>(Arrays.asList("82.0", "FIF3U1-01", "", "214"));
+            ArrayList list4 = new ArrayList<>(Arrays.asList("86.5", "MCR3U1-01", "Functions and Relations", "142"));
             LinkedHashMap<String, List<String>> newResponse = new LinkedHashMap<>();
             newResponse.put("283098", list1);
             newResponse.put("283003", list2);
             newResponse.put("283001", list3);
             newResponse.put("283152", list4);
-            */
+
 
 
 
@@ -143,216 +146,333 @@ public class AlertReceiver extends BroadcastReceiver {
                         if (entry.getKey().contains("NA")) {
                             //toSend.remove(entry.getKey());
                         } else if (!entry.getValue().get(0).equals(toSend.get(course)) || toSend.get(course).toString().contains("NA")) { // idk why u gotta add toString here
-                            SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                             String courseName = entry.getValue().get(1);
-                            LinkedHashMap<String,List<LinkedHashMap<String,String>>> marks;
+                            LinkedHashMap<String,List<Map<String,List<String>>>> marks;
 
                             if (course == 0) {
                                 marks = ta.GetMarks(0);
                                 String assignmentName = "";
-                                List<LinkedHashMap<String,String>> categories = new ArrayList();
-                                int assignmentNumber = 0;
-                                for(LinkedHashMap.Entry<String,List<LinkedHashMap<String,String>>> assignment : marks.entrySet()){
-                                    if(assignmentNumber == marks.size()-1){
-                                        assignmentName = assignment.getKey();
-                                        categories = assignment.getValue();
-                                    }
-                                    assignmentNumber++;
-                                }
                                 double assignmentAverage = 0.0;
                                 int usedCategories = 0;
-                                for(LinkedHashMap<String,String> category : categories){
-                                    if(category.get("thinking") != null){
-                                        if(!category.get("thinking").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("thinking").split("=")[1].split("%")[0]);
-                                            usedCategories++;
+                                Boolean gotAZero = false;
+                                int assignmentNumber = 0;
+                                for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
+                                    if (assignmentNumber == marks.size() - 1) {
+                                        assignmentName = assignment.getKey();
+                                        for (Map<String, List<String>> categoryMap : assignment.getValue()) {
+                                            for (Map.Entry<String, List<String>> category : categoryMap.entrySet()) {
+                                                if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("application") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+
+                                            }
                                         }
                                     }
-                                    if(category.get("communication") != null){
-                                        if(!category.get("communication").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("communication").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("application") != null){
-                                        if(!category.get("application").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("application").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("knowledge") != null){
-                                        if(!category.get("knowledge").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("knowledge").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
+                                    assignmentNumber++;
 
                                 }
-                                if(assignmentAverage != 0.0) {
+
+                                if (assignmentAverage != 0.0 || gotAZero) {
+                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
-                                    if(enabledNotifications) {
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION1, true);
+                                    if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
                                                 MarksView.class, 0, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
                                         sendNotifications.getManager().notify(1, notification);
                                         System.out.println("SENT NOTIFICATION");
 
-                                    }                             }
-                            } else if (course == 1) {
+                                    }
+                                }
+                            }
+                            else if (course == 1) {
                                 marks = ta.GetMarks(1);
                                 String assignmentName = "";
-                                List<LinkedHashMap<String,String>> categories = new ArrayList();
-                                int assignmentNumber = 0;
-                                for(LinkedHashMap.Entry<String,List<LinkedHashMap<String,String>>> assignment : marks.entrySet()){
-                                    if(assignmentNumber == marks.size()-1){
-                                        assignmentName = assignment.getKey();
-                                        categories = assignment.getValue();
-                                    }
-                                    assignmentNumber++;
-                                }
                                 double assignmentAverage = 0.0;
                                 int usedCategories = 0;
-                                for(LinkedHashMap<String,String> category : categories){
-                                    if(category.get("thinking") != null){
-                                        if(!category.get("thinking").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("thinking").split("=")[1].split("%")[0]);
-                                            usedCategories++;
+                                Boolean gotAZero = false;
+                                int assignmentNumber = 0;
+                                for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
+                                    if (assignmentNumber == marks.size() - 1) {
+                                        assignmentName = assignment.getKey();
+                                        for (Map<String, List<String>> cat : assignment.getValue()) {
+                                            for (Map.Entry<String, List<String>> category : cat.entrySet()) {
+                                                if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("application") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+
                                         }
                                     }
-                                    if(category.get("communication") != null){
-                                        if(!category.get("communication").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("communication").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("application") != null){
-                                        if(!category.get("application").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("application").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("knowledge") != null){
-                                        if(!category.get("knowledge").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("knowledge").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
+                                    assignmentNumber++;
 
                                 }
-                                if(assignmentAverage != 0.0) {
+                                if (assignmentAverage != 0.0 || gotAZero) {
+                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
-                                    if(enabledNotifications) {
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION2, true);
+                                    if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
                                                 MarksView.class, 1, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
                                         sendNotifications.getManager().notify(2, notification);
                                         System.out.println("SENT NOTIFICATION");
 
-                                    }                             }
-                            } else if (course == 2) {
+                                    }
+                                }
+
+                            }
+                            else if (course == 2) {
                                 marks = ta.GetMarks(2);
                                 String assignmentName = "";
-                                List<LinkedHashMap<String,String>> categories = new ArrayList();
-                                int assignmentNumber = 0;
-                                for(LinkedHashMap.Entry<String,List<LinkedHashMap<String,String>>> assignment : marks.entrySet()){
-                                    if(assignmentNumber == marks.size()-1){
-                                        assignmentName = assignment.getKey();
-                                        categories = assignment.getValue();
-                                    }
-                                    assignmentNumber++;
-                                }
                                 double assignmentAverage = 0.0;
                                 int usedCategories = 0;
-                                for(LinkedHashMap<String,String> category : categories){
-                                    if(category.get("thinking") != null){
-                                        if(!category.get("thinking").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("thinking").split("=")[1].split("%")[0]);
-                                            usedCategories++;
+                                Boolean gotAZero = false;
+                                int assignmentNumber = 0;
+                                for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
+                                    if (assignmentNumber == marks.size() - 1) {
+                                        assignmentName = assignment.getKey();
+                                        for (Map<String, List<String>> cat : assignment.getValue()) {
+                                            for (Map.Entry<String, List<String>> category : cat.entrySet()) {
+                                                if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("application") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+
                                         }
                                     }
-                                    if(category.get("communication") != null){
-                                        if(!category.get("communication").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("communication").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("application") != null){
-                                        if(!category.get("application").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("application").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("knowledge") != null){
-                                        if(!category.get("knowledge").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("knowledge").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
+                                    assignmentNumber++;
 
                                 }
-                                if(assignmentAverage != 0.0) {
+                                if (assignmentAverage != 0.0 || gotAZero) {
+                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
-                                    if(enabledNotifications) {
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION3, true);
+                                    if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
                                                 MarksView.class, 2, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
                                         sendNotifications.getManager().notify(3, notification);
                                         System.out.println("SENT NOTIFICATION");
+
                                     }
                                 }
-                            } else if (course == 3) {
+                            }
+                            else if (course == 3) {
                                 marks = ta.GetMarks(3);
                                 String assignmentName = "";
-                                List<LinkedHashMap<String,String>> categories = new ArrayList();
+                                double assignmentAverage = 0.0;
+                                int usedCategories = 0;
+                                Boolean gotAZero = false;
                                 int assignmentNumber = 0;
-                                for(LinkedHashMap.Entry<String,List<LinkedHashMap<String,String>>> assignment : marks.entrySet()){
-                                    if(assignmentNumber == marks.size()-1){
+                                for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
+                                    if (assignmentNumber == marks.size() - 1) {
                                         assignmentName = assignment.getKey();
-                                        categories = assignment.getValue();
+                                        for (Map<String, List<String>> cat : assignment.getValue()) {
+                                            for (Map.Entry<String, List<String>> category : cat.entrySet()) {
+                                                if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("application") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+                                                if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
+                                                    if (!category.getValue().get(0).isEmpty()) {
+                                                        try {
+                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
+                                                            usedCategories++;
+                                                        } catch (ArrayIndexOutOfBoundsException e) {
+                                                            assignmentAverage += Double.parseDouble("0");
+                                                            usedCategories++;
+                                                            gotAZero = true;
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        }
                                     }
                                     assignmentNumber++;
                                 }
-                                double assignmentAverage = 0.0;
-                                int usedCategories = 0;
-                                for(LinkedHashMap<String,String> category : categories){
-                                    if(category.get("thinking") != null){
-                                        if(!category.get("thinking").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("thinking").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("communication") != null){
-                                        if(!category.get("communication").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("communication").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("application") != null){
-                                        if(!category.get("application").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("application").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-                                    if(category.get("knowledge") != null){
-                                        if(!category.get("knowledge").isEmpty()) {
-                                            assignmentAverage += Double.parseDouble(category.get("knowledge").split("=")[1].split("%")[0]);
-                                            usedCategories++;
-                                        }
-                                    }
-
-                                }
-                                if(assignmentAverage != 0.0) {
+                                if (assignmentAverage != 0.0 || gotAZero) {
+                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
-                                    if(enabledNotifications) {
+                                    if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
                                                 MarksView.class, 3, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
                                         sendNotifications.getManager().notify(4, notification);
                                         System.out.println("SENT NOTIFICATION");
+
                                     }
                                 }
                             }

@@ -42,7 +42,7 @@ public class SendNotifications extends ContextWrapper {
 
 
     public Notification sendOnChannel(String channel, final Class<? extends Activity> activityToOpen, int subject, String title, String body){
-        Intent activityIntent = new Intent(this, activityToOpen);
+        Intent activityIntent = new Intent(this, MarksView.class);
 
         SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
         String username = sharedPreferences.getString(USERNAME, "");
@@ -51,14 +51,15 @@ public class SendNotifications extends ContextWrapper {
         activityIntent.putExtra("username", username);
         activityIntent.putExtra("password", password);
         activityIntent.putExtra("subject",subject);
-        PendingIntent contentIntent= PendingIntent.getActivity(this, 0, activityIntent, 0);
+        int currentTime = (int) System.currentTimeMillis();
+        PendingIntent contentIntent= PendingIntent.getActivity(this, /*request code*/currentTime+subject, activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this, channel)
                 .setSmallIcon(R.drawable.ta_logo_v3)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setContentIntent(contentIntent)
                 .setAutoCancel(true)
+                .setContentIntent(contentIntent)
                 .build();//TODO add real icon
         return notification;
 

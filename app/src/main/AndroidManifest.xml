@@ -36,9 +36,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTop"/>
 
-        <activity android:name=".login"></activity>
+        <activity android:name=".login"/>
 
         <activity android:name=".SettingsActivity"
             android:theme="@style/preferenceTheme">
@@ -53,7 +54,8 @@
 
 
         <activity android:name="EditActivity"/>
-        <activity android:name="MarksView"/>
+        <activity android:name="MarksView"
+            android:launchMode="singleTop"/>
         <receiver android:name=".AlertReceiver"/>
 
 

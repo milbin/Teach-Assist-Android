@@ -2,6 +2,7 @@ package com.teachassist.teachassist;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -59,6 +60,8 @@ import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
+import static com.teachassist.teachassist.App.CHANNEL_1_ID;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //String username = "335525168";
     //String password = "4a6349kc";
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ProgressDialog dialog;
     NavigationView navigationView;
     Menu menu;
+    Context context = this;
 
     public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
@@ -195,6 +199,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
+
+                SendNotifications sendNotifications = new SendNotifications(context);
+                Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
+                        MarksView.class, 0, "New Assignment posted in: " + "test",
+                        "You Got a " + 100 / 1 + "% in " + "test");
+                sendNotifications.getManager().notify(1, notification);
                 Intent myIntent = new Intent(MainActivity.this, MarksView.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);

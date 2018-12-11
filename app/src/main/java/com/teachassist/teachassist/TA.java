@@ -194,6 +194,9 @@ public class TA {
 
     public String GetCourse(int subject_number){
         String subject_id = subjects.get(subject_number);
+        System.out.println(subjects);
+        System.out.println(subject_id);
+        System.out.println(subject_number);
         String course = Marks.get(subject_id).get(1);
         return course;
     }
@@ -222,12 +225,10 @@ public class TA {
             String[] response = sr.send(url, headers, parameters, cookies, path);
 
             LinkedHashMap<String,List<Map<String,List<String>>>> marks = new LinkedHashMap<>();
-            System.out.println("knowledge = "+colors.get("knowledge"));
 
             for(String i:response[0].split("rowspan")){
                 ArrayList<Map<String,List<String>>> stats = new ArrayList<>();
                 if (i.charAt(0) == '=') {
-                    System.out.println("HERE"+i);
                     String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é").replaceAll("&#039;","'");
                     ArrayList knowledge = new ArrayList<>();
                     ArrayList thinking = new ArrayList<>();
@@ -303,7 +304,6 @@ public class TA {
                     catch (ArrayIndexOutOfBoundsException e){
                         String weight;
                         String field;
-                        System.out.println("BADBAD");
                         try{
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
@@ -417,8 +417,6 @@ public class TA {
                         String field;
                         Map<String, List<String>> mark = new HashMap<>();
                         if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
-                            //System.out.println("FUCK "+i.split("bgcolor=\"" + colors.get("other"))[2]);
-                            //System.out.println("CUCK = "+ i.split("bgcolor=\""+colors.get("other"))[2].split("id=")[1].split(">")[1]);
                             field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                             //other = "";
