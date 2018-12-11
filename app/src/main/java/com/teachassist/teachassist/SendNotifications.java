@@ -28,17 +28,6 @@ import static com.teachassist.teachassist.LaunchActivity.USERNAME;
 public class SendNotifications extends ContextWrapper {
     private NotificationManagerCompat notificationManager;
 
-
-
-    public static final String channel1ID = "Channel1ID";
-    public static final String channel1Name = "Course1";
-    public static final String channel2ID = "Channel2ID";
-    public static final String channel2Name = "Course2";
-    public static final String channel3ID = "Channel3ID";
-    public static final String channel3Name = "Course3";
-    public static final String channel4ID = "Channel4ID";
-    public static final String channel4Name = "Course4";
-
     public SendNotifications(Context base){
         super(base);
 
@@ -65,7 +54,7 @@ public class SendNotifications extends ContextWrapper {
         PendingIntent contentIntent= PendingIntent.getActivity(this, 0, activityIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, channel)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ta_logo_v3)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setContentIntent(contentIntent)

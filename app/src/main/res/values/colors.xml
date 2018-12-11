@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Material design pallet: pink500, Green400-->
-    <color name="colorPrimary">#4caf50</color>
+    <color name="colorPrimary">#25af2b</color>
     <color name="colorPrimaryDark">#087f23</color>
     <color name="colorAccent">#80e27e</color>
     <color name="AverageBarColor">#e91e63</color>

@@ -121,6 +121,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
                         Refresh = true;
+                        TextView EmptyCourse = findViewById(R.id.EmptyCourse);
+                        EmptyCourse.setText("");
+                        TextView EmptyCourse1 = findViewById(R.id.EmptyCourse1);
+                        EmptyCourse1.setText("");
+                        TextView EmptyCourse2 = findViewById(R.id.EmptyCourse2);
+                        EmptyCourse2.setText("");
+                        TextView EmptyCourse3 = findViewById(R.id.EmptyCourse3);
+                        EmptyCourse3.setText("");
                         relativeLayout.setVisibility(View.VISIBLE);
                         relativeLayout1.setVisibility(View.VISIBLE);
                         relativeLayout2.setVisibility(View.VISIBLE);

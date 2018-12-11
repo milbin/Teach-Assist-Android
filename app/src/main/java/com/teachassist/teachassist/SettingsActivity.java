@@ -103,14 +103,21 @@ public class SettingsActivity extends AppCompatActivity {
             all_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, false);
-                    editor.putBoolean(NOTIFICATION1, false);
-                    editor.putBoolean(NOTIFICATION2, false);
-                    editor.putBoolean(NOTIFICATION3, false);
-                    editor.putBoolean(NOTIFICATION4, false);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION1, true);
+                        editor.putBoolean(NOTIFICATION2, true);
+                        editor.putBoolean(NOTIFICATION3, true);
+                        editor.putBoolean(NOTIFICATION4, true);
+                    }else{
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION1, false);
+                        editor.putBoolean(NOTIFICATION2, false);
+                        editor.putBoolean(NOTIFICATION3, false);
+                        editor.putBoolean(NOTIFICATION4, false);
+                    }
                     editor.apply();
-
                     return true;
                 }
             });
@@ -119,11 +126,15 @@ public class SettingsActivity extends AppCompatActivity {
             notifications1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, true);
-                    editor.putBoolean(NOTIFICATION1, true);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION1, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION1, false);
+                    }
                     editor.apply();
-
                     return true;
                 }
             });
@@ -131,11 +142,15 @@ public class SettingsActivity extends AppCompatActivity {
             notifications2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, true);
-                    editor.putBoolean(NOTIFICATION2, true);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION2, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION2, false);
+                    }
                     editor.apply();
-
                     return true;
                 }
             });
@@ -143,11 +158,15 @@ public class SettingsActivity extends AppCompatActivity {
             notifications3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, true);
-                    editor.putBoolean(NOTIFICATION3, true);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION3, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION3, false);
+                    }
                     editor.apply();
-
                     return true;
                 }
             });
@@ -155,11 +174,15 @@ public class SettingsActivity extends AppCompatActivity {
             notifications4.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    SharedPreferences.Editor editor =   sharedPreferences.edit();
-                    editor.putBoolean(ALLNOTIFICATIONS, true);
-                    editor.putBoolean(NOTIFICATION4, true);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION4, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION4, false);
+                    }
                     editor.apply();
-
                     return true;
                 }
             });

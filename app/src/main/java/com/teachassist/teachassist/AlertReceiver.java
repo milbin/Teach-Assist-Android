@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ import static com.teachassist.teachassist.App.CHANNEL_4_ID;
 import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
 import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
 import static com.teachassist.teachassist.LaunchActivity.USERNAME;
+import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.ALLNOTIFICATIONS;
+import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION4;
 
 public class AlertReceiver extends BroadcastReceiver {
 
@@ -52,13 +55,27 @@ public class AlertReceiver extends BroadcastReceiver {
         Type entityType = new TypeToken<LinkedHashMap<String, List<String>>>() {
         }.getType();
         response = gson.fromJson(str, entityType);
+        /*
+        ArrayList list1 = new ArrayList<>(Arrays.asList("66.7", "AVI3M1-01", "Visual Arts", "169"));
+        ArrayList list2 = new ArrayList<>(Arrays.asList("93.1", "SPH3U1-01", "Physics", "167"));
+        ArrayList list3 = new ArrayList<>(Arrays.asList("83.0", "FIF3U1-01", "", "214"));
+        ArrayList list4 = new ArrayList<>(Arrays.asList("87.0", "MCR3U1-01", "Functions and Relations", "142"));
+        LinkedHashMap<String, List<String>> newResponse = new LinkedHashMap<>();
+        response.put("283098", list1);
+        response.put("283003", list2);
+        response.put("283001", list3);
+        response.put("NA", list4);
+        */
         System.out.println("NOTIFICATION" + response);
+
 
         //get username and password
         SharedPreferences sharedPreferences = context.getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
         username = sharedPreferences.getString(USERNAME, "");
         password = sharedPreferences.getString(PASSWORD, "");
-        new GetTaData().execute(username, password);
+        if(!username.isEmpty() && !password.isEmpty()) {
+            new GetTaData().execute(username, password);
+        }
 
 
     }
@@ -73,18 +90,20 @@ public class AlertReceiver extends BroadcastReceiver {
 
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params) {
+            TA ta = new TA();
+            //LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
+            ta.GetTAData(username, password);
 
-            //LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(Username, Password);
+            ArrayList list1 = new ArrayList<>(Arrays.asList("66.7", "AVI3M1-01", "Visual Arts", "169"));
+            ArrayList list2 = new ArrayList<>(Arrays.asList("93.1", "SPH3U1-01", "Physics", "167"));
+            ArrayList list3 = new ArrayList<>(Arrays.asList("83.0", "FIF3U1-01", "", "214"));
+            ArrayList list4 = new ArrayList<>(Arrays.asList("87.0", "MCR3U1-01", "Functions and Relations", "142"));
+            LinkedHashMap<String, List<String>> newResponse = new LinkedHashMap<>();
+            newResponse.put("283098", list1);
+            newResponse.put("283003", list2);
+            newResponse.put("283001", list3);
+            newResponse.put("283152", list4);
 
-            ArrayList list1 = new ArrayList<>(Arrays.asList("66.0", "AVI3M1-01", "Visual Arts", "169"));
-            ArrayList list2 = new ArrayList<>(Arrays.asList("99.1", "SPH3U1-01", "Physics", "167"));
-            ArrayList list3 = new ArrayList<>(Arrays.asList("84.0", "FIF3U1-01", "", "214"));
-            ArrayList list4 = new ArrayList<>(Arrays.asList("87.1", "MCR3U1-01", "Functions and Relations", "142"));
-            LinkedHashMap<String, List<String>> newresponse = new LinkedHashMap<>();
-            newresponse.put("283098", list1);
-            newresponse.put("283003", list2);
-            newresponse.put("283001", list3);
-            newresponse.put("283152", list4);
 
 
             try {
@@ -119,17 +138,15 @@ public class AlertReceiver extends BroadcastReceiver {
 
                     }
                     int course = 0;
-                    for (LinkedHashMap.Entry<String, List<String>> entry : newresponse.entrySet()) {
+                    for (LinkedHashMap.Entry<String, List<String>> entry : newResponse.entrySet()) {
                         if (entry.getKey().contains("NA")) {
                             //toSend.remove(entry.getKey());
                         } else if (!entry.getValue().get(0).equals(toSend.get(course)) || toSend.get(course).toString().contains("NA")) { // idk why u gotta add toString here
                             SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                             String courseName = entry.getValue().get(1);
-                            TA ta = new TA();
                             LinkedHashMap<String,List<LinkedHashMap<String,String>>> marks;
 
                             if (course == 0) {
-                                ta.GetTAData(username, password);
                                 marks = ta.GetMarks(0);
                                 String assignmentName = "";
                                 List<LinkedHashMap<String,String>> categories = new ArrayList();
@@ -171,14 +188,17 @@ public class AlertReceiver extends BroadcastReceiver {
 
                                 }
                                 if(assignmentAverage != 0.0) {
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
-                                            MarksView.class, 0, "New Assignment posted in: " + courseName,
-                                            "You Got a " + assignmentAverage/usedCategories + "% in " + assignmentName);
-                                    sendNotifications.getManager().notify(1, notification);
-                                    System.out.println("SENT NOTIFICATION");
-                                }
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
+                                    if(enabledNotifications) {
+                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
+                                                MarksView.class, 0, "New Assignment posted in: " + courseName,
+                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                        sendNotifications.getManager().notify(1, notification);
+                                        System.out.println("SENT NOTIFICATION");
+
+                                    }                             }
                             } else if (course == 1) {
-                                ta.GetTAData(username, password);
                                 marks = ta.GetMarks(1);
                                 String assignmentName = "";
                                 List<LinkedHashMap<String,String>> categories = new ArrayList();
@@ -220,14 +240,17 @@ public class AlertReceiver extends BroadcastReceiver {
 
                                 }
                                 if(assignmentAverage != 0.0) {
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
-                                            MarksView.class, 1, "New Assignment posted in: " + courseName,
-                                            "You Got a " + assignmentAverage/usedCategories + "% in " + assignmentName);
-                                    sendNotifications.getManager().notify(2, notification);
-                                    System.out.println("SENT NOTIFICATION");
-                                }
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
+                                    if(enabledNotifications) {
+                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
+                                                MarksView.class, 1, "New Assignment posted in: " + courseName,
+                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                        sendNotifications.getManager().notify(2, notification);
+                                        System.out.println("SENT NOTIFICATION");
+
+                                    }                             }
                             } else if (course == 2) {
-                                ta.GetTAData(username, password);
                                 marks = ta.GetMarks(2);
                                 String assignmentName = "";
                                 List<LinkedHashMap<String,String>> categories = new ArrayList();
@@ -269,15 +292,18 @@ public class AlertReceiver extends BroadcastReceiver {
 
                                 }
                                 if(assignmentAverage != 0.0) {
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
-                                            MarksView.class, 2, "New Assignment posted in: " + courseName,
-                                            "You Got a " + assignmentAverage/usedCategories + "% in " + assignmentName);
-                                    sendNotifications.getManager().notify(3, notification);
-                                    System.out.println("SENT NOTIFICATION");
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
+                                    if(enabledNotifications) {
+                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
+                                                MarksView.class, 2, "New Assignment posted in: " + courseName,
+                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                        sendNotifications.getManager().notify(3, notification);
+                                        System.out.println("SENT NOTIFICATION");
+                                    }
                                 }
                             } else if (course == 3) {
-                                ta.GetTAData(username, password);
-                                marks = ta.GetMarks(0);
+                                marks = ta.GetMarks(3);
                                 String assignmentName = "";
                                 List<LinkedHashMap<String,String>> categories = new ArrayList();
                                 int assignmentNumber = 0;
@@ -318,11 +344,15 @@ public class AlertReceiver extends BroadcastReceiver {
 
                                 }
                                 if(assignmentAverage != 0.0) {
-                                    Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
-                                            MarksView.class, 3, "New Assignment posted in: " + courseName,
-                                            "You Got a " + assignmentAverage/usedCategories + "% in " + assignmentName);
-                                    sendNotifications.getManager().notify(4, notification);
-                                    System.out.println("SENT NOTIFICATION");
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
+                                    if(enabledNotifications) {
+                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
+                                                MarksView.class, 3, "New Assignment posted in: " + courseName,
+                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                        sendNotifications.getManager().notify(4, notification);
+                                        System.out.println("SENT NOTIFICATION");
+                                    }
                                 }
                             }
                         }
@@ -339,7 +369,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
 
 
-            return newresponse;
+            return newResponse;
 
         }
 

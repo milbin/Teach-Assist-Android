@@ -5,24 +5,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@color/White"
     android:theme="@android:style/Theme.Black.NoTitleBar"
     >
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="150dp"
-        android:layout_height="125dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        app:srcCompat="@drawable/teach_assist_logo"
+        app:srcCompat="@drawable/ta_logo_v3"
         />
     <RelativeLayout
+        android:id="@+id/relativeLayoutLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="125dp"
         >
 
 
@@ -32,7 +33,7 @@
             android:id="@+id/editText1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="25dp"
             android:layout_centerHorizontal="true"
             android:inputType="textPersonName"
             android:background="@android:color/transparent"
@@ -84,23 +85,24 @@
             android:layout_marginTop="10dp"
             android:button="@drawable/checkbox"
             android:text="Remember me"
-            android:textColor="@color/White"
+            android:textColor="@color/TextColor"
 
             />
+    </RelativeLayout>
         <Button
             android:id="@+id/login_button"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
+            android:layout_width="230dp"
+            android:layout_height="50dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/editText2"
-            android:layout_marginTop="70dp"
+            android:layout_below="@id/relativeLayoutLogin"
+            android:layout_marginTop="50dp"
             android:background="@drawable/rounded_corner"
-            android:elevation="10dp"
+            android:elevation="0dp"
             android:text="LOGIN"
             android:textSize="25dp"
             android:textColor="@color/White"
             android:fontFamily="@font/nunito_bold"
             />
-    </RelativeLayout>
+
 
 </RelativeLayout>
