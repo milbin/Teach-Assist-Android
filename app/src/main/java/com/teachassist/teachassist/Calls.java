@@ -14,10 +14,10 @@ import java.util.Map;
 public class Calls {
     public static void main(String args[]) {
 
-        String test = "NA";
-        if(!test.equals("NA")){
-
-        }
+        String test = "/10=83%";
+        String errorCatcher = test.split("/")[0];
+        System.out.println(errorCatcher);
+        System.out.println(errorCatcher.isEmpty());
 
 
         TA ta = new TA();

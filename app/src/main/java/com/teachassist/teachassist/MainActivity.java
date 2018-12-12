@@ -440,7 +440,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         int size = y - removed.size()+Empty_course_list.size();
                         List<Double> grades = new ArrayList<>();
 
-                        System.out.println(removed);
 
 
                         if(removed.contains("0")){

@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.decimal4j.util.DoubleRounder;
+
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -151,10 +153,31 @@ public class AlertReceiver extends BroadcastReceiver {
 
                             if (course == 0) {
                                 marks = ta.GetMarks(0);
+                                LinkedHashMap<String, Double> weights = ta.GetCourseWeights();
+                                Double weightKnowledge = 1.0;
+                                Double weightCommunication = 1.0;
+                                Double weightThinking = 1.0;
+                                Double weightApplication = 1.0;
                                 String assignmentName = "";
                                 double assignmentAverage = 0.0;
+                                double totalWeight = 0.0;
                                 int usedCategories = 0;
                                 Boolean gotAZero = false;
+                                for (LinkedHashMap.Entry<String, Double> weight : weights.entrySet()) {
+                                    if(weight.getKey().equals("Knowledge")){
+                                        weightKnowledge = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Communication")){
+                                        weightCommunication = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Thinking")){
+                                        weightThinking = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Application")){
+                                        weightApplication = weight.getValue();
+                                    }
+
+                                }
                                 int assignmentNumber = 0;
                                 for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
                                     if (assignmentNumber == marks.size() - 1) {
@@ -164,11 +187,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightThinking;
+                                                                usedCategories++;
+                                                                totalWeight += weightThinking;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightThinking;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -176,11 +203,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightCommunication;
+                                                                usedCategories++;
+                                                                totalWeight += weightCommunication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightCommunication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -188,11 +219,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("application") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightApplication;
+                                                                usedCategories++;
+                                                                totalWeight += weightApplication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightApplication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -200,11 +235,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightKnowledge;
+                                                                usedCategories++;
+                                                                totalWeight += weightKnowledge;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightKnowledge;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -217,14 +256,18 @@ public class AlertReceiver extends BroadcastReceiver {
 
                                 }
 
-                                if (assignmentAverage != 0.0 || gotAZero) {
+                                if(totalWeight == 0.0){
+                                    totalWeight = usedCategories;
+                                }
+
+                                if (assignmentAverage != 0.0 || gotAZero || totalWeight !=0.0) {
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION1, true);
                                     if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
                                                 MarksView.class, 0, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                                "You Got a " + DoubleRounder.round(assignmentAverage / totalWeight, 1)+ "% in " + assignmentName);
                                         sendNotifications.getManager().notify(1, notification);
                                         System.out.println("SENT NOTIFICATION");
 
@@ -233,10 +276,31 @@ public class AlertReceiver extends BroadcastReceiver {
                             }
                             else if (course == 1) {
                                 marks = ta.GetMarks(1);
+                                LinkedHashMap<String, Double> weights = ta.GetCourseWeights();
+                                Double weightKnowledge = 1.0;
+                                Double weightCommunication = 1.0;
+                                Double weightThinking = 1.0;
+                                Double weightApplication = 1.0;
                                 String assignmentName = "";
                                 double assignmentAverage = 0.0;
+                                double totalWeight = 0.0;
                                 int usedCategories = 0;
                                 Boolean gotAZero = false;
+                                for (LinkedHashMap.Entry<String, Double> weight : weights.entrySet()) {
+                                    if(weight.getKey().equals("Knowledge")){
+                                        weightKnowledge = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Communication")){
+                                        weightCommunication = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Thinking")){
+                                        weightThinking = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Application")){
+                                        weightApplication = weight.getValue();
+                                    }
+
+                                }
                                 int assignmentNumber = 0;
                                 for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
                                     if (assignmentNumber == marks.size() - 1) {
@@ -246,11 +310,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightThinking;
+                                                                usedCategories++;
+                                                                totalWeight += weightThinking;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightThinking;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -258,11 +326,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightCommunication;
+                                                                usedCategories++;
+                                                                totalWeight += weightCommunication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightCommunication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -270,11 +342,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("application") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightApplication;
+                                                                usedCategories++;
+                                                                totalWeight += weightApplication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightApplication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -282,11 +358,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightKnowledge;
+                                                                usedCategories++;
+                                                                totalWeight += weightKnowledge;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightKnowledge;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -299,14 +379,18 @@ public class AlertReceiver extends BroadcastReceiver {
                                     assignmentNumber++;
 
                                 }
-                                if (assignmentAverage != 0.0 || gotAZero) {
+                                if(totalWeight == 0.0){
+                                    totalWeight = usedCategories;
+                                }
+
+                                if (assignmentAverage != 0.0 || gotAZero || totalWeight !=0.0) {
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION2, true);
                                     if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
                                                 MarksView.class, 1, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                                "You Got a " + DoubleRounder.round(assignmentAverage / totalWeight, 1)+ "% in " + assignmentName);
                                         sendNotifications.getManager().notify(2, notification);
                                         System.out.println("SENT NOTIFICATION");
 
@@ -316,10 +400,31 @@ public class AlertReceiver extends BroadcastReceiver {
                             }
                             else if (course == 2) {
                                 marks = ta.GetMarks(2);
+                                LinkedHashMap<String, Double> weights = ta.GetCourseWeights();
+                                Double weightKnowledge = 1.0;
+                                Double weightCommunication = 1.0;
+                                Double weightThinking = 1.0;
+                                Double weightApplication = 1.0;
                                 String assignmentName = "";
                                 double assignmentAverage = 0.0;
+                                double totalWeight = 0.0;
                                 int usedCategories = 0;
                                 Boolean gotAZero = false;
+                                for (LinkedHashMap.Entry<String, Double> weight : weights.entrySet()) {
+                                    if(weight.getKey().equals("Knowledge")){
+                                        weightKnowledge = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Communication")){
+                                        weightCommunication = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Thinking")){
+                                        weightThinking = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Application")){
+                                        weightApplication = weight.getValue();
+                                    }
+
+                                }
                                 int assignmentNumber = 0;
                                 for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
                                     if (assignmentNumber == marks.size() - 1) {
@@ -329,11 +434,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightThinking;
+                                                                usedCategories++;
+                                                                totalWeight += weightThinking;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightThinking;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -341,11 +450,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightCommunication;
+                                                                usedCategories++;
+                                                                totalWeight += weightCommunication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightCommunication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -353,11 +466,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("application") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightApplication;
+                                                                usedCategories++;
+                                                                totalWeight += weightApplication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightApplication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -365,11 +482,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightKnowledge;
+                                                                usedCategories++;
+                                                                totalWeight += weightKnowledge;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightKnowledge;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -382,14 +503,18 @@ public class AlertReceiver extends BroadcastReceiver {
                                     assignmentNumber++;
 
                                 }
-                                if (assignmentAverage != 0.0 || gotAZero) {
+                                if(totalWeight == 0.0){
+                                    totalWeight = usedCategories;
+                                }
+
+                                if (assignmentAverage != 0.0 || gotAZero || totalWeight !=0.0) {
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION3, true);
                                     if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
                                                 MarksView.class, 2, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                                "You Got a " + DoubleRounder.round(assignmentAverage / totalWeight, 1)+ "% in " + assignmentName);
                                         sendNotifications.getManager().notify(3, notification);
                                         System.out.println("SENT NOTIFICATION");
 
@@ -398,10 +523,31 @@ public class AlertReceiver extends BroadcastReceiver {
                             }
                             else if (course == 3) {
                                 marks = ta.GetMarks(3);
+                                LinkedHashMap<String, Double> weights = ta.GetCourseWeights();
+                                Double weightKnowledge = 1.0;
+                                Double weightCommunication = 1.0;
+                                Double weightThinking = 1.0;
+                                Double weightApplication = 1.0;
                                 String assignmentName = "";
                                 double assignmentAverage = 0.0;
+                                double totalWeight = 0.0;
                                 int usedCategories = 0;
                                 Boolean gotAZero = false;
+                                for (LinkedHashMap.Entry<String, Double> weight : weights.entrySet()) {
+                                    if(weight.getKey().equals("Knowledge")){
+                                        weightKnowledge = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Communication")){
+                                        weightCommunication = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Thinking")){
+                                        weightThinking = weight.getValue();
+                                    }
+                                    if(weight.getKey().equals("Application")){
+                                        weightApplication = weight.getValue();
+                                    }
+
+                                }
                                 int assignmentNumber = 0;
                                 for (LinkedHashMap.Entry<String, List<Map<String, List<String>>>> assignment : marks.entrySet()) {
                                     if (assignmentNumber == marks.size() - 1) {
@@ -411,11 +557,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("thinking") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightThinking;
+                                                                usedCategories++;
+                                                                totalWeight += weightThinking;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightThinking;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -423,11 +573,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("communication") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightCommunication;
+                                                                usedCategories++;
+                                                                totalWeight += weightCommunication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightCommunication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -435,11 +589,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("application") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightApplication;
+                                                                usedCategories++;
+                                                                totalWeight += weightApplication;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightApplication;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -447,11 +605,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 if (category.getKey().equals("knowledge") && category.getValue().get(0) != null) {
                                                     if (!category.getValue().get(0).isEmpty()) {
                                                         try {
-                                                            assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]);
-                                                            usedCategories++;
+                                                            if(!category.getValue().get(0).split("/")[0].isEmpty()) {
+                                                                assignmentAverage += Double.parseDouble(category.getValue().get(0).split("=")[1].split("%")[0]) * weightKnowledge;
+                                                                usedCategories++;
+                                                                totalWeight += weightKnowledge;
+                                                            }
                                                         } catch (ArrayIndexOutOfBoundsException e) {
                                                             assignmentAverage += Double.parseDouble("0");
                                                             usedCategories++;
+                                                            totalWeight +=weightKnowledge;
                                                             gotAZero = true;
                                                         }
                                                     }
@@ -462,14 +624,15 @@ public class AlertReceiver extends BroadcastReceiver {
                                     }
                                     assignmentNumber++;
                                 }
-                                if (assignmentAverage != 0.0 || gotAZero) {
+
+                                if (assignmentAverage != 0.0 || gotAZero || totalWeight !=0.0) {
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
                                     if (enabledNotifications) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
                                                 MarksView.class, 3, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage / usedCategories + "% in " + assignmentName);
+                                                "You Got a " + DoubleRounder.round(assignmentAverage / totalWeight, 1) + "% in " + assignmentName);
                                         sendNotifications.getManager().notify(4, notification);
                                         System.out.println("SENT NOTIFICATION");
 

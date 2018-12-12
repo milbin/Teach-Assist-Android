@@ -16,6 +16,7 @@ public class TA {
     String session_token;
     ArrayList<String> subjects = new ArrayList<>();
     LinkedHashMap<String, List<String>> Marks;
+    String[] marksResponse;
 
     /*
     public String Get_session_token_and_student_ID(String Username, String Password) {
@@ -188,15 +189,13 @@ public class TA {
         for (double value:grades)
             Average += value;
         Average = DoubleRounder.round(Average/grades.length, 1);
+
         return Average;
 
     }
 
     public String GetCourse(int subject_number){
         String subject_id = subjects.get(subject_number);
-        System.out.println(subjects);
-        System.out.println(subject_id);
-        System.out.println(subject_number);
         String course = Marks.get(subject_id).get(1);
         return course;
     }
@@ -222,11 +221,11 @@ public class TA {
 
             //get response
             SendRequest sr = new SendRequest();
-            String[] response = sr.send(url, headers, parameters, cookies, path);
+            marksResponse = sr.send(url, headers, parameters, cookies, path);
 
             LinkedHashMap<String,List<Map<String,List<String>>>> marks = new LinkedHashMap<>();
 
-            for(String i:response[0].split("rowspan")){
+            for(String i:marksResponse[0].split("rowspan")){
                 ArrayList<Map<String,List<String>>> stats = new ArrayList<>();
                 if (i.charAt(0) == '=') {
                     String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é").replaceAll("&#039;","'");
@@ -475,4 +474,29 @@ public class TA {
 
     }
 
+    public LinkedHashMap<String, Double> GetCourseWeights(){ //doesnt need course parameter because its being called with the same class instance as GetMarks
+        LinkedHashMap<String, Double> weights = new LinkedHashMap();
+        String response = marksResponse[0];
+        response = response.split("<th>Course Weighting</th>")[1].split("</table>")[0];
+        String knowledge = response.split("Knowledge/Understanding")[1].split("\"right\">")[1].split("%</td>")[0];
+        String thinking = response.split("Thinking")[1].split("\"right\">")[1].split("%</td>")[0];
+        String communication = response.split("Communication")[1].split("\"right\">")[1].split("%</td>")[0];
+        String application = response.split("Application")[1].split("\"right\">")[1].split("%</td>")[0];
+
+        Double Knowledge = Double.parseDouble(knowledge);
+        Double Thinking = Double.parseDouble(thinking);
+        Double Communication = Double.parseDouble(communication);
+        Double Application = Double.parseDouble(application);
+
+        weights.put("Knowledge", Knowledge);
+        weights.put("Thinking", Thinking);
+        weights.put("Communication", Communication);
+        weights.put("Application", Application);
+        return weights;
+    }
+
 }
+/*<td>Application</td>
+    								<td align="right">21.4%</td>
+I/System.out: 								<td align="right">15%</td>
+    								<td align="right">82.2%</td>*/
