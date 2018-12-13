@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         MarksView.class, 0, "New Assignment posted in: " + "test",
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
-                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 0);

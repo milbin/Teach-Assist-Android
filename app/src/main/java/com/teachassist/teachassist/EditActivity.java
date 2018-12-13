@@ -431,49 +431,6 @@ public class EditActivity extends AppCompatActivity {
 
     }
     //---------------------------------------------------------------------------------------------------------------------------------------
-    private class Average extends AsyncTask<HashMap<String, List<String>>, Integer, Float>{
-        @Override
-        protected void onPreExecute(){
-
-
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-            double average = ta.GetAverage(response[0]);
-            Float Average = (float) average;
-
-            final RingProgressBar ProgressBarAverage =  findViewById(R.id.AverageBar);
-            publishProgress (Math.round(Average));
-
-            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                @Override
-                public void progressToComplete() {
-                    // Progress reaches the maximum callback default Max value is 100
-                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                }
-                });
-
-
-
-            return Average;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Average) {
-
-
-        }
-
-    }
-    //---------------------------------------------------------------------------------------------------------------------------------------
     private class Subject extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
         @Override
         protected void onPreExecute(){
@@ -489,8 +446,6 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 0) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
                         return -1f;
@@ -527,6 +482,11 @@ public class EditActivity extends AppCompatActivity {
         }
 
         protected void onProgressUpdate(Integer... progress) {
+            if(progress[0] == 4){
+                // for some reason the code used for the other subject doesnt work on this one. the progress bar just appeares without animation
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
             ProgressBarAverage.setProgress(progress[0]);
 
@@ -560,8 +520,6 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 1) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
                         return -1f;
@@ -608,6 +566,10 @@ public class EditActivity extends AppCompatActivity {
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
                 EmptyCourse.setText(R.string.EmptyText);
             }
+            else{
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
 
 
         }
@@ -631,8 +593,6 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 2) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
                         return -1f;
@@ -680,6 +640,10 @@ public class EditActivity extends AppCompatActivity {
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
                 EmptyCourse.setText(R.string.EmptyText);
             }
+            else{
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
 
 
         }
@@ -703,8 +667,7 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 3) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
+
                     }
                     else {
                         return -1f;
@@ -751,6 +714,10 @@ public class EditActivity extends AppCompatActivity {
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
                 EmptyCourse.setText(R.string.EmptyText);
                 //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in
+            }
+            else{
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
             }
 
 
