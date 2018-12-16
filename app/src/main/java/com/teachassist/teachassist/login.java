@@ -44,8 +44,10 @@ public class login extends AppCompatActivity {
     public static final String REMEMBERME = "REMEMBERME";
 
     private void submit_buttonClicked(){
-        username = usernameInput.getText().toString();
-        password = passwordInput.getText().toString();
+        //username = usernameInput.getText().toString();
+        //password = passwordInput.getText().toString();
+        username = "335525168";
+        password = "4a6349kc";
 
     }
 
