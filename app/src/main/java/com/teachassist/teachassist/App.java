@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.util.Calendar;
 
 public class App extends Application {
@@ -23,6 +25,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         createNotificationChannels();
     }
     private void createNotificationChannels(){

@@ -40,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -95,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Crashlytics.setUserIdentifier(username);
+        Crashlytics.setString("username", username);
+        Crashlytics.setString("password", password);
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",
@@ -199,13 +204,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-
+                /*
                 SendNotifications sendNotifications = new SendNotifications(context);
                 Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
                         MarksView.class, 0, "New Assignment posted in: " + "test",
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+                */
+                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 0);
@@ -213,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dialog.dismiss();
             }
             catch(Exception e){
-
+                throw new RuntimeException("Crash in 1st course");
             }
         }
     }
@@ -222,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
+
                 Intent myIntent = new Intent(MainActivity.this, MarksView.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
@@ -230,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dialog.dismiss();
             }
             catch (Exception e){
-
+                throw new RuntimeException("Crash in 2nd course");
             }
 
         }
@@ -248,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dialog.dismiss();
             }
             catch (Exception e){
-
+                throw new RuntimeException("Crash in 3rd course");
             }
         }
     }
@@ -265,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dialog.dismiss();
             }
             catch (Exception e){
-
+                throw new RuntimeException("Crash in 4th course");
             }
         }
     }
@@ -309,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_email:
                 drawer.closeDrawer(Gravity.START);
 
-                String mailto = "mailto:Benjamintran0684@gmail.com";
+                String mailto = "mailto:TeachAssistApp@gmail.com";
 
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
                 emailIntent.setData(Uri.parse(mailto));
@@ -323,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_bug_report:
                 drawer.closeDrawer(Gravity.START);
-                String mailtoBug = "mailto:Benjamintran0684@gmail.com";
+                String mailtoBug = "mailto:TeachAssistApp@gmail.com";
 
                 Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
                 BugIntent.setData(Uri.parse(mailtoBug));

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,6 +39,10 @@ import javax.security.auth.Subject;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
+import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
+import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
+import static com.teachassist.teachassist.LaunchActivity.USERNAME;
+
 
 public class EditActivity extends AppCompatActivity {
 
@@ -44,6 +50,11 @@ public class EditActivity extends AppCompatActivity {
     ArrayList<String> removed = new ArrayList();
     FloatingActionButton fab;
     Boolean fab_animated = false;
+
+    //get username and password
+    SharedPreferences sharedPreferences = this.getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
+    String username = sharedPreferences.getString(USERNAME, "");
+    String password = sharedPreferences.getString(PASSWORD, "");
 
 
 
@@ -53,6 +64,9 @@ public class EditActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_activity);
+        Crashlytics.setUserIdentifier(username);
+        Crashlytics.setString("username", username);
+        Crashlytics.setString("password", password);
         Intent intent = getIntent();
 
         // get params
@@ -127,7 +141,6 @@ public class EditActivity extends AppCompatActivity {
             switch (dragEvent) {
 
                 case DragEvent.ACTION_DRAG_STARTED:
-
 
                     if (view.getId() == R.id.relativeLayout) {
                         view.setVisibility(View.INVISIBLE);

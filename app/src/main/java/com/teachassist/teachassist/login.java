@@ -19,11 +19,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import io.fabric.sdk.android.services.common.Crash;
 import retrofit2.http.HEAD;
 
 public class login extends AppCompatActivity {
@@ -129,7 +134,6 @@ public class login extends AppCompatActivity {
             TA ta = new TA();
             String Username = params[0];
             String Password = params[1];
-
             LinkedHashMap<String, List<String>> response = ta.GetTAData(Username, Password);
 
             return response;
@@ -159,6 +163,13 @@ public class login extends AppCompatActivity {
 
             }
             else {
+                Crashlytics.setUserIdentifier(username);
+                Crashlytics.setString("username", username);
+                Crashlytics.setString("password", password);
+                /*
+                if(true) //compiler error without this line
+                    throw new RuntimeException("This is a test crash");
+                    */
                 if (checkbox.isChecked()) {
                     //add username and password to shared preferances
                     System.out.println("CHECBOX IS CHECKED");

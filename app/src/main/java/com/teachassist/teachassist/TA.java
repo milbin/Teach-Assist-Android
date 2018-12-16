@@ -1,8 +1,14 @@
 package com.teachassist.teachassist;
 
+import android.content.SharedPreferences;
+
+import com.crashlytics.android.Crashlytics;
+import com.github.mikephil.charting.components.LimitLine;
+
 import org.decimal4j.util.DoubleRounder;
 
 import java.io.IOException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,12 +17,16 @@ import java.util.List;
 import java.util.Map;
 
 
+
 public class TA {
     String student_id;
     String session_token;
     ArrayList<String> subjects = new ArrayList<>();
     LinkedHashMap<String, List<String>> Marks;
     String[] marksResponse;
+
+
+
 
     /*
     public String Get_session_token_and_student_ID(String Username, String Password) {
@@ -111,6 +121,7 @@ public class TA {
 
             Marks = new LinkedHashMap();
 
+            int courseNum = 0;
             int numberOfEmptyCourses = 0;
             for(String i :resp[0].split("<td>")){
                 if(i.contains("current mark =  ")){
@@ -124,12 +135,12 @@ public class TA {
                     Stats.add(Course_Name);
                     Stats.add(Course_code);
                     Stats.add(Room_Number);
+                    courseNum++;
 
                     subjects.add(Subject_id);
-
                     Marks.put(Subject_id, Stats);
                 }
-                if(i.contains("Please see teacher for current status regarding achievement in the course")){
+                else if(i.contains("Please see teacher for current status regarding achievement in the course")){
                     System.out.println("Please see teacher for current status regarding achievement in the course");
                     ArrayList<String> Stats = new ArrayList<>();
                     String Course_Name = i.split(":")[0].trim();
@@ -139,8 +150,28 @@ public class TA {
                     Stats.add(Course_code);
                     Stats.add(Room_Number);
 
+                    courseNum++;
                     numberOfEmptyCourses++;
                     Marks.put("NA"+numberOfEmptyCourses, Stats);
+                }
+                else if(i.contains("Click Here")){
+                    String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
+                    subjects.add(Subject_id);
+                    LinkedHashMap<String,List<Map<String,List<String>>>> marks = GetMarks(courseNum);
+
+
+                    String Current_mark = ParseAverageFromMarksView(marks).toString();
+                    String Course_Name = i.split(":")[0].trim();
+                    String Course_code = i.split(":")[1].split("<br>")[0].trim();
+                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
+                    List Stats = new ArrayList<>();
+                    Stats.add(Current_mark);
+                    Stats.add(Course_Name);
+                    Stats.add(Course_code);
+                    Stats.add(Room_Number);
+                    courseNum++;
+
+                    Marks.put(Subject_id, Stats);
                 }
             }
             return Marks;
@@ -241,8 +272,14 @@ public class TA {
                         Map<String, List<String>> mark = new HashMap<>();
 
                         if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
-                            field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            if(i.contains("<font color=\"red\">")){
+                                field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }
+                            else {
+                                field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }
                         }
                         else {
                             field = "";
@@ -263,12 +300,20 @@ public class TA {
                             Map<String, List<String>> mark = new HashMap<>();
 
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
-                                field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                if(i.contains("<font color=\"red\">")){
+                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }
+                                else {
+                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }
                             } else {
                                 field = "";
                                 weight = "";
                             }
+
+
 
                             knowledge.add(field);
                             knowledge.add(weight);
@@ -287,9 +332,14 @@ public class TA {
                         Map<String, List<String>> mark = new HashMap<>();
 
                         if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
-                            field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                        } else {
+                            if (i.contains("<font color=\"red\">")) {
+                                field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            } else {
+                                field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }
+                        }else {
                             field = "";
                             weight = "";
                         }
@@ -306,9 +356,14 @@ public class TA {
                         try{
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
-                                field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            } else {
+                                if (i.contains("<font color=\"red\">")) {
+                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                } else {
+                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }
+                            }else {
                                 field = "";
                                 weight = "";
                             }
@@ -330,8 +385,13 @@ public class TA {
                         String field;
                         Map<String, List<String>> mark = new HashMap<>();
                         if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
-                            field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            if(i.contains("<font color=\"red\">")){
+                                field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }else{
+                                field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }
                         } else {
                             field = "";
                             weight = "";
@@ -349,8 +409,13 @@ public class TA {
                         try {
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
-                                field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                if(i.contains("<font color=\"red\">")){
+                                    field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }else{
+                                field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
                                 weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }
                             } else {
                                 field = "";
                                 weight = "";
@@ -373,9 +438,13 @@ public class TA {
                         String field;
                         Map<String, List<String>> mark = new HashMap<>();
                         if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
-                            field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-
+                            if(i.contains("<font color=\"red\">")){
+                                field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }else {
+                                field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }
                         } else {
                             field = "";
                             weight = "";
@@ -393,9 +462,14 @@ public class TA {
                         try{
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
-                                field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            } else {
+                                if (i.contains("<font color=\"red\">")) {
+                                    field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                } else {
+                                    field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }
+                            }else {
                                 field = "";
                                 weight = "";
                             }
@@ -416,9 +490,13 @@ public class TA {
                         String field;
                         Map<String, List<String>> mark = new HashMap<>();
                         if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
-                            field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            //other = "";
+                            if(i.contains("<font color=\"red\">")){
+                                field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }else {
+                                field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            }
                         } else {
                             field = "";
                             weight = "";
@@ -436,9 +514,14 @@ public class TA {
                         try{
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
-                                field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            } else {
+                                if (i.contains("<font color=\"red\">")) {
+                                    field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                } else {
+                                    field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }
+                            }else {
                                 field = "";
                                 weight = "";
                             }
@@ -493,6 +576,122 @@ public class TA {
         weights.put("Communication", Communication);
         weights.put("Application", Application);
         return weights;
+    }
+
+    public Double ParseAverageFromMarksView(LinkedHashMap<String,List<Map<String,List<String>>>> marks){
+        LinkedHashMap<String, Double> weights = GetCourseWeights();
+        Double Knowledge = weights.get("Knowledge");
+        Double Thinking = weights.get("Thinking");
+        Double Communication = weights.get("Communication");
+        Double Application = weights.get("Application");
+        System.out.println(marks);
+
+        Double knowledge = 0.0;
+        Double thinking = 0.0;
+        Double communication = 0.0;
+        Double application = 0.0;
+
+        Double totalWeightKnowledge = 0.0;
+        Double totalWeightThinking = 0.0;
+        Double totalWeightCommunication = 0.0;
+        Double totalWeightApplication = 0.0;
+
+        for(List<Map<String,List<String>>> Assignment: marks.values()){
+            for(Map<String,List<String>> CategoryList:Assignment){
+                for(Map.Entry<String,List<String>> Category:CategoryList.entrySet()){
+                    if(Category.getKey().equals("knowledge") && !Category.getValue().get(0).split("/")[0].isEmpty()){
+                        if(Category.getValue().get(0).split("=").length > 1) {
+                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightKnowledge += weight;
+                            knowledge += mark * weight;
+                        }else{
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightKnowledge += weight;
+                            //got a zero
+                        }
+                    }
+                    else if(Category.getKey().equals("thinking") && !Category.getValue().get(0).split("/")[0].isEmpty()){
+                        if(Category.getValue().get(0).split("=").length > 1) {
+                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightThinking += weight;
+                            thinking += mark * weight;
+                        }else{
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightThinking += weight;
+                            //got a zero
+                        }
+                    }
+                    else if(Category.getKey().equals("communication") && !Category.getValue().get(0).split("/")[0].isEmpty()){
+                        if(Category.getValue().get(0).split("=").length > 1) {
+                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightCommunication += weight;
+                            communication += mark * weight;
+                        }else{
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightCommunication += weight;
+                            //got a zero
+                        }
+                    }
+                    else if(Category.getKey().equals("application") && !Category.getValue().get(0).split("/")[0].isEmpty()){
+                        if(Category.getValue().get(0).split("=").length > 1) {
+                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightApplication += weight;
+                            application += mark * weight;
+                        }else{
+                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
+                            totalWeightApplication += weight;
+                            //got a zero
+                        }
+                    }
+
+                }
+            }
+        }
+        Double finalKnowledge;
+        Double finalThinking;
+        Double finalCommunication;
+        Double finalApplication;
+
+        //omit category if there is no assignment in it
+        if(totalWeightKnowledge != 0.0) {
+            finalKnowledge = knowledge / totalWeightKnowledge;
+        }else{
+            finalKnowledge = 0.0;
+            Knowledge = 0.0;
+        }
+        if(totalWeightThinking != 0.0) {
+            finalThinking = thinking/totalWeightThinking;
+        }else{
+            finalThinking = 0.0;
+            Thinking = 0.0;
+        }
+        if(totalWeightCommunication != 0.0) {
+            finalCommunication = communication/totalWeightCommunication;
+        }else{
+            finalCommunication = 0.0;
+            Communication = 0.0;
+        }
+        if(totalWeightApplication != 0.0) {
+            finalApplication = application/totalWeightApplication;
+        }else{
+            finalApplication = 0.0;
+            Application = 0.0;
+        }
+        finalKnowledge = finalKnowledge*Knowledge;
+        finalThinking = finalThinking*Thinking;
+        finalCommunication = finalCommunication*Communication;
+        finalApplication = finalApplication*Application;
+
+        Double Average = (finalApplication + finalKnowledge + finalThinking +finalCommunication) / (Knowledge+Thinking+Communication+Application);
+
+
+        return DoubleRounder.round(Average, 1);
+
+
     }
 
 }
