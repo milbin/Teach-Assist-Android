@@ -86,15 +86,18 @@ public class MarksView extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.marks_view);
-        Crashlytics.setUserIdentifier(username);
-        Crashlytics.setString("username", username);
-        Crashlytics.setString("password", password);
+
 
         //get intents
         Intent intent = getIntent();
         username = intent.getStringExtra("username").replaceAll("\\s+","");
         password = intent.getStringExtra("password").replaceAll("\\s+","");
         subject_number = intent.getIntExtra("subject",0);
+        Crashlytics.setUserIdentifier(username);
+        Crashlytics.setString("username", username);
+        Crashlytics.setString("password", password);
+        Crashlytics.log(Log.DEBUG, "username", username);
+        Crashlytics.log(Log.DEBUG, "password", password);
         //progress dialog
         dialog = ProgressDialog.show(MarksView.this, "", "Loading...", true);
         new GetMarks().execute();

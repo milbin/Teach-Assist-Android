@@ -97,9 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Crashlytics.setUserIdentifier(username);
-        Crashlytics.setString("username", username);
-        Crashlytics.setString("password", password);
+
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",
@@ -122,6 +120,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
         password = intent.getStringExtra("password");
+
+        Crashlytics.setUserIdentifier(username);
+        Crashlytics.setString("username", username);
+        Crashlytics.setString("password", password);
+        Crashlytics.log(Log.DEBUG, "username", username);
+        Crashlytics.log(Log.DEBUG, "password", password);
 
 
         //4 course relative layouts
@@ -539,8 +543,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TA ta = new TA();
 
             response = ta.GetTAData(username, password);
-            ta.GetMarks(0);
-
             Gson gson = new Gson();
             String list = gson.toJson(response);
             SharedPreferences sharedPreferences = getSharedPreferences(RESPONSE, MODE_PRIVATE);
@@ -840,6 +842,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView EmptyCourse = findViewById(R.id.EmptyCourse);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
                 EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout.setClickable(false);
             }
 
 
@@ -911,6 +914,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView EmptyCourse = findViewById(R.id.EmptyCourse1);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
                 EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout1.setClickable(false);
             }
 
 
@@ -985,6 +989,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView EmptyCourse = findViewById(R.id.EmptyCourse2);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
                 EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout2.setClickable(false);
             }
 
 
@@ -1058,10 +1063,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView EmptyCourse = findViewById(R.id.EmptyCourse3);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
                 EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout3.setClickable(false);
                 //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in
             }
             //hide menu
             showMenu(true);
+
 
 
         }

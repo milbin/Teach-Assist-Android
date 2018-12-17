@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -44,10 +45,10 @@ public class login extends AppCompatActivity {
     public static final String REMEMBERME = "REMEMBERME";
 
     private void submit_buttonClicked(){
-        //username = usernameInput.getText().toString();
-        //password = passwordInput.getText().toString();
-        username = "335525168";
-        password = "4a6349kc";
+        username = usernameInput.getText().toString();
+        password = passwordInput.getText().toString();
+        //username = "335525168";
+        //password = "4a6349kc";
 
     }
 
@@ -168,10 +169,13 @@ public class login extends AppCompatActivity {
                 Crashlytics.setUserIdentifier(username);
                 Crashlytics.setString("username", username);
                 Crashlytics.setString("password", password);
+
+                Crashlytics.log(Log.DEBUG, "username", username);
+                Crashlytics.log(Log.DEBUG, "password", password);
                 /*
                 if(true) //compiler error without this line
                     throw new RuntimeException("This is a test crash");
-                    */
+                */
                 if (checkbox.isChecked()) {
                     //add username and password to shared preferances
                     System.out.println("CHECBOX IS CHECKED");

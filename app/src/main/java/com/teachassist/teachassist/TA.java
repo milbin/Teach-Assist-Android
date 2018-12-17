@@ -1,6 +1,10 @@
 package com.teachassist.teachassist;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.components.LimitLine;
@@ -16,14 +20,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
+import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
+import static com.teachassist.teachassist.LaunchActivity.USERNAME;
 
 
-public class TA {
+public class TA{
     String student_id;
     String session_token;
     ArrayList<String> subjects = new ArrayList<>();
     LinkedHashMap<String, List<String>> Marks;
     String[] marksResponse;
+
+
+
+
 
 
 
@@ -95,6 +107,8 @@ public class TA {
     */
     public LinkedHashMap<String, List<String>> GetTAData(String Username, String Password){
         try {
+            Crashlytics.log(Log.DEBUG, "username", Username);
+            Crashlytics.log(Log.DEBUG, "password", Password);
             //get sesison token and studentID
             String url = "https://ta.yrdsb.ca/live/index.php?";
             String path = "/live/index.php?";
@@ -152,8 +166,10 @@ public class TA {
 
                     courseNum++;
                     numberOfEmptyCourses++;
+                    subjects.add("0");
                     Marks.put("NA"+numberOfEmptyCourses, Stats);
                 }
+
                 else if(i.contains("Click Here")){
                     String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
                     subjects.add(Subject_id);
@@ -173,6 +189,7 @@ public class TA {
 
                     Marks.put(Subject_id, Stats);
                 }
+
             }
             return Marks;
 
@@ -180,6 +197,7 @@ public class TA {
             catch (ArrayIndexOutOfBoundsException e){
                 e.printStackTrace();
                 LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
+                System.out.println("HERE");
                 return returnMap;
             }
 
@@ -233,137 +251,108 @@ public class TA {
 
     public LinkedHashMap<String,List<Map<String,List<String>>>> GetMarks(int subject_number){
         try {
-            String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
-            String path = "/live/students/viewReport.php?";
-            LinkedHashMap<String, String> headers = new LinkedHashMap<>();
-            LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
-            LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
-            parameters.put("subject_id", subjects.get(subject_number));
-            parameters.put("student_id", student_id);
-            cookies.put("session_token", session_token);
-            cookies.put("student_id", student_id);
+            if(subject_number >=0) {
+                String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
+                String path = "/live/students/viewReport.php?";
+                LinkedHashMap<String, String> headers = new LinkedHashMap<>();
+                LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
+                LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
+                parameters.put("subject_id", subjects.get(subject_number));
+                parameters.put("student_id", student_id);
+                cookies.put("session_token", session_token);
+                cookies.put("student_id", student_id);
 
-            Map<String,String> colors = new HashMap<>();
-            colors.put("knowledge","ffffaa");
-            colors.put("thinking","c0fea4");
-            colors.put("communication","afafff");
-            colors.put("application","ffd490");
-            colors.put("other","#dedede");
+                Map<String, String> colors = new HashMap<>();
+                colors.put("knowledge", "ffffaa");
+                colors.put("thinking", "c0fea4");
+                colors.put("communication", "afafff");
+                colors.put("application", "ffd490");
+                colors.put("other", "#dedede");
 
-            //get response
-            SendRequest sr = new SendRequest();
-            marksResponse = sr.send(url, headers, parameters, cookies, path);
+                //get response
+                SendRequest sr = new SendRequest();
+                marksResponse = sr.send(url, headers, parameters, cookies, path);
 
-            LinkedHashMap<String,List<Map<String,List<String>>>> marks = new LinkedHashMap<>();
+                LinkedHashMap<String, List<Map<String, List<String>>>> marks = new LinkedHashMap<>();
 
-            for(String i:marksResponse[0].split("rowspan")){
-                ArrayList<Map<String,List<String>>> stats = new ArrayList<>();
-                if (i.charAt(0) == '=') {
-                    String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;","é").replaceAll("&#039;","'");
-                    ArrayList knowledge = new ArrayList<>();
-                    ArrayList thinking = new ArrayList<>();
-                    ArrayList communication = new ArrayList<>();
-                    ArrayList application = new ArrayList<>();
-                    ArrayList other = new ArrayList<>();
+                for (String i : marksResponse[0].split("rowspan")) {
+                    ArrayList<Map<String, List<String>>> stats = new ArrayList<>();
+                    if (i.charAt(0) == '=') {
+                        String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;", "é").replaceAll("&#039;", "'");
+                        ArrayList knowledge = new ArrayList<>();
+                        ArrayList thinking = new ArrayList<>();
+                        ArrayList communication = new ArrayList<>();
+                        ArrayList application = new ArrayList<>();
+                        ArrayList other = new ArrayList<>();
 
-                    try {
-                        String weight;
-                        String field;
-                        Map<String, List<String>> mark = new HashMap<>();
-
-                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
-                            if(i.contains("<font color=\"red\">")){
-                                field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            }
-                            else {
-                                field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            }
-                        }
-                        else {
-                            field = "";
-                            weight = "";
-                        }
-
-                        knowledge.add(field);
-                        knowledge.add(weight);
-
-                        mark.put("knowledge",knowledge);
-                        stats.add(mark);
-                    }
-                    catch (ArrayIndexOutOfBoundsException e){
-                        String weight;
-                        String field;
-
-                        try{
+                        try {
+                            String weight;
+                            String field;
                             Map<String, List<String>> mark = new HashMap<>();
 
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
-                                if(i.contains("<font color=\"red\">")){
-                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                }
-                                else {
-                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                if (i.contains("<font color=\"red\">")) {
+                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                } else {
+                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                                 }
                             } else {
                                 field = "";
                                 weight = "";
                             }
 
-
-
                             knowledge.add(field);
                             knowledge.add(weight);
 
-                            mark.put("knowledge",knowledge);
+                            mark.put("knowledge", knowledge);
                             stats.add(mark);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            String weight;
+                            String field;
 
-                        }
-                        catch(ArrayIndexOutOfBoundsException e1){
+                            try {
+                                Map<String, List<String>> mark = new HashMap<>();
 
-                        }
-                    }
-                    try {
-                        String weight;
-                        String field;
-                        Map<String, List<String>> mark = new HashMap<>();
+                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
+                                    if (i.contains("<font color=\"red\">")) {
+                                        field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    } else {
+                                        field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    }
+                                } else {
+                                    field = "";
+                                    weight = "";
+                                }
 
-                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
-                            if (i.contains("<font color=\"red\">")) {
-                                field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            } else {
-                                field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+
+                                knowledge.add(field);
+                                knowledge.add(weight);
+
+                                mark.put("knowledge", knowledge);
+                                stats.add(mark);
+
+                            } catch (ArrayIndexOutOfBoundsException e1) {
+
                             }
-                        }else {
-                            field = "";
-                            weight = "";
                         }
-
-                        thinking.add(field);
-                        thinking.add(weight);
-
-                        mark.put("thinking",thinking);
-                        stats.add(mark);
-                    }
-                    catch (ArrayIndexOutOfBoundsException e){
-                        String weight;
-                        String field;
-                        try{
+                        try {
+                            String weight;
+                            String field;
                             Map<String, List<String>> mark = new HashMap<>();
+
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
                                 if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                                 } else {
-                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                                 }
-                            }else {
+                            } else {
                                 field = "";
                                 weight = "";
                             }
@@ -371,50 +360,48 @@ public class TA {
                             thinking.add(field);
                             thinking.add(weight);
 
-                            mark.put("thinking",thinking);
+                            mark.put("thinking", thinking);
                             stats.add(mark);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            String weight;
+                            String field;
+                            try {
+                                Map<String, List<String>> mark = new HashMap<>();
+                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
+                                    if (i.contains("<font color=\"red\">")) {
+                                        field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    } else {
+                                        field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    }
+                                } else {
+                                    field = "";
+                                    weight = "";
+                                }
 
-                        }
-                        catch(ArrayIndexOutOfBoundsException e1){
+                                thinking.add(field);
+                                thinking.add(weight);
 
-                        }
+                                mark.put("thinking", thinking);
+                                stats.add(mark);
 
-                    }
-                    try {
-                        String weight;
-                        String field;
-                        Map<String, List<String>> mark = new HashMap<>();
-                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
-                            if(i.contains("<font color=\"red\">")){
-                                field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            }else{
-                                field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            } catch (ArrayIndexOutOfBoundsException e1) {
+
                             }
-                        } else {
-                            field = "";
-                            weight = "";
+
                         }
-
-                        communication.add(field);
-                        communication.add(weight);
-
-                        mark.put("communication",communication);
-                        stats.add(mark);
-                    }
-                    catch (ArrayIndexOutOfBoundsException e){
-                        String weight;
-                        String field;
                         try {
+                            String weight;
+                            String field;
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
-                                if(i.contains("<font color=\"red\">")){
-                                    field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                }else{
-                                field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                if (i.contains("<font color=\"red\">")) {
+                                    field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                } else {
+                                    field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                                 }
                             } else {
                                 field = "";
@@ -424,52 +411,52 @@ public class TA {
                             communication.add(field);
                             communication.add(weight);
 
-                            mark.put("communication",communication);
+                            mark.put("communication", communication);
                             stats.add(mark);
-                        }
-                        catch (ArrayIndexOutOfBoundsException e1) {
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            String weight;
+                            String field;
+                            try {
+                                Map<String, List<String>> mark = new HashMap<>();
+                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
+                                    if (i.contains("<font color=\"red\">")) {
+                                        field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    } else {
+                                        field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    }
+                                } else {
+                                    field = "";
+                                    weight = "";
+                                }
+
+                                communication.add(field);
+                                communication.add(weight);
+
+                                mark.put("communication", communication);
+                                stats.add(mark);
+                            } catch (ArrayIndexOutOfBoundsException e1) {
 
                             }
                         }
 
 
-                    try {
-                        String weight;
-                        String field;
-                        Map<String, List<String>> mark = new HashMap<>();
-                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
-                            if(i.contains("<font color=\"red\">")){
-                                field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            }else {
-                                field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            }
-                        } else {
-                            field = "";
-                            weight = "";
-                        }
-
-                        application.add(field);
-                        application.add(weight);
-
-                        mark.put("application",application);
-                        stats.add(mark);
-                    }
-                    catch (ArrayIndexOutOfBoundsException e) {
-                        String weight;
-                        String field;
-                        try{
+                        try {
+                            //List Crash = new ArrayList();
+                            //Crash.get(1);
+                            String weight;
+                            String field;
                             Map<String, List<String>> mark = new HashMap<>();
                             if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
                                 if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                                 } else {
-                                    field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
                                 }
-                            }else {
+                            } else {
                                 field = "";
                                 weight = "";
                             }
@@ -477,51 +464,49 @@ public class TA {
                             application.add(field);
                             application.add(weight);
 
-                            mark.put("application",application);
+                            mark.put("application", application);
                             stats.add(mark);
-
-                        }
-                        catch(ArrayIndexOutOfBoundsException e1){
-
-                        }
-                    }
-                    try {
-                        String weight;
-                        String field;
-                        Map<String, List<String>> mark = new HashMap<>();
-                        if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
-                            if(i.contains("<font color=\"red\">")){
-                                field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            }else {
-                                field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                            }
-                        } else {
-                            field = "";
-                            weight = "";
-                        }
-
-                        other.add(field);
-                        other.add(weight);
-
-                        mark.put("other",other);
-                        stats.add(mark);
-                    }
-                    catch (ArrayIndexOutOfBoundsException e){
-                        String weight;
-                        String field;
-                        try{
-                            Map<String, List<String>> mark = new HashMap<>();
-                            if (i.split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
-                                if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            String weight;
+                            String field;
+                            try {
+                                Map<String, List<String>> mark = new HashMap<>();
+                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
+                                    if (i.contains("<font color=\"red\">")) {
+                                        field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    } else {
+                                        field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    }
                                 } else {
-                                    field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    field = "";
+                                    weight = "";
                                 }
-                            }else {
+
+                                application.add(field);
+                                application.add(weight);
+
+                                mark.put("application", application);
+                                stats.add(mark);
+
+                            } catch (ArrayIndexOutOfBoundsException e1) {
+
+                            }
+                        }
+                        try {
+                            String weight;
+                            String field;
+                            Map<String, List<String>> mark = new HashMap<>();
+                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
+                                if (i.contains("<font color=\"red\">")) {
+                                    field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                } else {
+                                    field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                }
+                            } else {
                                 field = "";
                                 weight = "";
                             }
@@ -529,24 +514,48 @@ public class TA {
                             other.add(field);
                             other.add(weight);
 
-                            mark.put("other",other);
+                            mark.put("other", other);
                             stats.add(mark);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            String weight;
+                            String field;
+                            try {
+                                Map<String, List<String>> mark = new HashMap<>();
+                                if (i.split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
+                                    if (i.contains("<font color=\"red\">")) {
+                                        field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    } else {
+                                        field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                        weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                                    }
+                                } else {
+                                    field = "";
+                                    weight = "";
+                                }
 
-                        }
-                        catch(ArrayIndexOutOfBoundsException e1){
+                                other.add(field);
+                                other.add(weight);
 
+                                mark.put("other", other);
+                                stats.add(mark);
+
+                            } catch (ArrayIndexOutOfBoundsException e1) {
+
+                            }
                         }
+
+                        marks.put(assignment, stats);
                     }
 
-                    marks.put(assignment, stats);
                 }
 
-            }
 
-
-
-
-            return marks;
+                return marks;
+           }else{
+               LinkedHashMap<String,List<Map<String,List<String>>>> returnMap = new LinkedHashMap<>();
+               return returnMap;
+           }
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -560,16 +569,29 @@ public class TA {
     public LinkedHashMap<String, Double> GetCourseWeights(){ //doesnt need course parameter because its being called with the same class instance as GetMarks
         LinkedHashMap<String, Double> weights = new LinkedHashMap();
         String response = marksResponse[0];
-        response = response.split("<th>Course Weighting</th>")[1].split("</table>")[0];
-        String knowledge = response.split("Knowledge/Understanding")[1].split("\"right\">")[1].split("%</td>")[0];
-        String thinking = response.split("Thinking")[1].split("\"right\">")[1].split("%</td>")[0];
-        String communication = response.split("Communication")[1].split("\"right\">")[1].split("%</td>")[0];
-        String application = response.split("Application")[1].split("\"right\">")[1].split("%</td>")[0];
+        Double Knowledge;
+        Double Thinking;
+        Double Communication;
+        Double Application;
+        try {
+            response = response.split("<th>Course Weighting</th>")[1].split("</table>")[0];
+            String knowledge = response.split("Knowledge/Understanding")[1].split("\"right\">")[1].split("%</td>")[0];
+            String thinking = response.split("Thinking")[1].split("\"right\">")[1].split("%</td>")[0];
+            String communication = response.split("Communication")[1].split("\"right\">")[1].split("%</td>")[0];
+            String application = response.split("Application")[1].split("\"right\">")[1].split("%</td>")[0];
 
-        Double Knowledge = Double.parseDouble(knowledge);
-        Double Thinking = Double.parseDouble(thinking);
-        Double Communication = Double.parseDouble(communication);
-        Double Application = Double.parseDouble(application);
+            Knowledge = Double.parseDouble(knowledge);
+            Thinking = Double.parseDouble(thinking);
+            Communication = Double.parseDouble(communication);
+            Application = Double.parseDouble(application);
+        }catch (ArrayIndexOutOfBoundsException e){
+            Knowledge = 1.0;
+            Thinking = 1.0;
+            Communication = 1.0;
+            Application = 1.0;
+        }
+
+
 
         weights.put("Knowledge", Knowledge);
         weights.put("Thinking", Thinking);
@@ -584,7 +606,9 @@ public class TA {
         Double Thinking = weights.get("Thinking");
         Double Communication = weights.get("Communication");
         Double Application = weights.get("Application");
-        System.out.println(marks);
+
+
+
 
         Double knowledge = 0.0;
         Double thinking = 0.0;

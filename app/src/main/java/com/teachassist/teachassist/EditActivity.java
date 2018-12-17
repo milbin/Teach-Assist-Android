@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,10 +52,8 @@ public class EditActivity extends AppCompatActivity {
     FloatingActionButton fab;
     Boolean fab_animated = false;
 
-    //get username and password
-    SharedPreferences sharedPreferences = this.getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
-    String username = sharedPreferences.getString(USERNAME, "");
-    String password = sharedPreferences.getString(PASSWORD, "");
+
+
 
 
 
@@ -64,9 +63,15 @@ public class EditActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_activity);
+        //get username and password
+        SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
+        String username = sharedPreferences.getString(USERNAME, "");
+        String password = sharedPreferences.getString(PASSWORD, "");
         Crashlytics.setUserIdentifier(username);
         Crashlytics.setString("username", username);
         Crashlytics.setString("password", password);
+        Crashlytics.log(Log.DEBUG, "username", username);
+        Crashlytics.log(Log.DEBUG, "password", password);
         Intent intent = getIntent();
 
         // get params
