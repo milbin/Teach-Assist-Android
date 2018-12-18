@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "645403703203",
-    "firebase_url": "https://teachassist-6784f.firebaseio.com",
-    "project_id": "teachassist-6784f",
-    "storage_bucket": "teachassist-6784f.appspot.com"
+    "project_number": "864079607861",
+    "firebase_url": "https://teachassist-5654f.firebaseio.com",
+    "project_id": "teachassist-5654f",
+    "storage_bucket": "teachassist-5654f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:645403703203:android:d615cd11381f9a07",
+        "mobilesdk_app_id": "1:864079607861:android:d615cd11381f9a07",
         "android_client_info": {
           "package_name": "com.teachassist.teachassist"
         }
       },
       "oauth_client": [
         {
-          "client_id": "645403703203-3266dnadl25djb1o5lb1lamrqbqthrj5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.teachassist.teachassist",
-            "certificate_hash": "b7f3eab3a89702e2f84e64828352e09d10249da4"
-          }
-        },
-        {
-          "client_id": "645403703203-45u1d97qqkeaj4nk04oli6sajr92sg1r.apps.googleusercontent.com",
+          "client_id": "864079607861-i4kppvj5obckiqcgo0o6v9l0cpo6pgoh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCVfDeAdBuj9LIQI-Eu8blsphtyDELrGGA"
+          "current_key": "AIzaSyB4xE_iY7ExcXJxeau92OeBmBusIKFchSM"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "645403703203-45u1d97qqkeaj4nk04oli6sajr92sg1r.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

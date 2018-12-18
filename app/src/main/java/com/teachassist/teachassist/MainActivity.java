@@ -215,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
                 */
+                if(true)
+                    throw new RuntimeException("Crash in 1st course");git
                 Intent myIntent = new Intent(MainActivity.this, MarksView.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
