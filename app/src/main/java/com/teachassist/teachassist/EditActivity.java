@@ -84,11 +84,11 @@ public class EditActivity extends AppCompatActivity {
         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
         ProgressBarAverage.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage1 =  findViewById(R.id.SubjectBar1);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage1.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage2 =  findViewById(R.id.SubjectBar2);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage2.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage3.setVisibility(View.INVISIBLE);
 
 
         //FAB

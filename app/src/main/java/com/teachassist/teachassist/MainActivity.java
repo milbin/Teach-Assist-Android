@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
 
         //hide progress bars so that they dont cover text view
+
         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
         ProgressBarAverage.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage1 =  findViewById(R.id.SubjectBar1);
@@ -113,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ProgressBarAverage2.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
         ProgressBarAverage3.setVisibility(View.INVISIBLE);
+
+
 
 
 
@@ -129,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //4 course relative layouts
+
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setOnClickListener(new subject_click());
         relativeLayout1 = findViewById(R.id.relativeLayout1);
@@ -140,7 +145,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        // Refresh
+
+        if (Build.VERSION.SDK_INT <= 23) {
+            //relativeLayout.setVisibility(View.GONE);
+        }
+
+
+            // Refresh
         SwipeRefresh = findViewById(R.id.swipeRefresh);
         SwipeRefresh.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -170,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         );
 
 
+
         //setup toolbar for nav bar drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -189,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
         //ToolbarText.setText("Student Report for: "+ username);
         getSupportActionBar().setTitle("Student: " + username);
-
 
         new GetTaData().execute();
 
@@ -215,8 +226,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
                 */
-                if(true)
-                    throw new RuntimeException("Crash in 1st course");git
                 Intent myIntent = new Intent(MainActivity.this, MarksView.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
@@ -283,6 +292,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
+
     // on navigation drawer item selection
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -322,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_email:
                 drawer.closeDrawer(Gravity.START);
 
-                String mailto = "mailto:TeachAssistApp@gmail.com";
+                String mailto = "mailto:TaAppYRDSB@gmail.com";
 
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
                 emailIntent.setData(Uri.parse(mailto));
@@ -336,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_bug_report:
                 drawer.closeDrawer(Gravity.START);
-                String mailtoBug = "mailto:TeachAssistApp@gmail.com";
+                String mailtoBug = "mailto:TaAppYRDSB@gmail.com";
 
                 Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
                 BugIntent.setData(Uri.parse(mailtoBug));
@@ -376,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 myIntent.putExtra("key", list); //Optional parameters
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 MainActivity.this.startActivityForResult(myIntent, 10101); //random int i set
-                //relativeLayout.setVisibility(View.GONE);
+
 
                 return true;
 
@@ -529,6 +540,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
 
 
 
@@ -1053,7 +1065,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onProgressUpdate(Integer... progress) {
 
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE) {
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
                 ProgressBarAverage.setVisibility(View.VISIBLE);
             }
             ProgressBarAverage.setProgress(progress[0]);
@@ -1075,8 +1087,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
-
-
 
 
 }
