@@ -46,6 +46,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.decimal4j.util.DoubleRounder;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,7 +228,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
                 */
-                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+
+                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 0);
@@ -556,6 +559,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
             TA ta = new TA();
 
+            //ta.newGetTAData(username, password);
             response = ta.GetTAData(username, password);
             Gson gson = new Gson();
             String list = gson.toJson(response);
@@ -985,6 +989,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             catch (InterruptedException e){
                 e.printStackTrace();
             }
+
+
             return Mark;
 
         }
@@ -1058,6 +1064,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             catch (InterruptedException e){
                 e.printStackTrace();
             }
+
+
+
+
             return Mark;
 
         }

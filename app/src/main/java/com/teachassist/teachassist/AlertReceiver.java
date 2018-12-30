@@ -65,17 +65,18 @@ public class AlertReceiver extends BroadcastReceiver {
         Type entityType = new TypeToken<LinkedHashMap<String, List<String>>>() {
         }.getType();
         response = gson.fromJson(str, entityType);
-        /*
+/*
         ArrayList list1 = new ArrayList<>(Arrays.asList("66.7", "AVI3M1-01", "Visual Arts", "169"));
         ArrayList list2 = new ArrayList<>(Arrays.asList("93.1", "SPH3U1-01", "Physics", "167"));
         ArrayList list3 = new ArrayList<>(Arrays.asList("83.0", "FIF3U1-01", "", "214"));
         ArrayList list4 = new ArrayList<>(Arrays.asList("87.0", "MCR3U1-01", "Functions and Relations", "142"));
-        LinkedHashMap<String, List<String>> newResponse = new LinkedHashMap<>();
+        response = new LinkedHashMap<>();
         response.put("283098", list1);
         response.put("283003", list2);
         response.put("283001", list3);
         response.put("NA", list4);
         */
+
         System.out.println("NOTIFICATION" + response);
 
 
@@ -101,7 +102,7 @@ public class AlertReceiver extends BroadcastReceiver {
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params) {
             TA ta = new TA();
-            LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
+            LinkedHashMap<String, List<String>> newResponse = ta.GetTADataNotifications(username, password);
             /*
             ta.GetTAData(username, password);
             ArrayList list1 = new ArrayList<>(Arrays.asList("63.2", "AVI3M1-01", "Visual Arts", "169"));

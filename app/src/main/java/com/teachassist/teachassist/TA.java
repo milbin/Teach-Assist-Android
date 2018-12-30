@@ -8,10 +8,15 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.components.LimitLine;
+import com.google.gson.JsonObject;
 
 import org.decimal4j.util.DoubleRounder;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,80 +37,161 @@ public class TA{
     ArrayList<String> subjects = new ArrayList<>();
     LinkedHashMap<String, List<String>> Marks;
     String[] marksResponse;
+    String username;
+    String password;
 
 
 
-
-
-
-
-
-    /*
-    public String Get_session_token_and_student_ID(String Username, String Password) {
-        try {
-        //get sesison token and studentID
-        String url = "https://ta.yrdsb.ca/live/index.php?";
-        String path = "/live/index.php?";
-        HashMap<String, String> headers = new HashMap<>();
-        HashMap<String, String> parameters = new HashMap<>();
-        HashMap<String, String> cookies = new HashMap<>();
-        parameters.put("username", Username);
-        parameters.put("password", Password);
-        parameters.put("subject_id", "0");
-
-        //get response
-        SendRequest sr = new SendRequest();
-        String[] response = sr.send(url, headers, parameters, cookies, path);
-
-
-        String session_token = response[1].split("=")[1].split(";")[0];
-        String student_id = response[2].split("=")[1].split(";")[0];
-        return  Login(session_token, student_id, Username, Password);
-
-
-
-
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-            //String[] returnString = {"ERROR! Check in SendRequest"};
-            return "ERROR! Check in SendRequest";
-        }
-
-
-
-        }
-
-    public String Login(String session_token, String student_id, String Username, String Password){
-
-        //add headers parameters and cookies
-        String url = "https://ta.yrdsb.ca/live/index.php?";
-        String path = "/live/index.php?";
-        HashMap<String, String> headers = new HashMap<>();
-        HashMap<String, String> parameters = new HashMap<>();
-        HashMap<String, String> cookies = new HashMap<>();
-        parameters.put("username", Username);
-        parameters.put("password", Password);
-        parameters.put("subject_id", "0");
-        cookies.put("session_token", session_token);
-        cookies.put("student_id", student_id);
-        parameters.put("student_id ", student_id);
-
-
+    public LinkedHashMap<String, List<String>> GetTAData(String Username, String Password) {
+        username = Username;
+        password = Password;
+        Crashlytics.log(Log.DEBUG, "username", Username);
+        Crashlytics.log(Log.DEBUG, "password", Password);
         SendRequest sr = new SendRequest();
         try {
-            String[] response = sr.send(url, headers, parameters, cookies, path);
-            return response.toString();
-        }
-        catch(IOException e) {
+            //get token and student id
+            JSONObject json = new JSONObject();
+            json.put("student_number", Username);
+            json.put("password", Password);
+            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
+            System.out.println(respJson + "JSON RESPONSE HERE<----");
+
+            session_token = respJson.getString("token");
+            student_id = respJson.getString("student_id");
+
+
+            //get marks and course code
+            JSONObject marksJson = new JSONObject();
+            marksJson.put("token", session_token);
+            marksJson.put("student_id", student_id);
+            marksJson.put("subject_id", 0);
+            JSONArray marksResp = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", marksJson.toString())
+                    .getJSONObject(0)
+                    .getJSONArray("data")
+                    .getJSONObject(0)
+                    .getJSONArray("subjects");
+
+            Marks = new LinkedHashMap<>();
+            for (int i = 0; i < marksResp.length(); i++) {
+                ArrayList<String> fields = new ArrayList<>();
+                JSONObject subject = marksResp.getJSONObject(i);
+                if(subject.getString("mark").equals("Please see teacher for current status regarding achievement in the course")) {
+                    fields.add(subject.getString("course"));
+                    Marks.put("NA"+i, fields);
+                }else{
+                    fields.add(subject.getString("mark").replaceAll("%", ""));
+                    fields.add(subject.getString("course"));
+                    Marks.put(subject.getString("subject_id"), fields);
+                }
+                subjects.add(subject.getString("subject_id"));
+
+            }
+
+
+
+            //get room number and course name
+            String url = "https://ta.yrdsb.ca/live/index.php?";
+            String path = "/live/index.php?";
+            HashMap<String, String> headers = new HashMap<>();
+            HashMap<String, String> parameters = new HashMap<>();
+            HashMap<String, String> cookies = new HashMap<>();
+            parameters.put("subject_id", "0");
+            parameters.put("username", Username);
+            parameters.put("password", Password);
+            cookies.put("session_token", session_token);
+            cookies.put("student_id", student_id);
+            String[] resp = sr.send(url, headers, parameters, cookies, path);
+
+            //parse return
+            int courseCounter1 = 0;
+            for(String i :resp[0].split("<td>")){
+                if(i.contains("current mark =  ") || i.contains("Please see teacher for current status regarding achievement in the course")||i.contains("Click Here")) {
+                    String Course_Name = i.split(":")[1].split("<br>")[0].trim();
+                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
+                    //String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
+                    int courseCounter2 = 0;
+                    for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
+                        if(courseCounter1 == courseCounter2) {
+                            entry.getValue().add(Course_Name);
+                            entry.getValue().add(Room_Number);
+                        }
+                        courseCounter2++;
+
+                    }
+                    courseCounter1++;
+                }
+
+
+                    //Marks.put(Subject_id, Stats);
+
+            }
+            System.out.println(Marks+"marks RESPONSE HERE<----");
+            return Marks;
+
+
+
+        }catch (Exception e){
             e.printStackTrace();
-
-            return "ERROR! Check in SendRequest";
+            return null;
         }
-
     }
-    */
-    public LinkedHashMap<String, List<String>> GetTAData(String Username, String Password){
+
+    public LinkedHashMap<String, List<String>> GetTADataNotifications(String Username, String Password) {
+        username = Username;
+        password = Password;
+        Crashlytics.log(Log.DEBUG, "username", Username);
+        Crashlytics.log(Log.DEBUG, "password", Password);
+        SendRequest sr = new SendRequest();
+        try {
+            //get token and student id
+            JSONObject json = new JSONObject();
+            json.put("student_number", Username);
+            json.put("password", Password);
+            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
+            System.out.println(respJson + "JSON RESPONSE HERE<----");
+
+            session_token = respJson.getString("token");
+            student_id = respJson.getString("student_id");
+
+
+            //get marks and course code
+            JSONObject marksJson = new JSONObject();
+            marksJson.put("token", session_token);
+            marksJson.put("student_id", student_id);
+            marksJson.put("subject_id", 0);
+            JSONArray marksResp = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", marksJson.toString())
+                    .getJSONObject(0)
+                    .getJSONArray("data")
+                    .getJSONObject(0)
+                    .getJSONArray("subjects");
+
+            LinkedHashMap<String, List<String>> MarksNotifications = new LinkedHashMap<>();
+            for (int i = 0; i < marksResp.length(); i++) {
+                ArrayList<String> fields = new ArrayList<>();
+                JSONObject subject = marksResp.getJSONObject(i);
+                if(subject.getString("mark").equals("Please see teacher for current status regarding achievement in the course")) {
+                    fields.add(subject.getString("course"));
+                    MarksNotifications.put("NA"+i, fields);
+                }else{
+                    fields.add(subject.getString("mark").replaceAll("%", ""));
+                    fields.add(subject.getString("course"));
+                    MarksNotifications.put(subject.getString("subject_id"), fields);
+                }
+                subjects.add(subject.getString("subject_id"));
+
+            }
+            System.out.println(MarksNotifications+"marks RESPONSE HERE<----");
+            return MarksNotifications;
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    /*
+    public LinkedHashMap<String, List<String>> oldGetTAData(String Username, String Password){
         try {
             Crashlytics.log(Log.DEBUG, "username", Username);
             Crashlytics.log(Log.DEBUG, "password", Password);
@@ -129,7 +215,7 @@ public class TA{
             student_id = response[2].split("=")[1].split(";")[0];
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
-            parameters.put("student_id ", student_id);
+
 
             String[] resp = sr.send(url, headers, parameters, cookies, path);
 
@@ -191,6 +277,7 @@ public class TA{
                 }
 
             }
+            System.out.println(Marks);
             return Marks;
 
             }
@@ -213,6 +300,7 @@ public class TA{
         }
 
     }
+    */
 
 
     public Double GetAverage(HashMap<String, List<String>> Marks){
@@ -247,6 +335,33 @@ public class TA{
         String subject_id = subjects.get(subject_number);
         String course = Marks.get(subject_id).get(1);
         return course;
+    }
+
+
+    public JSONObject newGetMarks(int subject_number) {
+        SendRequest sr = new SendRequest();
+        Crashlytics.log(Log.DEBUG, "username", username);
+        Crashlytics.log(Log.DEBUG, "password", password);
+        try {
+            //get marks
+            JSONObject json = new JSONObject();
+            json.put("token", session_token);
+            json.put("student_id", student_id);
+            json.put("subject_id", subjects.get(subject_number));
+            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString())
+                    .getJSONObject(0)
+                    .getJSONObject("data")
+                    .getJSONObject("assessment")
+                    .getJSONObject("data");
+            System.out.println(respJson + "JSON RESPONSE HERE<----");
+            System.out.println(respJson.length());
+            return respJson;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     public LinkedHashMap<String,List<Map<String,List<String>>>> GetMarks(int subject_number){
@@ -550,7 +665,7 @@ public class TA{
 
                 }
 
-
+                System.out.println(marks + "Get Marks RESPONSE <----");
                 return marks;
            }else{
                LinkedHashMap<String,List<Map<String,List<String>>>> returnMap = new LinkedHashMap<>();

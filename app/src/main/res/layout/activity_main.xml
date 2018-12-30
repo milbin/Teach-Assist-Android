@@ -53,10 +53,10 @@
                 android:background="@color/colorPrimary"
                 android:elevation="10dp"
                 android:minHeight="@dimen/Toolbar_Height"
-                android:uiOptions="splitActionBarWhenNarrow">
+                android:uiOptions="splitActionBarWhenNarrow"/>
 
 
-            </android.support.v7.widget.Toolbar>
+
 
 
 
@@ -77,7 +77,7 @@
                 android:paddingEnd="50dp"
                 android:paddingStart="50dp"
                 android:layout_marginBottom="10dp"
-                android:minHeight="150dp"
+                android:minHeight="@dimen/Average_Row_Height"
                 >
 
 
