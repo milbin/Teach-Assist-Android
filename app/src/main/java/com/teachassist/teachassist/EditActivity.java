@@ -474,41 +474,27 @@ public class EditActivity extends AppCompatActivity {
 
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-                System.out.println(Mark);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
 
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
+            publishProgress (Math.round(Mark-1));
 
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
-            if(progress[0] == 4){
-                // for some reason the code used for the other subject doesnt work on this one. the progress bar just appeares without animation
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
+
         @Override
         protected void onPostExecute(Float Mark) {
             if(Mark.equals(-1f)){
@@ -548,34 +534,24 @@ public class EditActivity extends AppCompatActivity {
                 counter++;
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
+            publishProgress (Math.round(Mark-1));
 
-
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
         @Override
         protected void onPostExecute(Float Mark) {
@@ -622,34 +598,24 @@ public class EditActivity extends AppCompatActivity {
                 counter++;
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
+            publishProgress (Math.round(Mark-1));
 
-
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
         @Override
         protected void onPostExecute(Float Mark) {
@@ -695,40 +661,29 @@ public class EditActivity extends AppCompatActivity {
                 counter++;
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
+            publishProgress (Math.round(Mark-1));
 
-
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
-
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
         @Override
         protected void onPostExecute(Float Mark) {
             if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse);
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse3);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
                 EmptyCourse.setText(R.string.EmptyText);
                 //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in

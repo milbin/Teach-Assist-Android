@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     Menu menu;
     Context context = this;
+    String subjectMark;
+    String subjectMark1;
+    String subjectMark2;
+    String subjectMark3;
 
     public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
@@ -228,11 +232,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
                 */
-
                 Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 0);
+                myIntent.putExtra("subject Mark", subjectMark);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -247,10 +251,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onClick(View v){
             try {
 
-                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 1);
+                myIntent.putExtra("subject Mark", subjectMark1);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -265,10 +270,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 2);
+                myIntent.putExtra("subject Mark", subjectMark2);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -282,10 +288,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-                Intent myIntent = new Intent(MainActivity.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 3);
+                myIntent.putExtra("subject Mark", subjectMark3);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -438,7 +445,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case 10101: // see MainActivity.this.startActivityForResult(myIntent, 10101); line(140)
+            case 10101: // see MainActivitythis.startActivityForResult(myIntent, 10101); line(140)
                 if (resultCode == Activity.RESULT_OK) {
                     removed = data.getStringArrayListExtra("list");
                     System.out.println(removed);
@@ -559,7 +566,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
             TA ta = new TA();
 
-            //ta.newGetTAData(username, password);
             response = ta.GetTAData(username, password);
             Gson gson = new Gson();
             String list = gson.toJson(response);
@@ -602,6 +608,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         SubjectAbrvString =  entry.getValue().get(1);
                         SubjectNameString =  entry.getValue().get(2);
                         RoomNumber  = entry.getValue().get(3);
+                        subjectMark = Mark.toString();
                     }
                     else {
                         SubjectAbrvString = entry.getValue().get(0);
@@ -635,6 +642,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         SubjectAbrvString1 = entry.getValue().get(1);
                         SubjectNameString1 = entry.getValue().get(2);
                         RoomNumber1 = entry.getValue().get(3);
+                        subjectMark1 = Mark1.toString();
                     }
                     else{
                         SubjectAbrvString1 = entry.getValue().get(0);
@@ -669,6 +677,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         SubjectAbrvString2 =  entry.getValue().get(1);
                         SubjectNameString2 =  entry.getValue().get(2);
                         RoomNumber2 = entry.getValue().get(3);
+                        subjectMark2 = Mark2.toString();
                     }
                     else{
                         SubjectAbrvString2 =  entry.getValue().get(0);
@@ -703,6 +712,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         SubjectAbrvString3 = entry.getValue().get(1);
                         SubjectNameString3 = entry.getValue().get(2);
                         RoomNumber3 = entry.getValue().get(3);
+                        subjectMark3 = Mark3.toString();
                     }
                     else{
                         SubjectAbrvString3 = entry.getValue().get(0);
@@ -727,17 +737,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         private void RunTasks(LinkedHashMap<String, List<String>> response){
 
-                new Average().execute(response);
-                new MainActivity.Subject().execute(response);
-                new Subject1().execute(response);
-                new Subject2().execute(response);
-                new Subject3().execute(response);
-                //hide menu
-                showMenu(false);
-                if(Refresh.equals(true)) {
-                    SwipeRefresh.setRefreshing(false);
-                    Refresh = false;
-                }
+            new MainActivity.Average().execute(response);
+            new MainActivity.Subject().execute(response);
+            new MainActivity.Subject1().execute(response);
+            new MainActivity.Subject2().execute(response);
+            new MainActivity.Subject3().execute(response);
+            //hide menu
+            showMenu(false);
+            if(Refresh.equals(true)) {
+                SwipeRefresh.setRefreshing(false);
+                Refresh = false;
+            }
 
         }
 
@@ -786,7 +796,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
             ProgressBarAverage.setProgress(progress[0]);
 
-            }
+        }
         @Override
         protected void onPostExecute(Float Average) {
 
@@ -989,8 +999,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             catch (InterruptedException e){
                 e.printStackTrace();
             }
-
-
             return Mark;
 
         }
@@ -1064,10 +1072,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             catch (InterruptedException e){
                 e.printStackTrace();
             }
-
-
-
-
             return Mark;
 
         }
@@ -1100,4 +1104,3 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 }
-

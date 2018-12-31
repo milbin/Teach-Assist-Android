@@ -14,7 +14,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="top"
+    android:layout_gravity="center_horizontal"
     android:backgroundTint="@color/Background"
     android:id="@+id/LinearLayoutMarksView">
     <android.support.v7.widget.Toolbar
@@ -25,6 +25,77 @@
         android:elevation="10dp"
         android:minHeight="@dimen/Toolbar_Height"
         android:uiOptions="splitActionBarWhenNarrow"/>
+
+    <!--Average-->
+    <RelativeLayout
+
+        android:id="@+id/relativeLayoutAverage"
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="5"
+        android:background="@color/Background"
+        android:minHeight="@dimen/Average_Row_Height"
+        android:paddingStart="50dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="50dp"
+        android:paddingBottom="5dp"
+        tools:context=".Average">
+
+
+        <TextView
+            android:id="@+id/AverageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/circle"
+            android:fontFamily="@font/roboto_mono"
+            android:paddingTop="2dp"
+            android:text="@string/Average"
+            android:textColor="@color/AverageTextColor"
+            android:textSize="16sp"
+            android:textStyle="bold"
+
+            />
+
+
+        <io.netopen.hotbitmapgg.library.view.RingProgressBar
+            android:id="@+id/AverageBar"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="115dp"
+            android:layout_below="@id/AverageText"
+            android:layout_marginTop="5dp"
+            android:elevation="15dp"
+            android:minHeight="115dp"
+            app:max="101"
+            app:ringColor="@android:color/transparent"
+            app:ringDiameter="115"
+            app:ringProgressColor="@color/AverageBarColor"
+            app:ringWidth="12dp"
+            app:style="STROKE"
+            app:textColor="@color/TextColor"
+            app:textIsShow="false"
+            app:textSize="26sp" />
+
+
+        <TextView
+            android:id="@+id/AverageInt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/AverageText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="47dp"
+            android:fontFamily="@font/roboto"
+            android:text=""
+            android:textColor="@color/TextColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
 
 </LinearLayout>
  </ScrollView>

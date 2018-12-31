@@ -128,7 +128,7 @@ public class MarksView extends AppCompatActivity{
             ta.GetTAData(username,password);
             System.out.println(subject_number);
             ta.newGetMarks(0);
-            marks = ta.GetMarks(subject_number);
+            //marks = ta.GetMarks(subject_number);
             System.out.println(subject_number);
             subject = ta.GetCourse(subject_number);
             return marks;

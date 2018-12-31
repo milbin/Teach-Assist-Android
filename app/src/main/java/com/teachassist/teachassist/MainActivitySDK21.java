@@ -86,6 +86,12 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
     NavigationView navigationView;
     Menu menu;
     Context context = this;
+    String subjectMark;
+    String subjectMark1;
+    String subjectMark2;
+    String subjectMark3;
+
+
 
     public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
@@ -223,10 +229,11 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
                 */
-                Intent myIntent = new Intent(MainActivitySDK21.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 0);
+                myIntent.putExtra("subject Mark", subjectMark);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -241,10 +248,11 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
         public void onClick(View v){
             try {
 
-                Intent myIntent = new Intent(MainActivitySDK21.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 1);
+                myIntent.putExtra("subject Mark", subjectMark1);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -259,10 +267,11 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
         @Override
         public void onClick(View v){
             try {
-                Intent myIntent = new Intent(MainActivitySDK21.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 2);
+                myIntent.putExtra("subject Mark", subjectMark2);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -276,10 +285,11 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
         @Override
         public void onClick(View v){
             try {
-                Intent myIntent = new Intent(MainActivitySDK21.this, MarksView.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 3);
+                myIntent.putExtra("subject Mark", subjectMark3);
                 startActivity(myIntent);
                 dialog.dismiss();
             }
@@ -595,6 +605,7 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
                         SubjectAbrvString =  entry.getValue().get(1);
                         SubjectNameString =  entry.getValue().get(2);
                         RoomNumber  = entry.getValue().get(3);
+                        subjectMark = Mark.toString();
                     }
                     else {
                         SubjectAbrvString = entry.getValue().get(0);
@@ -628,6 +639,7 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
                         SubjectAbrvString1 = entry.getValue().get(1);
                         SubjectNameString1 = entry.getValue().get(2);
                         RoomNumber1 = entry.getValue().get(3);
+                        subjectMark1 = Mark1.toString();
                     }
                     else{
                         SubjectAbrvString1 = entry.getValue().get(0);
@@ -662,6 +674,7 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
                         SubjectAbrvString2 =  entry.getValue().get(1);
                         SubjectNameString2 =  entry.getValue().get(2);
                         RoomNumber2 = entry.getValue().get(3);
+                        subjectMark2 = Mark2.toString();
                     }
                     else{
                         SubjectAbrvString2 =  entry.getValue().get(0);
@@ -696,6 +709,7 @@ public class MainActivitySDK21 extends AppCompatActivity implements NavigationVi
                         SubjectAbrvString3 = entry.getValue().get(1);
                         SubjectNameString3 = entry.getValue().get(2);
                         RoomNumber3 = entry.getValue().get(3);
+                        subjectMark3 = Mark3.toString();
                     }
                     else{
                         SubjectAbrvString3 = entry.getValue().get(0);

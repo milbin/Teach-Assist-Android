@@ -190,117 +190,6 @@ public class TA{
             return null;
         }
     }
-    /*
-    public LinkedHashMap<String, List<String>> oldGetTAData(String Username, String Password){
-        try {
-            Crashlytics.log(Log.DEBUG, "username", Username);
-            Crashlytics.log(Log.DEBUG, "password", Password);
-            //get sesison token and studentID
-            String url = "https://ta.yrdsb.ca/live/index.php?";
-            String path = "/live/index.php?";
-            HashMap<String, String> headers = new HashMap<>();
-            HashMap<String, String> parameters = new HashMap<>();
-            HashMap<String, String> cookies = new HashMap<>();
-            parameters.put("username", Username);
-            parameters.put("password", Password);
-            parameters.put("subject_id", "0");
-
-            //get response
-            SendRequest sr = new SendRequest();
-            String[] response = sr.send(url, headers, parameters, cookies, path);
-
-            try {
-
-            session_token = response[1].split("=")[1].split(";")[0];
-            student_id = response[2].split("=")[1].split(";")[0];
-            cookies.put("session_token", session_token);
-            cookies.put("student_id", student_id);
-
-
-            String[] resp = sr.send(url, headers, parameters, cookies, path);
-
-            Marks = new LinkedHashMap();
-
-            int courseNum = 0;
-            int numberOfEmptyCourses = 0;
-            for(String i :resp[0].split("<td>")){
-                if(i.contains("current mark =  ")){
-                    String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
-                    String Current_mark = i.split("current mark =  ")[1].split("%")[0].trim();
-                    String Course_Name = i.split(":")[0].trim();
-                    String Course_code = i.split(":")[1].split("<br>")[0].trim();
-                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
-                    List Stats = new ArrayList<>();
-                    Stats.add(Current_mark);
-                    Stats.add(Course_Name);
-                    Stats.add(Course_code);
-                    Stats.add(Room_Number);
-                    courseNum++;
-
-                    subjects.add(Subject_id);
-                    Marks.put(Subject_id, Stats);
-                }
-                else if(i.contains("Please see teacher for current status regarding achievement in the course")){
-                    System.out.println("Please see teacher for current status regarding achievement in the course");
-                    ArrayList<String> Stats = new ArrayList<>();
-                    String Course_Name = i.split(":")[0].trim();
-                    String Course_code = i.split(":")[1].split("<br>")[0].trim();
-                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
-                    Stats.add(Course_Name);
-                    Stats.add(Course_code);
-                    Stats.add(Room_Number);
-
-                    courseNum++;
-                    numberOfEmptyCourses++;
-                    subjects.add("0");
-                    Marks.put("NA"+numberOfEmptyCourses, Stats);
-                }
-
-                else if(i.contains("Click Here")){
-                    String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
-                    subjects.add(Subject_id);
-                    LinkedHashMap<String,List<Map<String,List<String>>>> marks = GetMarks(courseNum);
-
-
-                    String Current_mark = ParseAverageFromMarksView(marks).toString();
-                    String Course_Name = i.split(":")[0].trim();
-                    String Course_code = i.split(":")[1].split("<br>")[0].trim();
-                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
-                    List Stats = new ArrayList<>();
-                    Stats.add(Current_mark);
-                    Stats.add(Course_Name);
-                    Stats.add(Course_code);
-                    Stats.add(Room_Number);
-                    courseNum++;
-
-                    Marks.put(Subject_id, Stats);
-                }
-
-            }
-            System.out.println(Marks);
-            return Marks;
-
-            }
-            catch (ArrayIndexOutOfBoundsException e){
-                e.printStackTrace();
-                LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
-                System.out.println("HERE");
-                return returnMap;
-            }
-
-
-
-
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-            //String[] returnString = {"ERROR! Check in SendRequest"};
-            LinkedHashMap<String, List<String>> returnMap = new LinkedHashMap<>();
-            return returnMap;
-        }
-
-    }
-    */
 
 
     public Double GetAverage(HashMap<String, List<String>> Marks){
@@ -331,6 +220,7 @@ public class TA{
 
     }
 
+
     public String GetCourse(int subject_number){
         String subject_id = subjects.get(subject_number);
         String course = Marks.get(subject_id).get(1);
@@ -338,7 +228,7 @@ public class TA{
     }
 
 
-    public JSONObject newGetMarks(int subject_number) {
+    public List<JSONObject> newGetMarks(int subject_number) {
         SendRequest sr = new SendRequest();
         Crashlytics.log(Log.DEBUG, "username", username);
         Crashlytics.log(Log.DEBUG, "password", password);
@@ -348,14 +238,17 @@ public class TA{
             json.put("token", session_token);
             json.put("student_id", student_id);
             json.put("subject_id", subjects.get(subject_number));
-            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString())
+            JSONObject respJsonAssignments = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString())
                     .getJSONObject(0)
-                    .getJSONObject("data")
+                    .getJSONObject("data");
+            JSONObject respJsonName = respJsonAssignments;
+            respJsonAssignments = respJsonAssignments
                     .getJSONObject("assessment")
                     .getJSONObject("data");
-            System.out.println(respJson + "JSON RESPONSE HERE<----");
-            System.out.println(respJson.length());
-            return respJson;
+            System.out.println(respJsonAssignments + "JSON RESPONSE HERE<----");
+            System.out.println(respJsonAssignments.length());
+            List respJsonList = Arrays.asList(respJsonAssignments, respJsonName);
+            return respJsonList;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -681,6 +574,7 @@ public class TA{
 
     }
 
+
     public LinkedHashMap<String, Double> GetCourseWeights(){ //doesnt need course parameter because its being called with the same class instance as GetMarks
         LinkedHashMap<String, Double> weights = new LinkedHashMap();
         String response = marksResponse[0];
@@ -714,7 +608,7 @@ public class TA{
         weights.put("Application", Application);
         return weights;
     }
-
+/*
     public Double ParseAverageFromMarksView(LinkedHashMap<String,List<Map<String,List<String>>>> marks){
         LinkedHashMap<String, Double> weights = GetCourseWeights();
         Double Knowledge = weights.get("Knowledge");
@@ -831,7 +725,7 @@ public class TA{
         return DoubleRounder.round(Average, 1);
 
 
-    }
+    }*/
 
 }
 /*<td>Application</td>
