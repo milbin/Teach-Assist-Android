@@ -79,7 +79,7 @@ public class TA{
                     fields.add(subject.getString("course"));
                     Marks.put("NA"+i, fields);
                 }else{
-                    fields.add(subject.getString("mark").replaceAll("%", ""));
+                    fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
                     fields.add(subject.getString("course"));
                     Marks.put(subject.getString("subject_id"), fields);
                 }
@@ -173,7 +173,7 @@ public class TA{
                     fields.add(subject.getString("course"));
                     MarksNotifications.put("NA"+i, fields);
                 }else{
-                    fields.add(subject.getString("mark").replaceAll("%", ""));
+                    fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
                     fields.add(subject.getString("course"));
                     MarksNotifications.put(subject.getString("subject_id"), fields);
                 }
@@ -242,9 +242,13 @@ public class TA{
                     .getJSONObject(0)
                     .getJSONObject("data");
             JSONObject respJsonName = respJsonAssignments;
-            respJsonAssignments = respJsonAssignments
-                    .getJSONObject("assessment")
-                    .getJSONObject("data");
+            try {
+                respJsonAssignments = respJsonAssignments
+                        .getJSONObject("assessment")
+                        .getJSONObject("data");
+            }catch (Exception e){
+                return null;
+            }
             System.out.println(respJsonAssignments + "JSON RESPONSE HERE<----");
             System.out.println(respJsonAssignments.length());
             List respJsonList = Arrays.asList(respJsonAssignments, respJsonName);

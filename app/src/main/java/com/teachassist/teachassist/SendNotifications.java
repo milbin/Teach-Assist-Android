@@ -41,8 +41,8 @@ public class SendNotifications extends ContextWrapper {
     }
 
 
-    public Notification sendOnChannel(String channel, final Class<? extends Activity> activityToOpen, int subject, String title, String body){
-        Intent activityIntent = new Intent(this, MarksView.class);
+    public Notification sendOnChannel(String channel, final Class<? extends Activity> activityToOpen, int subject, String title, String body, String Average){
+        Intent activityIntent = new Intent(this, MarksViewMaterial.class);
 
         SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
         String username = sharedPreferences.getString(USERNAME, "");
@@ -51,6 +51,7 @@ public class SendNotifications extends ContextWrapper {
         activityIntent.putExtra("username", username);
         activityIntent.putExtra("password", password);
         activityIntent.putExtra("subject",subject);
+        activityIntent.putExtra("subject Mark", Average);
         int currentTime = (int) System.currentTimeMillis();
         PendingIntent contentIntent= PendingIntent.getActivity(this, /*request code*/currentTime+subject, activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 

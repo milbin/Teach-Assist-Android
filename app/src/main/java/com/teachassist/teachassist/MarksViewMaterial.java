@@ -1,5 +1,6 @@
 package com.teachassist.teachassist;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -53,6 +54,7 @@ public class MarksViewMaterial extends AppCompatActivity {
     int subject_number;
     String CourseName;
     String Mark;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,10 @@ public class MarksViewMaterial extends AppCompatActivity {
         //requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.marks_card_view);
+
+        //progress dialog
+        dialog = ProgressDialog.show(MarksViewMaterial.this, "",
+                "Loading...", true);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,7 +109,7 @@ public class MarksViewMaterial extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             TextView AverageInt = findViewById(R.id.AverageInt);
-            AverageInt.setText(Mark);
+            AverageInt.setText(Mark+"%");
             int Average = Math.round(Float.parseFloat(Mark.replaceAll("%", "")));
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
             ProgressBarAverage.setProgress(Average-2);
@@ -289,6 +295,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                     }else {
                         Apercent.setText(String.valueOf(Amark));
                     }
+                    dialog.dismiss();
 
 
                 }catch (JSONException e){
@@ -359,6 +366,9 @@ public class MarksViewMaterial extends AppCompatActivity {
         Cmark*=weightC;
         Amark*=weightA;
         String Average = round.format((Kmark+Tmark+Cmark+Amark)/(weightK+weightT+weightC+weightA)*100);
+        if(Average.equals(".0")){
+            Average = "0";
+        }
         return Average;
         }catch (JSONException e){
             e.printStackTrace();
