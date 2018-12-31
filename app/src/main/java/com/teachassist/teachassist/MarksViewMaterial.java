@@ -41,6 +41,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.netopen.hotbitmapgg.library.view.RingProgressBar;
+
 
 public class MarksViewMaterial extends AppCompatActivity {
     private Context mContext;
@@ -50,6 +52,7 @@ public class MarksViewMaterial extends AppCompatActivity {
     String password;
     int subject_number;
     String CourseName;
+    String Mark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class MarksViewMaterial extends AppCompatActivity {
         username = intent.getStringExtra("username").replaceAll("\\s+", "");
         password = intent.getStringExtra("password").replaceAll("\\s+", "");
         subject_number = intent.getIntExtra("subject", 0);
+        Mark = intent.getStringExtra("subject Mark");
         Crashlytics.setUserIdentifier(username);
         Crashlytics.setString("username", username);
         Crashlytics.setString("password", password);
@@ -98,7 +102,11 @@ public class MarksViewMaterial extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            TextView AverageInt = findViewById(R.id.AverageInt);
+            AverageInt.setText(Mark);
+            int Average = Math.round(Float.parseFloat(Mark.replaceAll("%", "")));
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+            ProgressBarAverage.setProgress(Average-2);
         }
 
         @Override

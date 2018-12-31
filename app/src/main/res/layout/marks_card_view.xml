@@ -36,7 +36,7 @@
         android:layout_marginBottom="10dp"
         android:layout_weight="5"
         android:background="@color/Background"
-        android:minHeight="@dimen/Average_Row_Height"
+        android:minHeight="150dp"
         android:paddingStart="50dp"
         android:paddingTop="0dp"
         android:paddingEnd="50dp"
