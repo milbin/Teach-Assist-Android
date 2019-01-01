@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -24,6 +25,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -332,6 +334,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 //add names of courses to list for settings summaries
                 ArrayList list = new ArrayList<String>();
+
+
+                if(response == null){
+                    new AlertDialog.Builder(context)
+                            .setTitle("Connection Error")
+                            .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Log.d("MainActivity", "No internet connection");
+                                }
+                            })
+                            .show();
+                    break;
+                }
                 for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                     list.add(entry.getValue().get(1));
                 }
@@ -450,6 +467,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     removed = data.getStringArrayListExtra("list");
                     System.out.println(removed);
                     if(removed.isEmpty()){
+                        //do nothing
+                    }
+                    else if(response == null){
                         //do nothing
                     }
                     else{
@@ -585,10 +605,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
             // Set Average Text
             TA ta = new TA();
-            double average = ta.GetAverage(response);
-            Float Average = (float) average;
+            Double average = ta.GetAverage(response);
+            //check if connected to internet
+            if(average == null || response == null){
+                new AlertDialog.Builder(context)
+                        .setTitle("Connection Error")
+                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("MainActivity", "No internet connection");
+                            }
+                        })
+                        .show();
+                relativeLayout.setClickable(false);
+                relativeLayout1.setClickable(false);
+                relativeLayout2.setClickable(false);
+                relativeLayout3.setClickable(false);
+                dialog.dismiss();
+                return;
+            }
             TextView AverageInt = findViewById(R.id.AverageInt);
-            AverageInt.setText(Average.toString()+"%");
+            AverageInt.setText(String.valueOf(average)+"%");
             System.out.println(response);
 
 

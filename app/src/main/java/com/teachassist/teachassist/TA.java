@@ -197,10 +197,14 @@ public class TA{
         //Get average
         double Average = 0;
         int x = 0;
-        for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-            if (!entry.getKey().contains("NA")) {
-                x++;
+        try {
+            for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
+                if (!entry.getKey().contains("NA")) {
+                    x++;
+                }
             }
+        }catch (Exception e){
+            return null;
         }
         double[] grades = new double[x];
         int i = 0;
@@ -228,7 +232,7 @@ public class TA{
     }
 
 
-    public List<JSONObject> newGetMarks(int subject_number) {
+    public List<JSONObject> newGetMarks(int subject_number) { //TODO .replace all for subject names for special charachters
         SendRequest sr = new SendRequest();
         Crashlytics.log(Log.DEBUG, "username", username);
         Crashlytics.log(Log.DEBUG, "password", password);
@@ -260,7 +264,7 @@ public class TA{
         }
 
     }
-
+/*
     public LinkedHashMap<String,List<Map<String,List<String>>>> GetMarks(int subject_number){
         try {
             if(subject_number >=0) {
@@ -577,7 +581,7 @@ public class TA{
         }
 
     }
-
+*/
 
     public LinkedHashMap<String, Double> GetCourseWeights(){ //doesnt need course parameter because its being called with the same class instance as GetMarks
         LinkedHashMap<String, Double> weights = new LinkedHashMap();

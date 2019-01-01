@@ -3,12 +3,15 @@ package com.teachassist.teachassist;
 import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
@@ -143,7 +146,19 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 if (currentTime.after(calendarStart.getTime()) && currentTime.before(calendarEnd.getTime())) {
 
-
+                    if(response == null){
+                        new AlertDialog.Builder(Globalcontext)
+                                .setTitle("Connection Error")
+                                .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Log.d("MainActivity", "No internet connection");
+                                    }
+                                })
+                                .show();
+                        return null;
+                    }
                     LinkedList<String> toSend = new LinkedList<String>();
                     for (LinkedHashMap.Entry<String, List<String>> entry : response.entrySet()) {
                         if (entry.getKey().contains("NA")) {

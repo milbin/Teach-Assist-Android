@@ -3,6 +3,7 @@ package com.teachassist.teachassist;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,6 +53,7 @@ public class EditActivity extends AppCompatActivity {
     ArrayList<String> removed = new ArrayList();
     FloatingActionButton fab;
     Boolean fab_animated = false;
+    Context context = this;
 
 
 
@@ -291,6 +294,20 @@ public class EditActivity extends AppCompatActivity {
 
 
         protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
+
+            if(response == null){
+                new AlertDialog.Builder(context)
+                        .setTitle("Connection Error")
+                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("MainActivity", "No internet connection");
+                            }
+                        })
+                        .show();
+                return;
+            }
 
             // Set Subject Text
             Float Mark = 0f;

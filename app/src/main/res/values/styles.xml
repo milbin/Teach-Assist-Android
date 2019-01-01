@@ -25,6 +25,10 @@
         <item name="colorAccent">@color/AverageBarColor</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+    <item name="android:windowNoTitle">true</item>
+    </style>
+
 
     <!--Fonts-->
     <style name="Roboto_Mono" parent="@android:style/TextAppearance.Small">

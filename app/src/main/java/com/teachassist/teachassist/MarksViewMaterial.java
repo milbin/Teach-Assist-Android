@@ -2,12 +2,15 @@ package com.teachassist.teachassist;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -55,6 +58,7 @@ public class MarksViewMaterial extends AppCompatActivity {
     String CourseName;
     String Mark;
     ProgressDialog dialog;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,20 @@ public class MarksViewMaterial extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            if(Mark == null){
+                new AlertDialog.Builder(context)
+                        .setTitle("Connection Error")
+                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("MainActivity", "No internet connection");
+                            }
+                        })
+                        .show();
+                dialog.dismiss();
+                return;
+            }
             TextView AverageInt = findViewById(R.id.AverageInt);
             AverageInt.setText(Mark+"%");
             int Average = Math.round(Float.parseFloat(Mark.replaceAll("%", "")));
@@ -120,6 +138,9 @@ public class MarksViewMaterial extends AppCompatActivity {
             TA ta = new TA();
             ta.GetTADataNotifications(username, password);
             List<JSONObject> returnValue = ta.newGetMarks(subject_number);
+            if(returnValue == null){
+                return null;
+            }
             Marks = returnValue.get(0);
             try {
                 CourseName = returnValue.get(1).getString("course");
@@ -135,6 +156,9 @@ public class MarksViewMaterial extends AppCompatActivity {
             super.onProgressUpdate();
         }
         protected void onPostExecute(JSONObject marks) {
+            if(marks == null){
+                return;
+            }
             int length = marks.length();
             String title;
             String feedback;
