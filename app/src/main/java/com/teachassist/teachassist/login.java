@@ -2,13 +2,11 @@ package com.teachassist.teachassist;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,15 +20,8 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import io.fabric.sdk.android.services.common.Crash;
-import retrofit2.http.HEAD;
 
 public class login extends AppCompatActivity {
     EditText usernameInput;
@@ -58,8 +49,8 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.login_page);
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 
-        usernameInput = (EditText) findViewById(R.id.editText1);
-        passwordInput = (EditText) findViewById(R.id.editText2);
+        usernameInput = (EditText) findViewById(R.id.Username);
+        passwordInput = (EditText) findViewById(R.id.Password);
 
         //change focus of EditText view on click
         usernameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -148,8 +139,8 @@ public class login extends AppCompatActivity {
 
         protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
 
-            final EditText usernameInput = (EditText) findViewById(R.id.editText1);
-            final EditText passwordInput = (EditText) findViewById(R.id.editText2);
+            final EditText usernameInput = (EditText) findViewById(R.id.Username);
+            final EditText passwordInput = (EditText) findViewById(R.id.Password);
             System.out.println(response);
             if (response.isEmpty()) {
                 dialog.dismiss();
