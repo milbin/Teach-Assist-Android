@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +43,7 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +62,12 @@ public class MarksViewMaterial extends AppCompatActivity {
     String Mark;
     ProgressDialog dialog;
     Context context = this;
+    ArrayList<View> rlList = new ArrayList<>();
+    int numberOfAssignments;
+    int numberOfRemovedAssignments;
+    ArrayList<Integer> removedAssignmentIndexList = new ArrayList<>();
+    LinkedHashMap<String, Integer> assignmentIndex = new LinkedHashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +101,8 @@ public class MarksViewMaterial extends AppCompatActivity {
         Crashlytics.log(Log.DEBUG, "username", username);
         Crashlytics.log(Log.DEBUG, "password", password);
 
+        linearLayout = findViewById(R.id.LinearLayoutMarksView);
+
 
         new GetMarks().execute();
     }
@@ -107,8 +118,10 @@ public class MarksViewMaterial extends AppCompatActivity {
         }
     }
 
-    private class GetMarks extends AsyncTask<String, Integer, JSONObject> {
 
+
+    private class GetMarks extends AsyncTask<String, Integer, JSONObject> {
+        View rl;
 
         @Override
         protected void onPreExecute() {
@@ -155,11 +168,11 @@ public class MarksViewMaterial extends AppCompatActivity {
         protected void onProgressUpdate(Integer... temp) {
             super.onProgressUpdate();
         }
-        protected void onPostExecute(JSONObject marks) {
+        protected void onPostExecute(JSONObject marks){
             if(marks == null){
                 return;
             }
-            int length = marks.length();
+            numberOfAssignments= marks.length()-1;
             String title;
             String feedback;
             Double Kweight = 0.0;
@@ -174,7 +187,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             Double Omark = 0.0;
             DecimalFormat round = new DecimalFormat(".#");
 
-            for(int i = 0; i <length-1; i++){
+            for(int i = 0; i <numberOfAssignments; i++){
                 Kweight = 0.0;
                 Kmark = 0.0;
                 Tweight = 0.0;
@@ -185,11 +198,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                 Amark = 0.0;
                Oweight = 0.0;
                Omark = 0.0;
-                LinearLayout linearLayout = findViewById(R.id.LinearLayoutMarksView);
-                View rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
+                rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
                 linearLayout.addView(rl);
+                rlList.add(rl);
                 try {
-                    JSONObject assignment = marks.getJSONObject(String.valueOf(i));
+                    final JSONObject assignment = marks.getJSONObject(String.valueOf(i));
                     title = assignment.getString("title");
                     feedback = assignment.getString("feedback");
 
@@ -254,7 +267,42 @@ public class MarksViewMaterial extends AppCompatActivity {
                         }
                     }
 
-                    //String courseName = marks.getJSONObject
+                    assignmentIndex.put(title, i);
+
+
+                    final String titleOnClick = title;
+
+                    final int index = i;
+                    ImageButton trashButton = (ImageButton) rl.findViewById(R.id.trash_can);
+                    trashButton.setOnClickListener(/*new onAssignmentClick(index));*/
+
+                            new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            System.out.println("CLICK "+index);
+                            int toSubtract = 0;
+                            int len = removedAssignmentIndexList.size();
+                            for(Integer i: removedAssignmentIndexList){
+                                if(i < assignmentIndex.get(titleOnClick)){
+                                    toSubtract++;
+                                }
+                            }
+
+                            linearLayout.removeViewAt(index + 2 - toSubtract);
+                            Marks.remove(String.valueOf(index));
+                            removedAssignmentIndexList.add(index);
+                            numberOfRemovedAssignments++;
+
+                            String returnval = CalculateTotalAverage(Marks);
+                            TextView AverageInt = findViewById(R.id.AverageInt);
+                            AverageInt.setText(returnval+"%");
+                            int Average = Math.round(Float.parseFloat(returnval));
+                            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+                            ProgressBarAverage.setProgress(Average);
+
+                        }
+                    });
+
 
                     // Setup toolbar text
                     getSupportActionBar().setTitle(CourseName);
@@ -394,6 +442,107 @@ public class MarksViewMaterial extends AppCompatActivity {
             Average = "0";
         }
         return Average;
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public String CalculateTotalAverage(JSONObject marks) {
+        DecimalFormat round = new DecimalFormat(".#");
+        try {
+            JSONObject weights = marks.getJSONObject("categories");
+            Double weightK = weights.getDouble("K") * 10;
+            Double weightT = weights.getDouble("T") * 10;
+            Double weightC = weights.getDouble("C") * 10;
+            Double weightA = weights.getDouble("A") * 10;
+            Double Kmark = 0.0;
+            Double Tmark = 0.0;
+            Double Cmark = 0.0;
+            Double Amark = 0.0;
+            Double KweightAssignment = 0.0;
+            Double TweightAssignment = 0.0;
+            Double CweightAssignment = 0.0;
+            Double AweightAssignment = 0.0;
+            Double KweightAssignmentTemp;
+            Double TweightAssignmentTemp;
+            Double CweightAssignmentTemp;
+            Double AweightAssignmentTemp;
+            for (int i = 0; i < marks.length()-1+numberOfRemovedAssignments; i++) {
+                JSONObject assignment;
+                try {
+                    assignment = marks.getJSONObject(String.valueOf(i));
+                }catch (JSONException e){
+                        e.printStackTrace();
+                        continue;}
+
+                try {
+                    Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
+                            Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                    KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
+                    Kmark += assignmentK * KweightAssignmentTemp;
+                    KweightAssignment += KweightAssignmentTemp;
+                }catch (JSONException e){}
+
+                try {
+                    Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
+                            Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
+                    TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
+                    Tmark += assignmentT * TweightAssignmentTemp;
+                    TweightAssignment += TweightAssignmentTemp;
+                }catch (JSONException e){}
+
+                try {
+                    Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
+                            Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
+                    CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
+                    Cmark += assignmentC * CweightAssignmentTemp;
+                    CweightAssignment += CweightAssignmentTemp;
+                }catch (JSONException e){}
+
+                try {
+                    Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
+                            Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
+                    AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
+                    Amark += assignmentA * AweightAssignmentTemp;
+                    AweightAssignment += AweightAssignmentTemp;
+                }catch (JSONException e){}
+
+            }
+            if(KweightAssignment == 0.0){
+                Kmark = 0.0;
+                weightK = 0.0;
+            }else {
+                Kmark /= KweightAssignment;
+            }
+
+            if(TweightAssignment == 0.0){
+                Tmark = 0.0;
+                weightT = 0.0;
+            }else {
+                Tmark /= TweightAssignment;
+            }
+
+            if(CweightAssignment == 0.0){
+                Cmark = 0.0;
+                weightC = 0.0;
+            }else {
+                Cmark /= CweightAssignment;
+            }
+
+            if(AweightAssignment == 0.0){
+                Amark = 0.0;
+                weightA = 0.0;
+            }else {
+                Amark /= AweightAssignment;
+            }
+
+            Kmark *= weightK;
+            Tmark *= weightT;
+            Cmark *= weightC;
+            Amark *= weightA;
+            String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark) / (weightK + weightT + weightC + weightA) * 100));
+            return Average;
+
         }catch (JSONException e){
             e.printStackTrace();
             return null;

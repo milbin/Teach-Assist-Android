@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/action_add_favourite"
+        android:id="@+id/action_remove"
         android:orderInCategory="100"
         android:title="Remove" />
+    <item
+        android:id="@+id/action_expand"
+        android:orderInCategory="100"
+        android:title="Expand" />
 </menu>

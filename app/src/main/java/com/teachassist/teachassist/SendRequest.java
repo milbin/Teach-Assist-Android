@@ -120,8 +120,7 @@ public class SendRequest {
         catch (IOException e) {
             e.printStackTrace();
             System.out.print("POST Request failed");
-            String[] returnString = {"ERROR! Check in SendRequest"};
-            return returnString;
+            return null;
         }
 
     }
@@ -149,6 +148,7 @@ public class SendRequest {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            return null;
         }
 
         return jsonObjectResp;

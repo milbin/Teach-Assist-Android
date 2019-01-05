@@ -150,6 +150,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout2.setOnClickListener(new subject2_click());
         relativeLayout3 = findViewById(R.id.relativeLayout3);
         relativeLayout3.setOnClickListener(new subject3_click());
+        relativeLayout.setClickable(true);
+        relativeLayout1.setClickable(true);
+        relativeLayout2.setClickable(true);
+        relativeLayout3.setClickable(true);
 
 
 
@@ -182,6 +186,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         relativeLayout1.setVisibility(View.VISIBLE);
                         relativeLayout2.setVisibility(View.VISIBLE);
                         relativeLayout3.setVisibility(View.VISIBLE);
+                        relativeLayout.setClickable(true);
+                        relativeLayout1.setClickable(true);
+                        relativeLayout2.setClickable(true);
+                        relativeLayout3.setClickable(true);
                         new GetTaData().execute();
 
                     }

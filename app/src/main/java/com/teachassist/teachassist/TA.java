@@ -54,6 +54,9 @@ public class TA{
             json.put("student_number", Username);
             json.put("password", Password);
             JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
+            if(respJson == null){
+                return null;
+            }
             System.out.println(respJson + "JSON RESPONSE HERE<----");
 
             session_token = respJson.getString("token");
@@ -70,6 +73,9 @@ public class TA{
                     .getJSONArray("data")
                     .getJSONObject(0)
                     .getJSONArray("subjects");
+            if(marksResp == null){
+                return null;
+            }
 
             Marks = new LinkedHashMap<>();
             for (int i = 0; i < marksResp.length(); i++) {
@@ -101,6 +107,9 @@ public class TA{
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
             String[] resp = sr.send(url, headers, parameters, cookies, path);
+            if(resp == null){
+                return null;
+            }
 
             //parse return
             int courseCounter1 = 0;
@@ -149,6 +158,9 @@ public class TA{
             json.put("password", Password);
             JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
             System.out.println(respJson + "JSON RESPONSE HERE<----");
+            if(respJson == null){
+                return null;
+            }
 
             session_token = respJson.getString("token");
             student_id = respJson.getString("student_id");
@@ -164,6 +176,9 @@ public class TA{
                     .getJSONArray("data")
                     .getJSONObject(0)
                     .getJSONArray("subjects");
+            if(marksResp == null){
+                return null;
+            }
 
             LinkedHashMap<String, List<String>> MarksNotifications = new LinkedHashMap<>();
             for (int i = 0; i < marksResp.length(); i++) {
@@ -245,6 +260,9 @@ public class TA{
             JSONObject respJsonAssignments = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString())
                     .getJSONObject(0)
                     .getJSONObject("data");
+            if(respJsonAssignments == null){
+                return null;
+            }
             JSONObject respJsonName = respJsonAssignments;
             try {
                 respJsonAssignments = respJsonAssignments

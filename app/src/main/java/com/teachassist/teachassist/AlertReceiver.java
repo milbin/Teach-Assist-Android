@@ -146,17 +146,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
                 if (currentTime.after(calendarStart.getTime()) && currentTime.before(calendarEnd.getTime())) {
 
-                    if(response == null){
-                        new AlertDialog.Builder(Globalcontext)
-                                .setTitle("Connection Error")
-                                .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Log.d("MainActivity", "No internet connection");
-                                    }
-                                })
-                                .show();
+                    if(response == null || newResponse == null){
                         return null;
                     }
                     LinkedList<String> toSend = new LinkedList<String>();

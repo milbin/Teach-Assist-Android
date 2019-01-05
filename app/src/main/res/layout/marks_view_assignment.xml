@@ -2,7 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
 <RelativeLayout
 
     android:id="@+id/relativeLayout_marks_view"
@@ -17,19 +19,31 @@
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="4dp"
-    >
 
+    >
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="18dp"
-        android:paddingLeft="@dimen/album_title_padding"
+        android:layout_marginEnd="35dp"
+        android:paddingStart="@dimen/album_title_padding"
         android:paddingTop="@dimen/album_title_padding"
+        android:text="functions and relations: a study in app design and stuff yknow?"
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp" />
 
+    <ImageButton
+        android:id="@+id/trash_can"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_actual_black_24dp"
+        android:background="@null"
+        android:padding="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="provides ability to remove and expand assignment"/>
     <TextView
         android:id="@+id/AveragePercent"
         android:layout_width="wrap_content"
@@ -40,6 +54,7 @@
         android:paddingLeft="8dp"
         android:textColor="@android:color/black"
         android:textSize="50sp"
+        android:text="80.0%"
         android:textStyle="bold" />
 
     <RelativeLayout
