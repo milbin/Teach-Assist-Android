@@ -1,11 +1,15 @@
 package com.teachassist.teachassist;
 
 
+import android.text.Html;
+
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -108,7 +112,7 @@ public class SendRequest {
 
             // generate return list and add cookies
             String returnList[] = new String[TAcookies.size()+1];
-            returnList[0] = response.body().string();
+            returnList[0] = StringEscapeUtils.unescapeHtml(response.body().string());
             for (String i : TAcookies) {
                 returnList[TAcookies.indexOf(i)+1] = i;
             }
@@ -143,6 +147,7 @@ public class SendRequest {
                 okhttp3.Response response = client.newCall(request).execute();
 
             String networkResp = response.body().string(); // raises exception if first 2 escape chars arent present
+            networkResp = StringEscapeUtils.unescapeHtml(networkResp);
             if (!networkResp.isEmpty()) {
                 jsonObjectResp = new JSONArray(networkResp);
             }
