@@ -703,7 +703,6 @@ public class EditActivity extends AppCompatActivity {
                 TextView EmptyCourse = findViewById(R.id.EmptyCourse3);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
                 EmptyCourse.setText(R.string.EmptyText);
-                //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in
             }
             else{
                 final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);

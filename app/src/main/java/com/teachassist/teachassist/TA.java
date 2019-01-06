@@ -247,7 +247,7 @@ public class TA{
     }
 
 
-    public List<JSONObject> newGetMarks(int subject_number) { //TODO .replace all for subject names for special charachters
+    public List<JSONObject> newGetMarks(int subject_number) {
         SendRequest sr = new SendRequest();
         Crashlytics.log(Log.DEBUG, "username", username);
         Crashlytics.log(Log.DEBUG, "password", password);

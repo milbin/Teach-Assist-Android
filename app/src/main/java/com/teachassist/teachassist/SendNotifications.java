@@ -61,7 +61,7 @@ public class SendNotifications extends ContextWrapper {
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent)
-                .build();//TODO add real icon
+                .build();
         return notification;
 
     }

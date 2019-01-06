@@ -1138,7 +1138,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
                 EmptyCourse.setText(R.string.EmptyText);
                 relativeLayout3.setClickable(false);
-                //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in
             }
             //hide menu
             showMenu(true);

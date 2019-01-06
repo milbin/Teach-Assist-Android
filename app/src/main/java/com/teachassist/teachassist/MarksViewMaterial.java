@@ -20,6 +20,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,12 +31,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.charts.LineChart;
+import com.google.gson.Gson;
 
 import org.decimal4j.util.DoubleRounder;
 import org.json.JSONException;
@@ -54,6 +57,7 @@ import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 public class MarksViewMaterial extends AppCompatActivity {
     private Context mContext;
     LinearLayout linearLayout;
+    Menu menu;
     JSONObject Marks;
     String username;
     String password;
@@ -65,6 +69,7 @@ public class MarksViewMaterial extends AppCompatActivity {
     ArrayList<View> rlList = new ArrayList<>();
     int numberOfAssignments;
     int numberOfRemovedAssignments;
+    Boolean trashShown = false;
     ArrayList<Integer> removedAssignmentIndexList = new ArrayList<>();
     LinkedHashMap<String, Integer> assignmentIndex = new LinkedHashMap<>();
 
@@ -113,9 +118,45 @@ public class MarksViewMaterial extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.action_edit:
+                if(!trashShown) {
+                    for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                        View v = linearLayout.getChildAt(i);
+                        if (v instanceof RelativeLayout) {
+                            try {
+                                ImageButton trashButton = (ImageButton) v.findViewById(R.id.trash_can);
+                                trashButton.setVisibility(View.VISIBLE);
+                                trashShown = true;
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+                }else{
+                    for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                        View v = linearLayout.getChildAt(i);
+                        if (v instanceof RelativeLayout) {
+                            try {
+                                ImageButton trashButton = (ImageButton) v.findViewById(R.id.trash_can);
+                                trashButton.setVisibility(View.INVISIBLE);
+                                trashShown = false;
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    //2 methods below for edit button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_button, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
 
@@ -311,6 +352,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                         }
                     });
 
+                    trashButton.setVisibility(View.INVISIBLE);
 
                     // Setup toolbar text
                     getSupportActionBar().setTitle(CourseName);
@@ -518,35 +560,43 @@ public class MarksViewMaterial extends AppCompatActivity {
                         continue;}
 
                 try {
-                    Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
-                    KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
-                    Kmark += assignmentK * KweightAssignmentTemp;
-                    KweightAssignment += KweightAssignmentTemp;
+                    if (!assignment.getJSONObject("K").isNull("mark")) {
+                        Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                        KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
+                        Kmark += assignmentK * KweightAssignmentTemp;
+                        KweightAssignment += KweightAssignmentTemp;
+                    }
                 }catch (JSONException e){}
 
                 try {
-                    Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
-                    TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
-                    Tmark += assignmentT * TweightAssignmentTemp;
-                    TweightAssignment += TweightAssignmentTemp;
+                    if (!assignment.getJSONObject("T").isNull("mark")) {
+                        Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
+                        TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
+                        Tmark += assignmentT * TweightAssignmentTemp;
+                        TweightAssignment += TweightAssignmentTemp;
+                    }
                 }catch (JSONException e){}
 
                 try {
-                    Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
-                    CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
-                    Cmark += assignmentC * CweightAssignmentTemp;
-                    CweightAssignment += CweightAssignmentTemp;
+                    if (!assignment.getJSONObject("C").isNull("mark")) {
+                        Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
+                        CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
+                        Cmark += assignmentC * CweightAssignmentTemp;
+                        CweightAssignment += CweightAssignmentTemp;
+                    }
                 }catch (JSONException e){}
 
                 try {
-                    Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
-                    AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
-                    Amark += assignmentA * AweightAssignmentTemp;
-                    AweightAssignment += AweightAssignmentTemp;
+                    if (!assignment.getJSONObject("A").isNull("mark")) {
+                        Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
+                        AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
+                        Amark += assignmentA * AweightAssignmentTemp;
+                        AweightAssignment += AweightAssignmentTemp;
+                    }
                 }catch (JSONException e){}
 
             }

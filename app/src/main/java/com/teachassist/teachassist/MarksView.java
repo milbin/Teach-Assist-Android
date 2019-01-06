@@ -70,7 +70,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
-
+//TODO remove this file
 public class MarksView extends AppCompatActivity{
     String username;
     String password;
