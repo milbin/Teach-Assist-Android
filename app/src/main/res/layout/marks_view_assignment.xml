@@ -91,6 +91,7 @@
             android:layout_alignStart="@+id/BarGraph1"
             android:layout_alignTop="@+id/BarGraph1"
             android:paddingLeft="2dp"
+            android:textColor="@color/White"
             android:text="66.9" />
 
         <View
@@ -118,6 +119,7 @@
             android:layout_alignStart="@+id/BarGraph2"
             android:layout_alignTop="@+id/BarGraph2"
             android:paddingLeft="2dp"
+            android:textColor="@color/White"
             android:text="87.0" />
 
         <View
@@ -145,6 +147,7 @@
             android:layout_alignStart="@+id/BarGraph3"
             android:layout_alignTop="@+id/BarGraph3"
             android:paddingLeft="2dp"
+            android:textColor="@color/White"
             android:text="90.0" />
 
         <View
@@ -172,6 +175,7 @@
             android:layout_alignStart="@+id/BarGraph4"
             android:layout_alignTop="@+id/BarGraph4"
             android:paddingLeft="2dp"
+            android:textColor="@color/White"
             android:text="57.0" />
     </RelativeLayout>
 

@@ -189,13 +189,13 @@ public class MarksViewMaterial extends AppCompatActivity {
 
             for(int i = 0; i <numberOfAssignments; i++){
                 Kweight = 0.0;
-                Kmark = 0.0;
+                Kmark = 0.000000001;
                 Tweight = 0.0;
-                Tmark = 0.0;
+                Tmark = 0.000000001;
                 Cweight = 0.0;
-                Cmark = 0.0;
+                Cmark = 0.000000001;
                 Aweight = 0.0;
-                Amark = 0.0;
+                Amark = 0.000000001;
                Oweight = 0.0;
                Omark = 0.0;
                 rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
@@ -330,10 +330,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                     View bar2 = rl.findViewById(R.id.BarGraph2);
                     View bar3 = rl.findViewById(R.id.BarGraph3);
                     View bar4 = rl.findViewById(R.id.BarGraph4);
-                    bar1.getLayoutParams().height = (int)Math.round(1.5*(Kmark));
-                    bar2.getLayoutParams().height = (int)Math.round(1.5*(Tmark));
-                    bar3.getLayoutParams().height = (int)Math.round(1.5*(Cmark));
-                    bar4.getLayoutParams().height = (int)Math.round(1.5*(Amark)); //TODO fix low mark cutting off percentage
+                    bar1.getLayoutParams().height = (int)Math.round(1.5*(Kmark))+45;
+                    bar2.getLayoutParams().height = (int)Math.round(1.5*(Tmark))+45;
+                    bar3.getLayoutParams().height = (int)Math.round(1.5*(Cmark))+45;
+                    bar4.getLayoutParams().height = (int)Math.round(1.5*(Amark))+45;
 
                     //set percentage texts
                     TextView Kpercent = rl.findViewById(R.id.Kpercent);
@@ -347,7 +347,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                     if(Kmark == 100.0){
                         Kpercent.setText(String.valueOf(Math.round(Kmark)));
                     }else if(Kmark == 0.0){
-                        K.setText("");
+                        Kpercent.setText("0.0");
+                    }else if(Kmark == 0.000000001){
+                        bar1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                        Kpercent.setTextColor(Color.WHITE);
+                        Kpercent.setText("NA");
                     }else {
                         Kpercent.setText(String.valueOf(Kmark));
                     }
@@ -355,7 +359,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                     if(Tmark == 100.0){
                         Tpercent.setText(String.valueOf(Math.round(Tmark)));
                     }else if(Tmark == 0.0){
-                        T.setText("");
+                        Tpercent.setText("0.0");
+                    }else if(Tmark == 0.000000001){
+                        bar2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                        Tpercent.setTextColor(Color.WHITE);
+                        Tpercent.setText("NA");
                     }else {
                         Tpercent.setText(String.valueOf(Tmark));
                     }
@@ -363,7 +371,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                     if(Cmark == 100.0){
                         Cpercent.setText(String.valueOf(Math.round(Cmark)));
                     }else if(Cmark == 0.0){
-                        C.setText("");
+                        Cpercent.setText("0.0");
+                    }else if(Cmark == 0.000000001){
+                        bar3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                        Cpercent.setTextColor(Color.WHITE);
+                        Cpercent.setText("NA");
                     }else {
                         Cpercent.setText(String.valueOf(Cmark));
                     }
@@ -371,7 +383,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                     if(Amark == 100.0){
                         Apercent.setText(String.valueOf(Math.round(Amark)));
                     }else if(Amark == 0.0){
-                        A.setText("");
+                        Apercent.setText("0.0");
+                    }else if(Amark == 0.000000001){
+                        bar4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                        Apercent.setTextColor(Color.WHITE);
+                        Apercent.setText("NA");
                     }else {
                         Apercent.setText(String.valueOf(Amark));
                     }
@@ -467,7 +483,7 @@ public class MarksViewMaterial extends AppCompatActivity {
         if(Average.equals(".0")){
             Average = "0";
         }
-        return Average; //TODO add indicatior if someone got a zero so that assignment average doesnt seem low
+        return Average;
         }catch (JSONException e){
             e.printStackTrace();
             return null;
