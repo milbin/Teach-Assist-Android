@@ -5,51 +5,32 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.JsonReader;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.github.mikephil.charting.charts.LineChart;
-import com.google.gson.Gson;
 
-import org.decimal4j.util.DoubleRounder;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
@@ -72,6 +53,7 @@ public class MarksViewMaterial extends AppCompatActivity {
     Boolean trashShown = false;
     ArrayList<Integer> removedAssignmentIndexList = new ArrayList<>();
     LinkedHashMap<String, Integer> assignmentIndex = new LinkedHashMap<>();
+    int original_height_of_assignment = -1;
 
 
     @Override
@@ -316,15 +298,61 @@ public class MarksViewMaterial extends AppCompatActivity {
                         }
                     }
 
+                    rl.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            RelativeLayout rlNested = v.findViewById(R.id.relativeLayout_marks_view);
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) rlNested.getLayoutParams();
+                            System.out.println("CLICK" + rlNested.getHeight());
+                            if(original_height_of_assignment == -1){
+                                original_height_of_assignment = rlNested.getHeight();
+                            }
+                            if(rlNested.getHeight() == original_height_of_assignment) {
+                                params.height = rlNested.getHeight() + 300;
+                            }else if(rlNested.getHeight() == original_height_of_assignment + 300){
+                                params.height = rlNested.getHeight() - 300;
+                            }
+                            rlNested.setLayoutParams(params);
+
+                            View bar1 = v.findViewById(R.id.BarGraph1);
+                            View bar2 = v.findViewById(R.id.BarGraph2);
+                            View bar3 = v.findViewById(R.id.BarGraph3);
+                            View bar4 = v.findViewById(R.id.BarGraph4);
+
+                            RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
+                            layoutParamsBar1.height = bar1.getHeight()*2;
+                            layoutParamsBar1.width = (int)Math.round(bar1.getWidth()*1.5);
+                            bar1.setLayoutParams(layoutParamsBar1);
+
+                            RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) bar2.getLayoutParams();
+                            layoutParamsBar2.height = bar2.getHeight()*2;
+                            layoutParamsBar2.width = (int)Math.round(bar2.getWidth()*1.5);
+                            bar2.setLayoutParams(layoutParamsBar2);
+
+                            RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
+                            layoutParamsBar3.height = bar3.getHeight()*2;
+                            layoutParamsBar3.width = (int)Math.round(bar3.getWidth()*1.5);
+                            bar3.setLayoutParams(layoutParamsBar3);
+
+                            RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
+                            layoutParamsBar4.height = bar4.getHeight()*2;
+                            layoutParamsBar4.width = (int)Math.round(bar4.getWidth()*1.5);
+                            bar4.setLayoutParams(layoutParamsBar4);
+
+                            RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
+                            RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
+                            barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                            barsRLParams.height = barsRL.getHeight()*2;
+                            barsRL.setLayoutParams(barsRLParams);
+
+                                }
+                            });
+
                     assignmentIndex.put(title, i);
-
-
                     final String titleOnClick = title;
-
                     final int index = i;
                     ImageButton trashButton = (ImageButton) rl.findViewById(R.id.trash_can);
                     trashButton.setOnClickListener(/*new onAssignmentClick(index));*/
-
                             new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -433,6 +461,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                     }else {
                         Apercent.setText(String.valueOf(Amark));
                     }
+
                     dialog.dismiss();
 
 
