@@ -26,6 +26,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -145,6 +146,11 @@ public class MarksViewMaterial extends AppCompatActivity {
 
     private class GetMarks extends AsyncTask<String, Integer, JSONObject> {
         View rl;
+        int KWeightID;
+        int TWeightID;
+        int CWeightID;
+        int AWeightID;
+        int FeedbackID;
 
         @Override
         protected void onPreExecute() {
@@ -197,28 +203,19 @@ public class MarksViewMaterial extends AppCompatActivity {
             }
             numberOfAssignments= marks.length()-1;
             String title;
-            String feedback;
-            Double Kweight = 0.0;
-            Double Kmark = 0.0;
-            Double Tweight;
-            Double Tmark = 0.0;
-            Double Cweight;
-            Double Cmark = 0.0;
-            Double Aweight;
-            Double Amark = 0.0;
             Double Oweight = 0.0;
             Double Omark = 0.0;
             DecimalFormat round = new DecimalFormat(".#");
 
             for(int i = 0; i <numberOfAssignments; i++){
-                Kweight = 0.0;
-                Kmark = 0.000000001;
-                Tweight = 0.0;
-                Tmark = 0.000000001;
-                Cweight = 0.0;
-                Cmark = 0.000000001;
-                Aweight = 0.0;
-                Amark = 0.000000001;
+               Double Kmark = 0.000000001;
+               Double Tmark = 0.000000001;
+               Double Cmark = 0.000000001;
+               Double Amark = 0.000000001;
+               final Double Kweight;
+               final Double Tweight;
+               final Double Cweight;
+               final Double Aweight;
                Oweight = 0.0;
                Omark = 0.0;
                 rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
@@ -227,7 +224,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                 try {
                     final JSONObject assignment = marks.getJSONObject(String.valueOf(i));
                     title = assignment.getString("title");
-                    feedback = assignment.getString("feedback");
+                    final String feedback = assignment.getString("feedback");
 
                     if(assignment.has("K")) {
                         if (assignment.getJSONObject("K").getString("weight").isEmpty()) {
@@ -236,7 +233,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                             Kweight = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
                         }
                         if (assignment.getJSONObject("K").getString("outOf").equals("0") || assignment.getJSONObject("K").getString("outOf").equals("0.0")) {
-                            Kweight = 0.0;
                             Kmark = 0.0;
                         }else {
                             if(!assignment.getJSONObject("K").isNull("mark") && !assignment.getJSONObject("K").isNull("outOf")) {
@@ -245,6 +241,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 Kmark = Double.parseDouble(round.format(Kmark * 100));
                             }
                         }
+                    }else{
+                        Kweight = 0.0;
                     }
                     if(assignment.has("T")) {
                         if (assignment.getJSONObject("T").getString("weight").isEmpty()) {
@@ -253,7 +251,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                             Tweight = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
                         }
                         if (assignment.getJSONObject("T").getString("outOf").equals("0") || assignment.getJSONObject("T").getString("outOf").equals("0.0")) {
-                            Tweight = 0.0;
                             Tmark = 0.0;
                         }else {
                             if(!assignment.getJSONObject("T").isNull("mark") && !assignment.getJSONObject("T").isNull("outOf")) {
@@ -262,6 +259,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 Tmark = Double.parseDouble(round.format(Tmark * 100));
                             }
                         }
+                    }else{
+                        Tweight = 0.0;
                     }
                     if(assignment.has("C")) {
                         if (assignment.getJSONObject("C").getString("weight").isEmpty()) {
@@ -270,7 +269,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                             Cweight = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
                         }
                         if (assignment.getJSONObject("C").getString("outOf").equals("0") || assignment.getJSONObject("C").getString("outOf").equals("0.0")) {
-                            Cweight = 0.0;
                             Cmark = 0.0;
                         }else {
                             if(!assignment.getJSONObject("C").isNull("mark") && !assignment.getJSONObject("C").isNull("outOf")) {
@@ -279,6 +277,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 Cmark = Double.parseDouble(round.format(Cmark * 100));
                             }
                         }
+                    }else{
+                        Cweight = 0.0;
                     }
                     if(assignment.has("A")) {
                         if (assignment.getJSONObject("A").getString("weight").isEmpty()) {
@@ -287,7 +287,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                             Aweight = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
                         }
                         if (assignment.getJSONObject("A").getString("outOf").equals("0") || assignment.getJSONObject("A").getString("outOf").equals("0.0")) {
-                            Aweight = 0.0;
                             Amark = 0.0;
                         }else {
                             if(!assignment.getJSONObject("A").isNull("mark") && !assignment.getJSONObject("A").isNull("outOf")) {
@@ -296,6 +295,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 Amark = Double.parseDouble(round.format(Amark * 100));
                             }
                         }
+                    }else{
+                        Aweight = 0.0;
                     }
 
                     rl.setOnClickListener(new View.OnClickListener() {
@@ -308,42 +309,181 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 original_height_of_assignment = rlNested.getHeight();
                             }
                             if(rlNested.getHeight() == original_height_of_assignment) {
-                                params.height = rlNested.getHeight() + 300;
-                            }else if(rlNested.getHeight() == original_height_of_assignment + 300){
-                                params.height = rlNested.getHeight() - 300;
+                                params.height = (int)Math.round(rlNested.getHeight()*2.3 + v.findViewById(R.id.AveragePercent).getHeight());
+
+                                rlNested.setLayoutParams(params);
+
+                                View bar1 = v.findViewById(R.id.BarGraph1);
+                                View bar2 = v.findViewById(R.id.BarGraph2);
+                                View bar3 = v.findViewById(R.id.BarGraph3);
+                                View bar4 = v.findViewById(R.id.BarGraph4);
+
+                                RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
+                                RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
+                                barsRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                                barsRLParams.height = barsRL.getHeight()*3;
+                                barsRLParams.addRule(RelativeLayout.BELOW, R.id.AveragePercent);
+                                barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
+                                barsRL.setLayoutParams(barsRLParams);
+
+                                TextView KWeight = new TextView(context);
+                                RelativeLayout.LayoutParams paramsKweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                KWeight.setId(View.generateViewId());
+                                KWeightID = KWeight.getId();
+                                paramsKweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                paramsKweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph1);
+                                KWeight.setLayoutParams(paramsKweight);
+                                KWeight.setText("W: "+String.valueOf(Kweight));
+                                barsRL.addView(KWeight);
+
+                                TextView TWeight = new TextView(context);
+                                RelativeLayout.LayoutParams paramsTweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                TWeight.setId(View.generateViewId());
+                                TWeightID = TWeight.getId();
+                                paramsTweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                paramsTweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph2);
+                                TWeight.setLayoutParams(paramsTweight);
+                                TWeight.setText("W: "+String.valueOf(Tweight));
+                                barsRL.addView(TWeight);
+
+                                TextView CWeight = new TextView(context);
+                                RelativeLayout.LayoutParams paramsCweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                CWeight.setId(View.generateViewId());
+                                CWeightID = CWeight.getId();
+                                paramsCweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                paramsCweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph3);
+                                CWeight.setLayoutParams(paramsCweight);
+                                CWeight.setText("W: "+String.valueOf(Cweight));
+                                barsRL.addView(CWeight);
+
+                                TextView AWeight = new TextView(context);
+                                RelativeLayout.LayoutParams paramsAweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                AWeight.setId(View.generateViewId());
+                                AWeightID = AWeight.getId();
+                                paramsAweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                paramsAweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph4);
+                                AWeight.setLayoutParams(paramsAweight);
+                                AWeight.setText("W: "+String.valueOf(Aweight));
+                                barsRL.addView(AWeight);
+
+
+                                RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
+                                layoutParamsBar1.height = (int)Math.round(bar1.getHeight()*2.3);
+                                layoutParamsBar1.width = (int)Math.round(bar1.getWidth()*2);
+                                layoutParamsBar1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+                                layoutParamsBar1.addRule(RelativeLayout.ABOVE, KWeight.getId());
+                                layoutParamsBar1.setMarginStart(0);
+                                bar1.setLayoutParams(layoutParamsBar1);
+
+                                RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) bar2.getLayoutParams();
+                                layoutParamsBar2.height = (int)Math.round(bar2.getHeight()*2.3);
+                                layoutParamsBar2.width = (int)Math.round(bar2.getWidth()*2);
+                                layoutParamsBar2.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+                                layoutParamsBar2.addRule(RelativeLayout.ABOVE, TWeight.getId());
+                                layoutParamsBar2.setMarginStart(30);
+                                bar2.setLayoutParams(layoutParamsBar2);
+
+                                RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
+                                layoutParamsBar3.height = (int)Math.round(bar3.getHeight()*2.3);
+                                layoutParamsBar3.width = (int)Math.round(bar3.getWidth()*2);
+                                layoutParamsBar3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+                                layoutParamsBar3.addRule(RelativeLayout.ABOVE, CWeight.getId());
+                                layoutParamsBar3.setMarginStart(30);
+                                bar3.setLayoutParams(layoutParamsBar3);
+
+                                RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
+                                layoutParamsBar4.height = (int)Math.round(bar4.getHeight()*2.3);
+                                layoutParamsBar4.width = (int)Math.round(bar4.getWidth()*2);
+                                layoutParamsBar4.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+                                layoutParamsBar4.addRule(RelativeLayout.ABOVE, AWeight.getId());
+                                layoutParamsBar4.setMarginStart(30);
+                                bar4.setLayoutParams(layoutParamsBar4);
+
+
+                                TextView AveragePercent = v.findViewById(R.id.AveragePercent);
+                                RelativeLayout.LayoutParams paramsAveragePercent = (RelativeLayout.LayoutParams) AveragePercent.getLayoutParams();
+                                paramsAveragePercent.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+                                TextView feedbackTextView = new TextView(context);
+                                feedbackTextView.setId(View.generateViewId());
+                                FeedbackID = feedbackTextView.getId();
+                                RelativeLayout.LayoutParams paramsFeedback = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                paramsFeedback.addRule(RelativeLayout.BELOW, R.id.AveragePercent);
+                                paramsFeedback.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                                paramsFeedback.setMarginStart(20);
+                                feedbackTextView.setLayoutParams(paramsFeedback);
+                                feedbackTextView.setText("Feedback: "+ feedback);
+                                rlNested.addView(feedbackTextView);
+                            }else if(rlNested.getHeight() == Math.round(original_height_of_assignment*2.3 + v.findViewById(R.id.AveragePercent).getHeight())){
+                                params.height = original_height_of_assignment;
+
+                                rlNested.setLayoutParams(params);
+
+                                View bar1 = v.findViewById(R.id.BarGraph1);
+                                View bar2 = v.findViewById(R.id.BarGraph2);
+                                View bar3 = v.findViewById(R.id.BarGraph3);
+                                View bar4 = v.findViewById(R.id.BarGraph4);
+
+                                RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
+                                RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
+                                barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                barsRLParams.height = barsRL.getHeight()/2;
+                                barsRLParams.addRule(RelativeLayout.BELOW, 0);
+                                barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                                barsRL.setLayoutParams(barsRLParams);
+
+                                TextView KWeight = v.findViewById(KWeightID);
+                                TextView TWeight = v.findViewById(TWeightID);
+                                TextView CWeight = v.findViewById(CWeightID);
+                                TextView AWeight = v.findViewById(AWeightID);
+
+                                KWeight.setVisibility(View.GONE);
+                                TWeight.setVisibility(View.GONE);
+                                CWeight.setVisibility(View.GONE);
+                                AWeight.setVisibility(View.GONE);
+
+                                RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
+                                layoutParamsBar1.height = (int)Math.round(bar1.getHeight()/2.3);
+                                layoutParamsBar1.width = (int)Math.round(bar1.getWidth()/2);
+                                layoutParamsBar1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                layoutParamsBar1.addRule(RelativeLayout.ABOVE, 0);
+                                layoutParamsBar1.setMarginStart(30);
+                                bar1.setLayoutParams(layoutParamsBar1);
+
+                                RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) bar2.getLayoutParams();
+                                layoutParamsBar2.height = (int)Math.round(bar2.getHeight()/2.3);
+                                layoutParamsBar2.width = (int)Math.round(bar2.getWidth()/2);
+                                layoutParamsBar2.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                layoutParamsBar2.addRule(RelativeLayout.ABOVE, 0);
+                                layoutParamsBar2.setMarginStart(3);
+                                bar2.setLayoutParams(layoutParamsBar2);
+
+                                RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
+                                layoutParamsBar3.height = (int)Math.round(bar3.getHeight()/2.3);
+                                layoutParamsBar3.width = (int)Math.round(bar3.getWidth()/2);
+                                layoutParamsBar3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                layoutParamsBar3.addRule(RelativeLayout.ABOVE, 0);
+                                layoutParamsBar3.setMarginStart(3);
+                                bar3.setLayoutParams(layoutParamsBar3);
+
+                                RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
+                                layoutParamsBar4.height = (int)Math.round(bar4.getHeight()/2.3);
+                                layoutParamsBar4.width = (int)Math.round(bar4.getWidth()/2);
+                                layoutParamsBar4.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                layoutParamsBar4.addRule(RelativeLayout.ABOVE, 0);
+                                layoutParamsBar4.setMarginStart(3);
+                                bar4.setLayoutParams(layoutParamsBar4);
+
+                                TextView AveragePercent = v.findViewById(R.id.AveragePercent);
+                                RelativeLayout.LayoutParams paramsAveragePercent = (RelativeLayout.LayoutParams) AveragePercent.getLayoutParams();
+                                paramsAveragePercent.addRule(RelativeLayout.CENTER_HORIZONTAL, 0);
+
+                                TextView feedbackTextView = v.findViewById(FeedbackID);
+                                feedbackTextView.setVisibility(View.GONE);
+
                             }
-                            rlNested.setLayoutParams(params);
 
-                            View bar1 = v.findViewById(R.id.BarGraph1);
-                            View bar2 = v.findViewById(R.id.BarGraph2);
-                            View bar3 = v.findViewById(R.id.BarGraph3);
-                            View bar4 = v.findViewById(R.id.BarGraph4);
 
-                            RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
-                            layoutParamsBar1.height = bar1.getHeight()*2;
-                            layoutParamsBar1.width = (int)Math.round(bar1.getWidth()*1.5);
-                            bar1.setLayoutParams(layoutParamsBar1);
-
-                            RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) bar2.getLayoutParams();
-                            layoutParamsBar2.height = bar2.getHeight()*2;
-                            layoutParamsBar2.width = (int)Math.round(bar2.getWidth()*1.5);
-                            bar2.setLayoutParams(layoutParamsBar2);
-
-                            RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
-                            layoutParamsBar3.height = bar3.getHeight()*2;
-                            layoutParamsBar3.width = (int)Math.round(bar3.getWidth()*1.5);
-                            bar3.setLayoutParams(layoutParamsBar3);
-
-                            RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
-                            layoutParamsBar4.height = bar4.getHeight()*2;
-                            layoutParamsBar4.width = (int)Math.round(bar4.getWidth()*1.5);
-                            bar4.setLayoutParams(layoutParamsBar4);
-
-                            RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
-                            RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
-                            barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                            barsRLParams.height = barsRL.getHeight()*2;
-                            barsRL.setLayoutParams(barsRLParams);
 
                                 }
                             });
@@ -356,7 +496,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                             new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            System.out.println("CLICK "+index);
                             int toSubtract = 0;
                             int len = removedAssignmentIndexList.size();
                             for(Integer i: removedAssignmentIndexList){
@@ -553,6 +692,9 @@ public class MarksViewMaterial extends AppCompatActivity {
         String Average = round.format((Kmark+Tmark+Cmark+Amark)/(weightK+weightT+weightC+weightA)*100);
         if(Average.equals(".0")){
             Average = "0";
+        }
+        if(Average.equals("100.0")){
+            Average = "100";
         }
         return Average;
         }catch (JSONException e){

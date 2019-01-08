@@ -60,10 +60,10 @@
     <RelativeLayout
         android:id="@+id/mark_bars"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="110dp"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginEnd="25dp"
         android:paddingBottom="10dp">
 
         <View

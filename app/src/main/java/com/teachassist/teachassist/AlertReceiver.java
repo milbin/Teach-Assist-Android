@@ -72,6 +72,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Type entityType = new TypeToken<LinkedHashMap<String, List<String>>>() {
         }.getType();
         response = gson.fromJson(str, entityType);
+        Toast.makeText(Globalcontext, "TA: notification checked", Toast.LENGTH_SHORT).show();
 /*
         ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
         ArrayList list2 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
@@ -85,7 +86,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
 
         System.out.println("NOTIFICATION" + response);
-        Toast.makeText(context, "TA: notification checked", Toast.LENGTH_SHORT).show();
 
 
         //get username and password
@@ -395,7 +395,7 @@ public class AlertReceiver extends BroadcastReceiver {
             Amark*=weightA;
             String Average = round.format((Kmark+Tmark+Cmark+Amark)/(weightK+weightT+weightC+weightA)*100);
             if(Average.equals(".0")){
-                Average = "0%";
+                Average = "0";
             }
             return Average;
         }catch (JSONException e){
