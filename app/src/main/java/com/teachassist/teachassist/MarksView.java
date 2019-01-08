@@ -45,6 +45,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -69,7 +70,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
-
+//TODO remove this file
 public class MarksView extends AppCompatActivity{
     String username;
     String password;
@@ -86,11 +87,17 @@ public class MarksView extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.marks_view);
 
+
         //get intents
         Intent intent = getIntent();
         username = intent.getStringExtra("username").replaceAll("\\s+","");
         password = intent.getStringExtra("password").replaceAll("\\s+","");
         subject_number = intent.getIntExtra("subject",0);
+        Crashlytics.setUserIdentifier(username);
+        Crashlytics.setString("username", username);
+        Crashlytics.setString("password", password);
+        Crashlytics.log(Log.DEBUG, "username", username);
+        Crashlytics.log(Log.DEBUG, "password", password);
         //progress dialog
         dialog = ProgressDialog.show(MarksView.this, "", "Loading...", true);
         new GetMarks().execute();
@@ -120,7 +127,8 @@ public class MarksView extends AppCompatActivity{
             System.out.println(password);
             ta.GetTAData(username,password);
             System.out.println(subject_number);
-            marks = ta.GetMarks(subject_number);
+            ta.newGetMarks(0);
+            //marks = ta.GetMarks(subject_number);
             System.out.println(subject_number);
             subject = ta.GetCourse(subject_number);
             return marks;

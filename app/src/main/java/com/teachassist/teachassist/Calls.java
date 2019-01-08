@@ -1,8 +1,12 @@
 package com.teachassist.teachassist;
 
+import android.util.JsonReader;
 import android.view.View;
 
+import com.google.gson.JsonObject;
+
 import org.decimal4j.util.DoubleRounder;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,17 +18,26 @@ import java.util.Map;
 public class Calls {
     public static void main(String args[]) {
 
-        String test = "/10=83%";
-        String errorCatcher = test.split("/")[0];
-        System.out.println(errorCatcher);
-        System.out.println(errorCatcher.isEmpty());
+/*
+        String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
+        String path = "/live/students/viewReport.php?";
+        LinkedHashMap<String, String> headers = new LinkedHashMap<>();
+        LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
+        LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
+        parameters.put("subject_id", subjects.get(subject_number));
+        parameters.put("student_id", student_id);
+        cookies.put("session_token", session_token);
+        cookies.put("student_id", student_id);
 
+        Map<String, String> colors = new HashMap<>();
+        colors.put("knowledge", "ffffaa");
+        colors.put("thinking", "c0fea4");
+        colors.put("communication", "afafff");
+        colors.put("application", "ffd490");
+        colors.put("other", "#dedede");
+*/
+        //get response
 
-        TA ta = new TA();
-        String username = "335525168";
-        String password = "4a6349kc";
-        LinkedHashMap<String, List<String>> response = ta.GetTAData(username, password);
-        System.out.println(response);
 
     }
 }

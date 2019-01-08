@@ -3,15 +3,19 @@ package com.teachassist.teachassist;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,6 +42,10 @@ import javax.security.auth.Subject;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
+import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
+import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
+import static com.teachassist.teachassist.LaunchActivity.USERNAME;
+
 
 public class EditActivity extends AppCompatActivity {
 
@@ -44,6 +53,10 @@ public class EditActivity extends AppCompatActivity {
     ArrayList<String> removed = new ArrayList();
     FloatingActionButton fab;
     Boolean fab_animated = false;
+    Context context = this;
+
+
+
 
 
 
@@ -53,6 +66,15 @@ public class EditActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_activity);
+        //get username and password
+        SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
+        String username = sharedPreferences.getString(USERNAME, "");
+        String password = sharedPreferences.getString(PASSWORD, "");
+        Crashlytics.setUserIdentifier(username);
+        Crashlytics.setString("username", username);
+        Crashlytics.setString("password", password);
+        Crashlytics.log(Log.DEBUG, "username", username);
+        Crashlytics.log(Log.DEBUG, "password", password);
         Intent intent = getIntent();
 
         // get params
@@ -65,11 +87,11 @@ public class EditActivity extends AppCompatActivity {
         final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
         ProgressBarAverage.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage1 =  findViewById(R.id.SubjectBar1);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage1.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage2 =  findViewById(R.id.SubjectBar2);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage2.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
+        ProgressBarAverage3.setVisibility(View.INVISIBLE);
 
 
         //FAB
@@ -127,7 +149,6 @@ public class EditActivity extends AppCompatActivity {
             switch (dragEvent) {
 
                 case DragEvent.ACTION_DRAG_STARTED:
-
 
                     if (view.getId() == R.id.relativeLayout) {
                         view.setVisibility(View.INVISIBLE);
@@ -273,6 +294,20 @@ public class EditActivity extends AppCompatActivity {
 
 
         protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
+
+            if(response == null){
+                new AlertDialog.Builder(context)
+                        .setTitle("Connection Error")
+                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("MainActivity", "No internet connection");
+                            }
+                        })
+                        .show();
+                return;
+            }
 
             // Set Subject Text
             Float Mark = 0f;
@@ -431,49 +466,6 @@ public class EditActivity extends AppCompatActivity {
 
     }
     //---------------------------------------------------------------------------------------------------------------------------------------
-    private class Average extends AsyncTask<HashMap<String, List<String>>, Integer, Float>{
-        @Override
-        protected void onPreExecute(){
-
-
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-            double average = ta.GetAverage(response[0]);
-            Float Average = (float) average;
-
-            final RingProgressBar ProgressBarAverage =  findViewById(R.id.AverageBar);
-            publishProgress (Math.round(Average));
-
-            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                @Override
-                public void progressToComplete() {
-                    // Progress reaches the maximum callback default Max value is 100
-                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                }
-                });
-
-
-
-            return Average;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Average) {
-
-
-        }
-
-    }
-    //---------------------------------------------------------------------------------------------------------------------------------------
     private class Subject extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
         @Override
         protected void onPreExecute(){
@@ -489,8 +481,6 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 0) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
                         return -1f;
@@ -501,36 +491,27 @@ public class EditActivity extends AppCompatActivity {
 
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-                System.out.println(Mark);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
 
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
+            publishProgress (Math.round(Mark-1));
 
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
+
         @Override
         protected void onPostExecute(Float Mark) {
             if(Mark.equals(-1f)){
@@ -560,8 +541,6 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 1) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
                         return -1f;
@@ -572,34 +551,24 @@ public class EditActivity extends AppCompatActivity {
                 counter++;
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
+            publishProgress (Math.round(Mark-1));
 
-
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
         @Override
         protected void onPostExecute(Float Mark) {
@@ -607,6 +576,10 @@ public class EditActivity extends AppCompatActivity {
                 TextView EmptyCourse = findViewById(R.id.EmptyCourse1);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
                 EmptyCourse.setText(R.string.EmptyText);
+            }
+            else{
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
             }
 
 
@@ -631,8 +604,6 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 2) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
                     }
                     else {
                         return -1f;
@@ -644,34 +615,24 @@ public class EditActivity extends AppCompatActivity {
                 counter++;
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
+            publishProgress (Math.round(Mark-1));
 
-
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
         @Override
         protected void onPostExecute(Float Mark) {
@@ -679,6 +640,10 @@ public class EditActivity extends AppCompatActivity {
                 TextView EmptyCourse = findViewById(R.id.EmptyCourse2);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
                 EmptyCourse.setText(R.string.EmptyText);
+            }
+            else{
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
             }
 
 
@@ -703,8 +668,7 @@ public class EditActivity extends AppCompatActivity {
                 if(counter == 3) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
+
                     }
                     else {
                         return -1f;
@@ -714,43 +678,35 @@ public class EditActivity extends AppCompatActivity {
                 counter++;
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
+            publishProgress (Math.round(Mark-1));
 
-
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
                 }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            });
 
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
             return Mark;
-
         }
 
         protected void onProgressUpdate(Integer... progress) {
-
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
             ProgressBarAverage.setProgress(progress[0]);
-
         }
         @Override
         protected void onPostExecute(Float Mark) {
             if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse);
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse3);
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
                 EmptyCourse.setText(R.string.EmptyText);
-                //TODO: invisibility lags behind, some text is cut off for a second before invisibility kicks in
+            }
+            else{
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
             }
 
 

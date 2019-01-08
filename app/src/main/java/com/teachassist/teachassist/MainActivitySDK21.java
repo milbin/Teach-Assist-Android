@@ -48,7 +48,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.decimal4j.util.DoubleRounder;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -56,7 +55,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +66,7 @@ import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 import static com.teachassist.teachassist.App.CHANNEL_1_ID;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivitySDK21 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //String username = "335525168";
     //String password = "4a6349kc";
 
@@ -95,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String subjectMark2;
     String subjectMark3;
 
+
+
     public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
     public static final String RESPONSE = "RESPONSE";
@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_sdk_21);
 
 
 
         //progress dialog
-        dialog = ProgressDialog.show(MainActivity.this, "",
+        dialog = ProgressDialog.show(MainActivitySDK21.this, "",
                 "Loading...", true);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
 
@@ -150,20 +150,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout2.setOnClickListener(new subject2_click());
         relativeLayout3 = findViewById(R.id.relativeLayout3);
         relativeLayout3.setOnClickListener(new subject3_click());
-        relativeLayout.setClickable(true);
-        relativeLayout1.setClickable(true);
-        relativeLayout2.setClickable(true);
-        relativeLayout3.setClickable(true);
 
 
 
 
-        if (Build.VERSION.SDK_INT <= 23) {
-            //relativeLayout.setVisibility(View.GONE);
-        }
 
 
-            // Refresh
+        // Refresh
         SwipeRefresh = findViewById(R.id.swipeRefresh);
         SwipeRefresh.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -186,10 +179,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         relativeLayout1.setVisibility(View.VISIBLE);
                         relativeLayout2.setVisibility(View.VISIBLE);
                         relativeLayout3.setVisibility(View.VISIBLE);
-                        relativeLayout.setClickable(true);
-                        relativeLayout1.setClickable(true);
-                        relativeLayout2.setClickable(true);
-                        relativeLayout3.setClickable(true);
                         new GetTaData().execute();
 
                     }
@@ -227,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showToast(String text){
-        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivitySDK21.this, text, Toast.LENGTH_SHORT).show();
     }
 
     public class subject_click implements View.OnClickListener{
@@ -242,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         "You Got a " + 100 / 1 + "% in " + "test");
                 sendNotifications.getManager().notify(1, notification);
                 */
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 0);
@@ -261,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onClick(View v){
             try {
 
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 1);
@@ -280,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 2);
@@ -298,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
                 myIntent.putExtra("subject", 3);
@@ -329,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 editor.putBoolean(REMEMBERME, false);
                 editor.apply();
 
-                Intent myIntent = new Intent(MainActivity.this, login.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, login.class);
                 startActivity(myIntent);
                 break;
 
@@ -339,24 +328,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_settings:
                 drawer.closeDrawer(Gravity.START);
-                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                Intent settingsIntent = new Intent(MainActivitySDK21.this, SettingsActivity.class);
                 //add names of courses to list for settings summaries
                 ArrayList list = new ArrayList<String>();
-
-
-                if(response == null){
-                    new AlertDialog.Builder(context)
-                            .setTitle("Connection Error")
-                            .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.d("MainActivity", "No internet connection");
-                                }
-                            })
-                            .show();
-                    break;
-                }
                 for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                     list.add(entry.getValue().get(1));
                 }
@@ -416,12 +390,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.action_edit:
 
-                Intent myIntent = new Intent(MainActivity.this, EditActivity.class);
+                Intent myIntent = new Intent(MainActivitySDK21.this, EditActivity.class);
                 Gson gson = new Gson();
                 String list = gson.toJson(response);
                 myIntent.putExtra("key", list); //Optional parameters
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                MainActivity.this.startActivityForResult(myIntent, 10101); //random int i set
+                MainActivitySDK21.this.startActivityForResult(myIntent, 10101); //random int i set
 
 
                 return true;
@@ -470,14 +444,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case 10101: // see MainActivitythis.startActivityForResult(myIntent, 10101); line(140)
+            case 10101: // see MainActivitySDK21this.startActivityForResult(myIntent, 10101); line(140)
                 if (resultCode == Activity.RESULT_OK) {
                     removed = data.getStringArrayListExtra("list");
                     System.out.println(removed);
                     if(removed.isEmpty()){
-                        //do nothing
-                    }
-                    else if(response == null){
                         //do nothing
                     }
                     else{
@@ -626,10 +597,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         })
                         .show();
-                relativeLayout.setClickable(false);
-                relativeLayout1.setClickable(false);
-                relativeLayout2.setClickable(false);
-                relativeLayout3.setClickable(false);
                 dialog.dismiss();
                 return;
             }
@@ -783,11 +750,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         private void RunTasks(LinkedHashMap<String, List<String>> response){
 
-            new MainActivity.Average().execute(response);
-            new MainActivity.Subject().execute(response);
-            new MainActivity.Subject1().execute(response);
-            new MainActivity.Subject2().execute(response);
-            new MainActivity.Subject3().execute(response);
+            new Average().execute(response);
+            new MainActivitySDK21.Subject().execute(response);
+            new Subject1().execute(response);
+            new Subject2().execute(response);
+            new Subject3().execute(response);
             //hide menu
             showMenu(false);
             if(Refresh.equals(true)) {
@@ -826,7 +793,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void progressToComplete() {
                         // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivitySDK21.this, "100", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -890,7 +857,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void progressToComplete() {
                         // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivitySDK21.this, "100", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -962,7 +929,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void progressToComplete() {
                         // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivitySDK21.this, "100", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -1037,7 +1004,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void progressToComplete() {
                         // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivitySDK21.this, "100", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -1110,7 +1077,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void progressToComplete() {
                         // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivitySDK21.this, "100", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -1147,5 +1114,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
+//TODO make sure everything in here is updated with MainActivity
 }
+

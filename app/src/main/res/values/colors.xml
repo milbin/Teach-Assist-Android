@@ -11,6 +11,7 @@
     <color name="BarColor4">#4caf50</color>
     <color name="TextColor">#000000</color>
     <color name="SecondaryTextColor">#C7C7C7</color>
+    <color name="DarkGray">@android:color/darker_gray</color>
     <color name="AverageTextColor">#BAB9B9</color>
     <color name="Background">#FAFAFA</color>
     <color name="White">#ffffff</color>

@@ -1,7 +1,15 @@
 package com.teachassist.teachassist;
 
 
+import android.text.Html;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,9 +20,11 @@ import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -75,7 +85,7 @@ public class SendRequest {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 builder.add(entry.getKey(), entry.getValue());
             }
-            Headers h = builder.build();
+            builder.build();
 
 
             // add parameters
@@ -102,13 +112,10 @@ public class SendRequest {
 
             // generate return list and add cookies
             String returnList[] = new String[TAcookies.size()+1];
-            returnList[0] = response.body().string();
+            returnList[0] = StringEscapeUtils.unescapeHtml(response.body().string());
             for (String i : TAcookies) {
                 returnList[TAcookies.indexOf(i)+1] = i;
             }
-
-            //System.out.println(Arrays.toString(returnList)+
-            //"\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^REQUEST SENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
             return returnList;
 
@@ -117,10 +124,39 @@ public class SendRequest {
         catch (IOException e) {
             e.printStackTrace();
             System.out.print("POST Request failed");
-            String[] returnString = {"ERROR! Check in SendRequest"};
-            return returnString;
+            return null;
         }
 
+    }
+
+
+    public JSONArray sendJson(String URL, String json) throws IOException {
+        JSONArray jsonObjectResp = null;
+
+        try {
+
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            OkHttpClient client = new OkHttpClient();
+
+            okhttp3.RequestBody body = RequestBody.create(JSON, json.toString());
+            okhttp3.Request request = new okhttp3.Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
+                okhttp3.Response response = client.newCall(request).execute();
+
+            String networkResp = response.body().string(); // raises exception if first 2 escape chars arent present
+            networkResp = StringEscapeUtils.unescapeHtml(networkResp);
+            if (!networkResp.isEmpty()) {
+                jsonObjectResp = new JSONArray(networkResp);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+        return jsonObjectResp;
     }
 
 }

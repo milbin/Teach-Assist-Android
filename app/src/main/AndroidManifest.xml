@@ -57,9 +57,19 @@
         <activity android:name="MarksView"
             android:launchMode="singleTop"/>
         <receiver android:name=".AlertReceiver"/>
+        <activity android:name=".MainActivitySDK21"/>
+        <activity android:name=".MarksViewMaterial">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.teachassist.teachassist.MainActivity" />
+        </activity>
 
 
 
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="81fde084e84196db0444d4ffb986fbb8d95655bf" />
     </application>
 
 </manifest>

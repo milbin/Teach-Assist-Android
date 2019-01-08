@@ -13,7 +13,6 @@
     android:animateLayoutChanges="true"
 
     >
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -22,6 +21,8 @@
         android:background="@color/Background"
 
         >
+
+
 
 
 
@@ -556,7 +557,11 @@
 
 
 
+
     </LinearLayout>
+
+
+
 
 
 

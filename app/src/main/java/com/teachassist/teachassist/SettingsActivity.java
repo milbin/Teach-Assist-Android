@@ -46,10 +46,9 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         //setup toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //back button
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
         //load settings fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.settings_fragment,
                 new PrefsFragment()).commit();

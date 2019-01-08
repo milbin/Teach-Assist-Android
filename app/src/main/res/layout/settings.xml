@@ -6,22 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
     <FrameLayout
         android:id="@+id/settings_fragment"
+        android:layout_height="750dp"
         android:layout_gravity="top|start"
-        android:layout_marginTop="40dp"
-        app:layout_widthPercent="100%"
-        app:layout_heightPercent="100%"/>
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="10dp"
-        android:minHeight="@dimen/Toolbar_Height"
-        android:uiOptions="splitActionBarWhenNarrow"
-        >
+        app:layout_heightPercent="100%"
+        app:layout_widthPercent="100%" />
 
-    </android.support.v7.widget.Toolbar>
+
+
 
 </android.support.percent.PercentFrameLayout>

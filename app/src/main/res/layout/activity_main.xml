@@ -53,18 +53,15 @@
                 android:background="@color/colorPrimary"
                 android:elevation="10dp"
                 android:minHeight="@dimen/Toolbar_Height"
-                android:uiOptions="splitActionBarWhenNarrow">
+                android:uiOptions="splitActionBarWhenNarrow"/>
 
 
-            </android.support.v7.widget.Toolbar>
+
 
 
 
             <!--Average-->
             <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 tools:context=".Average"
 
                 android:id="@+id/relativeLayoutAverage"
@@ -74,8 +71,8 @@
                 android:background="@color/Background"
                 android:paddingBottom="5dp"
                 android:paddingTop="0dp"
-                android:paddingRight="50dp"
-                android:paddingLeft="50dp"
+                android:paddingEnd="50dp"
+                android:paddingStart="50dp"
                 android:layout_marginBottom="10dp"
                 android:minHeight="@dimen/Average_Row_Height"
                 >
@@ -101,7 +98,7 @@
                 <io.netopen.hotbitmapgg.library.view.RingProgressBar
                     android:id="@+id/AverageBar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="115dp"
                     android:minHeight="115dp"
                     android:layout_below="@id/AverageText"
                     android:layout_marginTop="5dp"
@@ -147,6 +144,8 @@
                 android:background="@drawable/button_bg_rectangle_solid"
                 android:minHeight="@dimen/Row_Height"
                 android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="top"
                 android:elevation="3dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginStart="10dp"
@@ -159,13 +158,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:gravity="top"
                     android:textStyle="normal"
                     android:fontFamily="@font/roboto_mono"
                     android:layout_marginTop="3dp"
                     android:textSize="20sp"
                     android:text="Period 1:"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/SecondaryTextColor"
                     />
                 <TextView
@@ -201,7 +200,7 @@
                 <io.netopen.hotbitmapgg.library.view.RingProgressBar
                     android:id="@+id/SubjectBar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="90dp"
                     android:layout_centerInParent="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
@@ -268,6 +267,7 @@
                 android:background="@drawable/button_bg_rectangle_solid"
                 android:minHeight="@dimen/Row_Height"
                 android:clickable="true"
+                android:focusable="true"
                 android:elevation="3dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
@@ -286,7 +286,6 @@
                     android:textSize="20sp"
                     android:text="Period 2:"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/SecondaryTextColor"
                     />
                 <TextView
@@ -322,7 +321,7 @@
                 <io.netopen.hotbitmapgg.library.view.RingProgressBar
                     android:id="@+id/SubjectBar1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="90dp"
                     android:layout_centerInParent="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
@@ -389,6 +388,7 @@
                 android:background="@drawable/button_bg_rectangle_solid"
                 android:minHeight="@dimen/Row_Height"
                 android:clickable="true"
+                android:focusable="true"
                 android:elevation="3dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
@@ -407,7 +407,6 @@
                     android:textSize="20sp"
                     android:text="Period 3:"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/SecondaryTextColor"
                     />
                 <TextView
@@ -443,7 +442,7 @@
                 <io.netopen.hotbitmapgg.library.view.RingProgressBar
                     android:id="@+id/SubjectBar2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="90dp"
                     android:layout_centerInParent="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
@@ -509,6 +508,7 @@
                 android:background="@drawable/button_bg_rectangle_solid"
                 android:minHeight="@dimen/Row_Height"
                 android:clickable="true"
+                android:focusable="true"
                 android:elevation="3dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
@@ -527,7 +527,6 @@
                     android:textSize="20sp"
                     android:text="Period 4:"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/SecondaryTextColor"
                     />
                 <TextView
@@ -564,7 +563,7 @@
                 <io.netopen.hotbitmapgg.library.view.RingProgressBar
                     android:id="@+id/SubjectBar3"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="90dp"
                     android:layout_centerInParent="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
@@ -621,6 +620,9 @@
                     android:fontFamily="@font/roboto"
                     android:textStyle="italic" />
             </RelativeLayout>
+
+
+
 
 
 

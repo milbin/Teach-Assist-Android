@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -41,10 +42,18 @@ public class LaunchActivity extends AppCompatActivity {
 
 
         if(!username.isEmpty() && !password.isEmpty() && RemeberMe) {
-            Intent myIntent = new Intent(LaunchActivity.this, MainActivity.class);
-            myIntent.putExtra("username", username);
-            myIntent.putExtra("password", password);
-            startActivity(myIntent);
+            if (Build.VERSION.SDK_INT <= 23) {
+                Intent myIntent = new Intent(LaunchActivity.this, MainActivitySDK21.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+
+                startActivity(myIntent);
+            }else {
+                Intent myIntent = new Intent(LaunchActivity.this, MainActivity.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                startActivity(myIntent);
+            }
         }
         else{
             Intent myIntent = new Intent(LaunchActivity.this, login.class);
