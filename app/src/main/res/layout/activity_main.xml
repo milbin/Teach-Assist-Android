@@ -65,16 +65,16 @@
                 tools:context=".Average"
 
                 android:id="@+id/relativeLayoutAverage"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:minHeight="@dimen/Average_Row_Height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:background="@color/Background"
-                android:paddingBottom="5dp"
+                android:paddingBottom="10dp"
                 android:paddingTop="0dp"
                 android:paddingEnd="50dp"
                 android:paddingStart="50dp"
-                android:layout_marginBottom="10dp"
-                android:minHeight="@dimen/Average_Row_Height"
+                android:layout_marginBottom="5dp"
                 >
 
 
@@ -99,13 +99,14 @@
                     android:id="@+id/AverageBar"
                     android:layout_width="wrap_content"
                     android:layout_height="115dp"
-                    android:minHeight="115dp"
                     android:layout_below="@id/AverageText"
                     android:layout_marginTop="5dp"
                     android:elevation="15dp"
+                    android:minHeight="115dp"
+                    android:layout_centerHorizontal="true"
                     app:max="101"
-                    app:ringDiameter="115"
                     app:ringColor="@android:color/transparent"
+                    app:ringDiameter="115"
                     app:ringProgressColor="@color/AverageBarColor"
                     app:ringWidth="12dp"
                     app:style="STROKE"
@@ -178,7 +179,6 @@
                     android:textSize="15sp"
                     android:text=""
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/TextColor"
                     />
                 <TextView
@@ -299,7 +299,6 @@
                     android:textSize="15sp"
                     android:text=""
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/TextColor"
                     />
                 <TextView
@@ -420,7 +419,6 @@
                     android:textSize="15sp"
                     android:text=""
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/TextColor"
                     />
                 <TextView
@@ -540,7 +538,6 @@
                     android:textSize="15sp"
                     android:text=""
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/TextColor"
                     />
                 <TextView
@@ -612,6 +609,126 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/SubjectAbrv3"
                     android:layout_alignStart="@id/SubjectAbrv3"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text=""
+                    android:textColor="@color/SecondaryTextColor"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto"
+                    android:textStyle="italic" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout4"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_bg_rectangle_solid"
+                android:minHeight="@dimen/Row_Height"
+                android:clickable="true"
+                android:focusable="true"
+                android:elevation="3dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/Period4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/roboto_mono"
+                    android:layout_marginTop="3dp"
+                    android:textSize="20sp"
+                    android:text="Period 5:"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/SecondaryTextColor"
+                    />
+                <TextView
+                    android:id="@+id/RoomNumber4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/Period4"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/roboto_mono"
+                    android:layout_marginTop="3dp"
+                    android:textSize="15sp"
+                    android:text=""
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/TextColor"
+                    />
+                <TextView
+                    android:id="@+id/EmptyCourse4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/RoomNumber4"
+                    android:layout_marginEnd="100dp"
+                    android:gravity="start"
+                    android:layout_marginStart="15dp"
+                    android:layout_centerHorizontal="false"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+
+                    />
+
+
+
+                <io.netopen.hotbitmapgg.library.view.RingProgressBar
+                    android:id="@+id/SubjectBar4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:elevation="5dp"
+                    app:max="101"
+                    app:ringColor="@android:color/transparent"
+                    app:ringDiameter="90"
+                    app:ringProgressColor="@color/BarColor4"
+                    app:ringWidth="10dp"
+                    app:style="STROKE"
+                    app:textColor="@color/TextColor"
+                    app:textIsShow="false"
+                    app:textSize="16sp" />
+
+
+                <TextView
+                    android:id="@+id/SubjectInt4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignStart="@id/SubjectBar4"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginStart="20dp"
+                    android:text=""
+                    android:textColor="@color/TextColor"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/SubjectAbrv4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="25dp"
+                    android:text=""
+                    android:textColor="@color/TextColor"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/SubjectName4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/SubjectAbrv4"
+                    android:layout_alignStart="@id/SubjectAbrv4"
                     android:layout_marginEnd="5dp"
                     android:layout_marginTop="5dp"
                     android:text=""

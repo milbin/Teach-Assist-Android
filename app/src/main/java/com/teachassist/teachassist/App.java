@@ -21,6 +21,7 @@ public class App extends Application {
     public static final String CHANNEL_2_ID = "course2";
     public static final String CHANNEL_3_ID = "course3";
     public static final String CHANNEL_4_ID = "course4";
+    public static final String CHANNEL_5_ID = "course5";
 
     @Override
     public void onCreate() {
@@ -30,24 +31,24 @@ public class App extends Application {
     }
     private void createNotificationChannels(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            System.out.println(Calendar.getInstance().getTime());
             NotificationChannel course1 = new NotificationChannel(CHANNEL_1_ID, "course1", NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel course2 = new NotificationChannel(CHANNEL_2_ID, "course2", NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel course3 = new NotificationChannel(CHANNEL_3_ID, "course3", NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel course4 = new NotificationChannel(CHANNEL_4_ID, "course4", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel course5 = new NotificationChannel(CHANNEL_5_ID, "course5", NotificationManager.IMPORTANCE_HIGH);
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(course1);
             manager.createNotificationChannel(course2);
             manager.createNotificationChannel(course3);
             manager.createNotificationChannel(course4);
+            manager.createNotificationChannel(course5);
 
-            Calendar calendar = Calendar.getInstance();
             Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime()/* + AlarmManager.INTERVAL_HOUR*/, AlarmManager.INTERVAL_HOUR, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                    SystemClock.elapsedRealtime(), 60000, pendingIntent);
 
         }
     }

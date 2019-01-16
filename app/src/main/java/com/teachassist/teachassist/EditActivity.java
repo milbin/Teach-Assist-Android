@@ -31,12 +31,15 @@ import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.security.auth.Subject;
 
@@ -442,6 +445,39 @@ public class EditActivity extends AppCompatActivity {
             TextView roomNumber3 = findViewById(R.id.RoomNumber3);
             roomNumber3.setText("Room " + RoomNumber3);
 
+            //Set Subject4 Text
+            Float Mark4 = 0f;
+            int counter4 = 0;
+            String SubjectAbrvString4 = "";
+            String SubjectNameString4 = "";
+            String RoomNumber4 = "";
+            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                if(counter4 == 4) {
+                    if (!entry.getKey().contains("NA")) {
+                        Mark4 = Float.parseFloat(entry.getValue().get(0));
+                        TextView SubjectInt4 = findViewById(R.id.SubjectInt4);
+                        SubjectInt4.setText(Mark4.toString() + "%");
+
+                        SubjectAbrvString4 = entry.getValue().get(1);
+                        SubjectNameString4 = entry.getValue().get(2);
+                        RoomNumber4 = entry.getValue().get(3);
+                    }
+                    else{
+                        SubjectAbrvString4 = entry.getValue().get(0);
+                        SubjectNameString4 = entry.getValue().get(1);
+                        RoomNumber4 = entry.getValue().get(2);
+                    }
+                }
+                counter4++;
+            }
+
+            TextView SubjectAbrv4 = findViewById(R.id.SubjectAbrv4);
+            SubjectAbrv4.setText(SubjectAbrvString4);
+            TextView SubjectName4 = findViewById(R.id.SubjectName4);
+            SubjectName4.setText(SubjectNameString4);
+            TextView roomNumber4 = findViewById(R.id.RoomNumber4);
+            roomNumber4.setText("Room " + RoomNumber4);
+
 
 
             RunTasks(response);
@@ -706,6 +742,68 @@ public class EditActivity extends AppCompatActivity {
             }
             else{
                 final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
+
+
+        }
+    }
+
+    //------------------------------------------------------------------------------------
+    private class Subject4 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Float doInBackground(HashMap<String, List<String>>... response){
+            TA ta = new TA();
+
+            Float Mark = 0f;
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
+                if(counter == 4) {
+                    if(!entry.getKey().contains("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+
+                    }
+                    else {
+                        return -1f;
+
+                    }
+                }
+                counter++;
+            }
+
+            final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar4);
+            publishProgress (Math.round(Mark-1));
+
+            ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                @Override
+                public void progressToComplete() {
+                    // Progress reaches the maximum callback default Max value is 100
+                    Toast.makeText(EditActivity.this, "100", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return Mark;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar4);
+            ProgressBarAverage.setVisibility(View.VISIBLE);
+            ProgressBarAverage.setProgress(progress[0]);
+        }
+        @Override
+        protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse4);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar4);
+                EmptyCourse.setText(R.string.EmptyText);
+            }
+            else{
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar4);
                 ProgressBarAverage.setVisibility(View.VISIBLE);
             }
 

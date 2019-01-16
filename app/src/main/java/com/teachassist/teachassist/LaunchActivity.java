@@ -43,7 +43,7 @@ public class LaunchActivity extends AppCompatActivity {
 
         if(!username.isEmpty() && !password.isEmpty() && RemeberMe) {
             if (Build.VERSION.SDK_INT <= 23) {
-                Intent myIntent = new Intent(LaunchActivity.this, MainActivitySDK21.class);
+                Intent myIntent = new Intent(LaunchActivity.this, MainActivity.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
 

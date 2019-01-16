@@ -81,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         public static final String NOTIFICATION2 = "NOTIFICATION2";
         public static final String NOTIFICATION3 = "NOTIFICATION3";
         public static final String NOTIFICATION4 = "NOTIFICATION4";
+        public static final String NOTIFICATION5 = "NOTIFICATION4";
 
 
         @Override
@@ -93,10 +94,12 @@ public class SettingsActivity extends AppCompatActivity {
             Preference notificationSummary2 = findPreference("Notifications 2");
             Preference notificationSummary3 = findPreference("Notifications 3");
             Preference notificationSummary4 = findPreference("Notifications 4");
+            Preference notificationSummary5 = findPreference("Notifications 5");
             notificationSummary1.setSummary("Disable Notifications for: " + courses.get(0));
             notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
             notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
             notificationSummary4.setSummary("Disable Notifications for: " + courses.get(3));
+            notificationSummary5.setSummary("Disable Notifications for: " + courses.get(4));
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             Preference all_notifications = getPreferenceManager().findPreference("All Notifications");
             all_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -109,12 +112,14 @@ public class SettingsActivity extends AppCompatActivity {
                         editor.putBoolean(NOTIFICATION2, true);
                         editor.putBoolean(NOTIFICATION3, true);
                         editor.putBoolean(NOTIFICATION4, true);
+                        editor.putBoolean(NOTIFICATION5, true);
                     }else{
                         editor.putBoolean(ALLNOTIFICATIONS, false);
                         editor.putBoolean(NOTIFICATION1, false);
                         editor.putBoolean(NOTIFICATION2, false);
                         editor.putBoolean(NOTIFICATION3, false);
                         editor.putBoolean(NOTIFICATION4, false);
+                        editor.putBoolean(NOTIFICATION5, false);
                     }
                     editor.apply();
                     return true;
@@ -180,6 +185,25 @@ public class SettingsActivity extends AppCompatActivity {
                     }else {
                         editor.putBoolean(ALLNOTIFICATIONS, false);
                         editor.putBoolean(NOTIFICATION4, false);
+                    }
+                    editor.apply();
+                    return true;
+                }
+            });
+            Preference notifications5 = (Preference) findPreference("Notifications 5");
+            if(courses.size() > 4){
+                notifications5.setVisible(false);
+            }
+            notifications5.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION5, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION5, false);
                     }
                     editor.apply();
                     return true;

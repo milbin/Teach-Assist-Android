@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:key="Notifications"
@@ -9,7 +10,8 @@
             android:defaultValue="true"
             android:key="All Notifications"
             android:summary="Send notifications for all courses when a new assignment is posted"
-            android:title="All Notifications" />
+            android:title="All Notifications"
+            />
         <CheckBoxPreference
             android:defaultValue="true"
             android:dependency="All Notifications"
@@ -34,6 +36,12 @@
             android:key="Notifications 4"
             android:summary="Disable notifications for period 4 class"
             android:title="Period 4" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 5"
+            android:summary="Disable notifications for period 5 class"
+            android:title="Period 5" />
 
 
     </PreferenceCategory>

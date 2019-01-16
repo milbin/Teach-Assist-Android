@@ -1,8 +1,6 @@
 package com.teachassist.teachassist;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -14,16 +12,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,29 +30,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.decimal4j.util.DoubleRounder;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -65,8 +46,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
-
-import static com.teachassist.teachassist.App.CHANNEL_1_ID;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //String username = "335525168";
@@ -84,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RelativeLayout relativeLayout1;
     RelativeLayout relativeLayout2;
     RelativeLayout relativeLayout3;
+    RelativeLayout relativeLayout4;
     LinkedHashMap<String, List<String>> response;
     List<String> removed = new ArrayList<>();
     ProgressDialog dialog;
@@ -94,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String subjectMark1;
     String subjectMark2;
     String subjectMark3;
+    String subjectMark4;
 
     public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
@@ -123,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ProgressBarAverage2.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
         ProgressBarAverage3.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage4 =  findViewById(R.id.SubjectBar4);
+        ProgressBarAverage4.setVisibility(View.INVISIBLE);
 
 
 
@@ -150,10 +133,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout2.setOnClickListener(new subject2_click());
         relativeLayout3 = findViewById(R.id.relativeLayout3);
         relativeLayout3.setOnClickListener(new subject3_click());
+        relativeLayout4 = findViewById(R.id.relativeLayout4);
+        relativeLayout4.setOnClickListener(new subject4_click());
         relativeLayout.setClickable(true);
         relativeLayout1.setClickable(true);
         relativeLayout2.setClickable(true);
         relativeLayout3.setClickable(true);
+        relativeLayout4.setClickable(true);
 
 
 
@@ -182,15 +168,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         EmptyCourse2.setText("");
                         TextView EmptyCourse3 = findViewById(R.id.EmptyCourse3);
                         EmptyCourse3.setText("");
+                        TextView EmptyCourse4 = findViewById(R.id.EmptyCourse4);
+                        EmptyCourse4.setText("");
                         relativeLayout.setVisibility(View.VISIBLE);
                         relativeLayout1.setVisibility(View.VISIBLE);
                         relativeLayout2.setVisibility(View.VISIBLE);
                         relativeLayout3.setVisibility(View.VISIBLE);
+                        relativeLayout4.setVisibility(View.VISIBLE);
                         relativeLayout.setClickable(true);
                         relativeLayout1.setClickable(true);
                         relativeLayout2.setClickable(true);
                         relativeLayout3.setClickable(true);
-                        new GetTaData().execute();
+                        relativeLayout4.setClickable(true);
+                        new getTaData().execute();
 
                     }
                 }
@@ -218,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //ToolbarText.setText("Student Report for: "+ username);
         getSupportActionBar().setTitle("Student: " + username);
 
-        new GetTaData().execute();
+        new getTaData().execute();
 
 
 
@@ -235,13 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-                /*
-                SendNotifications sendNotifications = new SendNotifications(context);
-                Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
-                        MarksView.class, 0, "New Assignment posted in: " + "test",
-                        "You Got a " + 100 / 1 + "% in " + "test");
-                sendNotifications.getManager().notify(1, notification);
-                */
+
                 Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
@@ -308,6 +292,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             catch (Exception e){
                 throw new RuntimeException("Crash in 4th course");
+            }
+        }
+    }
+    public class subject4_click implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            try {
+                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+                myIntent.putExtra("username", username);
+                myIntent.putExtra("password", password);
+                myIntent.putExtra("subject", 4);
+                myIntent.putExtra("subject Mark", subjectMark4);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+            catch (Exception e){
+                throw new RuntimeException("Crash in 5th course");
             }
         }
     }
@@ -556,6 +558,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 x++;
                             }
                         }
+                        if(removed.contains("4")){
+                            relativeLayout4.setVisibility(View.GONE);
+                        }else if(response.size() == 4){}
+                        else {
+                            relativeLayout4.setVisibility(View.VISIBLE);
+                            int x = 0;
+                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                                if (x == 4) {
+                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
+                                }
+                                x++;
+                            }
+                        }
 
 
 
@@ -563,7 +578,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             average += value;
 
                         }
-                        System.out.println(size);
                         average = DoubleRounder.round(average / size, 1);
                         Float Average = (float) average;
                         TextView AverageInt = findViewById(R.id.AverageInt);
@@ -582,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    private class GetTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
+    private class getTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
 
 
         @Override
@@ -601,8 +615,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPreferences.Editor editor =   sharedPreferences.edit();
             editor.putString(RESPONSE, list);
             editor.apply();
-
-
             return response;
 
         }
@@ -630,6 +642,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 relativeLayout1.setClickable(false);
                 relativeLayout2.setClickable(false);
                 relativeLayout3.setClickable(false);
+                relativeLayout4.setClickable(false);
                 dialog.dismiss();
                 return;
             }
@@ -742,6 +755,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             roomNumber2.setText("Room " + RoomNumber2);
 
 
+
             //Set Subject3 Text
             Float Mark3 = 0f;
             int counter3 = 0;
@@ -776,6 +790,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView roomNumber3 = findViewById(R.id.RoomNumber3);
             roomNumber3.setText("Room " + RoomNumber3);
 
+
+            if(response.size() > 4) {
+                //Set Subject4 Text
+                Float Mark4 = 0f;
+                int counter4 = 0;
+                String SubjectAbrvString4 = "";
+                String SubjectNameString4 = "";
+                String RoomNumber4 = "";
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter4 == 4) {
+                        if (!entry.getKey().contains("NA")) {
+                            Mark4 = Float.parseFloat(entry.getValue().get(0));
+                            TextView SubjectInt4 = findViewById(R.id.SubjectInt4);
+                            SubjectInt4.setText(Mark4.toString() + "%");
+
+                            SubjectAbrvString4 = entry.getValue().get(1);
+                            SubjectNameString4 = entry.getValue().get(2);
+                            RoomNumber4 = entry.getValue().get(3);
+                            subjectMark4 = Mark4.toString();
+                        } else {
+                            SubjectAbrvString4 = entry.getValue().get(0);
+                            SubjectNameString4 = entry.getValue().get(1);
+                            RoomNumber4 = entry.getValue().get(2);
+                        }
+                    }
+                    counter4++;
+                }
+
+                TextView SubjectAbrv4 = findViewById(R.id.SubjectAbrv4);
+                SubjectAbrv4.setText(SubjectAbrvString4);
+                TextView SubjectName4 = findViewById(R.id.SubjectName4);
+                SubjectName4.setText(SubjectNameString4);
+                TextView roomNumber4 = findViewById(R.id.RoomNumber4);
+                roomNumber4.setText("Room " + RoomNumber4);
+            }else{
+                relativeLayout4.setVisibility(View.GONE);
+            }
+
             dialog.dismiss();
             RunTasks(response);
 
@@ -788,6 +840,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new MainActivity.Subject1().execute(response);
             new MainActivity.Subject2().execute(response);
             new MainActivity.Subject3().execute(response);
+            if(response.size() > 4) {
+                new MainActivity.Subject4().execute(response);
+            }
             //hide menu
             showMenu(false);
             if(Refresh.equals(true)) {
@@ -1138,6 +1193,83 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
                 EmptyCourse.setText(R.string.EmptyText);
                 relativeLayout3.setClickable(false);
+            }
+            //hide menu
+            showMenu(true);
+
+
+
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+    private class Subject4 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Float doInBackground(HashMap<String, List<String>>... response){
+            TA ta = new TA();
+
+            Float Mark = 0f;
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
+                if(counter == 4) {
+                    if(!entry.getKey().contains("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+
+                    }
+                    else {
+                        return -1f;
+
+                    }
+                }
+                counter++;
+            }
+
+            try {
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar4);
+                for (int i = 0; i < Math.round(Mark); i+=4) {
+                    publishProgress (i);
+                    Thread.sleep(0, 50);
+
+
+                }
+                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                    @Override
+                    public void progressToComplete() {
+                        // Progress reaches the maximum callback default Max value is 100
+                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return Mark;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar4);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
+            ProgressBarAverage.setProgress(progress[0]);
+
+        }
+        @Override
+        protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse4);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar4);
+                EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout4.setClickable(false);
             }
             //hide menu
             showMenu(true);

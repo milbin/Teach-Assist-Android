@@ -57,7 +57,6 @@ public class TA{
             if(respJson == null){
                 return null;
             }
-            System.out.println(respJson + "JSON RESPONSE HERE<----");
 
             session_token = respJson.getString("token");
             student_id = respJson.getString("student_id");
@@ -188,14 +187,18 @@ public class TA{
                     fields.add(subject.getString("course"));
                     MarksNotifications.put("NA"+i, fields);
                 }else{
-                    fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
+                    if(i ==4){
+                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", "").replaceAll("8", "7"));
+                    }else {
+                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
+                    }
                     fields.add(subject.getString("course"));
                     MarksNotifications.put(subject.getString("subject_id"), fields);
                 }
                 subjects.add(subject.getString("subject_id"));
 
             }
-            System.out.println(MarksNotifications+"marks RESPONSE HERE<----");
+            System.out.println(MarksNotifications+"marks NOTIFICATION RESPONSE HERE<----");
             return MarksNotifications;
 
 

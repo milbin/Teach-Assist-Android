@@ -42,6 +42,7 @@ import static com.teachassist.teachassist.App.CHANNEL_1_ID;
 import static com.teachassist.teachassist.App.CHANNEL_2_ID;
 import static com.teachassist.teachassist.App.CHANNEL_3_ID;
 import static com.teachassist.teachassist.App.CHANNEL_4_ID;
+import static com.teachassist.teachassist.App.CHANNEL_5_ID;
 import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
 import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
 import static com.teachassist.teachassist.LaunchActivity.USERNAME;
@@ -50,6 +51,7 @@ import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFIC
 import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION2;
 import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION3;
 import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION4;
+import static com.teachassist.teachassist.SettingsActivity.PrefsFragment.NOTIFICATION5;
 
 public class AlertReceiver extends BroadcastReceiver {
 
@@ -60,6 +62,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("NEW NOTIFICATION");
         Globalcontext = context;
         Crashlytics.setUserIdentifier(username);
         Crashlytics.setString("username", username);
@@ -72,20 +75,20 @@ public class AlertReceiver extends BroadcastReceiver {
         Type entityType = new TypeToken<LinkedHashMap<String, List<String>>>() {
         }.getType();
         response = gson.fromJson(str, entityType);
-        Toast.makeText(Globalcontext, "TA: notification checked", Toast.LENGTH_SHORT).show();
 /*
         ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
         ArrayList list2 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
         ArrayList list3 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
-        ArrayList list4 = new ArrayList<>(Arrays.asList("87.5", "MCR3U1-01", "Functions and Relations", "142"));
+        ArrayList list4 = new ArrayList<>(Arrays.asList("87.1", "MCR3U1-01", "Functions and Relations", "142"));
         response = new LinkedHashMap<>();
         response.put("283098", list1);
         response.put("283003", list2);
         response.put("283001", list3);
-        response.put("NA", list4);*/
-
+        response.put("283152", list4);
+        */
 
         System.out.println("NOTIFICATION" + response);
+        showToast(response.toString());
 
 
         //get username and password
@@ -94,9 +97,13 @@ public class AlertReceiver extends BroadcastReceiver {
         password = sharedPreferences.getString(PASSWORD, "");
         if(!username.isEmpty() && !password.isEmpty()) {
             new GetTaData().execute(username, password);
+            //showToast("TA SUCCESSFUL");
         }
 
 
+    }
+    private void showToast(String text){
+        Toast.makeText(Globalcontext, text, Toast.LENGTH_LONG).show();
     }
 
     private class GetTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>> {
@@ -123,6 +130,9 @@ public class AlertReceiver extends BroadcastReceiver {
             newResponse.put("283001", list3);
             newResponse.put("283152", list4);
             */
+
+
+
 
 
 
@@ -191,9 +201,9 @@ public class AlertReceiver extends BroadcastReceiver {
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION1, true);
-                                    if (enabledNotifications) {
+                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
-                                                MarksView.class, 0, "New Assignment posted in: " + courseName,
+                                                0, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                         sendNotifications.getManager().notify(1, notification);
                                         System.out.println("SENT NOTIFICATION");
@@ -225,9 +235,9 @@ public class AlertReceiver extends BroadcastReceiver {
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION2, true);
-                                    if (enabledNotifications) {
+                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
-                                                MarksView.class, 1, "New Assignment posted in: " + courseName,
+                                                1, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                         sendNotifications.getManager().notify(2, notification);
                                         System.out.println("SENT NOTIFICATION");
@@ -258,9 +268,9 @@ public class AlertReceiver extends BroadcastReceiver {
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
                                     Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION3, true);
-                                    if (enabledNotifications) {
+                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
                                         Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
-                                                MarksView.class, 2, "New Assignment posted in: " + courseName,
+                                                2, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                         sendNotifications.getManager().notify(3, notification);
                                         System.out.println("SENT NOTIFICATION");
@@ -290,13 +300,46 @@ public class AlertReceiver extends BroadcastReceiver {
 
                                     SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION2, true);
-                                    if (enabledNotifications) {
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
+                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
                                             Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
-                                                    MarksView.class, 3, "New Assignment posted in: " + courseName,
+                                                    3, "New Assignment posted in: " + courseName,
                                                     "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                             sendNotifications.getManager().notify(4, notification);
                                             System.out.println("SENT NOTIFICATION");
+
+                                    }
+
+                                } catch(JSONException e){
+                                    e.printStackTrace();
+                                }
+                            }
+                            else if (course == 4 && newResponse.size() > 4) {
+                                returnVal = ta.newGetMarks(4);
+                                if(returnVal == null){
+                                    continue;
+                                }else{
+                                    marks = returnVal.get(0);
+                                }
+                                String assignmentName = "";
+                                String assignmentAverage = "";
+                                try {
+                                    int assignmentNumber = marks.length() - 2;
+                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
+                                    if (assignmentNumber == marks.length() - 2) {
+                                        assignmentName = assignment.getString("title");
+                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
+                                    }
+
+                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION5, true);
+                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
+                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_5_ID,
+                                                4, "New Assignment posted in: " + courseName,
+                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
+                                        sendNotifications.getManager().notify(5, notification);
+                                        System.out.println("SENT NOTIFICATION");
 
                                     }
 
@@ -350,40 +393,58 @@ public class AlertReceiver extends BroadcastReceiver {
 
             if(assignment.has("")){
                 if (!assignment.getJSONObject("").getString("outOf").equals("0") || !assignment.getJSONObject("").getString("outOf").equals("0.0")) {
-                    Omark = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
-                    return round.format(Omark*100);
+                    if (!assignment.getJSONObject("").isNull("mark")) {
+                        Omark = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
+                        return round.format(Omark * 100);
+                    }
                 }
             }
 
             if(assignment.has("K")) {
                 if (!assignment.getJSONObject("K").getString("outOf").equals("0") || !assignment.getJSONObject("K").getString("outOf").equals("0.0")) {
-                    Kmark = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                    if (!assignment.getJSONObject("K").isNull("mark")) {
+                        Kmark = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                    }else{
+                        weightK = 0.0;
+                    }
                 }
             }else{
                 weightK = 0.0;
             }
             if(assignment.has("T")) {
                 if (!assignment.getJSONObject("T").getString("outOf").equals("0") || !assignment.getJSONObject("T").getString("outOf").equals("0.0")) {
-                    Tmark = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
+                    if (!assignment.getJSONObject("T").isNull("mark")) {
+                        Tmark = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
+                    }else{
+                        weightT = 0.0;
+                    }
                 }
             }else{
                 weightT = 0.0;
             }
             if(assignment.has("C")) {
                 if (!assignment.getJSONObject("C").getString("outOf").equals("0") || !assignment.getJSONObject("C").getString("outOf").equals("0.0")) {
-                    Cmark = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
+                    if (!assignment.getJSONObject("C").isNull("mark")) {
+                        Cmark = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
+                    }else{
+                        weightC = 0.0;
+                    }
                 }
             }else{
                 weightC = 0.0;
             }
             if(assignment.has("A")) {
                 if (!assignment.getJSONObject("A").getString("outOf").equals("0") || !assignment.getJSONObject("A").getString("outOf").equals("0.0")) {
-                    Amark = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
-                            Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
+                    if (!assignment.getJSONObject("A").isNull("mark")) {
+                        Amark = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
+                    }else{
+                        weightA = 0.0;
+                    }
                 }
             }else{
                 weightA = 0.0;
@@ -396,6 +457,9 @@ public class AlertReceiver extends BroadcastReceiver {
             String Average = round.format((Kmark+Tmark+Cmark+Amark)/(weightK+weightT+weightC+weightA)*100);
             if(Average.equals(".0")){
                 Average = "0";
+            }
+            if(Average.equals("100.0")){
+                Average = "100";
             }
             return Average;
         }catch (JSONException e){

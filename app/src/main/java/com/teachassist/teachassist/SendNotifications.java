@@ -41,7 +41,7 @@ public class SendNotifications extends ContextWrapper {
     }
 
 
-    public Notification sendOnChannel(String channel, final Class<? extends Activity> activityToOpen, int subject, String title, String body, String Average){
+    public Notification sendOnChannel(String channel, int subject, String title, String body, String Average){
         Intent activityIntent = new Intent(this, MarksViewMaterial.class);
 
         SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
