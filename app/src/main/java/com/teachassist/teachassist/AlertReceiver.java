@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,6 +64,11 @@ public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         System.out.println("NEW NOTIFICATION");
+        Date date = new Date();
+        String strDateFormat = "hh:mm:ss a";
+        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+        String formattedDate= dateFormat.format(date);
+        Log.d("NOTIFICATION AT: ", formattedDate);
         Globalcontext = context;
         Crashlytics.setUserIdentifier(username);
         Crashlytics.setString("username", username);
@@ -88,7 +94,7 @@ public class AlertReceiver extends BroadcastReceiver {
         */
 
         System.out.println("NOTIFICATION" + response);
-        showToast(response.toString());
+        //showToast(response.toString());
 
 
         //get username and password
@@ -159,6 +165,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 if (currentTime.after(calendarStart.getTime()) && currentTime.before(calendarEnd.getTime())) {
 
                     if(response == null || newResponse == null){
+                        Crashlytics.log(Log.ERROR, "network request failed AlertReciever", "line 162");
                         return null;
                     }
                     LinkedList<String> toSend = new LinkedList<String>();
@@ -370,9 +377,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
 
         protected void onPostExecute(LinkedHashMap<String, List<String>> newresponse) {
-
-
-
+        super.onPostExecute(newresponse);
         }
     }
 
@@ -464,6 +469,7 @@ public class AlertReceiver extends BroadcastReceiver {
             return Average;
         }catch (JSONException e){
             e.printStackTrace();
+            Crashlytics.log(Log.ERROR, "error in calculate Average AlertReciever", Arrays.toString(e.getStackTrace()));
             return null;
         }
     }

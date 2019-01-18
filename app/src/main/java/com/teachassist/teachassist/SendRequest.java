@@ -2,6 +2,9 @@ package com.teachassist.teachassist;
 
 
 import android.text.Html;
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
@@ -124,6 +127,7 @@ public class SendRequest {
         catch (IOException e) {
             e.printStackTrace();
             System.out.print("POST Request failed");
+            Crashlytics.log(Log.ERROR, "network request failed", "line 131 SR");
             return null;
         }
 
@@ -153,6 +157,7 @@ public class SendRequest {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            Crashlytics.log(Log.ERROR, "network request failed", "line 160 SR");
             return null;
         }
 

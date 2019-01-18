@@ -57,6 +57,7 @@ public class EditActivity extends AppCompatActivity {
     FloatingActionButton fab;
     Boolean fab_animated = false;
     Context context = this;
+    RelativeLayout relativeLayout4;
 
 
 
@@ -95,6 +96,8 @@ public class EditActivity extends AppCompatActivity {
         ProgressBarAverage2.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
         ProgressBarAverage3.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage4 =  findViewById(R.id.SubjectBar4);
+        ProgressBarAverage4.setVisibility(View.INVISIBLE);
 
 
         //FAB
@@ -114,11 +117,13 @@ public class EditActivity extends AppCompatActivity {
         RelativeLayout relativeLayout1 = findViewById(R.id.relativeLayout1);
         RelativeLayout relativeLayout2 = findViewById(R.id.relativeLayout2);
         RelativeLayout relativeLayout3 = findViewById(R.id.relativeLayout3);
+        relativeLayout4 = findViewById(R.id.relativeLayout4);
 
         relativeLayout.setOnLongClickListener(longClickListener );
         relativeLayout1.setOnLongClickListener(longClickListener );
         relativeLayout2.setOnLongClickListener(longClickListener );
         relativeLayout3.setOnLongClickListener(longClickListener );
+        relativeLayout4.setOnLongClickListener(longClickListener );
 
 
         new GetTaData().execute();
@@ -165,6 +170,9 @@ public class EditActivity extends AppCompatActivity {
                     if (view.getId() == R.id.relativeLayout3) {
                         view.setVisibility(View.INVISIBLE);
                     }
+                    if (view.getId() == R.id.relativeLayout4) {
+                        view.setVisibility(View.INVISIBLE);
+                    }
 
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
@@ -200,6 +208,9 @@ public class EditActivity extends AppCompatActivity {
                         if (view.getId() == R.id.relativeLayout3) {
                             view.setVisibility(View.VISIBLE);
                         }
+                        if (view.getId() == R.id.relativeLayout4) {
+                            view.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     break;
@@ -222,6 +233,10 @@ public class EditActivity extends AppCompatActivity {
                             view.setVisibility(View.GONE);
                             removed.add("3");
                         }
+                        if (view.getId() == R.id.relativeLayout4) {
+                            view.setVisibility(View.GONE);
+                            removed.add("3");
+                        }
 
 
 
@@ -229,8 +244,6 @@ public class EditActivity extends AppCompatActivity {
 
 
                     }
-
-                    System.out.print("DROP EVENT TRUE");
 
                     return true;
             }
@@ -445,38 +458,41 @@ public class EditActivity extends AppCompatActivity {
             TextView roomNumber3 = findViewById(R.id.RoomNumber3);
             roomNumber3.setText("Room " + RoomNumber3);
 
-            //Set Subject4 Text
-            Float Mark4 = 0f;
-            int counter4 = 0;
-            String SubjectAbrvString4 = "";
-            String SubjectNameString4 = "";
-            String RoomNumber4 = "";
-            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                if(counter4 == 4) {
-                    if (!entry.getKey().contains("NA")) {
-                        Mark4 = Float.parseFloat(entry.getValue().get(0));
-                        TextView SubjectInt4 = findViewById(R.id.SubjectInt4);
-                        SubjectInt4.setText(Mark4.toString() + "%");
+            if(response.size() > 4) {
+                //Set Subject4 Text
+                Float Mark4 = 0f;
+                int counter4 = 0;
+                String SubjectAbrvString4 = "";
+                String SubjectNameString4 = "";
+                String RoomNumber4 = "";
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter4 == 4) {
+                        if (!entry.getKey().contains("NA")) {
+                            Mark4 = Float.parseFloat(entry.getValue().get(0));
+                            TextView SubjectInt4 = findViewById(R.id.SubjectInt4);
+                            SubjectInt4.setText(Mark4.toString() + "%");
 
-                        SubjectAbrvString4 = entry.getValue().get(1);
-                        SubjectNameString4 = entry.getValue().get(2);
-                        RoomNumber4 = entry.getValue().get(3);
+                            SubjectAbrvString4 = entry.getValue().get(1);
+                            SubjectNameString4 = entry.getValue().get(2);
+                            RoomNumber4 = entry.getValue().get(3);
+                        } else {
+                            SubjectAbrvString4 = entry.getValue().get(0);
+                            SubjectNameString4 = entry.getValue().get(1);
+                            RoomNumber4 = entry.getValue().get(2);
+                        }
                     }
-                    else{
-                        SubjectAbrvString4 = entry.getValue().get(0);
-                        SubjectNameString4 = entry.getValue().get(1);
-                        RoomNumber4 = entry.getValue().get(2);
-                    }
+                    counter4++;
                 }
-                counter4++;
-            }
 
-            TextView SubjectAbrv4 = findViewById(R.id.SubjectAbrv4);
-            SubjectAbrv4.setText(SubjectAbrvString4);
-            TextView SubjectName4 = findViewById(R.id.SubjectName4);
-            SubjectName4.setText(SubjectNameString4);
-            TextView roomNumber4 = findViewById(R.id.RoomNumber4);
-            roomNumber4.setText("Room " + RoomNumber4);
+                TextView SubjectAbrv4 = findViewById(R.id.SubjectAbrv4);
+                SubjectAbrv4.setText(SubjectAbrvString4);
+                TextView SubjectName4 = findViewById(R.id.SubjectName4);
+                SubjectName4.setText(SubjectNameString4);
+                TextView roomNumber4 = findViewById(R.id.RoomNumber4);
+                roomNumber4.setText("Room " + RoomNumber4);
+            }else{
+                relativeLayout4.setVisibility(View.GONE);
+            }
 
 
 
@@ -491,6 +507,9 @@ public class EditActivity extends AppCompatActivity {
             new Subject1().execute(response);
             new Subject2().execute(response);
             new Subject3().execute(response);
+            if(response.size() > 4){
+                new Subject4().execute(response);
+            }
 
 
 

@@ -40,6 +40,7 @@ import com.google.gson.Gson;
 import org.decimal4j.util.DoubleRounder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -225,7 +226,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-
                 Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);
@@ -244,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View v){
             try {
-
                 Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
                 myIntent.putExtra("username", username);
                 myIntent.putExtra("password", password);

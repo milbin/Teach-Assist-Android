@@ -99,7 +99,9 @@ public class SettingsActivity extends AppCompatActivity {
             notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
             notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
             notificationSummary4.setSummary("Disable Notifications for: " + courses.get(3));
-            notificationSummary5.setSummary("Disable Notifications for: " + courses.get(4));
+            if(courses.size() > 4) {
+                notificationSummary5.setSummary("Disable Notifications for: " + courses.get(4));
+            }
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             Preference all_notifications = getPreferenceManager().findPreference("All Notifications");
             all_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -191,7 +193,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             Preference notifications5 = (Preference) findPreference("Notifications 5");
-            if(courses.size() > 4){
+            if(courses.size() < 5){
                 notifications5.setVisible(false);
             }
             notifications5.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

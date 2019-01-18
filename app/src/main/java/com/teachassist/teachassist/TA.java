@@ -55,6 +55,7 @@ public class TA{
             json.put("password", Password);
             JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
             if(respJson == null){
+                Crashlytics.log(Log.ERROR, "network request failed", "line 58 TA");
                 return null;
             }
 
@@ -73,6 +74,7 @@ public class TA{
                     .getJSONObject(0)
                     .getJSONArray("subjects");
             if(marksResp == null){
+                Crashlytics.log(Log.ERROR, "network request failed", "line 77 TA");
                 return null;
             }
 
@@ -107,6 +109,7 @@ public class TA{
             cookies.put("student_id", student_id);
             String[] resp = sr.send(url, headers, parameters, cookies, path);
             if(resp == null){
+                Crashlytics.log(Log.ERROR, "network request failed", "line 112 TA");
                 return null;
             }
 
@@ -140,6 +143,7 @@ public class TA{
 
         }catch (Exception e){
             e.printStackTrace();
+            Crashlytics.log(Log.ERROR, "Error in GetTaData in TA()", Arrays.toString(e.getStackTrace()));
             return null;
         }
     }
@@ -158,6 +162,7 @@ public class TA{
             JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
             System.out.println(respJson + "JSON RESPONSE HERE<----");
             if(respJson == null){
+                Crashlytics.log(Log.ERROR, "network request failed", "line 165 TA");
                 return null;
             }
 
@@ -176,6 +181,7 @@ public class TA{
                     .getJSONObject(0)
                     .getJSONArray("subjects");
             if(marksResp == null){
+                Crashlytics.log(Log.ERROR, "network request failed", "line 184 TA");
                 return null;
             }
 
@@ -187,8 +193,8 @@ public class TA{
                     fields.add(subject.getString("course"));
                     MarksNotifications.put("NA"+i, fields);
                 }else{
-                    if(i ==4){
-                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", "").replaceAll("8", "7"));
+                    if(false){ //for debugging
+                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", "").replaceAll("0", "1"));
                     }else {
                         fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
                     }
@@ -205,6 +211,7 @@ public class TA{
 
         }catch (Exception e){
             e.printStackTrace();
+            Crashlytics.log(Log.ERROR, "error in GetTaNotifications", Arrays.toString(e.getStackTrace()));
             return null;
         }
     }
@@ -222,6 +229,7 @@ public class TA{
                 }
             }
         }catch (Exception e){
+            Crashlytics.log(Log.ERROR, "Error in GetAverage TA()", "line 232 TA");
             return null;
         }
         double[] grades = new double[x];
@@ -264,6 +272,7 @@ public class TA{
                     .getJSONObject(0)
                     .getJSONObject("data");
             if(respJsonAssignments == null){
+                Crashlytics.log(Log.ERROR, "network request failed", "line 275 TA");
                 return null;
             }
             JSONObject respJsonName = respJsonAssignments;
@@ -272,15 +281,16 @@ public class TA{
                         .getJSONObject("assessment")
                         .getJSONObject("data");
             }catch (Exception e){
+                Crashlytics.log(Log.ERROR, "network request probably failed", "line 284 TA");
                 return null;
             }
             System.out.println(respJsonAssignments + "JSON RESPONSE HERE<----");
-            System.out.println(respJsonAssignments.length());
             List respJsonList = Arrays.asList(respJsonAssignments, respJsonName);
             return respJsonList;
 
         }catch (Exception e){
             e.printStackTrace();
+            Crashlytics.log(Log.ERROR, "Error in newGetMarks", "line 293 TA");
             return null;
         }
 
