@@ -56,7 +56,6 @@
         <activity android:name="EditActivity"/>
 
         <receiver android:name=".AlertReceiver"/>
-        <activity android:name=".MainActivitySDK21"/>
         <activity android:name=".MarksViewMaterial">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"

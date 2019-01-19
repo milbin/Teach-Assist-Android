@@ -30,6 +30,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +43,7 @@ import org.decimal4j.util.DoubleRounder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -49,11 +52,6 @@ import java.util.Map;
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    //String username = "335525168";
-    //String password = "4a6349kc";
-
-    //String username = login.getUser();
-    //String password = login.getPass();
     String username;
     String password;
 
@@ -76,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String subjectMark2;
     String subjectMark3;
     String subjectMark4;
+    ImageButton trash;
+    ImageButton trash1;
+    ImageButton trash2;
+    ImageButton trash3;
+    ImageButton trash4;
+    ArrayList<Integer> removedCourseIndexes = new ArrayList<>();
+    Boolean isEditing = false;
 
     public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
@@ -142,6 +147,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout3.setClickable(true);
         relativeLayout4.setClickable(true);
 
+        //trash buttons
+        trash = findViewById(R.id.trash_can);
+        trash1 = findViewById(R.id.trash_can1);
+        trash2 = findViewById(R.id.trash_can2);
+        trash3 = findViewById(R.id.trash_can3);
+        trash4 = findViewById(R.id.trash_can4);
+
 
 
 
@@ -181,6 +193,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         relativeLayout2.setClickable(true);
                         relativeLayout3.setClickable(true);
                         relativeLayout4.setClickable(true);
+
+                        trash.setVisibility(View.GONE);
+                        trash1.setVisibility(View.GONE);
+                        trash2.setVisibility(View.GONE);
+                        trash3.setVisibility(View.GONE);
+                        trash4.setVisibility(View.GONE);
+                        removedCourseIndexes = new ArrayList<>();
                         new getTaData().execute();
 
                     }
@@ -313,6 +332,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public class onTrashClick implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+                TA ta = new TA();
+                Double newAverage = -1.0;
+                View rlParent = (View) v.getParent();
+                String toRemove = "";
+                rlParent.setVisibility(View.GONE);
+                int toSubtract = 0;
+                int courseNum = 0;
+
+                if (rlParent == relativeLayout) {
+                    courseNum = 0;
+                } else if (rlParent == relativeLayout1) {
+                    courseNum = 1;
+                } else if (rlParent == relativeLayout2) {
+                    courseNum = 2;
+                } else if (rlParent == relativeLayout3) {
+                    courseNum = 3;
+                } else if (rlParent == relativeLayout4) {
+                    courseNum = 4;
+                }
+                for (int i : removedCourseIndexes) {
+                    if (i < courseNum) {
+                        toSubtract++;
+                    }
+                }
+                int counter = 0;
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter == courseNum - toSubtract) {
+                        toRemove = entry.getKey();
+                    }
+                    counter++;
+                }
+                removedCourseIndexes.add(courseNum);
+                response.remove(toRemove);
+                newAverage = ta.GetAverage(response);
+                TextView AverageInt = findViewById(R.id.AverageInt);
+                AverageInt.setText(newAverage.toString() + "%");
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+                if (newAverage < 1) {
+                    ProgressBarAverage.setProgress(1);
+                } else {
+                    ProgressBarAverage.setProgress((int) Math.round(newAverage));
+                }
+
+        }
+    }
+
 
 
     // on navigation drawer item selection
@@ -416,13 +485,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             case R.id.action_edit:
+                if(!isEditing) {
+                    isEditing = true;
+                    trash.setVisibility(View.VISIBLE);
+                    trash1.setVisibility(View.VISIBLE);
+                    trash2.setVisibility(View.VISIBLE);
+                    trash3.setVisibility(View.VISIBLE);
+                    trash4.setVisibility(View.VISIBLE);
 
-                Intent myIntent = new Intent(MainActivity.this, EditActivity.class);
-                Gson gson = new Gson();
-                String list = gson.toJson(response);
-                myIntent.putExtra("key", list); //Optional parameters
-                myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                MainActivity.this.startActivityForResult(myIntent, 10101); //random int i set
+                    trash.setOnClickListener(new onTrashClick());
+                    trash1.setOnClickListener(new onTrashClick());
+                    trash2.setOnClickListener(new onTrashClick());
+                    trash3.setOnClickListener(new onTrashClick());
+                    trash4.setOnClickListener(new onTrashClick());
+                }else{
+                    isEditing = false;
+                    trash.setVisibility(View.GONE);
+                    trash1.setVisibility(View.GONE);
+                    trash2.setVisibility(View.GONE);
+                    trash3.setVisibility(View.GONE);
+                    trash4.setVisibility(View.GONE);
+                }
+
+
+
+
 
 
                 return true;
@@ -434,14 +521,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return super.onOptionsItemSelected(item);
 
         }
-    }
-    //show and hide menu so that app does not crash is user presses edit button before main view is fully loaded
-    public void showMenu(boolean show){
-        if(menu == null){
-            System.out.println("NULL MENU");
-            return;
-        }
-        menu.setGroupVisible(R.id.main_menu_group, show);
     }
 
     //close drawer when back button pressed
@@ -467,134 +546,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 10101: // see MainActivitythis.startActivityForResult(myIntent, 10101); line(140)
-                if (resultCode == Activity.RESULT_OK) {
-                    removed = data.getStringArrayListExtra("list");
-                    System.out.println(removed);
-                    if(removed.isEmpty()){
-                        //do nothing
-                    }
-                    else if(response == null){
-                        //do nothing
-                    }
-                    else{
-                        ArrayList Empty_course_list = new ArrayList();
-                        double average = 0;
-
-                        int counter = 0;
-                        int y = 0;
-                        for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                            if (!entry.getKey().contains("NA")) {
-                                y++;
-                                counter++;
-
-                            }
-                            else{
-                                Empty_course_list.add(counter);
-                                counter++;
-                            }
-                        }
-
-
-                        int size = y - removed.size()+Empty_course_list.size();
-                        List<Double> grades = new ArrayList<>();
-
-
-
-                        if(removed.contains("0")){
-                            relativeLayout.setVisibility(View.GONE);
-                        }
-                        else {
-                            relativeLayout.setVisibility(View.VISIBLE);
-                            int x = 0;
-                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 0) {
-                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
-                                }
-                                x++;
-                            }
-                        }
-                        if(removed.contains("1")){
-                            relativeLayout1.setVisibility(View.GONE);
-                        }
-                        else {
-                            relativeLayout1.setVisibility(View.VISIBLE);
-                            int x = 0;
-                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 1) {
-                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
-                                }
-                                x++;
-                            }
-                        }
-                        if(removed.contains("2")){
-                            relativeLayout2.setVisibility(View.GONE);
-                        }
-                        else {
-                            relativeLayout2.setVisibility(View.VISIBLE);
-                            int x = 0;
-                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 2) {
-                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
-                                }
-                                x++;
-                            }
-                        }
-                        if(removed.contains("3")){
-                            relativeLayout3.setVisibility(View.GONE);
-                        }
-                        else {
-                            relativeLayout3.setVisibility(View.VISIBLE);
-                            int x = 0;
-                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 3) {
-                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
-                                }
-                                x++;
-                            }
-                        }
-                        if(removed.contains("4")){
-                            relativeLayout4.setVisibility(View.GONE);
-                        }else if(response.size() == 4){}
-                        else {
-                            relativeLayout4.setVisibility(View.VISIBLE);
-                            int x = 0;
-                            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                                if (x == 4) {
-                                    grades.add(Double.parseDouble(entry.getValue().get(0)));
-                                }
-                                x++;
-                            }
-                        }
-
-
-
-                        for (double value : grades) {
-                            average += value;
-
-                        }
-                        average = DoubleRounder.round(average / size, 1);
-                        Float Average = (float) average;
-                        TextView AverageInt = findViewById(R.id.AverageInt);
-                        AverageInt.setText(Average.toString() + "%");
-                        final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-                        ProgressBarAverage.setProgress(Math.round(Average));
-                    }
-
-
-                }
-
-        }
-
-    }
-
-
-
-
     private class getTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
 
 
@@ -608,6 +559,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TA ta = new TA();
 
             response = ta.GetTAData(username, password);
+
             Gson gson = new Gson();
             String list = gson.toJson(response);
             SharedPreferences sharedPreferences = getSharedPreferences(RESPONSE, MODE_PRIVATE);
@@ -842,8 +794,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(response.size() > 4) {
                 new MainActivity.Subject4().execute(response);
             }
-            //hide menu
-            showMenu(false);
             if(Refresh.equals(true)) {
                 SwipeRefresh.setRefreshing(false);
                 Refresh = false;
@@ -899,7 +849,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         @Override
         protected void onPostExecute(Float Average) {
-
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+            ProgressBarAverage.setProgress(Math.round(Average));
 
         }
 
@@ -1193,8 +1144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 EmptyCourse.setText(R.string.EmptyText);
                 relativeLayout3.setClickable(false);
             }
-            //hide menu
-            showMenu(true);
+
 
 
 
@@ -1270,8 +1220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 EmptyCourse.setText(R.string.EmptyText);
                 relativeLayout4.setClickable(false);
             }
-            //hide menu
-            showMenu(true);
+
 
 
 

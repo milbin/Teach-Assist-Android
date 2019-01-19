@@ -256,6 +256,18 @@
                     android:textSize="15sp"
                     android:fontFamily="@font/roboto"
                     android:textStyle="italic" />
+                <ImageButton
+                    android:id="@+id/trash_can"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_actual_black_24dp"
+                    android:background="@null"
+                    android:padding="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="provides ability to remove and expand assignment"
+                android:visibility="gone"/>
             </RelativeLayout>
 
 
@@ -375,6 +387,18 @@
                     android:textSize="15sp"
                     android:fontFamily="@font/roboto"
                     android:textStyle="italic" />
+                <ImageButton
+                    android:id="@+id/trash_can1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_actual_black_24dp"
+                    android:background="@null"
+                    android:padding="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="provides ability to remove and expand assignment"
+                    android:visibility="gone"/>
 
 
             </RelativeLayout>
@@ -495,6 +519,18 @@
                     android:textSize="15sp"
                     android:fontFamily="@font/roboto"
                     android:textStyle="italic" />
+                <ImageButton
+                    android:id="@+id/trash_can2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_actual_black_24dp"
+                    android:background="@null"
+                    android:padding="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="provides ability to remove and expand assignment"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -616,6 +652,18 @@
                     android:textSize="15sp"
                     android:fontFamily="@font/roboto"
                     android:textStyle="italic" />
+                <ImageButton
+                    android:id="@+id/trash_can3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_actual_black_24dp"
+                    android:background="@null"
+                    android:padding="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="provides ability to remove and expand assignment"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -736,6 +784,18 @@
                     android:textSize="15sp"
                     android:fontFamily="@font/roboto"
                     android:textStyle="italic" />
+                <ImageButton
+                    android:id="@+id/trash_can4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_actual_black_24dp"
+                    android:background="@null"
+                    android:padding="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="provides ability to remove and expand assignment"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
 
