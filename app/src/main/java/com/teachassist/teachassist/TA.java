@@ -194,7 +194,7 @@ public class TA{
                     MarksNotifications.put("NA"+i, fields);
                 }else{
                     if(false){ //for debugging
-                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", "").replaceAll("0", "1"));
+                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", "").replaceAll("8", "7"));
                     }else {
                         fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
                     }

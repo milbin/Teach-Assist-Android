@@ -32,7 +32,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RelativeLayout relativeLayout3;
     RelativeLayout relativeLayout4;
     LinkedHashMap<String, List<String>> response;
+    LinkedHashMap<String, List<String>> settingsResponse;
     List<String> removed = new ArrayList<>();
     ProgressDialog dialog;
     NavigationView navigationView;
@@ -134,13 +137,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setOnClickListener(new subject_click());
         relativeLayout1 = findViewById(R.id.relativeLayout1);
-        relativeLayout1.setOnClickListener(new subject1_click());
+        relativeLayout1.setOnClickListener(new subject_click());
         relativeLayout2 = findViewById(R.id.relativeLayout2);
-        relativeLayout2.setOnClickListener(new subject2_click());
+        relativeLayout2.setOnClickListener(new subject_click());
         relativeLayout3 = findViewById(R.id.relativeLayout3);
-        relativeLayout3.setOnClickListener(new subject3_click());
+        relativeLayout3.setOnClickListener(new subject_click());
         relativeLayout4 = findViewById(R.id.relativeLayout4);
-        relativeLayout4.setOnClickListener(new subject4_click());
+        relativeLayout4.setOnClickListener(new subject_click());
         relativeLayout.setClickable(true);
         relativeLayout1.setClickable(true);
         relativeLayout2.setClickable(true);
@@ -187,12 +190,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         relativeLayout1.setVisibility(View.VISIBLE);
                         relativeLayout2.setVisibility(View.VISIBLE);
                         relativeLayout3.setVisibility(View.VISIBLE);
-                        relativeLayout4.setVisibility(View.VISIBLE);
                         relativeLayout.setClickable(true);
                         relativeLayout1.setClickable(true);
                         relativeLayout2.setClickable(true);
                         relativeLayout3.setClickable(true);
-                        relativeLayout4.setClickable(true);
 
                         trash.setVisibility(View.GONE);
                         trash1.setVisibility(View.GONE);
@@ -244,91 +245,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v){
-            try {
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
-                myIntent.putExtra("username", username);
-                myIntent.putExtra("password", password);
-                myIntent.putExtra("subject", 0);
-                myIntent.putExtra("subject Mark", subjectMark);
-                startActivity(myIntent);
-                dialog.dismiss();
+            Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+            int subjectNumber = ((LinearLayout) v.getParent()).indexOfChild(v) -2;
+            int toSubtract = 0;
+            for (int i : removedCourseIndexes) {
+                if (i < subjectNumber) {
+                    toSubtract++;
+                }
             }
-            catch(Exception e){
-                throw new RuntimeException("Crash in 1st course");
+            subjectNumber -= toSubtract;
+            System.out.println(subjectNumber);
+            String subjectMark = "";
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                if(counter == subjectNumber){
+                    subjectMark = entry.getValue().get(0);
+                }
+                counter++;
             }
-        }
-    }
-    public class subject1_click implements View.OnClickListener{
+            myIntent.putExtra("username", username);
+            myIntent.putExtra("password", password);
+            myIntent.putExtra("subject", subjectNumber+toSubtract);
+            myIntent.putExtra("subject Mark", subjectMark);
+            startActivity(myIntent);
+            dialog.dismiss();
 
-        @Override
-        public void onClick(View v){
-            try {
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
-                myIntent.putExtra("username", username);
-                myIntent.putExtra("password", password);
-                myIntent.putExtra("subject", 1);
-                myIntent.putExtra("subject Mark", subjectMark1);
-                startActivity(myIntent);
-                dialog.dismiss();
-            }
-            catch (Exception e){
-                throw new RuntimeException("Crash in 2nd course");
-            }
-
-        }
-    }
-    public class subject2_click implements View.OnClickListener{
-
-        @Override
-        public void onClick(View v){
-            try {
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
-                myIntent.putExtra("username", username);
-                myIntent.putExtra("password", password);
-                myIntent.putExtra("subject", 2);
-                myIntent.putExtra("subject Mark", subjectMark2);
-                startActivity(myIntent);
-                dialog.dismiss();
-            }
-            catch (Exception e){
-                throw new RuntimeException("Crash in 3rd course");
-            }
-        }
-    }
-    public class subject3_click implements View.OnClickListener{
-
-        @Override
-        public void onClick(View v){
-            try {
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
-                myIntent.putExtra("username", username);
-                myIntent.putExtra("password", password);
-                myIntent.putExtra("subject", 3);
-                myIntent.putExtra("subject Mark", subjectMark3);
-                startActivity(myIntent);
-                dialog.dismiss();
-            }
-            catch (Exception e){
-                throw new RuntimeException("Crash in 4th course");
-            }
-        }
-    }
-    public class subject4_click implements View.OnClickListener{
-
-        @Override
-        public void onClick(View v){
-            try {
-                Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
-                myIntent.putExtra("username", username);
-                myIntent.putExtra("password", password);
-                myIntent.putExtra("subject", 4);
-                myIntent.putExtra("subject Mark", subjectMark4);
-                startActivity(myIntent);
-                dialog.dismiss();
-            }
-            catch (Exception e){
-                throw new RuntimeException("Crash in 5th course");
-            }
         }
     }
 
@@ -427,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             .show();
                     break;
                 }
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                for (Map.Entry<String, List<String>> entry : settingsResponse.entrySet()) {
                     list.add(entry.getValue().get(1));
                 }
                 settingsIntent.putStringArrayListExtra("key", list); //Optional parameters
@@ -482,11 +423,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
-
             case R.id.action_edit:
                 if(!isEditing) {
-                    isEditing = true;
                     trash.setVisibility(View.VISIBLE);
                     trash1.setVisibility(View.VISIBLE);
                     trash2.setVisibility(View.VISIBLE);
@@ -498,20 +436,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     trash2.setOnClickListener(new onTrashClick());
                     trash3.setOnClickListener(new onTrashClick());
                     trash4.setOnClickListener(new onTrashClick());
+                    isEditing = true;
                 }else{
-                    isEditing = false;
                     trash.setVisibility(View.GONE);
                     trash1.setVisibility(View.GONE);
                     trash2.setVisibility(View.GONE);
                     trash3.setVisibility(View.GONE);
                     trash4.setVisibility(View.GONE);
+                    isEditing = false;
                 }
-
-
-
-
-
-
                 return true;
 
 
@@ -559,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TA ta = new TA();
 
             response = ta.GetTAData(username, password);
-
+            settingsResponse = (LinkedHashMap<String, List<String>>)response.clone(); //stores original response for settings intent, if not clicking on settings will raise exception when you delete courses
             Gson gson = new Gson();
             String list = gson.toJson(response);
             SharedPreferences sharedPreferences = getSharedPreferences(RESPONSE, MODE_PRIVATE);
@@ -743,6 +676,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             if(response.size() > 4) {
+                relativeLayout4.setVisibility(View.VISIBLE);
                 //Set Subject4 Text
                 Float Mark4 = 0f;
                 int counter4 = 0;

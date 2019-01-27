@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/login_background"
+    android:background="@color/Background"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/ta_logo_v3" />
@@ -26,9 +26,10 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:paddingStart="10dp"
         android:text="@string/nav_header_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/White"
+        android:textColor="@android:color/black"
         android:textStyle="bold" />
 
     <TextView

@@ -142,7 +142,7 @@ public class login extends AppCompatActivity {
             final EditText usernameInput = (EditText) findViewById(R.id.Username);
             final EditText passwordInput = (EditText) findViewById(R.id.Password);
             System.out.println(response);
-            if (response.isEmpty() || response == null) {
+            if (response == null || response.isEmpty()){
                 dialog.dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
                 builder.setTitle("Sign in Failure")

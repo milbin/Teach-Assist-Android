@@ -23,29 +23,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView"
-        android:layout_marginStart="125dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
         >
-
-
 
 
         <EditText
             android:id="@+id/Username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="25dp"
-            android:layout_centerHorizontal="true"
-            android:inputType="textPersonName"
             android:background="@android:color/transparent"
-            android:theme="@style/EditTextTheme"
-            android:ems="10"
-            android:textColorHint="@color/SecondaryTextColor"
-            android:elevation="5dp"
-            android:padding="12dp"
+            android:drawableStart="@drawable/ic_person_black_24dp"
             android:drawablePadding="12dp"
-            android:drawableLeft="@drawable/ic_person_black_24dp"
+            android:elevation="5dp"
+            android:ems="10"
             android:hint="Username"
-            />
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:paddingStart="30dp"
+            android:textColorHint="@color/SecondaryTextColor"
+            android:theme="@style/EditTextTheme" />
 
 
 
@@ -69,7 +69,8 @@
             android:padding="12dp"
             android:hint="Password"
             android:drawablePadding="12dp"
-            android:drawableLeft="@drawable/ic_lock_black_24dp"
+            android:paddingStart="30dp"
+            android:drawableStart="@drawable/ic_lock_black_24dp"
             android:singleLine="true"
             android:imeOptions="actionDone"
 
@@ -82,12 +83,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/Password"
             android:layout_alignStart="@+id/Password"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="-1dp"
             android:button="@drawable/checkbox"
             android:text="Remember me"
-            android:textColor="@color/TextColor"
 
-            />
+            android:textColor="@color/TextColor" />
     </RelativeLayout>
         <Button
             android:id="@+id/login_button"

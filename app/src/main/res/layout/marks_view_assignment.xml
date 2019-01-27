@@ -29,7 +29,7 @@
         android:layout_marginEnd="35dp"
         android:paddingStart="@dimen/album_title_padding"
         android:paddingTop="@dimen/album_title_padding"
-        android:text="functions and relations: a study in app design and stuff yknow?"
+        android:text="Uh oh! if your seeing this something has gone wrong"
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp" />
 
@@ -54,7 +54,7 @@
         android:paddingLeft="8dp"
         android:textColor="@android:color/black"
         android:textSize="50sp"
-        android:text="80.0%"
+        android:text="-1%"
         android:textStyle="bold" />
 
     <RelativeLayout
@@ -92,7 +92,7 @@
             android:layout_alignTop="@+id/BarGraph1"
             android:paddingLeft="2dp"
             android:textColor="@color/White"
-            android:text="66.9" />
+            android:text="-1" />
 
         <View
             android:id="@+id/BarGraph2"
@@ -120,7 +120,7 @@
             android:layout_alignTop="@+id/BarGraph2"
             android:paddingLeft="2dp"
             android:textColor="@color/White"
-            android:text="87.0" />
+            android:text="-1" />
 
         <View
             android:id="@+id/BarGraph3"
@@ -148,7 +148,7 @@
             android:layout_alignTop="@+id/BarGraph3"
             android:paddingLeft="2dp"
             android:textColor="@color/White"
-            android:text="90.0" />
+            android:text="-1" />
 
         <View
             android:id="@+id/BarGraph4"
@@ -176,7 +176,7 @@
             android:layout_alignTop="@+id/BarGraph4"
             android:paddingLeft="2dp"
             android:textColor="@color/White"
-            android:text="57.0" />
+            android:text="-1" />
     </RelativeLayout>
 
 </RelativeLayout>

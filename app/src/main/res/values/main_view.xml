@@ -3,5 +3,5 @@
 
     <dimen name="Row_Height">130dp</dimen>
     <dimen name="Average_Row_Height">140dp</dimen>
-    <dimen name="Toolbar_Height">56dp</dimen>
+    <dimen name="Toolbar_Height">48dp</dimen>
 </resources>

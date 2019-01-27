@@ -60,6 +60,7 @@ public class AlertReceiver extends BroadcastReceiver {
     String username;
     String password;
     Context Globalcontext;
+    public static final String RESPONSE = "RESPONSE";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -75,7 +76,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Crashlytics.setString("password", password);
 
         //get old response
-        SharedPreferences prefs = context.getSharedPreferences("RESPONSE", MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(RESPONSE, MODE_PRIVATE);
         String str = prefs.getString("RESPONSE", "");
         Gson gson = new Gson();
         Type entityType = new TypeToken<LinkedHashMap<String, List<String>>>() {
@@ -168,6 +169,11 @@ public class AlertReceiver extends BroadcastReceiver {
                         Crashlytics.log(Log.ERROR, "network request failed AlertReciever", "line 162");
                         return null;
                     }
+                    Gson gson = new Gson();
+                    String list = gson.toJson(response);
+                    SharedPreferences sharedPreferencesResponse = Globalcontext.getSharedPreferences(RESPONSE, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferencesResponse.edit();
+
                     LinkedList<String> toSend = new LinkedList<String>();
                     for (LinkedHashMap.Entry<String, List<String>> entry : response.entrySet()) {
                         if (entry.getKey().contains("NA")) {
@@ -214,6 +220,8 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                         sendNotifications.getManager().notify(1, notification);
                                         System.out.println("SENT NOTIFICATION");
+                                        editor.putString(RESPONSE, list);
+                                            editor.apply();
 
                                     }
 
@@ -248,6 +256,8 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                         sendNotifications.getManager().notify(2, notification);
                                         System.out.println("SENT NOTIFICATION");
+                                        editor.putString(RESPONSE, list);
+                                            editor.apply();
 
                                     }
 
@@ -281,6 +291,8 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                         sendNotifications.getManager().notify(3, notification);
                                         System.out.println("SENT NOTIFICATION");
+                                        editor.putString(RESPONSE, list);
+                                            editor.apply();
 
                                     }
 
@@ -314,6 +326,8 @@ public class AlertReceiver extends BroadcastReceiver {
                                                     "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                             sendNotifications.getManager().notify(4, notification);
                                             System.out.println("SENT NOTIFICATION");
+                                            editor.putString(RESPONSE, list);
+                                            editor.apply();
 
                                     }
 
@@ -347,6 +361,8 @@ public class AlertReceiver extends BroadcastReceiver {
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
                                         sendNotifications.getManager().notify(5, notification);
                                         System.out.println("SENT NOTIFICATION");
+                                        editor.putString(RESPONSE, list);
+                                            editor.apply();
 
                                     }
 
