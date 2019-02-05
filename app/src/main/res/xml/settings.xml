@@ -42,6 +42,37 @@
             android:key="Notifications 5"
             android:summary="Enable notifications for period 5 class"
             android:title="Period 5" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 6"
+            android:summary="Enable notifications for period 6 class"
+            android:title="Period 6" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 7"
+            android:summary="Enable notifications for period 7 class"
+            android:title="Period 7" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 8"
+            android:summary="Enable notifications for period 8 class"
+            android:title="Period 8" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 9"
+            android:summary="Enable notifications for period 9 class"
+            android:title="Period 9" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications 10"
+            android:summary="Enable notifications for period 10 class"
+            android:title="Period 10" />
+
 
 
     </PreferenceCategory>

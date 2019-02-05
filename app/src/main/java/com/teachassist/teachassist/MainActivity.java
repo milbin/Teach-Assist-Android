@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RelativeLayout relativeLayout2;
     RelativeLayout relativeLayout3;
     RelativeLayout relativeLayout4;
+    RelativeLayout relativeLayout5;
+    RelativeLayout relativeLayout6;
+    RelativeLayout relativeLayout7;
+    RelativeLayout relativeLayout8;
+    RelativeLayout relativeLayout9;
     LinkedHashMap<String, List<String>> response;
     LinkedHashMap<String, List<String>> settingsResponse;
     List<String> removed = new ArrayList<>();
@@ -77,11 +82,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String subjectMark2;
     String subjectMark3;
     String subjectMark4;
+    String subjectMark5;
+    String subjectMark6;
+    String subjectMark7;
+    String subjectMark8;
+    String subjectMark9;
     ImageButton trash;
     ImageButton trash1;
     ImageButton trash2;
     ImageButton trash3;
     ImageButton trash4;
+    ImageButton trash5;
+    ImageButton trash6;
+    ImageButton trash7;
+    ImageButton trash8;
+    ImageButton trash9;
+
     ArrayList<Integer> removedCourseIndexes = new ArrayList<>();
     Boolean isEditing = false;
 
@@ -115,6 +131,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ProgressBarAverage3.setVisibility(View.INVISIBLE);
         final RingProgressBar ProgressBarAverage4 =  findViewById(R.id.SubjectBar4);
         ProgressBarAverage4.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage5 =  findViewById(R.id.SubjectBar5);
+        ProgressBarAverage5.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage6 =  findViewById(R.id.SubjectBar6);
+        ProgressBarAverage6.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage7 =  findViewById(R.id.SubjectBar7);
+        ProgressBarAverage7.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage8 =  findViewById(R.id.SubjectBar8);
+        ProgressBarAverage8.setVisibility(View.INVISIBLE);
+        final RingProgressBar ProgressBarAverage9 =  findViewById(R.id.SubjectBar9);
+        ProgressBarAverage9.setVisibility(View.INVISIBLE);
 
 
 
@@ -144,11 +170,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         relativeLayout3.setOnClickListener(new subject_click());
         relativeLayout4 = findViewById(R.id.relativeLayout4);
         relativeLayout4.setOnClickListener(new subject_click());
+        relativeLayout5 = findViewById(R.id.relativeLayout5);
+        relativeLayout5.setOnClickListener(new subject_click());
+        relativeLayout6 = findViewById(R.id.relativeLayout6);
+        relativeLayout6.setOnClickListener(new subject_click());
+        relativeLayout7 = findViewById(R.id.relativeLayout7);
+        relativeLayout7.setOnClickListener(new subject_click());
+        relativeLayout8 = findViewById(R.id.relativeLayout8);
+        relativeLayout8.setOnClickListener(new subject_click());
+        relativeLayout9 = findViewById(R.id.relativeLayout9);
+        relativeLayout9.setOnClickListener(new subject_click());
         relativeLayout.setClickable(true);
         relativeLayout1.setClickable(true);
         relativeLayout2.setClickable(true);
         relativeLayout3.setClickable(true);
         relativeLayout4.setClickable(true);
+        relativeLayout5.setClickable(true);
+        relativeLayout6.setClickable(true);
+        relativeLayout7.setClickable(true);
+        relativeLayout8.setClickable(true);
+        relativeLayout9.setClickable(true);
 
         //trash buttons
         trash = findViewById(R.id.trash_can);
@@ -156,6 +197,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         trash2 = findViewById(R.id.trash_can2);
         trash3 = findViewById(R.id.trash_can3);
         trash4 = findViewById(R.id.trash_can4);
+        trash5 = findViewById(R.id.trash_can5);
+        trash6 = findViewById(R.id.trash_can6);
+        trash7 = findViewById(R.id.trash_can7);
+        trash8 = findViewById(R.id.trash_can8);
+        trash9 = findViewById(R.id.trash_can9);
 
 
 
@@ -165,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-            // Refresh
+        // Refresh
         SwipeRefresh = findViewById(R.id.swipeRefresh);
         SwipeRefresh.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -186,20 +232,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         EmptyCourse3.setText("");
                         TextView EmptyCourse4 = findViewById(R.id.EmptyCourse4);
                         EmptyCourse4.setText("");
+                        TextView EmptyCourse5 = findViewById(R.id.EmptyCourse5);
+                        EmptyCourse5.setText("");
+                        TextView EmptyCourse6 = findViewById(R.id.EmptyCourse6);
+                        EmptyCourse6.setText("");
+                        TextView EmptyCourse7 = findViewById(R.id.EmptyCourse7);
+                        EmptyCourse7.setText("");
+                        TextView EmptyCourse8 = findViewById(R.id.EmptyCourse8);
+                        EmptyCourse5.setText("");
+                        TextView EmptyCourse9 = findViewById(R.id.EmptyCourse9);
+                        EmptyCourse9.setText("");
+
                         relativeLayout.setVisibility(View.VISIBLE);
                         relativeLayout1.setVisibility(View.VISIBLE);
                         relativeLayout2.setVisibility(View.VISIBLE);
                         relativeLayout3.setVisibility(View.VISIBLE);
+                        relativeLayout4.setVisibility(View.VISIBLE);
+                        relativeLayout5.setVisibility(View.VISIBLE);
+                        relativeLayout6.setVisibility(View.VISIBLE);
+                        relativeLayout7.setVisibility(View.VISIBLE);
+                        relativeLayout8.setVisibility(View.VISIBLE);
+                        relativeLayout9.setVisibility(View.VISIBLE);
+
                         relativeLayout.setClickable(true);
                         relativeLayout1.setClickable(true);
                         relativeLayout2.setClickable(true);
                         relativeLayout3.setClickable(true);
+                        relativeLayout4.setClickable(true);
+                        relativeLayout5.setClickable(true);
+                        relativeLayout6.setClickable(true);
+                        relativeLayout7.setClickable(true);
+                        relativeLayout8.setClickable(true);
+                        relativeLayout9.setClickable(true);
 
                         trash.setVisibility(View.GONE);
                         trash1.setVisibility(View.GONE);
                         trash2.setVisibility(View.GONE);
                         trash3.setVisibility(View.GONE);
                         trash4.setVisibility(View.GONE);
+                        trash5.setVisibility(View.GONE);
+                        trash6.setVisibility(View.GONE);
+                        trash7.setVisibility(View.GONE);
+                        trash8.setVisibility(View.GONE);
+                        trash9.setVisibility(View.GONE);
                         removedCourseIndexes = new ArrayList<>();
                         new getTaData().execute();
 
@@ -277,48 +352,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v) {
-                TA ta = new TA();
-                Double newAverage = -1.0;
-                View rlParent = (View) v.getParent();
-                String toRemove = "";
-                rlParent.setVisibility(View.GONE);
-                int toSubtract = 0;
-                int courseNum = 0;
+            TA ta = new TA();
+            Double newAverage = -1.0;
+            View rlParent = (View) v.getParent();
+            String toRemove = "";
+            rlParent.setVisibility(View.GONE);
+            int toSubtract = 0;
+            int courseNum = 0;
 
-                if (rlParent == relativeLayout) {
-                    courseNum = 0;
-                } else if (rlParent == relativeLayout1) {
-                    courseNum = 1;
-                } else if (rlParent == relativeLayout2) {
-                    courseNum = 2;
-                } else if (rlParent == relativeLayout3) {
-                    courseNum = 3;
-                } else if (rlParent == relativeLayout4) {
-                    courseNum = 4;
+            if (rlParent == relativeLayout) {
+                courseNum = 0;
+            } else if (rlParent == relativeLayout1) {
+                courseNum = 1;
+            } else if (rlParent == relativeLayout2) {
+                courseNum = 2;
+            } else if (rlParent == relativeLayout3) {
+                courseNum = 3;
+            } else if (rlParent == relativeLayout4) {
+                courseNum = 4;
+            }else if (rlParent == relativeLayout5) {
+                courseNum = 5;
+            }else if (rlParent == relativeLayout6) {
+                courseNum = 6;
+            }else if (rlParent == relativeLayout7) {
+                courseNum = 7;
+            }else if (rlParent == relativeLayout8) {
+                courseNum = 8;
+            }else if (rlParent == relativeLayout9) {
+                courseNum = 9;
+            }
+
+            for (int i : removedCourseIndexes) {
+                if (i < courseNum) {
+                    toSubtract++;
                 }
-                for (int i : removedCourseIndexes) {
-                    if (i < courseNum) {
-                        toSubtract++;
-                    }
+            }
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                if (counter == courseNum - toSubtract) {
+                    toRemove = entry.getKey();
                 }
-                int counter = 0;
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                    if (counter == courseNum - toSubtract) {
-                        toRemove = entry.getKey();
-                    }
-                    counter++;
-                }
-                removedCourseIndexes.add(courseNum);
-                response.remove(toRemove);
-                newAverage = ta.GetAverage(response);
-                TextView AverageInt = findViewById(R.id.AverageInt);
-                AverageInt.setText(newAverage.toString() + "%");
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-                if (newAverage < 1) {
-                    ProgressBarAverage.setProgress(1);
-                } else {
-                    ProgressBarAverage.setProgress((int) Math.round(newAverage));
-                }
+                counter++;
+            }
+            removedCourseIndexes.add(courseNum);
+            response.remove(toRemove);
+            newAverage = ta.GetAverage(response);
+            TextView AverageInt = findViewById(R.id.AverageInt);
+            AverageInt.setText(newAverage.toString() + "%");
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+            if (newAverage < 1) {
+                ProgressBarAverage.setProgress(1);
+            } else {
+                ProgressBarAverage.setProgress((int) Math.round(newAverage));
+            }
 
         }
     }
@@ -342,6 +428,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Intent myIntent = new Intent(MainActivity.this, login.class);
                 startActivity(myIntent);
+                finish();
                 break;
 
             case R.id.nav_home:
@@ -430,12 +517,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     trash2.setVisibility(View.VISIBLE);
                     trash3.setVisibility(View.VISIBLE);
                     trash4.setVisibility(View.VISIBLE);
+                    trash5.setVisibility(View.VISIBLE);
+                    trash6.setVisibility(View.VISIBLE);
+                    trash7.setVisibility(View.VISIBLE);
+                    trash8.setVisibility(View.VISIBLE);
+                    trash9.setVisibility(View.VISIBLE);
 
                     trash.setOnClickListener(new onTrashClick());
                     trash1.setOnClickListener(new onTrashClick());
                     trash2.setOnClickListener(new onTrashClick());
                     trash3.setOnClickListener(new onTrashClick());
                     trash4.setOnClickListener(new onTrashClick());
+                    trash5.setOnClickListener(new onTrashClick());
+                    trash6.setOnClickListener(new onTrashClick());
+                    trash7.setOnClickListener(new onTrashClick());
+                    trash8.setOnClickListener(new onTrashClick());
+                    trash9.setOnClickListener(new onTrashClick());
                     isEditing = true;
                 }else{
                     trash.setVisibility(View.GONE);
@@ -443,6 +540,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     trash2.setVisibility(View.GONE);
                     trash3.setVisibility(View.GONE);
                     trash4.setVisibility(View.GONE);
+                    trash5.setVisibility(View.GONE);
+                    trash6.setVisibility(View.GONE);
+                    trash7.setVisibility(View.GONE);
+                    trash8.setVisibility(View.GONE);
+                    trash9.setVisibility(View.GONE);
                     isEditing = false;
                 }
                 return true;
@@ -492,7 +594,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TA ta = new TA();
 
             response = ta.GetTAData(username, password);
-            settingsResponse = (LinkedHashMap<String, List<String>>)response.clone(); //stores original response for settings intent, if not clicking on settings will raise exception when you delete courses
+            /*
+            ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
+            ArrayList list2 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
+            ArrayList list3 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
+            ArrayList list4 = new ArrayList<>(Arrays.asList("87.1", "MCR3U1-01", "Functions and Relations", "142"));
+            ArrayList list5 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
+            ArrayList list6 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
+            ArrayList list7 = new ArrayList<>(Arrays.asList("87.1", "MCR3U1-01", "Functions and Relations", "142"));
+            response = new LinkedHashMap<>();
+            response.put("283098", list1);
+            response.put("283004", list2);
+            response.put("283001", list3);
+            response.put("283152", list4);
+            response.put("283003", list5);
+            response.put("283005", list6);
+            response.put("283006", list7);*/
+            if(response != null) {
+                settingsResponse = (LinkedHashMap<String, List<String>>) response.clone(); //stores original response for settings intent, if not clicking on settings will raise exception when you delete courses
+            }else{
+                new AlertDialog.Builder(context)
+                        .setTitle("Connection Error")
+                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("MainActivity", "No internet connection");
+                            }
+                        })
+                        .show();
+            }
             Gson gson = new Gson();
             String list = gson.toJson(response);
             SharedPreferences sharedPreferences = getSharedPreferences(RESPONSE, MODE_PRIVATE);
@@ -527,6 +658,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 relativeLayout2.setClickable(false);
                 relativeLayout3.setClickable(false);
                 relativeLayout4.setClickable(false);
+                relativeLayout5.setClickable(false);
+                relativeLayout6.setClickable(false);
+                relativeLayout7.setClickable(false);
+                relativeLayout8.setClickable(false);
+                relativeLayout9.setClickable(false);
                 dialog.dismiss();
                 return;
             }
@@ -713,6 +849,193 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 relativeLayout4.setVisibility(View.GONE);
             }
 
+            if(response.size() > 5) {
+                relativeLayout5.setVisibility(View.VISIBLE);
+                //Set Subject5 Text
+                Float Mark5 = 0f;
+                int counter5 = 0;
+                String SubjectAbrvString5 = "";
+                String SubjectNameString5 = "";
+                String RoomNumber5 = "";
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter5 == 5) {
+                        if (!entry.getKey().contains("NA")) {
+                            Mark5 = Float.parseFloat(entry.getValue().get(0));
+                            TextView SubjectInt5 = findViewById(R.id.SubjectInt5);
+                            SubjectInt5.setText(Mark5.toString() + "%");
+
+                            SubjectAbrvString5 = entry.getValue().get(1);
+                            SubjectNameString5 = entry.getValue().get(2);
+                            RoomNumber5 = entry.getValue().get(3);
+                            subjectMark5 = Mark5.toString();
+                        } else {
+                            SubjectAbrvString5 = entry.getValue().get(0);
+                            SubjectNameString5 = entry.getValue().get(1);
+                            RoomNumber5 = entry.getValue().get(2);
+                        }
+                    }
+                    counter5++;
+                }
+
+                TextView SubjectAbrv5 = findViewById(R.id.SubjectAbrv5);
+                SubjectAbrv5.setText(SubjectAbrvString5);
+                TextView SubjectName5 = findViewById(R.id.SubjectName5);
+                SubjectName5.setText(SubjectNameString5);
+                TextView roomNumber5 = findViewById(R.id.RoomNumber5);
+                roomNumber5.setText("Room " + RoomNumber5);
+            }else{
+                relativeLayout5.setVisibility(View.GONE);
+            }
+
+            if(response.size() > 6) {
+                relativeLayout6.setVisibility(View.VISIBLE);
+                //Set Subject6 Text
+                Float Mark6 = 0f;
+                int counter6 = 0;
+                String SubjectAbrvString6 = "";
+                String SubjectNameString6 = "";
+                String RoomNumber6 = "";
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter6 == 6) {
+                        if (!entry.getKey().contains("NA")) {
+                            Mark6 = Float.parseFloat(entry.getValue().get(0));
+                            TextView SubjectInt6 = findViewById(R.id.SubjectInt6);
+                            SubjectInt6.setText(Mark6.toString() + "%");
+
+                            SubjectAbrvString6 = entry.getValue().get(1);
+                            SubjectNameString6 = entry.getValue().get(2);
+                            RoomNumber6 = entry.getValue().get(3);
+                            subjectMark6 = Mark6.toString();
+                        } else {
+                            SubjectAbrvString6 = entry.getValue().get(0);
+                            SubjectNameString6 = entry.getValue().get(1);
+                            RoomNumber6 = entry.getValue().get(2);
+                        }
+                    }
+                    counter6++;
+                }
+
+                TextView SubjectAbrv6 = findViewById(R.id.SubjectAbrv6);
+                SubjectAbrv6.setText(SubjectAbrvString6);
+                TextView SubjectName6 = findViewById(R.id.SubjectName6);
+                SubjectName6.setText(SubjectNameString6);
+                TextView roomNumber6 = findViewById(R.id.RoomNumber6);
+                roomNumber6.setText("Room " + RoomNumber6);
+            }else{
+                relativeLayout6.setVisibility(View.GONE);
+            }
+            if(response.size() > 7) {
+                relativeLayout7.setVisibility(View.VISIBLE);
+                //Set Subject7 Text
+                Float Mark7 = 0f;
+                int counter7 = 0;
+                String SubjectAbrvString7 = "";
+                String SubjectNameString7 = "";
+                String RoomNumber7 = "";
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter7 == 7) {
+                        if (!entry.getKey().contains("NA")) {
+                            Mark7 = Float.parseFloat(entry.getValue().get(0));
+                            TextView SubjectInt7 = findViewById(R.id.SubjectInt7);
+                            SubjectInt7.setText(Mark7.toString() + "%");
+                            //TODO if there is no room number it causes a crash
+                            SubjectAbrvString7 = entry.getValue().get(1);
+                            SubjectNameString7 = entry.getValue().get(2);
+                            RoomNumber7 = entry.getValue().get(3);
+                            subjectMark7 = Mark7.toString();
+                        } else {
+                            SubjectAbrvString7 = entry.getValue().get(0);
+                            SubjectNameString7 = entry.getValue().get(1);
+                            RoomNumber7 = entry.getValue().get(2);
+                        }
+                    }
+                    counter7++;
+                }
+
+                TextView SubjectAbrv7 = findViewById(R.id.SubjectAbrv7);
+                SubjectAbrv7.setText(SubjectAbrvString7);
+                TextView SubjectName7 = findViewById(R.id.SubjectName7);
+                SubjectName7.setText(SubjectNameString7);
+                TextView roomNumber7 = findViewById(R.id.RoomNumber7);
+                roomNumber7.setText("Room " + RoomNumber7);
+            }else{
+                relativeLayout7.setVisibility(View.GONE);
+            }
+            if(response.size() > 8) {
+                relativeLayout8.setVisibility(View.VISIBLE);
+                //Set Subject8 Text
+                Float Mark8 = 0f;
+                int counter8 = 0;
+                String SubjectAbrvString8 = "";
+                String SubjectNameString8 = "";
+                String RoomNumber8 = "";
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter8 == 8) {
+                        if (!entry.getKey().contains("NA")) {
+                            Mark8 = Float.parseFloat(entry.getValue().get(0));
+                            TextView SubjectInt8 = findViewById(R.id.SubjectInt8);
+                            SubjectInt8.setText(Mark8.toString() + "%");
+
+                            SubjectAbrvString8 = entry.getValue().get(1);
+                            SubjectNameString8 = entry.getValue().get(2);
+                            RoomNumber8 = entry.getValue().get(3);
+                            subjectMark8 = Mark8.toString();
+                        } else {
+                            SubjectAbrvString8 = entry.getValue().get(0);
+                            SubjectNameString8 = entry.getValue().get(1);
+                            RoomNumber8 = entry.getValue().get(2);
+                        }
+                    }
+                    counter8++;
+                }
+
+                TextView SubjectAbrv8 = findViewById(R.id.SubjectAbrv8);
+                SubjectAbrv8.setText(SubjectAbrvString8);
+                TextView SubjectName8 = findViewById(R.id.SubjectName8);
+                SubjectName8.setText(SubjectNameString8);
+                TextView roomNumber8 = findViewById(R.id.RoomNumber8);
+                roomNumber8.setText("Room " + RoomNumber8);
+            }else{
+                relativeLayout8.setVisibility(View.GONE);
+            }
+            if(response.size() > 9) {
+                relativeLayout9.setVisibility(View.VISIBLE);
+                //Set Subject9 Text
+                Float Mark9 = 0f;
+                int counter9 = 0;
+                String SubjectAbrvString9 = "";
+                String SubjectNameString9 = "";
+                String RoomNumber9 = "";
+                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                    if (counter9 == 9) {
+                        if (!entry.getKey().contains("NA")) {
+                            Mark9 = Float.parseFloat(entry.getValue().get(0));
+                            TextView SubjectInt9 = findViewById(R.id.SubjectInt9);
+                            SubjectInt9.setText(Mark9.toString() + "%");
+
+                            SubjectAbrvString9 = entry.getValue().get(1);
+                            SubjectNameString9 = entry.getValue().get(2);
+                            RoomNumber9 = entry.getValue().get(3);
+                            subjectMark9 = Mark9.toString();
+                        } else {
+                            SubjectAbrvString9 = entry.getValue().get(0);
+                            SubjectNameString9 = entry.getValue().get(1);
+                            RoomNumber9 = entry.getValue().get(2);
+                        }
+                    }
+                    counter9++;
+                }
+
+                TextView SubjectAbrv9 = findViewById(R.id.SubjectAbrv9);
+                SubjectAbrv9.setText(SubjectAbrvString9);
+                TextView SubjectName9 = findViewById(R.id.SubjectName9);
+                SubjectName9.setText(SubjectNameString9);
+                TextView roomNumber9 = findViewById(R.id.RoomNumber9);
+                roomNumber9.setText("Room " + RoomNumber9);
+            }else{
+                relativeLayout9.setVisibility(View.GONE);
+            }
+
             dialog.dismiss();
             RunTasks(response);
 
@@ -727,6 +1050,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new MainActivity.Subject3().execute(response);
             if(response.size() > 4) {
                 new MainActivity.Subject4().execute(response);
+            }
+            if(response.size() > 5) {
+                new MainActivity.Subject5().execute(response);
+            }
+            if(response.size() > 6) {
+                new MainActivity.Subject6().execute(response);
+            }
+            if(response.size() > 7) {
+                new MainActivity.Subject7().execute(response);
+            }
+            if(response.size() > 8) {
+                new MainActivity.Subject8().execute(response);
+            }
+            if(response.size() > 9) {
+                new MainActivity.Subject9().execute(response);
             }
             if(Refresh.equals(true)) {
                 SwipeRefresh.setRefreshing(false);
@@ -798,7 +1136,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
 
             Float Mark = 0f;
             int counter = 0;
@@ -1153,6 +1490,385 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar4);
                 EmptyCourse.setText(R.string.EmptyText);
                 relativeLayout4.setClickable(false);
+            }
+
+
+
+
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+    private class Subject5 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Float doInBackground(HashMap<String, List<String>>... response){
+            TA ta = new TA();
+
+            Float Mark = 0f;
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
+                if(counter == 5) {
+                    if(!entry.getKey().contains("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+
+                    }
+                    else {
+                        return -1f;
+
+                    }
+                }
+                counter++;
+            }
+
+            try {
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar5);
+                for (int i = 0; i < Math.round(Mark); i+=4) {
+                    publishProgress (i);
+                    Thread.sleep(0, 50);
+
+
+                }
+                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                    @Override
+                    public void progressToComplete() {
+                        // Progress reaches the maximum callback default Max value is 100
+                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return Mark;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar5);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
+            ProgressBarAverage.setProgress(progress[0]);
+
+        }
+        @Override
+        protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse5);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar5);
+                EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout5.setClickable(false);
+            }
+
+
+
+
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+    private class Subject6 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Float doInBackground(HashMap<String, List<String>>... response){
+            TA ta = new TA();
+
+            Float Mark = 0f;
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
+                if(counter == 6) {
+                    if(!entry.getKey().contains("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+
+                    }
+                    else {
+                        return -1f;
+
+                    }
+                }
+                counter++;
+            }
+
+            try {
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar6);
+                for (int i = 0; i < Math.round(Mark); i+=4) {
+                    publishProgress (i);
+                    Thread.sleep(0, 50);
+
+
+                }
+                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                    @Override
+                    public void progressToComplete() {
+                        // Progress reaches the maximum callback default Max value is 100
+                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return Mark;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar6);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
+            ProgressBarAverage.setProgress(progress[0]);
+
+        }
+        @Override
+        protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse6);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar6);
+                EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout6.setClickable(false);
+            }
+
+
+
+
+        }
+    }
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+    private class Subject7 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Float doInBackground(HashMap<String, List<String>>... response){
+            TA ta = new TA();
+
+            Float Mark = 0f;
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
+                if(counter == 4) {
+                    if(!entry.getKey().contains("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+
+                    }
+                    else {
+                        return -1f;
+
+                    }
+                }
+                counter++;
+            }
+
+            try {
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar7);
+                for (int i = 0; i < Math.round(Mark); i+=4) {
+                    publishProgress (i);
+                    Thread.sleep(0, 50);
+
+
+                }
+                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                    @Override
+                    public void progressToComplete() {
+                        // Progress reaches the maximum callback default Max value is 100
+                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return Mark;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar7);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
+            ProgressBarAverage.setProgress(progress[0]);
+
+        }
+        @Override
+        protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse7);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar7);
+                EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout7.setClickable(false);
+            }
+
+
+
+
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+    private class Subject8 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Float doInBackground(HashMap<String, List<String>>... response){
+            TA ta = new TA();
+
+            Float Mark = 0f;
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
+                if(counter == 5) {
+                    if(!entry.getKey().contains("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+
+                    }
+                    else {
+                        return -1f;
+
+                    }
+                }
+                counter++;
+            }
+
+            try {
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar8);
+                for (int i = 0; i < Math.round(Mark); i+=4) {
+                    publishProgress (i);
+                    Thread.sleep(0, 50);
+
+
+                }
+                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                    @Override
+                    public void progressToComplete() {
+                        // Progress reaches the maximum callback default Max value is 100
+                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return Mark;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar8);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
+            ProgressBarAverage.setProgress(progress[0]);
+
+        }
+        @Override
+        protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse8);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar8);
+                EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout8.setClickable(false);
+            }
+
+
+
+
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
+
+    private class Subject9 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Float doInBackground(HashMap<String, List<String>>... response){
+            TA ta = new TA();
+
+            Float Mark = 0f;
+            int counter = 0;
+            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
+                if(counter == 6) {
+                    if(!entry.getKey().contains("NA")) {
+                        Mark = Float.parseFloat(entry.getValue().get(0));
+
+                    }
+                    else {
+                        return -1f;
+
+                    }
+                }
+                counter++;
+            }
+
+            try {
+                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar9);
+                for (int i = 0; i < Math.round(Mark); i+=4) {
+                    publishProgress (i);
+                    Thread.sleep(0, 50);
+
+
+                }
+                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
+                    @Override
+                    public void progressToComplete() {
+                        // Progress reaches the maximum callback default Max value is 100
+                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return Mark;
+
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar9);
+            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                ProgressBarAverage.setVisibility(View.VISIBLE);
+            }
+            ProgressBarAverage.setProgress(progress[0]);
+
+        }
+        @Override
+        protected void onPostExecute(Float Mark) {
+            if(Mark.equals(-1f)){
+                TextView EmptyCourse = findViewById(R.id.EmptyCourse9);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar9);
+                EmptyCourse.setText(R.string.EmptyText);
+                relativeLayout9.setClickable(false);
             }
 
 

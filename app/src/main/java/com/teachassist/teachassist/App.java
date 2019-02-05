@@ -22,6 +22,11 @@ public class App extends Application {
     public static final String CHANNEL_3_ID = "course3";
     public static final String CHANNEL_4_ID = "course4";
     public static final String CHANNEL_5_ID = "course5";
+    public static final String CHANNEL_6_ID = "course6";
+    public static final String CHANNEL_7_ID = "course7";
+    public static final String CHANNEL_8_ID = "course8";
+    public static final String CHANNEL_9_ID = "course9";
+    public static final String CHANNEL_10_ID = "course10";
 
     @Override
     public void onCreate() {
@@ -36,6 +41,11 @@ public class App extends Application {
             NotificationChannel course3 = new NotificationChannel(CHANNEL_3_ID, "course3", NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel course4 = new NotificationChannel(CHANNEL_4_ID, "course4", NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel course5 = new NotificationChannel(CHANNEL_5_ID, "course5", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel course6 = new NotificationChannel(CHANNEL_6_ID, "course6", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel course7 = new NotificationChannel(CHANNEL_7_ID, "course7", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel course8 = new NotificationChannel(CHANNEL_5_ID, "course8", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel course9 = new NotificationChannel(CHANNEL_6_ID, "course9", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel course10 = new NotificationChannel(CHANNEL_7_ID, "course10", NotificationManager.IMPORTANCE_HIGH);
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(course1);
@@ -43,6 +53,11 @@ public class App extends Application {
             manager.createNotificationChannel(course3);
             manager.createNotificationChannel(course4);
             manager.createNotificationChannel(course5);
+            manager.createNotificationChannel(course6);
+            manager.createNotificationChannel(course7);
+            manager.createNotificationChannel(course8);
+            manager.createNotificationChannel(course9);
+            manager.createNotificationChannel(course10);
 
             Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);

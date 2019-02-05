@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -194,6 +195,9 @@ public class MarksViewMaterial extends AppCompatActivity {
             }
             TextView AverageInt = findViewById(R.id.AverageInt);
             AverageInt.setText(Mark+"%");
+            if(Mark.contains("NA") && !Mark.contains("NaN")){
+                finish();
+            }
             int Average = Math.round(Float.parseFloat(Mark.replaceAll("%", "")));
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
             ProgressBarAverage.setProgress(Average);
@@ -228,8 +232,6 @@ public class MarksViewMaterial extends AppCompatActivity {
             }
             numberOfAssignments= marks.length()-1;
             String title;
-            Double Oweight = 0.0;
-            Double Omark = 0.0;
             DecimalFormat round = new DecimalFormat(".#");
 
             for(int i = 0; i <numberOfAssignments; i++){
@@ -241,9 +243,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                final Double Tweight;
                final Double Cweight;
                final Double Aweight;
+                final Double Oweight;
                final String feedback;
-               Oweight = 0.0;
-               Omark = 0.0;
                 rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
                 linearLayout.addView(rl);
                 rlList.add(rl);
@@ -259,6 +260,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                         Tweight = 0.0;
                         Cweight = 0.0;
                         Aweight = 0.0;
+                        Oweight = 0.0;
                     }else {
 
                         title = assignment.getString("title");
@@ -335,6 +337,16 @@ public class MarksViewMaterial extends AppCompatActivity {
                             }
                         } else {
                             Aweight = 0.0;
+                        }
+
+                        if (assignment.has("")) {
+                            if (assignment.getJSONObject("").getString("weight").isEmpty()) {
+                                Oweight = 0.0;
+                            } else {
+                                Oweight = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
+                            }
+                        } else {
+                            Oweight = 0.0;
                         }
                     }
 
@@ -632,6 +644,34 @@ public class MarksViewMaterial extends AppCompatActivity {
                         Apercent.setText("NA");
                     }else {
                         Apercent.setText(String.valueOf(Amark));
+                    }
+
+
+                    //hide bars if the assignment is an exam / summative
+                    if(Kpercent.getText().equals("NA") &&
+                            Tpercent.getText().equals("NA") &&
+                            Cpercent.getText().equals("NA") &&
+                            Apercent.getText().equals("NA")){
+                        bar1.setVisibility(View.GONE);
+                        bar2.setVisibility(View.GONE);
+                        bar3.setVisibility(View.GONE);
+                        bar4.setVisibility(View.GONE);
+                        Kpercent.setVisibility(View.GONE);
+                        Tpercent.setVisibility(View.GONE);
+                        Cpercent.setVisibility(View.GONE);
+                        Apercent.setVisibility(View.GONE);
+                        T.setVisibility(View.GONE);
+                        C.setVisibility(View.GONE);
+                        A.setVisibility(View.GONE);
+
+                        K.setText("Weight: "+String.valueOf(Oweight));
+                        RelativeLayout.LayoutParams lpK = (RelativeLayout.LayoutParams) K.getLayoutParams();
+                        lpK.addRule(RelativeLayout.CENTER_IN_PARENT);
+                        K.setTextSize(20);
+                        rl.setClickable(false);
+
+
+
                     }
 
                     dialog.dismiss();

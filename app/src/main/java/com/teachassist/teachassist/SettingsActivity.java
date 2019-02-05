@@ -81,7 +81,12 @@ public class SettingsActivity extends AppCompatActivity {
         public static final String NOTIFICATION2 = "NOTIFICATION2";
         public static final String NOTIFICATION3 = "NOTIFICATION3";
         public static final String NOTIFICATION4 = "NOTIFICATION4";
-        public static final String NOTIFICATION5 = "NOTIFICATION4";
+        public static final String NOTIFICATION5 = "NOTIFICATION5";
+        public static final String NOTIFICATION6 = "NOTIFICATION6";
+        public static final String NOTIFICATION7 = "NOTIFICATION7";
+        public static final String NOTIFICATION8 = "NOTIFICATION8";
+        public static final String NOTIFICATION9 = "NOTIFICATION9";
+        public static final String NOTIFICATION10 = "NOTIFICATION10";
 
 
         @Override
@@ -95,12 +100,32 @@ public class SettingsActivity extends AppCompatActivity {
             Preference notificationSummary3 = findPreference("Notifications 3");
             Preference notificationSummary4 = findPreference("Notifications 4");
             Preference notificationSummary5 = findPreference("Notifications 5");
+            Preference notificationSummary6 = findPreference("Notifications 6");
+            Preference notificationSummary7 = findPreference("Notifications 7");
+            Preference notificationSummary8 = findPreference("Notifications 8");
+            Preference notificationSummary9 = findPreference("Notifications 9");
+            Preference notificationSummary10 = findPreference("Notifications 10");
             notificationSummary1.setSummary("Disable Notifications for: " + courses.get(0));
             notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
             notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
             notificationSummary4.setSummary("Disable Notifications for: " + courses.get(3));
             if(courses.size() > 4) {
                 notificationSummary5.setSummary("Disable Notifications for: " + courses.get(4));
+            }
+            if(courses.size() > 5) {
+                notificationSummary6.setSummary("Disable Notifications for: " + courses.get(5));
+            }
+            if(courses.size() > 6) {
+                notificationSummary7.setSummary("Disable Notifications for: " + courses.get(6));
+            }
+            if(courses.size() > 7) {
+                notificationSummary8.setSummary("Disable Notifications for: " + courses.get(7));
+            }
+            if(courses.size() > 8) {
+                notificationSummary9.setSummary("Disable Notifications for: " + courses.get(8));
+            }
+            if(courses.size() > 9) {
+                notificationSummary10.setSummary("Disable Notifications for: " + courses.get(9));
             }
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             Preference all_notifications = getPreferenceManager().findPreference("All Notifications");
@@ -115,6 +140,11 @@ public class SettingsActivity extends AppCompatActivity {
                         editor.putBoolean(NOTIFICATION3, true);
                         editor.putBoolean(NOTIFICATION4, true);
                         editor.putBoolean(NOTIFICATION5, true);
+                        editor.putBoolean(NOTIFICATION6, true);
+                        editor.putBoolean(NOTIFICATION7, true);
+                        editor.putBoolean(NOTIFICATION8, true);
+                        editor.putBoolean(NOTIFICATION9, true);
+                        editor.putBoolean(NOTIFICATION10, true);
                     }else{
                         editor.putBoolean(ALLNOTIFICATIONS, false);
                         editor.putBoolean(NOTIFICATION1, false);
@@ -122,6 +152,11 @@ public class SettingsActivity extends AppCompatActivity {
                         editor.putBoolean(NOTIFICATION3, false);
                         editor.putBoolean(NOTIFICATION4, false);
                         editor.putBoolean(NOTIFICATION5, false);
+                        editor.putBoolean(NOTIFICATION6, false);
+                        editor.putBoolean(NOTIFICATION7, false);
+                        editor.putBoolean(NOTIFICATION8, false);
+                        editor.putBoolean(NOTIFICATION9, false);
+                        editor.putBoolean(NOTIFICATION10, false);
                     }
                     editor.apply();
                     return true;
@@ -206,6 +241,101 @@ public class SettingsActivity extends AppCompatActivity {
                     }else {
                         editor.putBoolean(ALLNOTIFICATIONS, false);
                         editor.putBoolean(NOTIFICATION5, false);
+                    }
+                    editor.apply();
+                    return true;
+                }
+            });
+            Preference notifications6 = (Preference) findPreference("Notifications 6");
+            if(courses.size() < 6){
+                notifications6.setVisible(false);
+            }
+            notifications6.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION6, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION6, false);
+                    }
+                    editor.apply();
+                    return true;
+                }
+            });
+            Preference notifications7 = (Preference) findPreference("Notifications 7");
+            if(courses.size() < 7){
+                notifications7.setVisible(false);
+            }
+            notifications7.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION7, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION7, false);
+                    }
+                    editor.apply();
+                    return true;
+                }
+            });
+            Preference notifications8 = (Preference) findPreference("Notifications 8");
+            if(courses.size() < 8){
+                notifications8.setVisible(false);
+            }
+            notifications8.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION8, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION8, false);
+                    }
+                    editor.apply();
+                    return true;
+                }
+            });
+            Preference notifications9 = (Preference) findPreference("Notifications 9");
+            if(courses.size() < 9){
+                notifications9.setVisible(false);
+            }
+            notifications9.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION9, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION9, false);
+                    }
+                    editor.apply();
+                    return true;
+                }
+            });
+            Preference notifications10 = (Preference) findPreference("Notifications 10");
+            if(courses.size() < 10){
+                notifications10.setVisible(false);
+            }
+            notifications10.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATION10, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATION10, false);
                     }
                     editor.apply();
                     return true;

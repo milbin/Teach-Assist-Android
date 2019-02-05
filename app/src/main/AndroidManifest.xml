@@ -53,8 +53,6 @@
         </activity>
 
 
-        <activity android:name="EditActivity"/>
-
         <receiver android:name=".AlertReceiver"/>
         <activity android:name=".MarksViewMaterial">
         <meta-data
