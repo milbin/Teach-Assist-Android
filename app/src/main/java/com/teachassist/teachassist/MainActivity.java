@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +25,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,12 +42,14 @@ import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 
 import org.decimal4j.util.DoubleRounder;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,43 +62,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Boolean Refresh = false;
     SwipeRefreshLayout SwipeRefresh;
     private DrawerLayout drawer;
-    RelativeLayout relativeLayout;
-    RelativeLayout relativeLayout1;
-    RelativeLayout relativeLayout2;
-    RelativeLayout relativeLayout3;
-    RelativeLayout relativeLayout4;
-    RelativeLayout relativeLayout5;
-    RelativeLayout relativeLayout6;
-    RelativeLayout relativeLayout7;
-    RelativeLayout relativeLayout8;
-    RelativeLayout relativeLayout9;
     LinkedHashMap<String, List<String>> response;
     LinkedHashMap<String, List<String>> settingsResponse;
     List<String> removed = new ArrayList<>();
     ProgressDialog dialog;
     NavigationView navigationView;
     Menu menu;
-    Context context = this;
+    Context context = (Context) this;
     String subjectMark;
-    String subjectMark1;
-    String subjectMark2;
-    String subjectMark3;
-    String subjectMark4;
-    String subjectMark5;
-    String subjectMark6;
-    String subjectMark7;
-    String subjectMark8;
-    String subjectMark9;
-    ImageButton trash;
-    ImageButton trash1;
-    ImageButton trash2;
-    ImageButton trash3;
-    ImageButton trash4;
-    ImageButton trash5;
-    ImageButton trash6;
-    ImageButton trash7;
-    ImageButton trash8;
-    ImageButton trash9;
+    LinkedList<View> Courses = new LinkedList<View>();
 
     ArrayList<Integer> removedCourseIndexes = new ArrayList<>();
     Boolean isEditing = false;
@@ -119,29 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 "Loading...", true);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
 
-        //hide progress bars so that they dont cover text view
-
-        final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-        ProgressBarAverage.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage1 =  findViewById(R.id.SubjectBar1);
-        ProgressBarAverage1.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage2 =  findViewById(R.id.SubjectBar2);
-        ProgressBarAverage2.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage3 =  findViewById(R.id.SubjectBar3);
-        ProgressBarAverage3.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage4 =  findViewById(R.id.SubjectBar4);
-        ProgressBarAverage4.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage5 =  findViewById(R.id.SubjectBar5);
-        ProgressBarAverage5.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage6 =  findViewById(R.id.SubjectBar6);
-        ProgressBarAverage6.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage7 =  findViewById(R.id.SubjectBar7);
-        ProgressBarAverage7.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage8 =  findViewById(R.id.SubjectBar8);
-        ProgressBarAverage8.setVisibility(View.INVISIBLE);
-        final RingProgressBar ProgressBarAverage9 =  findViewById(R.id.SubjectBar9);
-        ProgressBarAverage9.setVisibility(View.INVISIBLE);
-
 
 
 
@@ -158,58 +109,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Crashlytics.log(Log.DEBUG, "password", password);
 
 
-        //4 course relative layouts
-
-        relativeLayout = findViewById(R.id.relativeLayout);
-        relativeLayout.setOnClickListener(new subject_click());
-        relativeLayout1 = findViewById(R.id.relativeLayout1);
-        relativeLayout1.setOnClickListener(new subject_click());
-        relativeLayout2 = findViewById(R.id.relativeLayout2);
-        relativeLayout2.setOnClickListener(new subject_click());
-        relativeLayout3 = findViewById(R.id.relativeLayout3);
-        relativeLayout3.setOnClickListener(new subject_click());
-        relativeLayout4 = findViewById(R.id.relativeLayout4);
-        relativeLayout4.setOnClickListener(new subject_click());
-        relativeLayout5 = findViewById(R.id.relativeLayout5);
-        relativeLayout5.setOnClickListener(new subject_click());
-        relativeLayout6 = findViewById(R.id.relativeLayout6);
-        relativeLayout6.setOnClickListener(new subject_click());
-        relativeLayout7 = findViewById(R.id.relativeLayout7);
-        relativeLayout7.setOnClickListener(new subject_click());
-        relativeLayout8 = findViewById(R.id.relativeLayout8);
-        relativeLayout8.setOnClickListener(new subject_click());
-        relativeLayout9 = findViewById(R.id.relativeLayout9);
-        relativeLayout9.setOnClickListener(new subject_click());
-        relativeLayout.setClickable(true);
-        relativeLayout1.setClickable(true);
-        relativeLayout2.setClickable(true);
-        relativeLayout3.setClickable(true);
-        relativeLayout4.setClickable(true);
-        relativeLayout5.setClickable(true);
-        relativeLayout6.setClickable(true);
-        relativeLayout7.setClickable(true);
-        relativeLayout8.setClickable(true);
-        relativeLayout9.setClickable(true);
-
-        //trash buttons
-        trash = findViewById(R.id.trash_can);
-        trash1 = findViewById(R.id.trash_can1);
-        trash2 = findViewById(R.id.trash_can2);
-        trash3 = findViewById(R.id.trash_can3);
-        trash4 = findViewById(R.id.trash_can4);
-        trash5 = findViewById(R.id.trash_can5);
-        trash6 = findViewById(R.id.trash_can6);
-        trash7 = findViewById(R.id.trash_can7);
-        trash8 = findViewById(R.id.trash_can8);
-        trash9 = findViewById(R.id.trash_can9);
-
-
-
-
-        if (Build.VERSION.SDK_INT <= 23) {
-            //relativeLayout.setVisibility(View.GONE);
-        }
-
 
         // Refresh
         SwipeRefresh = findViewById(R.id.swipeRefresh);
@@ -222,60 +121,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
                         Refresh = true;
-                        TextView EmptyCourse = findViewById(R.id.EmptyCourse);
-                        EmptyCourse.setText("");
-                        TextView EmptyCourse1 = findViewById(R.id.EmptyCourse1);
-                        EmptyCourse1.setText("");
-                        TextView EmptyCourse2 = findViewById(R.id.EmptyCourse2);
-                        EmptyCourse2.setText("");
-                        TextView EmptyCourse3 = findViewById(R.id.EmptyCourse3);
-                        EmptyCourse3.setText("");
-                        TextView EmptyCourse4 = findViewById(R.id.EmptyCourse4);
-                        EmptyCourse4.setText("");
-                        TextView EmptyCourse5 = findViewById(R.id.EmptyCourse5);
-                        EmptyCourse5.setText("");
-                        TextView EmptyCourse6 = findViewById(R.id.EmptyCourse6);
-                        EmptyCourse6.setText("");
-                        TextView EmptyCourse7 = findViewById(R.id.EmptyCourse7);
-                        EmptyCourse7.setText("");
-                        TextView EmptyCourse8 = findViewById(R.id.EmptyCourse8);
-                        EmptyCourse5.setText("");
-                        TextView EmptyCourse9 = findViewById(R.id.EmptyCourse9);
-                        EmptyCourse9.setText("");
 
-                        relativeLayout.setVisibility(View.VISIBLE);
-                        relativeLayout1.setVisibility(View.VISIBLE);
-                        relativeLayout2.setVisibility(View.VISIBLE);
-                        relativeLayout3.setVisibility(View.VISIBLE);
-                        relativeLayout4.setVisibility(View.VISIBLE);
-                        relativeLayout5.setVisibility(View.VISIBLE);
-                        relativeLayout6.setVisibility(View.VISIBLE);
-                        relativeLayout7.setVisibility(View.VISIBLE);
-                        relativeLayout8.setVisibility(View.VISIBLE);
-                        relativeLayout9.setVisibility(View.VISIBLE);
+                        LinearLayout linearLayout = findViewById(R.id.CourseLinearLayout);
+                        for(View rl: Courses) {
+                            linearLayout.removeViewAt(2);
 
-                        relativeLayout.setClickable(true);
-                        relativeLayout1.setClickable(true);
-                        relativeLayout2.setClickable(true);
-                        relativeLayout3.setClickable(true);
-                        relativeLayout4.setClickable(true);
-                        relativeLayout5.setClickable(true);
-                        relativeLayout6.setClickable(true);
-                        relativeLayout7.setClickable(true);
-                        relativeLayout8.setClickable(true);
-                        relativeLayout9.setClickable(true);
-
-                        trash.setVisibility(View.GONE);
-                        trash1.setVisibility(View.GONE);
-                        trash2.setVisibility(View.GONE);
-                        trash3.setVisibility(View.GONE);
-                        trash4.setVisibility(View.GONE);
-                        trash5.setVisibility(View.GONE);
-                        trash6.setVisibility(View.GONE);
-                        trash7.setVisibility(View.GONE);
-                        trash8.setVisibility(View.GONE);
-                        trash9.setVisibility(View.GONE);
+                        }
                         removedCourseIndexes = new ArrayList<>();
+                        isEditing = false;
+                        Courses = new LinkedList<View>();
                         new getTaData().execute();
 
                     }
@@ -320,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v){
+            System.out.println("CLICK");
             Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
             int subjectNumber = ((LinearLayout) v.getParent()).indexOfChild(v) -2;
             int toSubtract = 0;
@@ -328,10 +183,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     toSubtract++;
                 }
             }
+            TextView p = v.findViewById(R.id.Period);
             subjectNumber -= toSubtract;
             System.out.println(subjectNumber);
+            System.out.println(p.getText());
+            System.out.println(toSubtract + "toSubtract");
             String subjectMark = "";
             int counter = 0;
+            System.out.println(subjectNumber);
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter == subjectNumber){
                     subjectMark = entry.getValue().get(0);
@@ -354,39 +213,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onClick(View v) {
             TA ta = new TA();
             Double newAverage = -1.0;
-            View rlParent = (View) v.getParent();
+            View rlParent = (View) v.getParent().getParent();
             String toRemove = "";
             rlParent.setVisibility(View.GONE);
             int toSubtract = 0;
             int courseNum = 0;
 
-            if (rlParent == relativeLayout) {
-                courseNum = 0;
-            } else if (rlParent == relativeLayout1) {
-                courseNum = 1;
-            } else if (rlParent == relativeLayout2) {
-                courseNum = 2;
-            } else if (rlParent == relativeLayout3) {
-                courseNum = 3;
-            } else if (rlParent == relativeLayout4) {
-                courseNum = 4;
-            }else if (rlParent == relativeLayout5) {
-                courseNum = 5;
-            }else if (rlParent == relativeLayout6) {
-                courseNum = 6;
-            }else if (rlParent == relativeLayout7) {
-                courseNum = 7;
-            }else if (rlParent == relativeLayout8) {
-                courseNum = 8;
-            }else if (rlParent == relativeLayout9) {
-                courseNum = 9;
+            int count = 0;
+            for(View rl: Courses) {
+                if (rlParent == rl) {
+                    courseNum = count;
+                }
+                count++;
             }
+
 
             for (int i : removedCourseIndexes) {
                 if (i < courseNum) {
                     toSubtract++;
                 }
             }
+            System.out.println(toSubtract);
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if (counter == courseNum - toSubtract) {
@@ -512,39 +359,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.action_edit:
                 if(!isEditing) {
-                    trash.setVisibility(View.VISIBLE);
-                    trash1.setVisibility(View.VISIBLE);
-                    trash2.setVisibility(View.VISIBLE);
-                    trash3.setVisibility(View.VISIBLE);
-                    trash4.setVisibility(View.VISIBLE);
-                    trash5.setVisibility(View.VISIBLE);
-                    trash6.setVisibility(View.VISIBLE);
-                    trash7.setVisibility(View.VISIBLE);
-                    trash8.setVisibility(View.VISIBLE);
-                    trash9.setVisibility(View.VISIBLE);
-
-                    trash.setOnClickListener(new onTrashClick());
-                    trash1.setOnClickListener(new onTrashClick());
-                    trash2.setOnClickListener(new onTrashClick());
-                    trash3.setOnClickListener(new onTrashClick());
-                    trash4.setOnClickListener(new onTrashClick());
-                    trash5.setOnClickListener(new onTrashClick());
-                    trash6.setOnClickListener(new onTrashClick());
-                    trash7.setOnClickListener(new onTrashClick());
-                    trash8.setOnClickListener(new onTrashClick());
-                    trash9.setOnClickListener(new onTrashClick());
+                    for(View rl: Courses) {
+                        ImageButton trash = rl.findViewById(R.id.trash_can);
+                        trash.setVisibility(View.VISIBLE);
+                        trash.setOnClickListener(new onTrashClick());
+                    }
                     isEditing = true;
                 }else{
-                    trash.setVisibility(View.GONE);
-                    trash1.setVisibility(View.GONE);
-                    trash2.setVisibility(View.GONE);
-                    trash3.setVisibility(View.GONE);
-                    trash4.setVisibility(View.GONE);
-                    trash5.setVisibility(View.GONE);
-                    trash6.setVisibility(View.GONE);
-                    trash7.setVisibility(View.GONE);
-                    trash8.setVisibility(View.GONE);
-                    trash9.setVisibility(View.GONE);
+                    for(View rl: Courses) {
+                        ImageButton trash = rl.findViewById(R.id.trash_can);
+                        trash.setVisibility(View.GONE);
+                        trash.setOnClickListener(new onTrashClick());
+                    }
                     isEditing = false;
                 }
                 return true;
@@ -653,16 +479,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         })
                         .show();
-                relativeLayout.setClickable(false);
-                relativeLayout1.setClickable(false);
-                relativeLayout2.setClickable(false);
-                relativeLayout3.setClickable(false);
-                relativeLayout4.setClickable(false);
-                relativeLayout5.setClickable(false);
-                relativeLayout6.setClickable(false);
-                relativeLayout7.setClickable(false);
-                relativeLayout8.setClickable(false);
-                relativeLayout9.setClickable(false);
                 dialog.dismiss();
                 return;
             }
@@ -670,370 +486,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             AverageInt.setText(String.valueOf(average)+"%");
             System.out.println(response);
 
-
-
-            // Set Subject Text
-            Float Mark = 0f;
-            int counter = 0;
-            String SubjectAbrvString = "";
-            String SubjectNameString = "";
-            String RoomNumber  = "";
+            int periodNum = 1;
+            LinearLayout linearLayout = findViewById(R.id.CourseLinearLayout);
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                if(counter == 0) {
-                    if (!entry.getKey().contains("NA")) {
+                View relativeLayout = LayoutInflater.from(context).inflate(R.layout.course_layout, null);
+                linearLayout.addView(relativeLayout);
+                relativeLayout.setOnClickListener(new subject_click());
+                Float Mark = 0f;
+                String SubjectAbrvString = "";
+                String SubjectNameString = "";
+                String RoomNumber  = "";
+                if (!entry.getKey().contains("NA")) {
+                    try {
                         Mark = Float.parseFloat(entry.getValue().get(0));
-                        TextView SubjectInt = findViewById(R.id.SubjectInt);
-                        SubjectInt.setText(Mark.toString()+"%");
-                        SubjectAbrvString =  entry.getValue().get(1);
+                    }catch (Exception e){}
+                    TextView SubjectInt = relativeLayout.findViewById(R.id.SubjectInt);
+                    SubjectInt.setText(Mark.toString()+"%");
+                    try {
+                        SubjectAbrvString = entry.getValue().get(1);
+                    }catch (Exception e){}
+                    try{
                         SubjectNameString =  entry.getValue().get(2);
+                    }catch (Exception e){}
+                    try{
                         RoomNumber  = entry.getValue().get(3);
-                        subjectMark = Mark.toString();
-                    }
-                    else {
+                    }catch (Exception e){}
+                    subjectMark = Mark.toString();
+                }else {
+                    try {
                         SubjectAbrvString = entry.getValue().get(0);
-                        SubjectNameString = entry.getValue().get(1);
-                        RoomNumber = entry.getValue().get(2);
-                    }
+                    }catch (Exception e){}
+                    try{
+                        SubjectNameString =  entry.getValue().get(1);
+                    }catch (Exception e){}
+                    try{
+                        RoomNumber  = entry.getValue().get(2);
+                    }catch (Exception e){}
                 }
-                counter++;
-            }
+                TextView SubjectAbrv = relativeLayout.findViewById(R.id.SubjectAbrv);
+                SubjectAbrv.setText(SubjectAbrvString);
+                TextView SubjectName = relativeLayout.findViewById(R.id.SubjectName);
+                SubjectName.setText(SubjectNameString);
+                TextView roomNumber  = relativeLayout.findViewById(R.id.RoomNumber);
+                roomNumber.setText("Room " + RoomNumber );
+                TextView period = relativeLayout.findViewById(R.id.Period);
+                period.setText("Period "+periodNum+":");
 
-            TextView SubjectAbrv = findViewById(R.id.SubjectAbrv);
-            SubjectAbrv.setText(SubjectAbrvString);
-            TextView SubjectName = findViewById(R.id.SubjectName);
-            SubjectName.setText(SubjectNameString);
-
-
-            TextView roomNumber  = findViewById(R.id.RoomNumber);
-            roomNumber .setText("Room " + RoomNumber );
-            //Set Subject1 Text
-            Float Mark1 = 0f;
-            int counter1 = 0;
-            String SubjectAbrvString1 = "";
-            String SubjectNameString1 = "";
-            String RoomNumber1 = "";
-            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                if(counter1 == 1) {
-                    if (!entry.getKey().contains("NA")) {
-                        Mark1 = Float.parseFloat(entry.getValue().get(0));
-                        TextView SubjectInt1 = findViewById(R.id.SubjectInt1);
-                        SubjectInt1.setText(Mark1.toString() + "%");
-                        SubjectAbrvString1 = entry.getValue().get(1);
-                        SubjectNameString1 = entry.getValue().get(2);
-                        RoomNumber1 = entry.getValue().get(3);
-                        subjectMark1 = Mark1.toString();
-                    }
-                    else{
-                        SubjectAbrvString1 = entry.getValue().get(0);
-                        SubjectNameString1 = entry.getValue().get(1);
-                        RoomNumber1 = entry.getValue().get(2);
-                    }
-                }
-                counter1++;
-            }
-
-            TextView SubjectAbrv1 = findViewById(R.id.SubjectAbrv1);
-            SubjectAbrv1.setText(SubjectAbrvString1);
-            TextView SubjectName1 = findViewById(R.id.SubjectName1);
-            SubjectName1.setText(SubjectNameString1);
-            TextView roomNumber1 = findViewById(R.id.RoomNumber1);
-            roomNumber1.setText("Room " + RoomNumber1);
-
-
-            //Set Subject2 Text
-            Float Mark2 = 0f;
-            int counter2 = 0;
-            String SubjectAbrvString2 = "";
-            String SubjectNameString2 = "";
-            String RoomNumber2 = "";
-            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                if(counter2 == 2) {
-                    if (!entry.getKey().contains("NA")) {
-                        Mark2 = Float.parseFloat(entry.getValue().get(0));
-                        TextView SubjectInt2 = findViewById(R.id.SubjectInt2);
-                        SubjectInt2.setText(Mark2.toString()+"%");
-
-                        SubjectAbrvString2 =  entry.getValue().get(1);
-                        SubjectNameString2 =  entry.getValue().get(2);
-                        RoomNumber2 = entry.getValue().get(3);
-                        subjectMark2 = Mark2.toString();
-                    }
-                    else{
-                        SubjectAbrvString2 =  entry.getValue().get(0);
-                        SubjectNameString2 =  entry.getValue().get(1);
-                        RoomNumber2 = entry.getValue().get(2);
-                    }
-                }
-                counter2++;
-            }
-
-            TextView SubjectAbrv2 = findViewById(R.id.SubjectAbrv2);
-            SubjectAbrv2.setText(SubjectAbrvString2);
-            TextView SubjectName2 = findViewById(R.id.SubjectName2);
-            SubjectName2.setText(SubjectNameString2);
-            TextView roomNumber2 = findViewById(R.id.RoomNumber2);
-            roomNumber2.setText("Room " + RoomNumber2);
-
-
-
-            //Set Subject3 Text
-            Float Mark3 = 0f;
-            int counter3 = 0;
-            String SubjectAbrvString3 = "";
-            String SubjectNameString3 = "";
-            String RoomNumber3 = "";
-            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                if(counter3 == 3) {
-                    if (!entry.getKey().contains("NA")) {
-                        Mark3 = Float.parseFloat(entry.getValue().get(0));
-                        TextView SubjectInt3 = findViewById(R.id.SubjectInt3);
-                        SubjectInt3.setText(Mark3.toString() + "%");
-
-                        SubjectAbrvString3 = entry.getValue().get(1);
-                        SubjectNameString3 = entry.getValue().get(2);
-                        RoomNumber3 = entry.getValue().get(3);
-                        subjectMark3 = Mark3.toString();
-                    }
-                    else{
-                        SubjectAbrvString3 = entry.getValue().get(0);
-                        SubjectNameString3 = entry.getValue().get(1);
-                        RoomNumber3 = entry.getValue().get(2);
-                    }
-                }
-                counter3++;
-            }
-
-            TextView SubjectAbrv3 = findViewById(R.id.SubjectAbrv3);
-            SubjectAbrv3.setText(SubjectAbrvString3);
-            TextView SubjectName3 = findViewById(R.id.SubjectName3);
-            SubjectName3.setText(SubjectNameString3);
-            TextView roomNumber3 = findViewById(R.id.RoomNumber3);
-            roomNumber3.setText("Room " + RoomNumber3);
-
-
-            if(response.size() > 4) {
-                relativeLayout4.setVisibility(View.VISIBLE);
-                //Set Subject4 Text
-                Float Mark4 = 0f;
-                int counter4 = 0;
-                String SubjectAbrvString4 = "";
-                String SubjectNameString4 = "";
-                String RoomNumber4 = "";
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                    if (counter4 == 4) {
-                        if (!entry.getKey().contains("NA")) {
-                            Mark4 = Float.parseFloat(entry.getValue().get(0));
-                            TextView SubjectInt4 = findViewById(R.id.SubjectInt4);
-                            SubjectInt4.setText(Mark4.toString() + "%");
-
-                            SubjectAbrvString4 = entry.getValue().get(1);
-                            SubjectNameString4 = entry.getValue().get(2);
-                            RoomNumber4 = entry.getValue().get(3);
-                            subjectMark4 = Mark4.toString();
-                        } else {
-                            SubjectAbrvString4 = entry.getValue().get(0);
-                            SubjectNameString4 = entry.getValue().get(1);
-                            RoomNumber4 = entry.getValue().get(2);
-                        }
-                    }
-                    counter4++;
-                }
-
-                TextView SubjectAbrv4 = findViewById(R.id.SubjectAbrv4);
-                SubjectAbrv4.setText(SubjectAbrvString4);
-                TextView SubjectName4 = findViewById(R.id.SubjectName4);
-                SubjectName4.setText(SubjectNameString4);
-                TextView roomNumber4 = findViewById(R.id.RoomNumber4);
-                roomNumber4.setText("Room " + RoomNumber4);
-            }else{
-                relativeLayout4.setVisibility(View.GONE);
-            }
-
-            if(response.size() > 5) {
-                relativeLayout5.setVisibility(View.VISIBLE);
-                //Set Subject5 Text
-                Float Mark5 = 0f;
-                int counter5 = 0;
-                String SubjectAbrvString5 = "";
-                String SubjectNameString5 = "";
-                String RoomNumber5 = "";
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                    if (counter5 == 5) {
-                        if (!entry.getKey().contains("NA")) {
-                            Mark5 = Float.parseFloat(entry.getValue().get(0));
-                            TextView SubjectInt5 = findViewById(R.id.SubjectInt5);
-                            SubjectInt5.setText(Mark5.toString() + "%");
-
-                            SubjectAbrvString5 = entry.getValue().get(1);
-                            SubjectNameString5 = entry.getValue().get(2);
-                            RoomNumber5 = entry.getValue().get(3);
-                            subjectMark5 = Mark5.toString();
-                        } else {
-                            SubjectAbrvString5 = entry.getValue().get(0);
-                            SubjectNameString5 = entry.getValue().get(1);
-                            RoomNumber5 = entry.getValue().get(2);
-                        }
-                    }
-                    counter5++;
-                }
-
-                TextView SubjectAbrv5 = findViewById(R.id.SubjectAbrv5);
-                SubjectAbrv5.setText(SubjectAbrvString5);
-                TextView SubjectName5 = findViewById(R.id.SubjectName5);
-                SubjectName5.setText(SubjectNameString5);
-                TextView roomNumber5 = findViewById(R.id.RoomNumber5);
-                roomNumber5.setText("Room " + RoomNumber5);
-            }else{
-                relativeLayout5.setVisibility(View.GONE);
-            }
-
-            if(response.size() > 6) {
-                relativeLayout6.setVisibility(View.VISIBLE);
-                //Set Subject6 Text
-                Float Mark6 = 0f;
-                int counter6 = 0;
-                String SubjectAbrvString6 = "";
-                String SubjectNameString6 = "";
-                String RoomNumber6 = "";
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                    if (counter6 == 6) {
-                        if (!entry.getKey().contains("NA")) {
-                            Mark6 = Float.parseFloat(entry.getValue().get(0));
-                            TextView SubjectInt6 = findViewById(R.id.SubjectInt6);
-                            SubjectInt6.setText(Mark6.toString() + "%");
-
-                            SubjectAbrvString6 = entry.getValue().get(1);
-                            SubjectNameString6 = entry.getValue().get(2);
-                            RoomNumber6 = entry.getValue().get(3);
-                            subjectMark6 = Mark6.toString();
-                        } else {
-                            SubjectAbrvString6 = entry.getValue().get(0);
-                            SubjectNameString6 = entry.getValue().get(1);
-                            RoomNumber6 = entry.getValue().get(2);
-                        }
-                    }
-                    counter6++;
-                }
-
-                TextView SubjectAbrv6 = findViewById(R.id.SubjectAbrv6);
-                SubjectAbrv6.setText(SubjectAbrvString6);
-                TextView SubjectName6 = findViewById(R.id.SubjectName6);
-                SubjectName6.setText(SubjectNameString6);
-                TextView roomNumber6 = findViewById(R.id.RoomNumber6);
-                roomNumber6.setText("Room " + RoomNumber6);
-            }else{
-                relativeLayout6.setVisibility(View.GONE);
-            }
-            if(response.size() > 7) {
-                relativeLayout7.setVisibility(View.VISIBLE);
-                //Set Subject7 Text
-                Float Mark7 = 0f;
-                int counter7 = 0;
-                String SubjectAbrvString7 = "";
-                String SubjectNameString7 = "";
-                String RoomNumber7 = "";
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                    if (counter7 == 7) {
-                        if (!entry.getKey().contains("NA")) {
-                            Mark7 = Float.parseFloat(entry.getValue().get(0));
-                            TextView SubjectInt7 = findViewById(R.id.SubjectInt7);
-                            SubjectInt7.setText(Mark7.toString() + "%");
-                            //TODO if there is no room number it causes a crash
-                            SubjectAbrvString7 = entry.getValue().get(1);
-                            SubjectNameString7 = entry.getValue().get(2);
-                            RoomNumber7 = entry.getValue().get(3);
-                            subjectMark7 = Mark7.toString();
-                        } else {
-                            SubjectAbrvString7 = entry.getValue().get(0);
-                            SubjectNameString7 = entry.getValue().get(1);
-                            RoomNumber7 = entry.getValue().get(2);
-                        }
-                    }
-                    counter7++;
-                }
-
-                TextView SubjectAbrv7 = findViewById(R.id.SubjectAbrv7);
-                SubjectAbrv7.setText(SubjectAbrvString7);
-                TextView SubjectName7 = findViewById(R.id.SubjectName7);
-                SubjectName7.setText(SubjectNameString7);
-                TextView roomNumber7 = findViewById(R.id.RoomNumber7);
-                roomNumber7.setText("Room " + RoomNumber7);
-            }else{
-                relativeLayout7.setVisibility(View.GONE);
-            }
-            if(response.size() > 8) {
-                relativeLayout8.setVisibility(View.VISIBLE);
-                //Set Subject8 Text
-                Float Mark8 = 0f;
-                int counter8 = 0;
-                String SubjectAbrvString8 = "";
-                String SubjectNameString8 = "";
-                String RoomNumber8 = "";
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                    if (counter8 == 8) {
-                        if (!entry.getKey().contains("NA")) {
-                            Mark8 = Float.parseFloat(entry.getValue().get(0));
-                            TextView SubjectInt8 = findViewById(R.id.SubjectInt8);
-                            SubjectInt8.setText(Mark8.toString() + "%");
-
-                            SubjectAbrvString8 = entry.getValue().get(1);
-                            SubjectNameString8 = entry.getValue().get(2);
-                            RoomNumber8 = entry.getValue().get(3);
-                            subjectMark8 = Mark8.toString();
-                        } else {
-                            SubjectAbrvString8 = entry.getValue().get(0);
-                            SubjectNameString8 = entry.getValue().get(1);
-                            RoomNumber8 = entry.getValue().get(2);
-                        }
-                    }
-                    counter8++;
-                }
-
-                TextView SubjectAbrv8 = findViewById(R.id.SubjectAbrv8);
-                SubjectAbrv8.setText(SubjectAbrvString8);
-                TextView SubjectName8 = findViewById(R.id.SubjectName8);
-                SubjectName8.setText(SubjectNameString8);
-                TextView roomNumber8 = findViewById(R.id.RoomNumber8);
-                roomNumber8.setText("Room " + RoomNumber8);
-            }else{
-                relativeLayout8.setVisibility(View.GONE);
-            }
-            if(response.size() > 9) {
-                relativeLayout9.setVisibility(View.VISIBLE);
-                //Set Subject9 Text
-                Float Mark9 = 0f;
-                int counter9 = 0;
-                String SubjectAbrvString9 = "";
-                String SubjectNameString9 = "";
-                String RoomNumber9 = "";
-                for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                    if (counter9 == 9) {
-                        if (!entry.getKey().contains("NA")) {
-                            Mark9 = Float.parseFloat(entry.getValue().get(0));
-                            TextView SubjectInt9 = findViewById(R.id.SubjectInt9);
-                            SubjectInt9.setText(Mark9.toString() + "%");
-
-                            SubjectAbrvString9 = entry.getValue().get(1);
-                            SubjectNameString9 = entry.getValue().get(2);
-                            RoomNumber9 = entry.getValue().get(3);
-                            subjectMark9 = Mark9.toString();
-                        } else {
-                            SubjectAbrvString9 = entry.getValue().get(0);
-                            SubjectNameString9 = entry.getValue().get(1);
-                            RoomNumber9 = entry.getValue().get(2);
-                        }
-                    }
-                    counter9++;
-                }
-
-                TextView SubjectAbrv9 = findViewById(R.id.SubjectAbrv9);
-                SubjectAbrv9.setText(SubjectAbrvString9);
-                TextView SubjectName9 = findViewById(R.id.SubjectName9);
-                SubjectName9.setText(SubjectNameString9);
-                TextView roomNumber9 = findViewById(R.id.RoomNumber9);
-                roomNumber9.setText("Room " + RoomNumber9);
-            }else{
-                relativeLayout9.setVisibility(View.GONE);
+                Courses.add(relativeLayout);
+                periodNum++;
             }
 
             dialog.dismiss();
@@ -1041,31 +541,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-        private void RunTasks(LinkedHashMap<String, List<String>> response){
 
+        private void RunTasks(LinkedHashMap<String, List<String>> response){
             new MainActivity.Average().execute(response);
-            new MainActivity.Subject().execute(response);
-            new MainActivity.Subject1().execute(response);
-            new MainActivity.Subject2().execute(response);
-            new MainActivity.Subject3().execute(response);
-            if(response.size() > 4) {
-                new MainActivity.Subject4().execute(response);
+            int currentSubject = 0;
+            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
+                new MainActivity.Subject().execute(response, currentSubject);
+                currentSubject++;
             }
-            if(response.size() > 5) {
-                new MainActivity.Subject5().execute(response);
-            }
-            if(response.size() > 6) {
-                new MainActivity.Subject6().execute(response);
-            }
-            if(response.size() > 7) {
-                new MainActivity.Subject7().execute(response);
-            }
-            if(response.size() > 8) {
-                new MainActivity.Subject8().execute(response);
-            }
-            if(response.size() > 9) {
-                new MainActivity.Subject9().execute(response);
-            }
+
             if(Refresh.equals(true)) {
                 SwipeRefresh.setRefreshing(false);
                 Refresh = false;
@@ -1128,25 +612,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
     //---------------------------------------------------------------------------------------------------------------------------------------
-    private class Subject extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
+    private class Subject extends AsyncTask<Object, Object, Object[]> {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
         }
 
         @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-
+        protected Object[] doInBackground(Object... params){
+            LinkedHashMap<String, List<String>> response =(LinkedHashMap<String, List<String>>) params[0];
+            int currentSubject = (int) params[1];
+            View currentRL = Courses.get(currentSubject);
             Float Mark = 0f;
             int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 0) {
+            for (Map.Entry<String, List<String>> entry :response.entrySet()) {
+                if(counter == currentSubject) {
                     if(!entry.getKey().contains("NA")) {
                         Mark = Float.parseFloat(entry.getValue().get(0));
 
                     }
                     else {
-                        return -1f;
+                        return new Object[]{-1f, currentSubject};
 
                     }
 
@@ -1154,14 +640,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 counter++;
             }
 
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
+            //try {
+                final RingProgressBar ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
                 ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
                     @Override
                     public void progressToComplete() {
@@ -1169,713 +649,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout.setClickable(false);
-            }
-
-
-        }
-    }
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject1 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 1) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-                    }
-                    else {
-                        return -1f;
-
-                    }
-
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar1);
+                /*
                 for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
+                    publishProgress (i, currentSubject);
                     Thread.sleep(0, 50);
+                }*/
+                publishProgress(Math.round(Mark), currentSubject);
 
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
+            //}
+            //catch (InterruptedException e){
+            //    e.printStackTrace();
+            //}
+            return new Object[]{Mark, currentSubject};
 
         }
 
-        protected void onProgressUpdate(Integer... progress) {
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
+        protected void onProgressUpdate(Object... params) {
+            int currentSubject = (int) params[1];
+            View currentRL = Courses.get(currentSubject);
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) currentRL.findViewById(R.id.SubjectBar);
             if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
                 ProgressBarAverage.setVisibility(View.VISIBLE);
             }
-            ProgressBarAverage.setProgress(progress[0]);
+            ProgressBarAverage.setProgress((int)params[0]);
 
         }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse1);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar1);
+
+        protected void onPostExecute(Object... params) {
+            if(params[0].equals(-1f)){
+                int currentSubject = (int) params[1];
+                View currentRL = Courses.get(currentSubject);
+                TextView EmptyCourse = currentRL.findViewById(R.id.EmptyCourse);
+                final RingProgressBar ProgressBarAverage = (RingProgressBar) currentRL.findViewById(R.id.SubjectBar);
                 EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout1.setClickable(false);
+                currentRL.setClickable(false);
             }
 
 
         }
     }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject2 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 2) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-
-
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar2);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse2);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar2);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout2.setClickable(false);
-            }
-
-
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject3 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 3) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar3);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse3);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar3);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout3.setClickable(false);
-            }
-
-
-
-
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject4 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 4) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar4);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar4);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse4);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar4);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout4.setClickable(false);
-            }
-
-
-
-
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject5 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 5) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar5);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar5);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse5);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar5);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout5.setClickable(false);
-            }
-
-
-
-
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject6 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 6) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar6);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar6);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse6);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar6);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout6.setClickable(false);
-            }
-
-
-
-
-        }
-    }
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject7 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 4) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar7);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar7);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse7);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar7);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout7.setClickable(false);
-            }
-
-
-
-
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject8 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 5) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar8);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar8);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse8);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar8);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout8.setClickable(false);
-            }
-
-
-
-
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------
-
-    private class Subject9 extends AsyncTask<HashMap<String, List<String>>, Integer, Float> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry : response[0].entrySet()) {
-                if(counter == 6) {
-                    if(!entry.getKey().contains("NA")) {
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return -1f;
-
-                    }
-                }
-                counter++;
-            }
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.SubjectBar9);
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Mark;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar9);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Mark) {
-            if(Mark.equals(-1f)){
-                TextView EmptyCourse = findViewById(R.id.EmptyCourse9);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.SubjectBar9);
-                EmptyCourse.setText(R.string.EmptyText);
-                relativeLayout9.setClickable(false);
-            }
-
-
-
-
-        }
-    }
-
 
 }

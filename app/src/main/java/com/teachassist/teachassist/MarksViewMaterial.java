@@ -105,11 +105,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                     public void onRefresh() {
                         Intent intent = getIntent();
                         Mark = intent.getStringExtra("subject Mark");
-                        System.out.println(linearLayout.getChildCount() + "HERE");
                         int length = linearLayout.getChildCount();
                         for (int i = 1; i < length; i++) {
                             linearLayout.removeViewAt(1);
-                            System.out.println("REMOVED");
                         }
                         removedAssignmentIndexList = new ArrayList<>();
                         assignmentIndex = new LinkedHashMap<>();
@@ -361,7 +359,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                         public void onClick(View v) {
                             RelativeLayout rlNested = v.findViewById(R.id.relativeLayout_marks_view);
                             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) rlNested.getLayoutParams();
-                            System.out.println("CLICK" + rlNested.getHeight());
                             if(original_height_of_assignment == -1){
                                 original_height_of_assignment = rlNested.getHeight();
                             }
@@ -570,7 +567,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                     Title.setText(title);
 
                     //set mark
-                    System.out.println(i);
                     TextView Average = rl.findViewById(R.id.AveragePercent);
                     String returnval = CalculateAverage(marks, String.valueOf(i));
                     if(returnval.equals("No Mark")){
@@ -796,7 +792,6 @@ public class MarksViewMaterial extends AppCompatActivity {
         DecimalFormat round = new DecimalFormat(".#");
         try {
             JSONObject weights = marks.getJSONObject("categories");
-            System.out.println(weights);
             Double weightK = weights.getDouble("K") * 10 * 0.7;
             Double weightT = weights.getDouble("T") * 10 * 0.7;
             Double weightC = weights.getDouble("C") * 10 * 0.7;
