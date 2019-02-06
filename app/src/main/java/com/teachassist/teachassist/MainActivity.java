@@ -303,7 +303,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 }
                 for (Map.Entry<String, List<String>> entry : settingsResponse.entrySet()) {
-                    list.add(entry.getValue().get(1));
+                    try {
+                        list.add(entry.getValue().get(1));
+                    }catch (IndexOutOfBoundsException e){
+                        list.add(entry.getValue().get(0));
+                    }
                 }
                 settingsIntent.putStringArrayListExtra("key", list); //Optional parameters
 
