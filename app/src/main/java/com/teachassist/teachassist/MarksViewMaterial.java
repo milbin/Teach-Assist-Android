@@ -226,6 +226,17 @@ public class MarksViewMaterial extends AppCompatActivity {
         }
         protected void onPostExecute(JSONObject marks){
             if(marks == null){
+                new AlertDialog.Builder(context)
+                        .setTitle("Connection Error")
+                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                recreate();
+                            }
+                        })
+                        .show();
+                dialog.dismiss();
                 return;
             }
             numberOfAssignments= marks.length()-1;

@@ -293,10 +293,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new AlertDialog.Builder(context)
                             .setTitle("Connection Error")
                             .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Log.d("MainActivity", "No internet connection");
+                                    recreate();
                                 }
                             })
                             .show();
@@ -443,16 +444,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(response != null) {
                 settingsResponse = (LinkedHashMap<String, List<String>>) response.clone(); //stores original response for settings intent, if not clicking on settings will raise exception when you delete courses
             }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("Connection Error")
-                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Log.d("MainActivity", "No internet connection");
-                            }
-                        })
-                        .show();
+               return null;
             }
             Gson gson = new Gson();
             String list = gson.toJson(response);
@@ -476,10 +468,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new AlertDialog.Builder(context)
                         .setTitle("Connection Error")
                         .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Log.d("MainActivity", "No internet connection");
+                                recreate();
                             }
                         })
                         .show();

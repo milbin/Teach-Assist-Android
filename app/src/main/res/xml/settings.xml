@@ -72,6 +72,12 @@
             android:key="Notifications 10"
             android:summary="Enable notifications for period 10 class"
             android:title="Period 10" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="All Notifications"
+            android:key="Notifications EXTRA"
+            android:summary="Enable notifications for period 11+ class"
+            android:title="Period 11+" />
 
 
 

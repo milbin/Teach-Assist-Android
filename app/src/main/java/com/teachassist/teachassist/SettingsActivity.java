@@ -87,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
         public static final String NOTIFICATION8 = "NOTIFICATION8";
         public static final String NOTIFICATION9 = "NOTIFICATION9";
         public static final String NOTIFICATION10 = "NOTIFICATION10";
+        public static final String NOTIFICATIONEXTRA = "NOTIFICATIONEXTRA";
 
 
         @Override
@@ -105,6 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
             Preference notificationSummary8 = findPreference("Notifications 8");
             Preference notificationSummary9 = findPreference("Notifications 9");
             Preference notificationSummary10 = findPreference("Notifications 10");
+            Preference notificationSummaryEXTRA = findPreference("Notifications EXTRA");
             notificationSummary1.setSummary("Disable Notifications for: " + courses.get(0));
             notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
             notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
@@ -127,6 +129,9 @@ public class SettingsActivity extends AppCompatActivity {
             if(courses.size() > 9) {
                 notificationSummary10.setSummary("Disable Notifications for: " + courses.get(9));
             }
+            if(courses.size() > 10) {
+                notificationSummaryEXTRA.setSummary("Disable Notifications for Periods 11+  " );
+            }
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             Preference all_notifications = getPreferenceManager().findPreference("All Notifications");
             all_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -145,6 +150,7 @@ public class SettingsActivity extends AppCompatActivity {
                         editor.putBoolean(NOTIFICATION8, true);
                         editor.putBoolean(NOTIFICATION9, true);
                         editor.putBoolean(NOTIFICATION10, true);
+                        editor.putBoolean(NOTIFICATIONEXTRA, true);
                     }else{
                         editor.putBoolean(ALLNOTIFICATIONS, false);
                         editor.putBoolean(NOTIFICATION1, false);
@@ -157,6 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
                         editor.putBoolean(NOTIFICATION8, false);
                         editor.putBoolean(NOTIFICATION9, false);
                         editor.putBoolean(NOTIFICATION10, false);
+                        editor.putBoolean(NOTIFICATIONEXTRA, false);
                     }
                     editor.apply();
                     return true;
@@ -336,6 +343,26 @@ public class SettingsActivity extends AppCompatActivity {
                     }else {
                         editor.putBoolean(ALLNOTIFICATIONS, false);
                         editor.putBoolean(NOTIFICATION10, false);
+                    }
+                    editor.apply();
+                    return true;
+                }
+            });
+
+            Preference notificationsEXTRA = (Preference) findPreference("Notifications EXTRA");
+            if(courses.size() < 11){
+                notificationsEXTRA.setVisible(false);
+            }
+            notificationsEXTRA.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(Boolean.valueOf(newValue.toString())) {
+                        editor.putBoolean(ALLNOTIFICATIONS, true);
+                        editor.putBoolean(NOTIFICATIONEXTRA, true);
+                    }else {
+                        editor.putBoolean(ALLNOTIFICATIONS, false);
+                        editor.putBoolean(NOTIFICATIONEXTRA, false);
                     }
                     editor.apply();
                     return true;

@@ -141,12 +141,21 @@ public class AlertReceiver extends BroadcastReceiver {
             ArrayList list2 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
             ArrayList list3 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
             ArrayList list4 = new ArrayList<>(Arrays.asList("87.4", "MCR3U1-01", "Functions and Relations", "142"));
+
+            ArrayList list5 = new ArrayList<>(Arrays.asList("64.2", "SBI3U2-01", "Biology", "123"));
+            ArrayList list6 = new ArrayList<>(Arrays.asList("93.7", "HFN2OF-01", "Food and Nutrition", "138"));
+            ArrayList list7 = new ArrayList<>(Arrays.asList("80.6", "ENG3U1-04", "English", "214"));
+            ArrayList list8 = new ArrayList<>(Arrays.asList("87.4", "SCH3U1-03", "Chemistry", "142"));
             LinkedHashMap<String, List<String>> newResponse = new LinkedHashMap<>();
             newResponse.put("283098", list1);
             newResponse.put("283003", list2);
             newResponse.put("283001", list3);
             newResponse.put("283152", list4);
-            */
+            newResponse.put("NA5", list5);
+            newResponse.put("NA6", list6);
+            newResponse.put("NA7", list7);
+            newResponse.put("NA8", list8);*/
+
 
 
 
@@ -195,6 +204,9 @@ public class AlertReceiver extends BroadcastReceiver {
                     }
                     int course = 0;
                     for (LinkedHashMap.Entry<String, List<String>> entry : newResponse.entrySet()) {
+                        System.out.println(!entry.getValue().get(0).equals(toSend.get(course)));
+                        System.out.println(toSend.get(course).toString().contains("NA"));
+
                         if (entry.getKey().contains("NA")) {
                             //toSend.remove(entry.getKey());
                         } else if (!entry.getValue().get(0).equals(toSend.get(course)) || toSend.get(course).toString().contains("NA")) { // idk why u gotta add toString here
@@ -204,356 +216,50 @@ public class AlertReceiver extends BroadcastReceiver {
                             JSONObject marks;
                             List<JSONObject> returnVal;
 
-                            if (course == 0) {
-                                returnVal = ta.newGetMarks(0);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                        if (assignmentNumber == marks.length() - 2) {
-                                            assignmentName = assignment.getString("title");
-                                            assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                        }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION1, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_1_ID,
-                                                0, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(1, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                            editor.apply();
-
-                                    }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
+                            //handle each course
+                            returnVal = ta.newGetMarks(course);
+                            if(returnVal == null){
+                                continue;
+                            }else{
+                                marks = returnVal.get(0);
                             }
-
-                            else if (course == 1) {
-                                returnVal = ta.newGetMarks(1);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
+                            String assignmentName = "";
+                            String assignmentAverage = "";
+                            try {
+                                int assignmentNumber = marks.length() - 2;
+                                JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
+                                if (assignmentNumber == marks.length() - 2) {
+                                    assignmentName = assignment.getString("title");
+                                    assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
                                 }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION2, true);
+                                SendNotifications sendNotifications = new SendNotifications(Globalcontext);
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
+                                if(course < 11) {
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean("NOTIFICATION"+(course+1), true);
                                     if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_2_ID,
-                                                1, "New Assignment posted in: " + courseName,
+                                        Notification notification = sendNotifications.sendOnChannel("course"+(course+1),
+                                                course, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(2, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                            editor.apply();
-
+                                        sendNotifications.getManager().notify(course, notification);
                                     }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (course == 2) {
-                                returnVal = ta.newGetMarks(2);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION3, true);
+                                }else {
+                                    Boolean enabledNotifications = sharedPreferences.getBoolean("NOTIFICATIONEXTRA", true);
                                     if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_3_ID,
-                                                2, "New Assignment posted in: " + courseName,
+                                        Notification notification = sendNotifications.sendOnChannel("courseEXTRA",
+                                                course, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(3, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                            editor.apply();
-
+                                        sendNotifications.getManager().notify(course, notification);
                                     }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
                                 }
-                            }
-                            else if (course == 3) {
-                                returnVal = ta.newGetMarks(3);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
+                                System.out.println("SENT NOTIFICATION");
+                                editor.putString(RESPONSE, list);
+                                editor.apply();
 
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION4, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                            Notification notification = sendNotifications.sendOnChannel(CHANNEL_4_ID,
-                                                    3, "New Assignment posted in: " + courseName,
-                                                    "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                            sendNotifications.getManager().notify(4, notification);
-                                            System.out.println("SENT NOTIFICATION");
-                                            editor.putString(RESPONSE, list);
-                                            editor.apply();
 
-                                    }
 
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (course == 4 && newResponse.size() > 4) {
-                                returnVal = ta.newGetMarks(4);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION5, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_5_ID,
-                                                4, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(5, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                            editor.apply();
-
-                                    }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (course == 5 && newResponse.size() > 5) {
-                                returnVal = ta.newGetMarks(5);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION6, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_6_ID,
-                                                5, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(6, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                        editor.apply();
-
-                                    }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (course == 6 && newResponse.size() > 6) {
-                                returnVal = ta.newGetMarks(6);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION7, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_7_ID,
-                                                6, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(7, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                        editor.apply();
-
-                                    }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (course == 7 && newResponse.size() > 7) {
-                                returnVal = ta.newGetMarks(7);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION8, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_8_ID,
-                                                7, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(8, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                        editor.apply();
-
-                                    }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (course == 8 && newResponse.size() > 8) {
-                                returnVal = ta.newGetMarks(8);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION9, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_9_ID,
-                                                8, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(9, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                        editor.apply();
-
-                                    }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
-                            }
-                            else if (course == 9 && newResponse.size() > 9) {
-                                returnVal = ta.newGetMarks(9);
-                                if(returnVal == null){
-                                    continue;
-                                }else{
-                                    marks = returnVal.get(0);
-                                }
-                                String assignmentName = "";
-                                String assignmentAverage = "";
-                                try {
-                                    int assignmentNumber = marks.length() - 2;
-                                    JSONObject assignment = marks.getJSONObject(String.valueOf(assignmentNumber));
-                                    if (assignmentNumber == marks.length() - 2) {
-                                        assignmentName = assignment.getString("title");
-                                        assignmentAverage = CalculateAverage(marks, String.valueOf(assignmentNumber));
-                                    }
-
-                                    SendNotifications sendNotifications = new SendNotifications(Globalcontext);
-                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
-                                    Boolean enabledNotifications = sharedPreferences.getBoolean(NOTIFICATION10, true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
-                                        Notification notification = sendNotifications.sendOnChannel(CHANNEL_10_ID,
-                                                9, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
-                                        sendNotifications.getManager().notify(10, notification);
-                                        System.out.println("SENT NOTIFICATION");
-                                        editor.putString(RESPONSE, list);
-                                        editor.apply();
-
-                                    }
-
-                                } catch(JSONException e){
-                                    e.printStackTrace();
-                                }
+                            } catch(JSONException e){
+                                e.printStackTrace();
+                                System.out.println(marks);
                             }
                         }
                         course++;
