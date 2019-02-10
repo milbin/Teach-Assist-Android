@@ -1,10 +1,8 @@
 # Teach-Assist
 An android app for the YRDSB Teach Assist website
 Avaliable now in Beta:
-https://play.google.com/store/apps/details?id=com.teachassist.teachassist
-<aside class="warning">
-We've moved to GitLab, you can follow our progress over there!
-  https://gitlab.com/milbin/Teach-Assist-Android
-</aside>
+```html
+<a href='https://play.google.com/store/apps/details?id=com.teachassist.teachassist&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+```
 
 
