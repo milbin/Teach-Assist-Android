@@ -252,11 +252,19 @@ public class MarksViewMaterial extends AppCompatActivity {
                final Double Tweight;
                final Double Cweight;
                final Double Aweight;
-                final Double Oweight;
+               final Double Oweight;
                final String feedback;
-                rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
-                linearLayout.addView(rl);
-                rlList.add(rl);
+               final String finalStringKFraction;
+               final String finalStringTFraction;
+               final String finalStringCFraction;
+               final String finalStringAFraction;
+               String stringKFraction = "";
+               String stringTFraction = "";
+               String stringCFraction = "";
+               String stringAFraction = "";
+               rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
+               linearLayout.addView(rl);
+               rlList.add(rl);
                 try {
                     final JSONObject assignment = marks.getJSONObject(String.valueOf(i));
                     if(assignment.has("K") && assignment.getJSONObject("K").getString("mark").equals("no mark") ||
@@ -290,6 +298,16 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     Kmark = Double.parseDouble(round.format(Kmark * 100));
                                 }
                             }
+                            if(assignment.getJSONObject("K").getString("mark").isEmpty()){
+                                stringKFraction = "0/";
+                            }else{
+                                stringKFraction = assignment.getJSONObject("K").getString("mark")+"/";
+                            }
+                            if(assignment.getJSONObject("K").getString("outOf").isEmpty()){
+                                stringKFraction += "0";
+                            }else{
+                                stringKFraction += assignment.getJSONObject("K").getString("outOf");
+                            }
                         } else {
                             Kweight = 0.0;
                         }
@@ -307,6 +325,16 @@ public class MarksViewMaterial extends AppCompatActivity {
                                             Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
                                     Tmark = Double.parseDouble(round.format(Tmark * 100));
                                 }
+                            }
+                            if(assignment.getJSONObject("T").getString("mark").isEmpty()){
+                                stringTFraction = "0/";
+                            }else{
+                                stringTFraction = assignment.getJSONObject("T").getString("mark")+"/";
+                            }
+                            if(assignment.getJSONObject("T").getString("outOf").isEmpty()){
+                                stringTFraction += "0";
+                            }else{
+                                stringTFraction += assignment.getJSONObject("T").getString("outOf");
                             }
                         } else {
                             Tweight = 0.0;
@@ -326,6 +354,16 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     Cmark = Double.parseDouble(round.format(Cmark * 100));
                                 }
                             }
+                            if(assignment.getJSONObject("C").getString("mark").isEmpty()){
+                                stringCFraction = "0/";
+                            }else{
+                                stringCFraction = assignment.getJSONObject("C").getString("mark")+"/";
+                            }
+                            if(assignment.getJSONObject("C").getString("outOf").isEmpty()){
+                                stringCFraction += "0";
+                            }else{
+                                stringCFraction += assignment.getJSONObject("C").getString("outOf");
+                            }
                         } else {
                             Cweight = 0.0;
                         }
@@ -344,6 +382,16 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     Amark = Double.parseDouble(round.format(Amark * 100));
                                 }
                             }
+                            if(assignment.getJSONObject("A").getString("mark").isEmpty()){
+                                stringAFraction = "0/";
+                            }else{
+                                stringAFraction = assignment.getJSONObject("A").getString("mark")+"/";
+                            }
+                            if(assignment.getJSONObject("A").getString("outOf").isEmpty()){
+                                stringAFraction += "0";
+                            }else{
+                                stringAFraction += assignment.getJSONObject("A").getString("outOf");
+                            }
                         } else {
                             Aweight = 0.0;
                         }
@@ -359,11 +407,20 @@ public class MarksViewMaterial extends AppCompatActivity {
                         }
                     }
 
+                    finalStringKFraction = stringKFraction;
+                    finalStringTFraction = stringTFraction;
+                    finalStringCFraction = stringCFraction;
+                    finalStringAFraction = stringAFraction;
+
                     final TextView KWeight = new TextView(context);
                     final TextView TWeight = new TextView(context);
                     final TextView CWeight = new TextView(context);
                     final TextView AWeight = new TextView(context);
                     final TextView feedbackTextView = new TextView(context);
+                    final TextView markFractionK = new TextView(context);
+                    final TextView markFractionT = new TextView(context);
+                    final TextView markFractionC = new TextView(context);
+                    final TextView markFractionA = new TextView(context);
 
                     rl.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -423,7 +480,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 AWeight.setText("W: "+String.valueOf(Aweight));
                                 barsRL.addView(AWeight);
 
-
                                 RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
                                 layoutParamsBar1.height = (int)Math.round(bar1.getHeight()*2.3);
                                 layoutParamsBar1.width = (int)Math.round(bar1.getWidth()*2);
@@ -456,7 +512,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 layoutParamsBar4.setMarginStart(30);
                                 bar4.setLayoutParams(layoutParamsBar4);
 
-
                                 TextView AveragePercent = v.findViewById(R.id.AveragePercent);
                                 RelativeLayout.LayoutParams paramsAveragePercent = (RelativeLayout.LayoutParams) AveragePercent.getLayoutParams();
                                 paramsAveragePercent.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -470,6 +525,50 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 feedbackTextView.setLayoutParams(paramsFeedback);
                                 feedbackTextView.setText("Feedback: "+ feedback);
                                 rlNested.addView(feedbackTextView);
+
+                                markFractionK.setText(finalStringKFraction);
+                                markFractionT.setText(finalStringTFraction);
+                                markFractionC.setText(finalStringCFraction);
+                                markFractionA.setText(finalStringAFraction);
+                                markFractionK.setId(View.generateViewId());
+                                markFractionT.setId(View.generateViewId());
+                                markFractionC.setId(View.generateViewId());
+                                markFractionA.setId(View.generateViewId());
+                                markFractionK.setTextColor(getResources().getColor(R.color.White));
+                                markFractionT.setTextColor(getResources().getColor(R.color.White));
+                                markFractionC.setTextColor(getResources().getColor(R.color.White));
+                                markFractionA.setTextColor(getResources().getColor(R.color.White));
+
+                                RelativeLayout.LayoutParams markFractionKLP = new RelativeLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                                RelativeLayout.LayoutParams markFractionTLP = new RelativeLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                                RelativeLayout.LayoutParams markFractionCLP = new RelativeLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                                RelativeLayout.LayoutParams markFractionALP = new RelativeLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                                markFractionKLP.addRule(RelativeLayout.BELOW, R.id.Kpercent);
+                                markFractionTLP.addRule(RelativeLayout.BELOW, R.id.Tpercent);
+                                markFractionCLP.addRule(RelativeLayout.BELOW, R.id.Cpercent);
+                                markFractionALP.addRule(RelativeLayout.BELOW, R.id.Apercent);
+                                markFractionKLP.addRule(RelativeLayout.ALIGN_START, R.id.Kpercent);
+                                markFractionTLP.addRule(RelativeLayout.ALIGN_START, R.id.Tpercent);
+                                markFractionCLP.addRule(RelativeLayout.ALIGN_START, R.id.Cpercent);
+                                markFractionALP.addRule(RelativeLayout.ALIGN_START, R.id.Apercent);
+                                markFractionK.setLayoutParams(markFractionKLP);
+                                markFractionT.setLayoutParams(markFractionTLP);
+                                markFractionC.setLayoutParams(markFractionCLP);
+                                markFractionA.setLayoutParams(markFractionALP);
+
+                                barsRL.addView(markFractionK);
+                                barsRL.addView(markFractionT);
+                                barsRL.addView(markFractionC);
+                                barsRL.addView(markFractionA);
                             }else if(rlNested.getHeight() != original_height_of_assignment){
                                 params.height = original_height_of_assignment;
 
@@ -493,6 +592,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 barsRL.removeView(CWeight);
                                 barsRL.removeView(AWeight);
                                 rlNested.removeView(feedbackTextView);
+
+                                barsRL.removeView(markFractionK);
+                                barsRL.removeView(markFractionT);
+                                barsRL.removeView(markFractionC);
+                                barsRL.removeView(markFractionA);
 
                                 RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
                                 layoutParamsBar1.height = (int)Math.round(bar1.getHeight()/2.3);
@@ -525,6 +629,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 layoutParamsBar4.addRule(RelativeLayout.ABOVE, 0);
                                 layoutParamsBar4.setMarginStart(3);
                                 bar4.setLayoutParams(layoutParamsBar4);
+
 
                                 TextView AveragePercent = v.findViewById(R.id.AveragePercent);
                                 RelativeLayout.LayoutParams paramsAveragePercent = (RelativeLayout.LayoutParams) AveragePercent.getLayoutParams();

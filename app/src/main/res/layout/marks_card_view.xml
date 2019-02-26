@@ -29,6 +29,7 @@
         android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/Background"
         android:id="@+id/LinearLayoutMarksView"
+        android:gravity="top"
         >
 
 
@@ -38,9 +39,8 @@
             android:id="@+id/relativeLayoutAverage"
 
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="150dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="5"
             android:background="@color/Background"
             android:minHeight="150dp"
             android:paddingStart="50dp"
@@ -102,6 +102,7 @@
 
 
         </RelativeLayout>
+
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

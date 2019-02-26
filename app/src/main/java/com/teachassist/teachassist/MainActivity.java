@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private class getTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
-
+        TA ta = new TA();
 
         @Override
         protected void onPreExecute(){
@@ -422,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
-            TA ta = new TA();
+
 
             response = ta.GetTAData(username, password);
             /*
@@ -461,7 +461,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
             // Set Average Text
-            TA ta = new TA();
             Double average = ta.GetAverage(response);
             //check if connected to internet
             if(average == null || response == null){
@@ -625,6 +624,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             for (Map.Entry<String, List<String>> entry :response.entrySet()) {
                 if(counter == currentSubject) {
                     if(!entry.getKey().contains("NA")) {
+
                         Mark = Float.parseFloat(entry.getValue().get(0));
 
                     }

@@ -169,7 +169,6 @@ public class login extends AppCompatActivity {
                 */
                 if (checkbox.isChecked()) {
                     //add username and password to shared preferances
-                    System.out.println("CHECBOX IS CHECKED");
                     SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                     SharedPreferences.Editor editor =   sharedPreferences.edit();
                     editor.putString(USERNAME, username);
