@@ -204,14 +204,10 @@ public class AlertReceiver extends BroadcastReceiver {
                     }
                     int course = 0;
                     for (LinkedHashMap.Entry<String, List<String>> entry : newResponse.entrySet()) {
-                        System.out.println(!entry.getValue().get(0).equals(toSend.get(course)));
-                        System.out.println(toSend.get(course).toString().contains("NA"));
 
                         if (entry.getKey().contains("NA")) {
                             //toSend.remove(entry.getKey());
                         } else if (!entry.getValue().get(0).equals(toSend.get(course)) || toSend.get(course).toString().contains("NA")) { // idk why u gotta add toString here
-                            System.out.println(entry.getValue().get(0));
-                            System.out.println(toSend.get(course)+"HERE");
                             String courseName = entry.getValue().get(1);
                             JSONObject marks;
                             List<JSONObject> returnVal;
@@ -239,7 +235,7 @@ public class AlertReceiver extends BroadcastReceiver {
                                     if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
                                         Notification notification = sendNotifications.sendOnChannel("course"+(course+1),
                                                 course, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
+                                                "You Got a " + assignmentAverage + "% in " + assignmentName, entry.getValue().get(0));
                                         sendNotifications.getManager().notify(course, notification);
                                     }
                                 }else {
@@ -247,10 +243,11 @@ public class AlertReceiver extends BroadcastReceiver {
                                     if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
                                         Notification notification = sendNotifications.sendOnChannel("courseEXTRA",
                                                 course, "New Assignment posted in: " + courseName,
-                                                "You Got a " + assignmentAverage + "% in " + assignmentName, toSend.get(course));
+                                                "You Got a " + assignmentAverage + "% in " + assignmentName, entry.getValue().get(0));
                                         sendNotifications.getManager().notify(course, notification);
                                     }
                                 }
+                                Crashlytics.log(Log.DEBUG, "SENT NOTIFICATION", "mark key: "+entry.getValue().get(0));
                                 System.out.println("SENT NOTIFICATION");
                                 editor.putString(RESPONSE, list);
                                 editor.apply();
