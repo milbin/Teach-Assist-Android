@@ -91,7 +91,7 @@ public class TA{
                     if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")) {
                         fields.add(String.valueOf(CalculateAverageFromMarksView(i)));
                     }else {
-                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
+                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", ""));
                     }
                     fields.add(subject.getString("course"));
                     Marks.put(subject.getString("subject_id"), fields);
@@ -199,9 +199,13 @@ public class TA{
                     MarksNotifications.put("NA"+i, fields);
                 }else{
                     if(false){ //for debugging
-                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", "").replaceAll("8", "7"));
+                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", "").replaceAll("8", "7"));
                     }else {
-                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(" ", ""));
+                        if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")) {
+                            fields.add(String.valueOf(CalculateAverageFromMarksView(i)));
+                        }else {
+                            fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", ""));
+                        }
                     }
                     fields.add(subject.getString("course"));
                     MarksNotifications.put(subject.getString("subject_id"), fields);

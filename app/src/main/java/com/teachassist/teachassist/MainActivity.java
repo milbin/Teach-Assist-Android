@@ -497,7 +497,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Mark = Float.parseFloat(entry.getValue().get(0));
                     }catch (Exception e){}
                     TextView SubjectInt = relativeLayout.findViewById(R.id.SubjectInt);
-                    SubjectInt.setText(Mark.toString()+"%");
+                    if(Mark == 100.0){
+                        SubjectInt.setText("100%");
+                    }else {
+                        SubjectInt.setText(Mark.toString() + "%");
+                    }
                     try {
                         SubjectAbrvString = entry.getValue().get(1);
                     }catch (Exception e){}
