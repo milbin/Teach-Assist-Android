@@ -327,6 +327,7 @@ public class TA{
         Double totalWeightCommunication = 0.0;
         Double totalWeightApplication = 0.0;
         try {
+            System.out.println(marks);
             JSONObject weights = marks.get(0).getJSONObject("categories");
             System.out.println(marks.get(0).length()-1);
             for(int i = 0; i <marks.get(0).length()-1; i++){

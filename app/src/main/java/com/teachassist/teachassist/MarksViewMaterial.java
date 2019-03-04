@@ -204,7 +204,7 @@ public class MarksViewMaterial extends AppCompatActivity {
         @Override
         protected JSONObject doInBackground(String... temp) {
             TA ta = new TA();
-            ta.GetTADataNotifications(username, password);
+            ta.GetTAData(username, password);
             List<JSONObject> returnValue = ta.newGetMarks(subject_number);
             if(returnValue == null){
                 Crashlytics.log(Log.ERROR, "network request failed", "line 184 MVM");

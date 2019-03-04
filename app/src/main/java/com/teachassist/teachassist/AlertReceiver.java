@@ -134,7 +134,7 @@ public class AlertReceiver extends BroadcastReceiver {
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params) {
             TA ta = new TA();
-            LinkedHashMap<String, List<String>> newResponse = ta.GetTADataNotifications(username, password);
+            LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
 /*
             ta.GetTAData(username, password);
             ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
