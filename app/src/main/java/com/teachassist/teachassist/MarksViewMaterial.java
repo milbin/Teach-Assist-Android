@@ -306,7 +306,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     if (!assignment.getJSONObject("K").isNull("mark") && !assignment.getJSONObject("K").isNull("outOf")) {
                                         Kmark = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
                                                 Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
-                                        Kmark = Double.parseDouble(round.format(Kmark * 100));
+                                        Kmark = Double.parseDouble(round.format(Kmark * 100).replaceAll(",", "."));
                                     }
                                 }
                                 if (assignment.getJSONObject("K").getString("mark").isEmpty()) {
@@ -334,7 +334,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     if (!assignment.getJSONObject("T").isNull("mark") && !assignment.getJSONObject("T").isNull("outOf")) {
                                         Tmark = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
                                                 Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
-                                        Tmark = Double.parseDouble(round.format(Tmark * 100));
+                                        Tmark = Double.parseDouble(round.format(Tmark * 100).replaceAll(",", "."));
                                     }
                                 }
                                 if (assignment.getJSONObject("T").getString("mark").isEmpty()) {
@@ -362,7 +362,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     if (!assignment.getJSONObject("C").isNull("mark") && !assignment.getJSONObject("C").isNull("outOf")) {
                                         Cmark = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
                                                 Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
-                                        Cmark = Double.parseDouble(round.format(Cmark * 100));
+                                        Cmark = Double.parseDouble(round.format(Cmark * 100).replaceAll(",", "."));
                                     }
                                 }
                                 if (assignment.getJSONObject("C").getString("mark").isEmpty()) {
@@ -390,7 +390,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     if (!assignment.getJSONObject("A").isNull("mark") && !assignment.getJSONObject("A").isNull("outOf")) {
                                         Amark = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
                                                 Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
-                                        Amark = Double.parseDouble(round.format(Amark * 100));
+                                        Amark = Double.parseDouble(round.format(Amark * 100).replaceAll(",", "."));
                                     }
                                 }
                                 if (assignment.getJSONObject("A").getString("mark").isEmpty()) {
@@ -829,7 +829,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                     }
                     Omark = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
                             Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
-                    return round.format(Omark * 100);
+                    return round.format(Omark * 100).replaceAll(",", ".");
 
                 }
             }
@@ -900,7 +900,7 @@ public class MarksViewMaterial extends AppCompatActivity {
         Tmark*=weightT;
         Cmark*=weightC;
         Amark*=weightA;
-        String Average = round.format((Kmark+Tmark+Cmark+Amark)/(weightK+weightT+weightC+weightA)*100);
+        String Average = round.format((Kmark+Tmark+Cmark+Amark)/(weightK+weightT+weightC+weightA)*100).replaceAll(",", ".");
         if(Average.equals(".0")){
             Average = "0";
         }
@@ -1036,7 +1036,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             Cmark *= weightC;
             Amark *= weightA;
             Smark *= weightS;
-            String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100));
+            String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100).replaceAll(",", "."));
             return Average;
 
         }catch (JSONException e){
