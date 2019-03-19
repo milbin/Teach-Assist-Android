@@ -622,6 +622,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected Object[] doInBackground(Object... params){
             LinkedHashMap<String, List<String>> response =(LinkedHashMap<String, List<String>>) params[0];
             int currentSubject = (int) params[1];
+            if(Courses.size() == 0){ //stop execution because if courses is equal to zero it means view has been refreshed and async task is now useless
+                return new Object[]{1f, currentSubject};
+            }
             View currentRL = Courses.get(currentSubject);
             Float Mark = 0f;
             int counter = 0;

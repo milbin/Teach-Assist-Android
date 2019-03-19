@@ -109,8 +109,12 @@ public class SettingsActivity extends AppCompatActivity {
             Preference notificationSummaryEXTRA = findPreference("Notifications EXTRA");
             notificationSummary1.setSummary("Disable Notifications for: " + courses.get(0));
             notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
-            notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
-            notificationSummary4.setSummary("Disable Notifications for: " + courses.get(3));
+            if(courses.size() > 2) {
+                notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
+            }
+            if(courses.size() > 3) {
+                notificationSummary4.setSummary("Disable Notifications for: " + courses.get(3));
+            }
             if(courses.size() > 4) {
                 notificationSummary5.setSummary("Disable Notifications for: " + courses.get(4));
             }
@@ -203,6 +207,9 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             Preference notifications3 = (Preference) findPreference("Notifications 3");
+            if(courses.size() < 3){
+                notifications3.setVisible(false);
+            }
             notifications3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -219,6 +226,9 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             Preference notifications4 = (Preference) findPreference("Notifications 4");
+            if(courses.size() < 4){
+                notifications4.setVisible(false);
+            }
             notifications4.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
