@@ -36,7 +36,7 @@ public class App extends Application {
         createNotificationChannels();
     }
     private void createNotificationChannels(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel course1 = new NotificationChannel(CHANNEL_1_ID, "course1", NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel course2 = new NotificationChannel(CHANNEL_2_ID, "course2", NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel course3 = new NotificationChannel(CHANNEL_3_ID, "course3", NotificationManager.IMPORTANCE_HIGH);
@@ -61,13 +61,19 @@ public class App extends Application {
             manager.createNotificationChannel(course9);
             manager.createNotificationChannel(course10);
             manager.createNotificationChannel(courseEXTRA);
-
+        }
+        boolean alarmUp = (PendingIntent.getBroadcast(this, 0,
+                new Intent(getApplicationContext(), AlertReceiver.class),
+                PendingIntent.FLAG_NO_CREATE) != null);
+        if(!alarmUp){
             Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+            intent.putExtra("FromBoot", false);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
-
         }
+
+
     }
 }

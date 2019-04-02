@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -442,7 +443,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     original_height_of_assignment = rlNested.getHeight();
                                 }
                                 if (rlNested.getHeight() == original_height_of_assignment) {
-                                    params.height = (int) Math.round(rlNested.getHeight() * 2.3 + v.findViewById(R.id.AveragePercent).getHeight() + feedback.length() / 40 * 20);
+                                    params.height = (int) Math.round(rlNested.getHeight() * 2.3 + v.findViewById(R.id.AveragePercent).getHeight() + (feedback.length()/40) * 28);
 
                                     rlNested.setLayoutParams(params);
 
@@ -457,6 +458,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     barsRLParams.height = barsRL.getHeight() * 3;
                                     barsRLParams.addRule(RelativeLayout.BELOW, R.id.AveragePercent);
                                     barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
+                                    barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     barsRL.setLayoutParams(barsRLParams);
 
                                     RelativeLayout.LayoutParams paramsKweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

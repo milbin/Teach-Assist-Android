@@ -1,12 +1,15 @@
 package com.teachassist.teachassist;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -74,6 +77,18 @@ public class AlertReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        //check if alarm is set and if not set it. This should only get called when the device reboots
+        if(intent.getBooleanExtra("FromBoot", true)){
+            Intent alarmIntent = new Intent(context.getApplicationContext(), AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 100, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+            System.out.println("PROBLEMOOOOOOO");
+        }
+
+
         System.out.println("NEW NOTIFICATION");
         Date date = new Date();
         String strDateFormat = "hh:mm:ss a";
@@ -92,17 +107,17 @@ public class AlertReceiver extends BroadcastReceiver {
         Type entityType = new TypeToken<LinkedHashMap<String, List<String>>>() {
         }.getType();
         response = gson.fromJson(str, entityType);
-/*
-        ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
-        ArrayList list2 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
-        ArrayList list3 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
-        ArrayList list4 = new ArrayList<>(Arrays.asList("87.1", "MCR3U1-01", "Functions and Relations", "142"));
+
+        /*ArrayList list1 = new ArrayList<>(Arrays.asList("93.2", "AVI3M1-01", "Visual Arts", "169"));
+        ArrayList list2 = new ArrayList<>(Arrays.asList("93.1", "SPH3U1-01", "Physics", "167"));
+        ArrayList list3 = new ArrayList<>(Arrays.asList("80.3", "FIF3U1-01", "", "214"));
+        ArrayList list4 = new ArrayList<>(Arrays.asList("88.5", "MCR3U1-01", "Functions and Relations", "142"));
         response = new LinkedHashMap<>();
         response.put("283098", list1);
         response.put("283003", list2);
         response.put("283001", list3);
-        response.put("283152", list4);
-        */
+        response.put("283152", list4);*/
+
 
         System.out.println("NOTIFICATION" + response);
         //showToast(response.toString());
