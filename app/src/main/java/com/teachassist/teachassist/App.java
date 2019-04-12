@@ -62,17 +62,14 @@ public class App extends Application {
             manager.createNotificationChannel(course10);
             manager.createNotificationChannel(courseEXTRA);
         }
-        boolean alarmUp = (PendingIntent.getBroadcast(this, 0,
-                new Intent(getApplicationContext(), AlertReceiver.class),
-                PendingIntent.FLAG_NO_CREATE) != null);
-        if(!alarmUp){
-            Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
-            intent.putExtra("FromBoot", false);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
-        }
+        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+
+
 
 
     }

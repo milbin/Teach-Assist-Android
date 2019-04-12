@@ -55,9 +55,12 @@
 
 
         <receiver android:name=".AlertReceiver">
-        <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
-        </intent-filter>
+        </receiver>
+
+        <receiver android:name=".OnBoot">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
 
         <activity android:name=".MarksViewMaterial">

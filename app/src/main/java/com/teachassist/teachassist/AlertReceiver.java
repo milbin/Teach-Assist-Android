@@ -77,18 +77,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        //check if alarm is set and if not set it. This should only get called when the device reboots
-        if(intent.getBooleanExtra("FromBoot", true)){
-            Intent alarmIntent = new Intent(context.getApplicationContext(), AlertReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 100, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
-            System.out.println("PROBLEMOOOOOOO");
-        }
-
-
         System.out.println("NEW NOTIFICATION");
         Date date = new Date();
         String strDateFormat = "hh:mm:ss a";
