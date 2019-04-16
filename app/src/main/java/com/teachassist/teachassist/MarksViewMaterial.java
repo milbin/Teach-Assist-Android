@@ -199,7 +199,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                             }
                         })
                         .show();
-                dialog.dismiss();
+                if(!isCancelled()) {
+                    dialog.dismiss();
+                }
                 return;
             }
             TextView AverageInt = findViewById(R.id.AverageInt);
@@ -409,11 +411,22 @@ public class MarksViewMaterial extends AppCompatActivity {
                             }
 
                             if (assignment.has("")) {
-                                if (assignment.getJSONObject("").getString("weight").isEmpty()) {
+                                if(assignment.getJSONObject("").has("weight")) {
+
+                                    if (assignment.getJSONObject("").getString("weight").isEmpty()) {
+                                        Oweight = 0.0;
+                                    } else {
+                                        if(Double.parseDouble(assignment.getJSONObject("").getString("weight")) == -1.0){
+                                            Oweight = 0.0;
+                                        }else {
+                                            Oweight = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
+                                        }
+
+                                    }
+                                }else{
                                     Oweight = 0.0;
-                                } else {
-                                    Oweight = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
                                 }
+
                             } else {
                                 Oweight = 0.0;
                             }
@@ -697,8 +710,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                         //set mark
                         TextView Average = rl.findViewById(R.id.AveragePercent);
                         String returnval = CalculateAverage(marks, String.valueOf(i));
-                        if (returnval.equals("No Mark")) {
-                            Average.setText(returnval);
+                        if (returnval.equals("No Mark") || returnval.equals("NaN")) {
+                            Average.setText("No Mark");
                         } else {
                             Average.setText(returnval + "%");
                         }
@@ -796,8 +809,9 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
                         }
-
-                        dialog.dismiss();
+                        if(!isCancelled()) {
+                            dialog.dismiss();
+                        }
 
 
                     } catch (JSONException e) {
@@ -824,6 +838,9 @@ public class MarksViewMaterial extends AppCompatActivity {
         JSONObject assignment = marks.getJSONObject(assingmentNumber);
 
         if(assignment.has("")){
+            if(assignment.getJSONObject("").getString("mark").equals("no mark")){
+                return "No Mark";
+            }
             if (!assignment.getJSONObject("").getString("outOf").equals("0") || !assignment.getJSONObject("").getString("outOf").equals("0.0")) {
                 if (!assignment.getJSONObject("").isNull("mark")) {
                     if(assignment.getJSONObject("").getString("mark").equals("no mark")){
@@ -952,8 +969,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                         Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
                         KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
-                        Kmark += assignmentK * KweightAssignmentTemp;
-                        KweightAssignment += KweightAssignmentTemp;
+                        if(KweightAssignmentTemp != -1.0) {
+                            Kmark += assignmentK * KweightAssignmentTemp;
+                            KweightAssignment += KweightAssignmentTemp;
+                        }
                     }
                 }catch (JSONException e){}
 
@@ -962,8 +981,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                         Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
                         TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
-                        Tmark += assignmentT * TweightAssignmentTemp;
-                        TweightAssignment += TweightAssignmentTemp;
+                        if(TweightAssignmentTemp != -1.0) {
+                            Tmark += assignmentT * TweightAssignmentTemp;
+                            TweightAssignment += TweightAssignmentTemp;
+                        }
                     }
                 }catch (JSONException e){}
 
@@ -972,8 +993,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                         Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
                         CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
-                        Cmark += assignmentC * CweightAssignmentTemp;
-                        CweightAssignment += CweightAssignmentTemp;
+                        if(CweightAssignmentTemp != -1.0) {
+                            Cmark += assignmentC * CweightAssignmentTemp;
+                            CweightAssignment += CweightAssignmentTemp;
+                        }
                     }
                 }catch (JSONException e){}
 
@@ -982,18 +1005,22 @@ public class MarksViewMaterial extends AppCompatActivity {
                         Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
                         AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
-                        Amark += assignmentA * AweightAssignmentTemp;
-                        AweightAssignment += AweightAssignmentTemp;
+                        if(AweightAssignmentTemp != -1.0) {
+                            Amark += assignmentA * AweightAssignmentTemp;
+                            AweightAssignment += AweightAssignmentTemp;
+                        }
                     }
                 }catch (JSONException e){}
 
                 try {
-                    if (!assignment.getJSONObject("").isNull("mark")) {
+                    if (!assignment.getJSONObject("").isNull("mark") && !assignment.getJSONObject("").getString("mark").equals("no mark")) {
                         Double assignmentS = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
                         SweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
-                        Smark += assignmentS * SweightAssignmentTemp;
-                        SweightAssignment += SweightAssignmentTemp;
+                        if(SweightAssignmentTemp != -1.0) {
+                            Smark += assignmentS * SweightAssignmentTemp;
+                            SweightAssignment += SweightAssignmentTemp;
+                        }
                     }
                 }catch (JSONException e){}
 

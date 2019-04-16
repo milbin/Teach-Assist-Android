@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.mikephil.charting.utils.EntryXIndexComparator;
 import com.google.gson.Gson;
 
 import org.decimal4j.util.DoubleRounder;

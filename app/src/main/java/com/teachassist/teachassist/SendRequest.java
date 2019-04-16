@@ -150,7 +150,7 @@ public class SendRequest {
 
                 okhttp3.Response response = client.newCall(request).execute();
 
-            String networkResp = response.body().string(); // raises exception if first 2 escape chars arent present
+            String networkResp = response.body().string().replaceAll("&quot;", "'"); // raises exception if first 2 escape chars arent present
             networkResp = StringEscapeUtils.unescapeHtml(networkResp);
             if (!networkResp.isEmpty()) {
                 jsonObjectResp = new JSONArray(networkResp);

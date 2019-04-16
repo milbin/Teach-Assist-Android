@@ -74,6 +74,7 @@ public class AlertReceiver extends BroadcastReceiver {
     String password;
     Context Globalcontext;
     public static final String RESPONSE = "RESPONSE";
+    SharedPreferences prefs;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -89,7 +90,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Crashlytics.setString("password", password);
 
         //get old response
-        SharedPreferences prefs = context.getSharedPreferences(RESPONSE, MODE_PRIVATE);
+        prefs = context.getSharedPreferences(RESPONSE, MODE_PRIVATE);
         String str = prefs.getString("RESPONSE", "");
         Gson gson = new Gson();
         Type entityType = new TypeToken<LinkedHashMap<String, List<String>>>() {
@@ -104,7 +105,8 @@ public class AlertReceiver extends BroadcastReceiver {
         response.put("283098", list1);
         response.put("283003", list2);
         response.put("283001", list3);
-        response.put("283152", list4);*/
+        response.put("283152", list4);
+        response.put("282152", list4);*/
 
 
         System.out.println("NOTIFICATION" + response);
@@ -191,10 +193,8 @@ public class AlertReceiver extends BroadcastReceiver {
                         Crashlytics.log(Log.ERROR, "network request failed AlertReciever", "line 162");
                         return null;
                     }
-                    Gson gson = new Gson();
-                    String list = gson.toJson(response);
-                    SharedPreferences sharedPreferencesResponse = Globalcontext.getSharedPreferences(RESPONSE, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferencesResponse.edit();
+
+                    SharedPreferences.Editor editor = prefs.edit();
 
                     LinkedList<String> toSend = new LinkedList<String>();
                     for (LinkedHashMap.Entry<String, List<String>> entry : response.entrySet()) {
@@ -252,6 +252,8 @@ public class AlertReceiver extends BroadcastReceiver {
                                 }
                                 Crashlytics.log(Log.DEBUG, "SENT NOTIFICATION", "mark key: "+entry.getValue().get(0));
                                 System.out.println("SENT NOTIFICATION");
+                                Gson gson = new Gson();
+                                String list = gson.toJson(newResponse);
                                 editor.putString(RESPONSE, list);
                                 editor.apply();
 
