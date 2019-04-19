@@ -121,7 +121,7 @@ public class TA{
             //parse return
             int courseCounter1 = 0;
             for(String i :resp[0].split("<td>")){
-                if(i.contains("current mark = ") || i.contains("Please see teacher for current status regarding achievement in the course")||i.contains("Click Here")||i.contains("Level")||i.contains("Block")) {
+                if((i.contains("current mark = ") || i.contains("Please see teacher for current status regarding achievement in the course")||i.contains("Click Here")||i.contains("Level")||i.contains("Block")) && !i.contains("0000-00-00")) {
                     String Course_Name = i.split(":")[1].split("<br>")[0].trim();
                     String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
                     //String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
