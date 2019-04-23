@@ -825,6 +825,8 @@ public class MarksViewMaterial extends AppCompatActivity {
     private String CalculateAverage(JSONObject marks, String assingmentNumber){
     try {
         JSONObject weights = marks.getJSONObject("categories");
+        System.out.println(weights);
+        System.out.println("HERE");
         Double weightK = weights.getDouble("K")*10;
         Double weightT = weights.getDouble("T")*10;
         Double weightC = weights.getDouble("C")*10;

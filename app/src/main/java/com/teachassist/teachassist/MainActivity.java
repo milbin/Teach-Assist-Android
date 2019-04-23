@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("password", password);
             myIntent.putExtra("subject", subjectNumber+toSubtract);
             myIntent.putExtra("subject Mark", subjectMark);
+            Crashlytics.log(Log.DEBUG, "subject Mark", subjectMark);
             startActivity(myIntent);
             dialog.dismiss();
 

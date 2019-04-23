@@ -105,8 +105,8 @@ public class AlertReceiver extends BroadcastReceiver {
         response.put("283098", list1);
         response.put("283003", list2);
         response.put("283001", list3);
-        response.put("283152", list4);
-        response.put("282152", list4);*/
+        response.put("283152", list4);*/
+
 
 
         System.out.println("NOTIFICATION" + response);
@@ -140,8 +140,8 @@ public class AlertReceiver extends BroadcastReceiver {
         protected LinkedHashMap<String, List<String>> doInBackground(String... params) {
             TA ta = new TA();
             LinkedHashMap<String, List<String>> newResponse = ta.GetTAData(username, password);
-/*
-            ta.GetTAData(username, password);
+
+            /*ta.GetTAData(username, password);
             ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
             ArrayList list2 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
             ArrayList list3 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
@@ -233,9 +233,10 @@ public class AlertReceiver extends BroadcastReceiver {
                                 }
                                 SendNotifications sendNotifications = new SendNotifications(Globalcontext);
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Globalcontext);
+                                System.out.println(entry.getValue());
                                 if(course < 11) {
                                     Boolean enabledNotifications = sharedPreferences.getBoolean("NOTIFICATION"+(course+1), true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
+                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN") && !entry.getValue().get(0).contains("-")) {
                                         Notification notification = sendNotifications.sendOnChannel("course"+(course+1),
                                                 course, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, entry.getValue().get(0));
@@ -243,14 +244,14 @@ public class AlertReceiver extends BroadcastReceiver {
                                     }
                                 }else {
                                     Boolean enabledNotifications = sharedPreferences.getBoolean("NOTIFICATIONEXTRA", true);
-                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN")) {
+                                    if (enabledNotifications && assignmentAverage != null && !assignmentAverage.equals("NaN") && !entry.getValue().get(0).contains("-")) {
                                         Notification notification = sendNotifications.sendOnChannel("courseEXTRA",
                                                 course, "New Assignment posted in: " + courseName,
                                                 "You Got a " + assignmentAverage + "% in " + assignmentName, entry.getValue().get(0));
                                         sendNotifications.getManager().notify(course, notification);
                                     }
                                 }
-                                Crashlytics.log(Log.DEBUG, "SENT NOTIFICATION", "mark key: "+entry.getValue().get(0));
+                                Crashlytics.log(Log.ERROR, "SENT NOTIFICATION", "mark key: "+entry.getValue().get(0));
                                 System.out.println("SENT NOTIFICATION");
                                 Gson gson = new Gson();
                                 String list = gson.toJson(newResponse);
