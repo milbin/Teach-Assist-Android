@@ -5,17 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,10 +25,8 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -71,7 +65,7 @@ public class MarksViewMaterial extends AppCompatActivity {
         // Request window feature action bar
         //requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.marks_card_view);
+        setContentView(R.layout.marks_view);
 
         //progress dialog
         dialog = ProgressDialog.show(MarksViewMaterial.this, "",
@@ -108,8 +102,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                         Intent intent = getIntent();
                         Mark = intent.getStringExtra("subject Mark");
                         int length = linearLayout.getChildCount();
-                        for (int i = 1; i < length; i++) {
-                            linearLayout.removeViewAt(1);
+                        for (int i = 2; i < length; i++) {
+                            linearLayout.removeViewAt(2);
                         }
                         removedAssignmentIndexList = new ArrayList<>();
                         assignmentIndex = new LinkedHashMap<>();
@@ -255,7 +249,85 @@ public class MarksViewMaterial extends AppCompatActivity {
                 }
                 numberOfAssignments = marks.length() - 1;
                 String title;
-                DecimalFormat round = new DecimalFormat(".#");
+                final DecimalFormat round = new DecimalFormat(".#");
+
+                //setup course bars
+                RelativeLayout barAverageRL = findViewById(R.id.mark_bars);
+
+                TextView weightKAverage = findViewById(R.id.weightKAverage);
+                TextView weightTAverage = findViewById(R.id.weightTAverage);
+                TextView weightCAverage = findViewById(R.id.weightCAverage);
+                TextView weightAAverage = findViewById(R.id.weightAAverage);
+
+                TextView KpercentAverage = findViewById(R.id.KpercentAverage);
+                TextView TpercentAverage = findViewById(R.id.TpercentAverage);
+                TextView CpercentAverage = findViewById(R.id.CpercentAverage);
+                TextView ApercentAverage = findViewById(R.id.ApercentAverage);
+
+                View BarAverage1 = findViewById(R.id.BarAverage1);
+                View BarAverage2 = findViewById(R.id.BarAverage2);
+                View BarAverage3 = findViewById(R.id.BarAverage3);
+                View BarAverage4 = findViewById(R.id.BarAverage4);
+                List<String> list = GetWeightAndAverageByCategory(marks);
+
+
+                RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
+                layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.5 + 45);
+                BarAverage1.setLayoutParams(layoutParamsBar1);
+
+                RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
+                layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.5 + 45);
+                BarAverage2.setLayoutParams(layoutParamsBar2);
+
+                RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
+                layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.5 + 45);
+                BarAverage3.setLayoutParams(layoutParamsBar3);
+
+                RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
+                layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.5 + 45);
+                BarAverage4.setLayoutParams(layoutParamsBar4);
+
+                if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
+                    KpercentAverage.setText("NA");
+                    BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                }else {
+                    KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
+                    BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                }
+
+                if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals(".0")){
+                    TpercentAverage.setText("NA");
+                    BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                }else {
+                    TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
+                    BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                }
+
+                if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals(".0")){
+                    CpercentAverage.setText("NA");
+                    BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                }else {
+                    CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
+                    BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                }
+
+                if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals(".0")){
+                    ApercentAverage.setText("NA");
+                    BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                }else {
+                    ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
+                    BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                }
+
+                weightKAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
+                weightTAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
+                weightCAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
+                weightAAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
+
+                RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
+                barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                barAverageRL.setLayoutParams(barAverageRLParams);
+
 
                 for (int i = 0; i < numberOfAssignments; i++) {
                     Double Kmark = 0.000000001;
@@ -431,6 +503,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 Oweight = 0.0;
                             }
                         }
+
+
 
                         finalStringKFraction = stringKFraction;
                         finalStringTFraction = stringTFraction;
@@ -683,7 +757,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                             }
                                         }
 
-                                        linearLayout.removeViewAt(index + 1 - toSubtract);
+                                        linearLayout.removeViewAt(index + 2 - toSubtract);
                                         Marks.remove(String.valueOf(index));
                                         removedAssignmentIndexList.add(index);
                                         numberOfRemovedAssignments++;
@@ -694,6 +768,84 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         int Average = Math.round(Float.parseFloat(returnval));
                                         final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
                                         ProgressBarAverage.setProgress(Average);
+
+                                        //setup course bars
+                                        RelativeLayout barAverageRL = findViewById(R.id.mark_bars);
+
+                                        TextView weightKAverage = findViewById(R.id.weightKAverage);
+                                        TextView weightTAverage = findViewById(R.id.weightTAverage);
+                                        TextView weightCAverage = findViewById(R.id.weightCAverage);
+                                        TextView weightAAverage = findViewById(R.id.weightAAverage);
+
+                                        TextView KpercentAverage = findViewById(R.id.KpercentAverage);
+                                        TextView TpercentAverage = findViewById(R.id.TpercentAverage);
+                                        TextView CpercentAverage = findViewById(R.id.CpercentAverage);
+                                        TextView ApercentAverage = findViewById(R.id.ApercentAverage);
+
+                                        View BarAverage1 = findViewById(R.id.BarAverage1);
+                                        View BarAverage2 = findViewById(R.id.BarAverage2);
+                                        View BarAverage3 = findViewById(R.id.BarAverage3);
+                                        View BarAverage4 = findViewById(R.id.BarAverage4);
+                                        List<String> list = GetWeightAndAverageByCategory(Marks);
+
+
+                                        RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
+                                        layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.5 + 45);
+                                        BarAverage1.setLayoutParams(layoutParamsBar1);
+
+                                        RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
+                                        layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.5 + 45);
+                                        BarAverage2.setLayoutParams(layoutParamsBar2);
+
+                                        RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
+                                        layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.5 + 45);
+                                        BarAverage3.setLayoutParams(layoutParamsBar3);
+
+                                        RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
+                                        layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.5 + 45);
+                                        BarAverage4.setLayoutParams(layoutParamsBar4);
+                                        System.out.println(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
+                                        System.out.println("HERE");
+                                        if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
+                                            KpercentAverage.setText("NA");
+                                            BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                        }else {
+                                            KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
+                                            BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                        }
+
+                                        if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals(".0")){
+                                            TpercentAverage.setText("NA");
+                                            BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                        }else {
+                                            TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
+                                            BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                        }
+
+                                        if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals(".0")){
+                                            CpercentAverage.setText("NA");
+                                            BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                        }else {
+                                            CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
+                                            BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                        }
+
+                                        if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals(".0")){
+                                            ApercentAverage.setText("NA");
+                                            BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                        }else {
+                                            ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
+                                            BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                        }
+
+                                        weightKAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
+                                        weightTAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
+                                        weightCAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
+                                        weightAAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
+
+                                        RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
+                                        barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                                        barAverageRL.setLayoutParams(barAverageRLParams);
 
                                     }
                                 });
@@ -825,8 +977,6 @@ public class MarksViewMaterial extends AppCompatActivity {
     private String CalculateAverage(JSONObject marks, String assingmentNumber){
     try {
         JSONObject weights = marks.getJSONObject("categories");
-        System.out.println(weights);
-        System.out.println("HERE");
         Double weightK = weights.getDouble("K")*10;
         Double weightT = weights.getDouble("T")*10;
         Double weightC = weights.getDouble("C")*10;
@@ -1069,6 +1219,156 @@ public class MarksViewMaterial extends AppCompatActivity {
             Smark *= weightS;
             String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100).replaceAll(",", "."));
             return Average;
+
+        }catch (JSONException e){
+            e.printStackTrace();
+            Crashlytics.log(Log.ERROR, "MarksViewMaterial Calculate total average returns null", Arrays.toString(e.getStackTrace()));
+            return null;
+        }
+    }
+
+    public List<String> GetWeightAndAverageByCategory(JSONObject marks) {
+        DecimalFormat round = new DecimalFormat(".#");
+        try {
+            JSONObject weights = marks.getJSONObject("categories");
+            Double weightK = weights.getDouble("K") * 10 * 0.7;
+            Double weightT = weights.getDouble("T") * 10 * 0.7;
+            Double weightC = weights.getDouble("C") * 10 * 0.7;
+            Double weightA = weights.getDouble("A") * 10 * 0.7;
+            Double weightS = 0.3*10;
+            Double Kmark = 0.0;
+            Double Tmark = 0.0;
+            Double Cmark = 0.0;
+            Double Amark = 0.0;
+            Double Smark = 0.0;
+            Double KweightAssignment = 0.0;
+            Double TweightAssignment = 0.0;
+            Double CweightAssignment = 0.0;
+            Double AweightAssignment = 0.0;
+            Double SweightAssignment = 0.0;
+            Double KweightAssignmentTemp;
+            Double TweightAssignmentTemp;
+            Double CweightAssignmentTemp;
+            Double AweightAssignmentTemp;
+            Double SweightAssignmentTemp;
+            for (int i = 0; i < marks.length()-1+numberOfRemovedAssignments; i++) {
+                JSONObject assignment;
+                try {
+                    assignment = marks.getJSONObject(String.valueOf(i));
+                }catch (JSONException e){
+                    continue;}
+
+                try {
+                    if (!assignment.getJSONObject("K").isNull("mark") && !assignment.getJSONObject("K").getString("mark").equals("no mark")) {
+                        Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                        KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
+                        if(KweightAssignmentTemp != -1.0) {
+                            Kmark += assignmentK * KweightAssignmentTemp;
+                            KweightAssignment += KweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
+
+                try {
+                    if (!assignment.getJSONObject("T").isNull("mark") && !assignment.getJSONObject("T").getString("mark").equals("no mark")) {
+                        Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
+                        TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
+                        if(TweightAssignmentTemp != -1.0) {
+                            Tmark += assignmentT * TweightAssignmentTemp;
+                            TweightAssignment += TweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
+
+                try {
+                    if (!assignment.getJSONObject("C").isNull("mark") && !assignment.getJSONObject("C").getString("mark").equals("no mark")) {
+                        Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
+                        CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
+                        if(CweightAssignmentTemp != -1.0) {
+                            Cmark += assignmentC * CweightAssignmentTemp;
+                            CweightAssignment += CweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
+
+                try {
+                    if (!assignment.getJSONObject("A").isNull("mark") && !assignment.getJSONObject("A").getString("mark").equals("no mark")) {
+                        Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
+                        AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
+                        if(AweightAssignmentTemp != -1.0) {
+                            Amark += assignmentA * AweightAssignmentTemp;
+                            AweightAssignment += AweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
+
+                try {
+                    if (!assignment.getJSONObject("").isNull("mark") && !assignment.getJSONObject("").getString("mark").equals("no mark")) {
+                        Double assignmentS = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
+                        SweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
+                        if(SweightAssignmentTemp != -1.0) {
+                            Smark += assignmentS * SweightAssignmentTemp;
+                            SweightAssignment += SweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
+
+            }
+
+            if(KweightAssignment == 0.0){
+                Kmark = 0.0;
+                weightK = 0.0;
+            }else {
+                Kmark /= KweightAssignment;
+            }
+
+            if(TweightAssignment == 0.0){
+                Tmark = 0.0;
+                weightT = 0.0;
+            }else {
+                Tmark /= TweightAssignment;
+            }
+
+            if(CweightAssignment == 0.0){
+                Cmark = 0.0;
+                weightC = 0.0;
+            }else {
+                Cmark /= CweightAssignment;
+            }
+
+            if(AweightAssignment == 0.0){
+                Amark = 0.0;
+                weightA = 0.0;
+            }else {
+                Amark /= AweightAssignment;
+            }
+            if(SweightAssignment == 0.0){
+                Smark = 0.0;
+                weightS = 0.0;
+            }else {
+                Smark /= SweightAssignment;
+            }
+
+            Kmark *= 100;
+            Tmark *= 100;
+            Cmark *= 100;
+            Amark *= 100;
+
+            weightK *= 10;
+            weightT *= 10;
+            weightC *= 10;
+            weightA *= 10;
+
+            return Arrays.asList(String.valueOf(Kmark), String.valueOf(Tmark), String.valueOf(Cmark), String.valueOf(Amark), String.valueOf(weightK), String.valueOf(weightT), String.valueOf(weightC), String.valueOf(weightA));
+            //Smark *= weightS;
+
+            //String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100).replaceAll(",", "."));
+            //return Average;
 
         }catch (JSONException e){
             e.printStackTrace();

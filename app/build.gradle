@@ -17,8 +17,8 @@ android {
         applicationId "com.teachassist.teachassist"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 27
-        versionName "1.9.6"
+        versionCode 29
+        versionName "1.9.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
