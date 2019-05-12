@@ -88,8 +88,8 @@ public class TA{
                     fields.add(subject.getString("course"));
                     Marks.put("NA"+i, fields);
                 }else{
-                    if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")) {
-                        fields.add(String.valueOf(CalculateAverageFromMarksView(i)));
+                    if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")|| subject.getString("mark").contains("Click") || subject.getString("mark").contains("click")) {
+                        fields.add(CalculateAverageFromMarksView(newGetMarks(i).get(0), 0));
                     }else {
                         fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", ""));
                     }
@@ -153,78 +153,6 @@ public class TA{
         }
     }
 
-    public LinkedHashMap<String, List<String>> GetTADataNotifications(String Username, String Password) {
-        username = Username;
-        password = Password;
-        Crashlytics.log(Log.DEBUG, "username", Username);
-        Crashlytics.log(Log.DEBUG, "password", Password);
-        SendRequest sr = new SendRequest();
-        try {
-            //get token and student id
-            JSONObject json = new JSONObject();
-            json.put("student_number", Username);
-            json.put("password", Password);
-            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
-            System.out.println(respJson + "JSON RESPONSE HERE<----");
-            if(respJson == null){
-                Crashlytics.log(Log.ERROR, "network request failed", "line 165 TA");
-                return null;
-            }
-
-            session_token = respJson.getString("token");
-            student_id = respJson.getString("student_id");
-
-
-            //get marks and course code
-            JSONObject marksJson = new JSONObject();
-            marksJson.put("token", session_token);
-            marksJson.put("student_id", student_id);
-            marksJson.put("subject_id", 0);
-            JSONArray marksResp = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", marksJson.toString())
-                    .getJSONObject(0)
-                    .getJSONArray("data")
-                    .getJSONObject(0)
-                    .getJSONArray("subjects");
-            if(marksResp == null){
-                Crashlytics.log(Log.ERROR, "network request failed", "line 184 TA");
-                return null;
-            }
-
-            LinkedHashMap<String, List<String>> MarksNotifications = new LinkedHashMap<>();
-            for (int i = 0; i < marksResp.length(); i++) {
-                ArrayList<String> fields = new ArrayList<>();
-                JSONObject subject = marksResp.getJSONObject(i);
-                if(subject.getString("mark").equals("Please see teacher for current status regarding achievement in the course")) {
-                    fields.add(subject.getString("course"));
-                    MarksNotifications.put("NA"+i, fields);
-                }else{
-                    if(false){ //for debugging
-                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", "").replaceAll("8", "7"));
-                    }else {
-                        if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")) {
-                            fields.add(String.valueOf(CalculateAverageFromMarksView(i)));
-                        }else {
-                            fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", ""));
-                        }
-                    }
-                    fields.add(subject.getString("course"));
-                    MarksNotifications.put(subject.getString("subject_id"), fields);
-                }
-                subjects.add(subject.getString("subject_id"));
-
-            }
-            System.out.println(MarksNotifications+"marks NOTIFICATION RESPONSE HERE<----");
-            return MarksNotifications;
-
-
-
-        }catch (Exception e){
-            e.printStackTrace();
-            Crashlytics.log(Log.ERROR, "error in GetTaNotifications", Arrays.toString(e.getStackTrace()));
-            return null;
-        }
-    }
-
 
     public Double GetAverage(HashMap<String, List<String>> Marks){
 
@@ -246,8 +174,8 @@ public class TA{
         int counter = 0;
         for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
             if (!entry.getKey().contains("NA")) {
-                if(entry.getValue().get(0).contains("Level") || entry.getValue().get(0).contains("level")){
-                    grades[i] = CalculateAverageFromMarksView(counter);
+                if(entry.getValue().get(0).contains("Level") || entry.getValue().get(0).contains("level") || entry.getValue().get(0).contains("Click") || entry.getValue().get(0).contains("click")){
+                    grades[i] = Double.parseDouble(CalculateAverageFromMarksView(newGetMarks(counter).get(0), 0));
                 }else {
                     grades[i] = Double.parseDouble(entry.getValue().get(0));
                 }
@@ -266,12 +194,6 @@ public class TA{
 
     }
 
-
-    public String GetCourse(int subject_number){
-        String subject_id = subjects.get(subject_number);
-        String course = Marks.get(subject_id).get(1);
-        return course;
-    }
 
 
     public List<JSONObject> newGetMarks(int subject_number) {
@@ -315,155 +237,148 @@ public class TA{
 
     }
 
-    private Double CalculateAverageFromMarksView(int subjectNumber){
-        List<JSONObject> marks = newGetMarks(subjectNumber);
-        Double knowledge = 0.0;
-        Double thinking = 0.0;
-        Double communication = 0.0;
-        Double application = 0.0;
-
-        Double totalWeightKnowledge = 0.0;
-        Double totalWeightThinking = 0.0;
-        Double totalWeightCommunication = 0.0;
-        Double totalWeightApplication = 0.0;
+    public String CalculateAverageFromMarksView(JSONObject marks, int numberOfRemovedAssignments) { //CalculateTotalAverage
+        DecimalFormat round = new DecimalFormat(".#");
         try {
-            System.out.println(marks);
-            JSONObject weights = marks.get(0).getJSONObject("categories");
-            System.out.println(marks.get(0).length()-1);
-            for(int i = 0; i <marks.get(0).length()-1; i++){
-                JSONObject assignment = marks.get(0).getJSONObject(String.valueOf(i));
-                Double markK = 0.0;
-                Double outOfK = 0.0;
-                Double weightK = -0.1;
-                try{markK = Double.parseDouble(assignment.getJSONObject("K").getString("mark"));}catch(Exception e){weightK = 0.0;}
-                try{outOfK = Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));}catch(Exception e){}
-                if(weightK == -0.1){
-                    try{weightK = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));}catch(Exception e){}
-                }
-                if(outOfK != 0.0) {
-                    knowledge += markK / outOfK * weightK;
-                    totalWeightKnowledge += weightK;
-                }
+            JSONObject weights = marks.getJSONObject("categories");
+            Double weightK = weights.getDouble("K") * 10 * 0.7;
+            Double weightT = weights.getDouble("T") * 10 * 0.7;
+            Double weightC = weights.getDouble("C") * 10 * 0.7;
+            Double weightA = weights.getDouble("A") * 10 * 0.7;
+            Double weightS = 0.3*10;
+            Double Kmark = 0.0;
+            Double Tmark = 0.0;
+            Double Cmark = 0.0;
+            Double Amark = 0.0;
+            Double Smark = 0.0;
+            Double KweightAssignment = 0.0;
+            Double TweightAssignment = 0.0;
+            Double CweightAssignment = 0.0;
+            Double AweightAssignment = 0.0;
+            Double SweightAssignment = 0.0;
+            Double KweightAssignmentTemp;
+            Double TweightAssignmentTemp;
+            Double CweightAssignmentTemp;
+            Double AweightAssignmentTemp;
+            Double SweightAssignmentTemp;
+            for (int i = 0; i < marks.length()-1+numberOfRemovedAssignments; i++) {
+                JSONObject assignment;
+                try {
+                    assignment = marks.getJSONObject(String.valueOf(i));
+                }catch (JSONException e){
+                    continue;}
 
-                Double markT = 0.0;
-                Double outOfT = 0.0;
-                Double weightT = -0.1;
-                try{markT = Double.parseDouble(assignment.getJSONObject("T").getString("mark"));}catch(Exception e){weightT = 0.0;}
-                try{outOfT = Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));}catch(Exception e){}
-                if(weightT == -0.1){
-                    try{weightT = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));}catch(Exception e){}
-                }
-                if(outOfT != 0.0) {
-                    thinking += markT / outOfT * weightT;
-                    totalWeightThinking += weightT;
-                }
-                Double markC = 0.0;
-                Double outOfC = 0.0;
-                Double weightC = -0.1;
-                try{markC = Double.parseDouble(assignment.getJSONObject("C").getString("mark"));}catch(Exception e){weightC = 0.0;}
-                try{outOfC = Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));}catch(Exception e){}
-                if(weightC == -0.1){
-                    try{weightC = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));}catch(Exception e){}
-                }
-                if(outOfC != 0.0) {
-                    communication += markC / outOfC * weightC;
-                    totalWeightCommunication += weightC;
-                }
+                try {
+                    if (!assignment.getJSONObject("K").isNull("mark") && !assignment.getJSONObject("K").getString("mark").equals("no mark")) {
+                        Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                        KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
+                        if(KweightAssignmentTemp != -1.0) {
+                            Kmark += assignmentK * KweightAssignmentTemp;
+                            KweightAssignment += KweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
 
-                Double markA = 0.0;
-                Double outOfA = 0.0;
-                Double weightA = -0.1;
-                try{markA = Double.parseDouble(assignment.getJSONObject("A").getString("mark"));}catch(Exception e){weightA = 0.0;}
-                try{outOfA = Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));}catch(Exception e){}
-                if(weightA == -0.1){
-                    try{weightA = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));}catch(Exception e){}
-                }
-                if(outOfA != 0.0) {
-                    application += markA / outOfA * weightA;
-                    totalWeightApplication += weightA;
-                }
-            }
-            Double Knowledge = Double.parseDouble(weights.getString("K"));
-            Double Thinking = Double.parseDouble(weights.getString("T"));
-            Double Communication = Double.parseDouble(weights.getString("C"));
-            Double Application = Double.parseDouble(weights.getString("A"));
+                try {
+                    if (!assignment.getJSONObject("T").isNull("mark") && !assignment.getJSONObject("T").getString("mark").equals("no mark")) {
+                        Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
+                        TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
+                        if(TweightAssignmentTemp != -1.0) {
+                            Tmark += assignmentT * TweightAssignmentTemp;
+                            TweightAssignment += TweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
 
-            Double finalKnowledge;
-            Double finalThinking;
-            Double finalCommunication;
-            Double finalApplication;
+                try {
+                    if (!assignment.getJSONObject("C").isNull("mark") && !assignment.getJSONObject("C").getString("mark").equals("no mark")) {
+                        Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
+                        CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
+                        if(CweightAssignmentTemp != -1.0) {
+                            Cmark += assignmentC * CweightAssignmentTemp;
+                            CweightAssignment += CweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
 
-            //omit category if there is no assignment in it
-            if(totalWeightKnowledge != 0.0) {
-                finalKnowledge = knowledge / totalWeightKnowledge;
-            }else{
-                finalKnowledge = 0.0;
-                Knowledge = 0.0;
-            }
-            if(totalWeightThinking != 0.0) {
-                finalThinking = thinking/totalWeightThinking;
-            }else{
-                finalThinking = 0.0;
-                Thinking = 0.0;
-            }
-            if(totalWeightCommunication != 0.0) {
-                finalCommunication = communication/totalWeightCommunication;
-            }else{
-                finalCommunication = 0.0;
-                Communication = 0.0;
-            }
-            if(totalWeightApplication != 0.0) {
-                finalApplication = application/totalWeightApplication;
-            }else{
-                finalApplication = 0.0;
-                Application = 0.0;
-            }
-            finalKnowledge = finalKnowledge*Knowledge;
-            finalThinking = finalThinking*Thinking;
-            finalCommunication = finalCommunication*Communication;
-            finalApplication = finalApplication*Application;
+                try {
+                    if (!assignment.getJSONObject("A").isNull("mark") && !assignment.getJSONObject("A").getString("mark").equals("no mark")) {
+                        Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
+                        AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
+                        if(AweightAssignmentTemp != -1.0) {
+                            Amark += assignmentA * AweightAssignmentTemp;
+                            AweightAssignment += AweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
 
-            Double Average = (finalApplication + finalKnowledge + finalThinking +finalCommunication) / (Knowledge+Thinking+Communication+Application)*100;
-            return DoubleRounder.round(Average, 1);
+                try {
+                    if (!assignment.getJSONObject("").isNull("mark") && !assignment.getJSONObject("").getString("mark").equals("no mark")) {
+                        Double assignmentS = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
+                                Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
+                        SweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
+                        if(SweightAssignmentTemp != -1.0) {
+                            Smark += assignmentS * SweightAssignmentTemp;
+                            SweightAssignment += SweightAssignmentTemp;
+                        }
+                    }
+                }catch (JSONException e){}
+
+            }
+
+            if(KweightAssignment == 0.0){
+                Kmark = 0.0;
+                weightK = 0.0;
+            }else {
+                Kmark /= KweightAssignment;
+            }
+
+            if(TweightAssignment == 0.0){
+                Tmark = 0.0;
+                weightT = 0.0;
+            }else {
+                Tmark /= TweightAssignment;
+            }
+
+            if(CweightAssignment == 0.0){
+                Cmark = 0.0;
+                weightC = 0.0;
+            }else {
+                Cmark /= CweightAssignment;
+            }
+
+            if(AweightAssignment == 0.0){
+                Amark = 0.0;
+                weightA = 0.0;
+            }else {
+                Amark /= AweightAssignment;
+            }
+            if(SweightAssignment == 0.0){
+                Smark = 0.0;
+                weightS = 0.0;
+            }else {
+                Smark /= SweightAssignment;
+            }
+
+            Kmark *= weightK;
+            Tmark *= weightT;
+            Cmark *= weightC;
+            Amark *= weightA;
+            Smark *= weightS;
+            String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100).replaceAll(",", "."));
+            return Average;
+
         }catch (JSONException e){
             e.printStackTrace();
-            return 0.0;
+            Crashlytics.log(Log.ERROR, "MarksViewMaterial Calculate total average returns null", Arrays.toString(e.getStackTrace()));
+            return null;
         }
-
     }
-    public LinkedHashMap<String, Double> GetCourseWeights(){ //doesnt need course parameter because its being called with the same class instance as GetMarks
-        LinkedHashMap<String, Double> weights = new LinkedHashMap();
-        String response = marksResponse[0];
-        Double Knowledge;
-        Double Thinking;
-        Double Communication;
-        Double Application;
-        try {
-            response = response.split("<th>Course Weighting</th>")[1].split("</table>")[0];
-            String knowledge = response.split("Knowledge/Understanding")[1].split("\"right\">")[1].split("%</td>")[0];
-            String thinking = response.split("Thinking")[1].split("\"right\">")[1].split("%</td>")[0];
-            String communication = response.split("Communication")[1].split("\"right\">")[1].split("%</td>")[0];
-            String application = response.split("Application")[1].split("\"right\">")[1].split("%</td>")[0];
 
-            Knowledge = Double.parseDouble(knowledge);
-            Thinking = Double.parseDouble(thinking);
-            Communication = Double.parseDouble(communication);
-            Application = Double.parseDouble(application);
-        }catch (ArrayIndexOutOfBoundsException e){
-            Knowledge = 1.0;
-            Thinking = 1.0;
-            Communication = 1.0;
-            Application = 1.0;
-        }
-
-
-
-        weights.put("Knowledge", Knowledge);
-        weights.put("Thinking", Thinking);
-        weights.put("Communication", Communication);
-        weights.put("Application", Application);
-        return weights;
-    }
 
 }
 

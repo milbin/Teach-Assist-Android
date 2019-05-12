@@ -761,8 +761,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         Marks.remove(String.valueOf(index));
                                         removedAssignmentIndexList.add(index);
                                         numberOfRemovedAssignments++;
-
-                                        String returnval = CalculateTotalAverage(Marks);
+                                        TA ta = new TA();
+                                        String returnval = ta.CalculateAverageFromMarksView(Marks, numberOfRemovedAssignments);
                                         TextView AverageInt = findViewById(R.id.AverageInt);
                                         AverageInt.setText(returnval + "%");
                                         int Average = Math.round(Float.parseFloat(returnval));
@@ -1085,147 +1085,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             return null;
         }
     }
-    public String CalculateTotalAverage(JSONObject marks) {
-        DecimalFormat round = new DecimalFormat(".#");
-        try {
-            JSONObject weights = marks.getJSONObject("categories");
-            Double weightK = weights.getDouble("K") * 10 * 0.7;
-            Double weightT = weights.getDouble("T") * 10 * 0.7;
-            Double weightC = weights.getDouble("C") * 10 * 0.7;
-            Double weightA = weights.getDouble("A") * 10 * 0.7;
-            Double weightS = 0.3*10;
-            Double Kmark = 0.0;
-            Double Tmark = 0.0;
-            Double Cmark = 0.0;
-            Double Amark = 0.0;
-            Double Smark = 0.0;
-            Double KweightAssignment = 0.0;
-            Double TweightAssignment = 0.0;
-            Double CweightAssignment = 0.0;
-            Double AweightAssignment = 0.0;
-            Double SweightAssignment = 0.0;
-            Double KweightAssignmentTemp;
-            Double TweightAssignmentTemp;
-            Double CweightAssignmentTemp;
-            Double AweightAssignmentTemp;
-            Double SweightAssignmentTemp;
-            for (int i = 0; i < marks.length()-1+numberOfRemovedAssignments; i++) {
-                JSONObject assignment;
-                try {
-                    assignment = marks.getJSONObject(String.valueOf(i));
-                }catch (JSONException e){
-                        continue;}
 
-                try {
-                    if (!assignment.getJSONObject("K").isNull("mark") && !assignment.getJSONObject("K").getString("mark").equals("no mark")) {
-                        Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
-                        KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
-                        if(KweightAssignmentTemp != -1.0) {
-                            Kmark += assignmentK * KweightAssignmentTemp;
-                            KweightAssignment += KweightAssignmentTemp;
-                        }
-                    }
-                }catch (JSONException e){}
-
-                try {
-                    if (!assignment.getJSONObject("T").isNull("mark") && !assignment.getJSONObject("T").getString("mark").equals("no mark")) {
-                        Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
-                        TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
-                        if(TweightAssignmentTemp != -1.0) {
-                            Tmark += assignmentT * TweightAssignmentTemp;
-                            TweightAssignment += TweightAssignmentTemp;
-                        }
-                    }
-                }catch (JSONException e){}
-
-                try {
-                    if (!assignment.getJSONObject("C").isNull("mark") && !assignment.getJSONObject("C").getString("mark").equals("no mark")) {
-                        Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
-                        CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
-                        if(CweightAssignmentTemp != -1.0) {
-                            Cmark += assignmentC * CweightAssignmentTemp;
-                            CweightAssignment += CweightAssignmentTemp;
-                        }
-                    }
-                }catch (JSONException e){}
-
-                try {
-                    if (!assignment.getJSONObject("A").isNull("mark") && !assignment.getJSONObject("A").getString("mark").equals("no mark")) {
-                        Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
-                        AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
-                        if(AweightAssignmentTemp != -1.0) {
-                            Amark += assignmentA * AweightAssignmentTemp;
-                            AweightAssignment += AweightAssignmentTemp;
-                        }
-                    }
-                }catch (JSONException e){}
-
-                try {
-                    if (!assignment.getJSONObject("").isNull("mark") && !assignment.getJSONObject("").getString("mark").equals("no mark")) {
-                        Double assignmentS = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
-                        SweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
-                        if(SweightAssignmentTemp != -1.0) {
-                            Smark += assignmentS * SweightAssignmentTemp;
-                            SweightAssignment += SweightAssignmentTemp;
-                        }
-                    }
-                }catch (JSONException e){}
-
-            }
-
-            if(KweightAssignment == 0.0){
-                Kmark = 0.0;
-                weightK = 0.0;
-            }else {
-                Kmark /= KweightAssignment;
-            }
-
-            if(TweightAssignment == 0.0){
-                Tmark = 0.0;
-                weightT = 0.0;
-            }else {
-                Tmark /= TweightAssignment;
-            }
-
-            if(CweightAssignment == 0.0){
-                Cmark = 0.0;
-                weightC = 0.0;
-            }else {
-                Cmark /= CweightAssignment;
-            }
-
-            if(AweightAssignment == 0.0){
-                Amark = 0.0;
-                weightA = 0.0;
-            }else {
-                Amark /= AweightAssignment;
-            }
-            if(SweightAssignment == 0.0){
-                Smark = 0.0;
-                weightS = 0.0;
-            }else {
-                Smark /= SweightAssignment;
-            }
-
-            Kmark *= weightK;
-            Tmark *= weightT;
-            Cmark *= weightC;
-            Amark *= weightA;
-            Smark *= weightS;
-            String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100).replaceAll(",", "."));
-            return Average;
-
-        }catch (JSONException e){
-            e.printStackTrace();
-            Crashlytics.log(Log.ERROR, "MarksViewMaterial Calculate total average returns null", Arrays.toString(e.getStackTrace()));
-            return null;
-        }
-    }
 
     public List<String> GetWeightAndAverageByCategory(JSONObject marks) {
         DecimalFormat round = new DecimalFormat(".#");
