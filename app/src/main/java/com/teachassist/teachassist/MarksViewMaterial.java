@@ -258,16 +258,19 @@ public class MarksViewMaterial extends AppCompatActivity {
                 TextView weightTAverage = findViewById(R.id.weightTAverage);
                 TextView weightCAverage = findViewById(R.id.weightCAverage);
                 TextView weightAAverage = findViewById(R.id.weightAAverage);
+                TextView weightOAverage = findViewById(R.id.weightOAverage);
 
                 TextView KpercentAverage = findViewById(R.id.KpercentAverage);
                 TextView TpercentAverage = findViewById(R.id.TpercentAverage);
                 TextView CpercentAverage = findViewById(R.id.CpercentAverage);
                 TextView ApercentAverage = findViewById(R.id.ApercentAverage);
+                TextView OpercentAverage = findViewById(R.id.OpercentAverage);
 
                 View BarAverage1 = findViewById(R.id.BarAverage1);
                 View BarAverage2 = findViewById(R.id.BarAverage2);
                 View BarAverage3 = findViewById(R.id.BarAverage3);
                 View BarAverage4 = findViewById(R.id.BarAverage4);
+                View BarAverage5 = findViewById(R.id.BarAverage5);
                 List<String> list = GetWeightAndAverageByCategory(marks);
 
 
@@ -286,6 +289,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                 RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
                 layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.5 + 45);
                 BarAverage4.setLayoutParams(layoutParamsBar4);
+
+                RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
+                layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.5 + 45);
+                BarAverage5.setLayoutParams(layoutParamsBar5);
 
                 if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
                     KpercentAverage.setText("NA");
@@ -319,10 +326,19 @@ public class MarksViewMaterial extends AppCompatActivity {
                     BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                 }
 
-                weightKAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
-                weightTAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
-                weightCAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
-                weightAAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
+                if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals(".0")){
+                    OpercentAverage.setText("NA");
+                    BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                }else {
+                    OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
+                    BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                }
+
+                weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
+                weightTAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
+                weightCAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
+                weightAAverage.setText(round.format(Double.parseDouble(list.get(8))).replaceAll(",", "."));
+                weightOAverage.setText(round.format(Double.parseDouble(list.get(9))).replaceAll(",", "."));
 
                 RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
                 barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -334,6 +350,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                     Double Tmark = 0.000000001;
                     Double Cmark = 0.000000001;
                     Double Amark = 0.000000001;
+                    Double Omark = 0.000000001;
                     final Double Kweight;
                     final Double Tweight;
                     final Double Cweight;
@@ -344,31 +361,22 @@ public class MarksViewMaterial extends AppCompatActivity {
                     final String finalStringTFraction;
                     final String finalStringCFraction;
                     final String finalStringAFraction;
+                    final String finalStringOFraction;
                     String stringKFraction = "";
                     String stringTFraction = "";
                     String stringCFraction = "";
                     String stringAFraction = "";
+                    String stringOFraction = "";
                     rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
                     linearLayout.addView(rl);
                     rlList.add(rl);
                     try {
                         final JSONObject assignment = marks.getJSONObject(String.valueOf(i));
-                        if (assignment.has("K") && assignment.getJSONObject("K").getString("mark").equals("no mark") ||
-                                assignment.has("T") && assignment.getJSONObject("T").getString("mark").equals("no mark") ||
-                                assignment.has("C") && assignment.getJSONObject("C").getString("mark").equals("no mark") ||
-                                assignment.has("A") && assignment.getJSONObject("A").getString("mark").equals("no mark")) {
-                            title = assignment.getString("title");
-                            feedback = "";
+                        title = assignment.getString("title");
+                        feedback = assignment.getString("feedback").replaceAll("\n", "");
+                        if (assignment.has("K") && assignment.getJSONObject("K").getString("mark").equals("no mark")){
                             Kweight = 0.0;
-                            Tweight = 0.0;
-                            Cweight = 0.0;
-                            Aweight = 0.0;
-                            Oweight = 0.0;
-                        } else {
-
-                            title = assignment.getString("title");
-                            feedback = assignment.getString("feedback").replaceAll("\n", "");
-
+                        }else {
                             if (assignment.has("K")) {
                                 if (assignment.getJSONObject("K").getString("weight").isEmpty()) {
                                     Kweight = 0.0;
@@ -397,6 +405,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                             } else {
                                 Kweight = 0.0;
                             }
+                        }
+                        if (assignment.has("T") && assignment.getJSONObject("T").getString("mark").equals("no mark")) {
+                            Tweight = 0.0;
+                        }else {
+
                             if (assignment.has("T")) {
                                 if (assignment.getJSONObject("T").getString("weight").isEmpty()) {
                                     Tweight = 0.0;
@@ -425,6 +438,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                             } else {
                                 Tweight = 0.0;
                             }
+                        }
+                        if (assignment.has("C") && assignment.getJSONObject("C").getString("mark").equals("no mark")) {
+                            Cweight = 0.0;
+                        }else {
+
                             if (assignment.has("C")) {
                                 if (assignment.getJSONObject("C").getString("weight").isEmpty()) {
                                     Cweight = 0.0;
@@ -453,6 +471,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                             } else {
                                 Cweight = 0.0;
                             }
+                        }
+                        if (assignment.has("A") && assignment.getJSONObject("A").getString("mark").equals("no mark")) {
+                            Aweight = 0.0;
+                        }else {
+
                             if (assignment.has("A")) {
                                 if (assignment.getJSONObject("A").getString("weight").isEmpty()) {
                                     Aweight = 0.0;
@@ -481,24 +504,35 @@ public class MarksViewMaterial extends AppCompatActivity {
                             } else {
                                 Aweight = 0.0;
                             }
-
+                        }
+                        if (assignment.has("") && assignment.getJSONObject("").getString("mark").equals("no mark")) {
+                            Oweight = 0.0;
+                        }else {
                             if (assignment.has("")) {
-                                if(assignment.getJSONObject("").has("weight")) {
-
-                                    if (assignment.getJSONObject("").getString("weight").isEmpty()) {
-                                        Oweight = 0.0;
-                                    } else {
-                                        if(Double.parseDouble(assignment.getJSONObject("").getString("weight")) == -1.0){
-                                            Oweight = 0.0;
-                                        }else {
-                                            Oweight = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
-                                        }
-
-                                    }
-                                }else{
+                                if (assignment.getJSONObject("").getString("weight").isEmpty()) {
                                     Oweight = 0.0;
+                                } else {
+                                    Oweight = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
                                 }
-
+                                if (assignment.getJSONObject("").getString("outOf").equals("0") || assignment.getJSONObject("").getString("outOf").equals("0.0")) {
+                                    Omark = 0.0;
+                                } else {
+                                    if (!assignment.getJSONObject("").isNull("mark") && !assignment.getJSONObject("").isNull("outOf")) {
+                                        Omark = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
+                                                Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
+                                        Omark = Double.parseDouble(round.format(Omark * 100).replaceAll(",", "."));
+                                    }
+                                }
+                                if (assignment.getJSONObject("").getString("mark").isEmpty()) {
+                                    stringOFraction = "0/";
+                                } else {
+                                    stringOFraction = assignment.getJSONObject("").getString("mark") + "/";
+                                }
+                                if (assignment.getJSONObject("").getString("outOf").isEmpty()) {
+                                    stringOFraction += "0";
+                                } else {
+                                    stringOFraction += assignment.getJSONObject("").getString("outOf");
+                                }
                             } else {
                                 Oweight = 0.0;
                             }
@@ -506,20 +540,24 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
 
+
                         finalStringKFraction = stringKFraction;
                         finalStringTFraction = stringTFraction;
                         finalStringCFraction = stringCFraction;
                         finalStringAFraction = stringAFraction;
+                        finalStringOFraction = stringOFraction;
 
                         final TextView KWeight = new TextView(context);
                         final TextView TWeight = new TextView(context);
                         final TextView CWeight = new TextView(context);
                         final TextView AWeight = new TextView(context);
+                        final TextView OWeight = new TextView(context);
                         final TextView feedbackTextView = new TextView(context);
                         final TextView markFractionK = new TextView(context);
                         final TextView markFractionT = new TextView(context);
                         final TextView markFractionC = new TextView(context);
                         final TextView markFractionA = new TextView(context);
+                        final TextView markFractionO = new TextView(context);
 
                         rl.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -538,6 +576,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     View bar2 = v.findViewById(R.id.BarGraph2);
                                     View bar3 = v.findViewById(R.id.BarGraph3);
                                     View bar4 = v.findViewById(R.id.BarGraph4);
+                                    View bar5 = v.findViewById(R.id.BarGraph5);
 
                                     RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
                                     RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
@@ -580,6 +619,14 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     AWeight.setText("W: " + String.valueOf(Aweight));
                                     barsRL.addView(AWeight);
 
+                                    RelativeLayout.LayoutParams paramsOweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    OWeight.setId(View.generateViewId());
+                                    paramsOweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                    paramsOweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph5);
+                                    OWeight.setLayoutParams(paramsOweight);
+                                    OWeight.setText("W: " + String.valueOf(Oweight));
+                                    barsRL.addView(OWeight);
+
                                     RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
                                     layoutParamsBar1.height = (int) Math.round(bar1.getHeight() * 2.3);
                                     layoutParamsBar1.width = (int) Math.round(bar1.getWidth() * 2);
@@ -612,6 +659,14 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar4.setMarginStart(30);
                                     bar4.setLayoutParams(layoutParamsBar4);
 
+                                    RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) bar5.getLayoutParams();
+                                    layoutParamsBar5.height = (int) Math.round(bar5.getHeight() * 2.3);
+                                    layoutParamsBar5.width = (int) Math.round(bar5.getWidth() * 2);
+                                    layoutParamsBar5.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+                                    layoutParamsBar5.addRule(RelativeLayout.ABOVE, OWeight.getId());
+                                    layoutParamsBar5.setMarginStart(30);
+                                    bar5.setLayoutParams(layoutParamsBar5);
+
                                     TextView AveragePercent = v.findViewById(R.id.AveragePercent);
                                     RelativeLayout.LayoutParams paramsAveragePercent = (RelativeLayout.LayoutParams) AveragePercent.getLayoutParams();
                                     paramsAveragePercent.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -630,14 +685,17 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     markFractionT.setText(finalStringTFraction);
                                     markFractionC.setText(finalStringCFraction);
                                     markFractionA.setText(finalStringAFraction);
+                                    markFractionO.setText(finalStringOFraction);
                                     markFractionK.setId(View.generateViewId());
                                     markFractionT.setId(View.generateViewId());
                                     markFractionC.setId(View.generateViewId());
                                     markFractionA.setId(View.generateViewId());
+                                    markFractionO.setId(View.generateViewId());
                                     markFractionK.setTextColor(getResources().getColor(R.color.White));
                                     markFractionT.setTextColor(getResources().getColor(R.color.White));
                                     markFractionC.setTextColor(getResources().getColor(R.color.White));
                                     markFractionA.setTextColor(getResources().getColor(R.color.White));
+                                    markFractionO.setTextColor(getResources().getColor(R.color.White));
 
                                     RelativeLayout.LayoutParams markFractionKLP = new RelativeLayout.LayoutParams(
                                             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -651,24 +709,31 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     RelativeLayout.LayoutParams markFractionALP = new RelativeLayout.LayoutParams(
                                             ViewGroup.LayoutParams.WRAP_CONTENT,
                                             ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    RelativeLayout.LayoutParams markFractionOLP = new RelativeLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT);
 
                                     markFractionKLP.addRule(RelativeLayout.BELOW, R.id.Kpercent);
                                     markFractionTLP.addRule(RelativeLayout.BELOW, R.id.Tpercent);
                                     markFractionCLP.addRule(RelativeLayout.BELOW, R.id.Cpercent);
                                     markFractionALP.addRule(RelativeLayout.BELOW, R.id.Apercent);
+                                    markFractionOLP.addRule(RelativeLayout.BELOW, R.id.Opercent);
                                     markFractionKLP.addRule(RelativeLayout.ALIGN_START, R.id.Kpercent);
                                     markFractionTLP.addRule(RelativeLayout.ALIGN_START, R.id.Tpercent);
                                     markFractionCLP.addRule(RelativeLayout.ALIGN_START, R.id.Cpercent);
                                     markFractionALP.addRule(RelativeLayout.ALIGN_START, R.id.Apercent);
+                                    markFractionOLP.addRule(RelativeLayout.ALIGN_START, R.id.Opercent);
                                     markFractionK.setLayoutParams(markFractionKLP);
                                     markFractionT.setLayoutParams(markFractionTLP);
                                     markFractionC.setLayoutParams(markFractionCLP);
                                     markFractionA.setLayoutParams(markFractionALP);
+                                    markFractionO.setLayoutParams(markFractionOLP);
 
                                     barsRL.addView(markFractionK);
                                     barsRL.addView(markFractionT);
                                     barsRL.addView(markFractionC);
                                     barsRL.addView(markFractionA);
+                                    barsRL.addView(markFractionO);
                                 } else if (rlNested.getHeight() != original_height_of_assignment) {
                                     params.height = original_height_of_assignment;
 
@@ -678,6 +743,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     View bar2 = v.findViewById(R.id.BarGraph2);
                                     View bar3 = v.findViewById(R.id.BarGraph3);
                                     View bar4 = v.findViewById(R.id.BarGraph4);
+                                    View bar5 = v.findViewById(R.id.BarGraph5);
 
                                     RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
                                     RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
@@ -691,12 +757,14 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     barsRL.removeView(TWeight);
                                     barsRL.removeView(CWeight);
                                     barsRL.removeView(AWeight);
+                                    barsRL.removeView(OWeight);
                                     rlNested.removeView(feedbackTextView);
 
                                     barsRL.removeView(markFractionK);
                                     barsRL.removeView(markFractionT);
                                     barsRL.removeView(markFractionC);
                                     barsRL.removeView(markFractionA);
+                                    barsRL.removeView(markFractionO);
 
                                     RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
                                     layoutParamsBar1.height = (int) Math.round(bar1.getHeight() / 2.3);
@@ -729,6 +797,14 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar4.addRule(RelativeLayout.ABOVE, 0);
                                     layoutParamsBar4.setMarginStart(3);
                                     bar4.setLayoutParams(layoutParamsBar4);
+
+                                    RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) bar5.getLayoutParams();
+                                    layoutParamsBar5.height = (int) Math.round(bar5.getHeight() / 2.3);
+                                    layoutParamsBar5.width = (int) Math.round(bar5.getWidth() / 2);
+                                    layoutParamsBar5.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                    layoutParamsBar5.addRule(RelativeLayout.ABOVE, 0);
+                                    layoutParamsBar5.setMarginStart(3);
+                                    bar5.setLayoutParams(layoutParamsBar5);
 
 
                                     TextView AveragePercent = v.findViewById(R.id.AveragePercent);
@@ -776,16 +852,19 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         TextView weightTAverage = findViewById(R.id.weightTAverage);
                                         TextView weightCAverage = findViewById(R.id.weightCAverage);
                                         TextView weightAAverage = findViewById(R.id.weightAAverage);
+                                        TextView weightOAverage = findViewById(R.id.weightOAverage);
 
                                         TextView KpercentAverage = findViewById(R.id.KpercentAverage);
                                         TextView TpercentAverage = findViewById(R.id.TpercentAverage);
                                         TextView CpercentAverage = findViewById(R.id.CpercentAverage);
                                         TextView ApercentAverage = findViewById(R.id.ApercentAverage);
+                                        TextView OpercentAverage = findViewById(R.id.OpercentAverage);
 
                                         View BarAverage1 = findViewById(R.id.BarAverage1);
                                         View BarAverage2 = findViewById(R.id.BarAverage2);
                                         View BarAverage3 = findViewById(R.id.BarAverage3);
                                         View BarAverage4 = findViewById(R.id.BarAverage4);
+                                        View BarAverage5 = findViewById(R.id.BarAverage5);
                                         List<String> list = GetWeightAndAverageByCategory(Marks);
 
 
@@ -804,8 +883,12 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
                                         layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.5 + 45);
                                         BarAverage4.setLayoutParams(layoutParamsBar4);
-                                        System.out.println(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
-                                        System.out.println("HERE");
+
+                                        RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
+                                        layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.5 + 45);
+                                        BarAverage5.setLayoutParams(layoutParamsBar5);
+
+
                                         if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
                                             KpercentAverage.setText("NA");
                                             BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
@@ -838,10 +921,19 @@ public class MarksViewMaterial extends AppCompatActivity {
                                             BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                                         }
 
-                                        weightKAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
-                                        weightTAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
-                                        weightCAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
-                                        weightAAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
+                                        if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals(".0")){
+                                            OpercentAverage.setText("NA");
+                                            BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                        }else {
+                                            OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
+                                            BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                        }
+
+                                        weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
+                                        weightTAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
+                                        weightCAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
+                                        weightAAverage.setText(round.format(Double.parseDouble(list.get(8))).replaceAll(",", "."));
+                                        weightOAverage.setText(round.format(Double.parseDouble(list.get(9))).replaceAll(",", "."));
 
                                         RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
                                         barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -862,31 +954,32 @@ public class MarksViewMaterial extends AppCompatActivity {
                         //set mark
                         TextView Average = rl.findViewById(R.id.AveragePercent);
                         String returnval = CalculateAverage(marks, String.valueOf(i));
-                        if (returnval.equals("No Mark") || returnval.equals("NaN")) {
+                        if(returnval == null || returnval.equals("NaN")||returnval.equals("null")){
                             Average.setText("No Mark");
-                        } else {
+                        }else {
                             Average.setText(returnval + "%");
                         }
+
 
                         //set bars
                         View bar1 = rl.findViewById(R.id.BarGraph1);
                         View bar2 = rl.findViewById(R.id.BarGraph2);
                         View bar3 = rl.findViewById(R.id.BarGraph3);
                         View bar4 = rl.findViewById(R.id.BarGraph4);
+                        View bar5 = rl.findViewById(R.id.BarGraph5);
                         bar1.getLayoutParams().height = (int) Math.round(1.5 * (Kmark)) + 45;
                         bar2.getLayoutParams().height = (int) Math.round(1.5 * (Tmark)) + 45;
                         bar3.getLayoutParams().height = (int) Math.round(1.5 * (Cmark)) + 45;
                         bar4.getLayoutParams().height = (int) Math.round(1.5 * (Amark)) + 45;
+                        bar5.getLayoutParams().height = (int) Math.round(1.5 * (Omark)) + 45;
 
                         //set percentage texts
                         TextView Kpercent = rl.findViewById(R.id.Kpercent);
                         TextView Tpercent = rl.findViewById(R.id.Tpercent);
                         TextView Cpercent = rl.findViewById(R.id.Cpercent);
                         TextView Apercent = rl.findViewById(R.id.Apercent);
-                        TextView K = rl.findViewById(R.id.K);
-                        TextView T = rl.findViewById(R.id.T);
-                        TextView C = rl.findViewById(R.id.C);
-                        TextView A = rl.findViewById(R.id.A);
+                        TextView Opercent = rl.findViewById(R.id.Opercent);
+
                         if (Kmark == 100.0) {
                             Kpercent.setText(String.valueOf(Math.round(Kmark)));
                         } else if (Kmark == 0.0) {
@@ -935,32 +1028,18 @@ public class MarksViewMaterial extends AppCompatActivity {
                             Apercent.setText(String.valueOf(Amark));
                         }
 
-
-                        //hide bars if the assignment is an exam / summative
-                        if (Kpercent.getText().equals("NA") &&
-                                Tpercent.getText().equals("NA") &&
-                                Cpercent.getText().equals("NA") &&
-                                Apercent.getText().equals("NA")) {
-                            bar1.setVisibility(View.GONE);
-                            bar2.setVisibility(View.GONE);
-                            bar3.setVisibility(View.GONE);
-                            bar4.setVisibility(View.GONE);
-                            Kpercent.setVisibility(View.GONE);
-                            Tpercent.setVisibility(View.GONE);
-                            Cpercent.setVisibility(View.GONE);
-                            Apercent.setVisibility(View.GONE);
-                            T.setVisibility(View.GONE);
-                            C.setVisibility(View.GONE);
-                            A.setVisibility(View.GONE);
-
-                            K.setText("Weight: " + String.valueOf(Oweight));
-                            RelativeLayout.LayoutParams lpK = (RelativeLayout.LayoutParams) K.getLayoutParams();
-                            lpK.addRule(RelativeLayout.CENTER_IN_PARENT);
-                            K.setTextSize(20);
-                            rl.setClickable(false);
-
-
+                        if (Omark == 100.0) {
+                            Opercent.setText(String.valueOf(Math.round(Omark)));
+                        } else if (Amark == 0.0) {
+                            Opercent.setText("0.0");
+                        } else if (Omark == 0.000000001) {
+                            bar5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                            Opercent.setTextColor(Color.WHITE);
+                            Opercent.setText("NA");
+                        } else {
+                            Opercent.setText(String.valueOf(Omark));
                         }
+
                         if(!isCancelled()) {
                             dialog.dismiss();
                         }
@@ -977,10 +1056,11 @@ public class MarksViewMaterial extends AppCompatActivity {
     private String CalculateAverage(JSONObject marks, String assingmentNumber){
     try {
         JSONObject weights = marks.getJSONObject("categories");
-        Double weightK = weights.getDouble("K")*10;
-        Double weightT = weights.getDouble("T")*10;
-        Double weightC = weights.getDouble("C")*10;
-        Double weightA = weights.getDouble("A")*10;
+        Double weightK = weights.getDouble("K")*10 * 0.7;
+        Double weightT = weights.getDouble("T")*10 * 0.7;
+        Double weightC = weights.getDouble("C")*10 * 0.7;
+        Double weightA = weights.getDouble("A")*10 * 0.7;
+        Double weightO = 3.0;
         Double Kmark = 0.0;
         Double Tmark = 0.0;
         Double Cmark = 0.0;
@@ -989,26 +1069,25 @@ public class MarksViewMaterial extends AppCompatActivity {
         DecimalFormat round = new DecimalFormat(".#");
         JSONObject assignment = marks.getJSONObject(assingmentNumber);
 
-        if(assignment.has("")){
+        if(assignment.has("")) {
             if(assignment.getJSONObject("").getString("mark").equals("no mark")){
-                return "No Mark";
+                weightO = 0.0;
             }
             if (!assignment.getJSONObject("").getString("outOf").equals("0") || !assignment.getJSONObject("").getString("outOf").equals("0.0")) {
                 if (!assignment.getJSONObject("").isNull("mark")) {
-                    if(assignment.getJSONObject("").getString("mark").equals("no mark")){
-                        return "No Mark";
-                    }
                     Omark = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
                             Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
-                    return round.format(Omark * 100).replaceAll(",", ".");
-
+                }else{
+                    weightO = 0.0;
                 }
             }
+        }else{
+            weightO = 0.0;
         }
 
         if(assignment.has("K")) {
             if(assignment.getJSONObject("K").getString("mark").equals("no mark")){
-                return "No Mark";
+                weightK = 0.0;
             }
             if (!assignment.getJSONObject("K").getString("outOf").equals("0") || !assignment.getJSONObject("K").getString("outOf").equals("0.0")) {
                 if (!assignment.getJSONObject("K").isNull("mark")) {
@@ -1023,7 +1102,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             }
         if(assignment.has("T")) {
             if(assignment.getJSONObject("T").getString("mark").equals("no mark")){
-                return "No Mark";
+                weightT = 0.0;
             }
             if (!assignment.getJSONObject("T").getString("outOf").equals("0") || !assignment.getJSONObject("T").getString("outOf").equals("0.0")) {
                 if (!assignment.getJSONObject("T").isNull("mark")) {
@@ -1038,7 +1117,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             }
         if(assignment.has("C")) {
             if(assignment.getJSONObject("C").getString("mark").equals("no mark")){
-                return "No Mark";
+                weightC = 0.0;
             }
             if (!assignment.getJSONObject("C").getString("outOf").equals("0") || !assignment.getJSONObject("C").getString("outOf").equals("0.0")) {
                 if (!assignment.getJSONObject("C").isNull("mark")) {
@@ -1053,7 +1132,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             }
         if(assignment.has("A")) {
             if(assignment.getJSONObject("A").getString("mark").equals("no mark")){
-                return "No Mark";
+                weightA = 0.0;
             }
             if (!assignment.getJSONObject("A").getString("outOf").equals("0") || !assignment.getJSONObject("A").getString("outOf").equals("0.0")) {
                 if (!assignment.getJSONObject("A").isNull("mark")) {
@@ -1071,7 +1150,8 @@ public class MarksViewMaterial extends AppCompatActivity {
         Tmark*=weightT;
         Cmark*=weightC;
         Amark*=weightA;
-        String Average = round.format((Kmark+Tmark+Cmark+Amark)/(weightK+weightT+weightC+weightA)*100).replaceAll(",", ".");
+        Omark*=weightO;
+        String Average = round.format((Kmark+Tmark+Cmark+Amark+Omark)/(weightK+weightT+weightC+weightA+weightO)*100).replaceAll(",", ".");
         if(Average.equals(".0")){
             Average = "0";
         }
@@ -1218,17 +1298,16 @@ public class MarksViewMaterial extends AppCompatActivity {
             Tmark *= 100;
             Cmark *= 100;
             Amark *= 100;
+            Smark *= 100;
 
             weightK *= 10;
             weightT *= 10;
             weightC *= 10;
             weightA *= 10;
+            weightS *= 10;
+            System.out.println(String.valueOf(Smark) +"HERE");
+            return Arrays.asList(String.valueOf(Kmark), String.valueOf(Tmark), String.valueOf(Cmark), String.valueOf(Amark),String.valueOf(Smark), String.valueOf(weightK), String.valueOf(weightT), String.valueOf(weightC), String.valueOf(weightA), String.valueOf(weightS));
 
-            return Arrays.asList(String.valueOf(Kmark), String.valueOf(Tmark), String.valueOf(Cmark), String.valueOf(Amark), String.valueOf(weightK), String.valueOf(weightT), String.valueOf(weightC), String.valueOf(weightA));
-            //Smark *= weightS;
-
-            //String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100).replaceAll(",", "."));
-            //return Average;
 
         }catch (JSONException e){
             e.printStackTrace();

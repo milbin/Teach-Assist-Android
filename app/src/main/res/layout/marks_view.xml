@@ -228,7 +228,7 @@
                     android:layout_above="@+id/weightAAverage"
                     android:layout_marginStart="3dp"
                     android:layout_toRightOf="@+id/BarAverage3"
-                    android:layout_marginEnd="10dp"
+
                     android:background="@drawable/rounded_rectangle_bar_graph" />
 
                 <TextView
@@ -253,6 +253,43 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/BarAverage4"
+                    android:text="W:"
+                    android:layout_alignParentBottom="true"
+
+                    />
+
+                <View
+                    android:id="@+id/BarAverage5"
+                    android:layout_width="40dp"
+                    android:layout_height="80dp"
+                    android:layout_above="@+id/weightOAverage"
+                    android:layout_marginStart="3dp"
+                    android:layout_toRightOf="@+id/BarAverage4"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/rounded_rectangle_bar_graph" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/BarAverage5"
+                    android:layout_alignStart="@+id/BarAverage5"
+                    android:paddingLeft="10dp"
+                    android:text="O" />
+
+                <TextView
+                    android:id="@+id/OpercentAverage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/BarAverage5"
+                    android:layout_alignTop="@+id/BarAverage5"
+                    android:paddingEnd="2dp"
+                    android:textColor="@color/White"
+                    android:text="" />
+                <TextView
+                    android:id="@+id/weightOAverage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/BarAverage5"
                     android:text="W:"
                     android:layout_alignParentBottom="true"
 

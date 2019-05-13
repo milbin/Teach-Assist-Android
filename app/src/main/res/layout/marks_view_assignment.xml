@@ -177,6 +177,34 @@
             android:paddingLeft="2dp"
             android:textColor="@color/White"
             android:text="-1" />
+
+        <View
+            android:id="@+id/BarGraph5"
+            android:layout_width="30dp"
+            android:layout_height="38dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="3dp"
+            android:layout_toRightOf="@+id/BarGraph4"
+            android:background="@drawable/rounded_rectangle_bar_graph" />
+
+        <TextView
+            android:id="@+id/O"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/BarGraph5"
+            android:layout_alignStart="@+id/BarGraph5"
+            android:paddingLeft="10dp"
+            android:text="O" />
+
+        <TextView
+            android:id="@+id/Opercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/BarGraph5"
+            android:layout_alignTop="@+id/BarGraph5"
+            android:paddingLeft="2dp"
+            android:textColor="@color/White"
+            android:text="-1" />
     </RelativeLayout>
 
 </RelativeLayout>
