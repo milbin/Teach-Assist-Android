@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -141,8 +141,8 @@ public class login extends AppCompatActivity {
 
             final EditText usernameInput = (EditText) findViewById(R.id.Username);
             final EditText passwordInput = (EditText) findViewById(R.id.Password);
-            System.out.println(response);
-            if (response == null || response.isEmpty()){
+            System.out.println(response + "RESPONSE HERE");
+            if (response == null /*|| response.isEmpty()*/){
                 dialog.dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
                 builder.setTitle("Sign in Failure")

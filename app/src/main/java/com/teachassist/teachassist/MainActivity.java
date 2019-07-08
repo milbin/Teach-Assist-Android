@@ -11,18 +11,17 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -265,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()){
             case R.id.nav_logout:
-                drawer.closeDrawer(Gravity.START);
+                drawer.closeDrawer(GravityCompat.START);
 
 
                 SharedPreferences sharedPreferences = getSharedPreferences(CREDENTIALS, MODE_PRIVATE);
@@ -281,11 +280,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_home:
-                drawer.closeDrawer(Gravity.START);
+                drawer.closeDrawer(GravityCompat.START);
                 break;
 
             case R.id.nav_settings:
-                drawer.closeDrawer(Gravity.START);
+                drawer.closeDrawer(GravityCompat.START);
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 //add names of courses to list for settings summaries
                 ArrayList list = new ArrayList<String>();
@@ -318,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_email:
-                drawer.closeDrawer(Gravity.START);
+                drawer.closeDrawer(GravityCompat.START);
 
                 String mailto = "mailto:TaAppYRDSB@gmail.com";
 
@@ -333,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_bug_report:
-                drawer.closeDrawer(Gravity.START);
+                drawer.closeDrawer(GravityCompat.START);
                 String mailtoBug = "mailto:TaAppYRDSB@gmail.com";
 
                 Intent BugIntent = new Intent(Intent.ACTION_SENDTO);

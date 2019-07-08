@@ -8,13 +8,13 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.app.NavUtils;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -107,8 +107,12 @@ public class SettingsActivity extends AppCompatActivity {
             Preference notificationSummary9 = findPreference("Notifications 9");
             Preference notificationSummary10 = findPreference("Notifications 10");
             Preference notificationSummaryEXTRA = findPreference("Notifications EXTRA");
-            notificationSummary1.setSummary("Disable Notifications for: " + courses.get(0));
-            notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
+            if(courses.size() > 0) {
+                notificationSummary1.setSummary("Disable Notifications for: " + courses.get(0));
+            }
+            if(courses.size() > 1) {
+                notificationSummary2.setSummary("Disable Notifications for: " + courses.get(1));
+            }
             if(courses.size() > 2) {
                 notificationSummary3.setSummary("Disable Notifications for: " + courses.get(2));
             }
@@ -175,6 +179,9 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             Preference notifications1 = (Preference) findPreference("Notifications 1");
+            if(courses.size() < 1){
+                notifications1.setVisible(false);
+            }
             notifications1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -190,7 +197,11 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
             Preference notifications2 = (Preference) findPreference("Notifications 2");
+            if(courses.size() < 2){
+                notifications2.setVisible(false);
+            }
             notifications2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {

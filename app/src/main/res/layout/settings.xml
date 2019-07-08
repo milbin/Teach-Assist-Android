@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentFrameLayout
+<androidx.percentlayout.widget.PercentFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,6 +10,7 @@
     <FrameLayout
         android:id="@+id/settings_fragment"
         android:layout_height="750dp"
+        android:layout_width="match_parent"
         android:layout_gravity="top|start"
         app:layout_heightPercent="100%"
         app:layout_widthPercent="100%" />
@@ -17,4 +18,4 @@
 
 
 
-</android.support.percent.PercentFrameLayout>
+</androidx.percentlayout.widget.PercentFrameLayout>
