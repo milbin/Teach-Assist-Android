@@ -42,6 +42,8 @@ import com.github.mikephil.charting.utils.EntryXIndexComparator;
 import com.google.gson.Gson;
 
 import org.decimal4j.util.DoubleRounder;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -174,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v){
-            System.out.println("CLICK");
             Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
             int subjectNumber = ((LinearLayout) v.getParent()).indexOfChild(v) -2;
             int toSubtract = 0;
@@ -273,6 +274,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 editor.putString(PASSWORD, "");
                 editor.putBoolean(REMEMBERME, false);
                 editor.apply();
+
+                //register for notifications if not already registered
+                SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
+                String token = sharedPreferencesNotifications.getString("token", "");
+
+                if(!token.equals("")) {
+                    try {
+                        JSONObject json = new JSONObject();
+                        json.put("purpose", "delete");
+                        json.put("token", token);
+                        json.put("auth", "TAAPPYRDSB123!PASSWORD");
+                        new unregisterFromNotificationServer().execute(json);
+                    }catch (Exception e){}
+
+                }
 
                 Intent myIntent = new Intent(MainActivity.this, login.class);
                 startActivity(myIntent);
@@ -453,6 +469,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPreferences.Editor editor =   sharedPreferences.edit();
             editor.putString(RESPONSE, list);
             editor.apply();
+
+            //register for notifications if not already registered
+            SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
+            String token = sharedPreferencesNotifications.getString("token", "");
+            boolean hasRegistered = sharedPreferencesNotifications.getBoolean("hasRegistered", false);
+            if(!token.equals("") && !hasRegistered) {
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put("username", username);
+                    json.put("password", password);
+                    json.put("purpose", "register");
+                    json.put("token", token);
+                    json.put("platform", "ANDROID");
+                    json.put("auth", "TAAPPYRDSB123!PASSWORD");
+                    SendRequest sr = new SendRequest();
+                    if(sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", json.toString()) != null){
+                        SharedPreferences.Editor editorNotifications =   sharedPreferencesNotifications.edit();
+                        editorNotifications.putBoolean("hasRegistered", true);
+                        editorNotifications.apply();
+                    }
+                    System.out.println(token +"TOKEN HERE");
+
+                }catch (Exception e){}
+            }
+
+
+
             return response;
 
         }
@@ -689,6 +732,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 EmptyCourse.setText(R.string.EmptyText);
                 currentRL.setClickable(false);
             }
+
+
+        }
+    }
+
+
+    private class unregisterFromNotificationServer extends AsyncTask<JSONObject, Object, Object[]> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Object[] doInBackground(JSONObject... params){
+            try {
+                SendRequest sr = new SendRequest();
+                sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", params[0].toString());
+            }catch (Exception e){}
+            return null;
+
+        }
+
+        protected void onProgressUpdate(Object... params) {
+
+        }
+
+        protected void onPostExecute(Object... params) {
 
 
         }

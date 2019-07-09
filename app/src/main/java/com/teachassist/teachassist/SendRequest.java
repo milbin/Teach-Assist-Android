@@ -164,4 +164,36 @@ public class SendRequest {
         return jsonObjectResp;
     }
 
+
+
+    public JSONObject sendJsonNotifications(String URL, String json) throws IOException {
+        JSONObject jsonObjectResp = null;
+
+        try {
+
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            OkHttpClient client = new OkHttpClient();
+
+            okhttp3.RequestBody body = RequestBody.create(JSON, json.toString());
+            okhttp3.Request request = new okhttp3.Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
+            okhttp3.Response response = client.newCall(request).execute();
+
+            String networkResp = response.body().string().replaceAll("&quot;", "'"); // raises exception if first 2 escape chars arent present
+            networkResp = StringEscapeUtils.unescapeHtml(networkResp);
+            if (!networkResp.isEmpty()) {
+                jsonObjectResp = new JSONObject(networkResp);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Crashlytics.log(Log.ERROR, "network request failed", "line 160 SR");
+            return null;
+        }
+
+        return jsonObjectResp;
+    }
+
 }
