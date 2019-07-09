@@ -55,19 +55,11 @@
         </activity>
 
 
-        <receiver android:name=".AlertReceiver">
-        </receiver>
         <service android:name=".onNotificationReceived">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <receiver android:name=".OnBoot">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
 
         <activity android:name=".MarksViewMaterial">
         <meta-data

@@ -186,12 +186,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             TextView p = v.findViewById(R.id.Period);
             subjectNumber -= toSubtract;
-            System.out.println(subjectNumber);
-            System.out.println(p.getText());
-            System.out.println(toSubtract + "toSubtract");
             String subjectMark = "";
             int counter = 0;
-            System.out.println(subjectNumber);
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter == subjectNumber){
                     subjectMark = entry.getValue().get(0);
@@ -235,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     toSubtract++;
                 }
             }
-            System.out.println(toSubtract);
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if (counter == courseNum - toSubtract) {
@@ -286,6 +281,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         json.put("token", token);
                         json.put("auth", "TAAPPYRDSB123!PASSWORD");
                         new unregisterFromNotificationServer().execute(json);
+                        SharedPreferences.Editor editorNotifications =   sharedPreferencesNotifications.edit();
+                        editorNotifications.putBoolean("hasRegistered", false);
+                        editorNotifications.apply();
                     }catch (Exception e){}
 
                 }
@@ -474,6 +472,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
             String token = sharedPreferencesNotifications.getString("token", "");
             boolean hasRegistered = sharedPreferencesNotifications.getBoolean("hasRegistered", false);
+            System.out.println(hasRegistered +"HAS REGISTERED");
             if(!token.equals("") && !hasRegistered) {
                 try {
                     JSONObject json = new JSONObject();
@@ -489,7 +488,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         editorNotifications.putBoolean("hasRegistered", true);
                         editorNotifications.apply();
                     }
-                    System.out.println(token +"TOKEN HERE");
 
                 }catch (Exception e){}
             }

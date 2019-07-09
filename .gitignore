@@ -7,5 +7,6 @@
 /.idea/workspace.xml
 .DS_Store
 /build
+/app/google-services.json
 /captures
 .externalNativeBuild
