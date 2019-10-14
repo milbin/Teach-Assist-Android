@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
@@ -39,6 +42,9 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.utils.EntryXIndexComparator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
 import org.decimal4j.util.DoubleRounder;
@@ -270,6 +276,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 editor.putBoolean(REMEMBERME, false);
                 editor.apply();
 
+                //logout of firebase
+                FirebaseAuth.getInstance().signOut();
+
                 //register for notifications if not already registered
                 SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
                 String token = sharedPreferencesNotifications.getString("token", "");
@@ -461,6 +470,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }else{
                return null;
             }
+
             Gson gson = new Gson();
             String list = gson.toJson(response);
             SharedPreferences sharedPreferences = getSharedPreferences(RESPONSE, MODE_PRIVATE);
@@ -468,8 +478,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             editor.putString(RESPONSE, list);
             editor.apply();
 
+
             //register for notifications if not already registered
-            SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
+            final SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
             String token = sharedPreferencesNotifications.getString("token", "");
             boolean hasRegistered = sharedPreferencesNotifications.getBoolean("hasRegistered", false);
             System.out.println(hasRegistered +"HAS REGISTERED");
@@ -490,9 +501,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
 
                 }catch (Exception e){}
+            } else if(token.equals("")){
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (!task.isSuccessful()) {
+                                    return;
+                                }
+                                // Get new Instance ID token
+                                String token = task.getResult().getToken();
+
+                                SharedPreferences.Editor editorNotifications =   sharedPreferencesNotifications.edit();
+                                editorNotifications.putString("token", token);
+                                editorNotifications.apply();
+                            }
+                        });
             }
-
-
 
             return response;
 
@@ -519,6 +544,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .show();
                 dialog.dismiss();
                 return;
+            }
+            if(response.size() == 0){
+                findViewById(R.id.noCoursesTV).setVisibility(View.VISIBLE);
+                TextView AverageInt = findViewById(R.id.AverageInt);
+                AverageInt.setText("");
             }
             TextView AverageInt = findViewById(R.id.AverageInt);
             AverageInt.setText(String.valueOf(average)+"%");

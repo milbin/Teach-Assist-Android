@@ -124,15 +124,24 @@ public class TA{
                 if((i.contains("current mark = ") || i.contains("Please see teacher for current status regarding achievement in the course")||i.contains("Click Here")||i.contains("Level")||i.contains("Block")) && !i.contains("0000-00-00")) {
                     String Course_Name = i.split(":")[1].split("<br>")[0].trim();
                     String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
+                    String course = i.split(" :")[0].trim();
                     //String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
                     int courseCounter2 = 0;
-                    for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-                        if(courseCounter1 == courseCounter2) {
-                            entry.getValue().add(Course_Name);
-                            entry.getValue().add(Room_Number);
-                        }
-                        courseCounter2++;
+                    if(courseCounter1>=Marks.size()){
+                        ArrayList<String> fields = new ArrayList<>();
+                        fields.add(course);
+                        fields.add(Course_Name);
+                        fields.add(Room_Number);
+                        Marks.put("NA"+courseCounter1, fields);
+                    }else {
+                        for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
+                            if (courseCounter1 == courseCounter2) {
+                                entry.getValue().add(Course_Name);
+                                entry.getValue().add(Room_Number);
+                            }
+                            courseCounter2++;
 
+                        }
                     }
                     courseCounter1++;
                 }
