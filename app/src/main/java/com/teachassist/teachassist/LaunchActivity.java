@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import static com.teachassist.teachassist.MainActivity.CREDENTIALS;
 
@@ -47,12 +49,21 @@ public class LaunchActivity extends AppCompatActivity {
 
 
         if(!username.isEmpty() && !password.isEmpty() && RemeberMe) {
+
+            final SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
+            String token = sharedPreferencesNotifications.getString("token", "");
             //register with firebase, if user is already registered nothing will happen
             try {
                 final FirebaseAuth auth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = auth.getCurrentUser();
                 if(currentUser == null){
-                    auth.createUserWithEmailAndPassword(username+"@"+password+".com", password);
+                    auth.createUserWithEmailAndPassword(username+"@"+password+".android", password);
+                }
+                if(!token.equals("") && !currentUser.getDisplayName().equals(token)){
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(token)
+                            .build();
+                    currentUser.updateProfile(profileUpdates);
                 }
             }catch (Exception e){
                 e.printStackTrace();
