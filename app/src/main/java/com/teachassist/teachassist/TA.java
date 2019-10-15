@@ -182,19 +182,23 @@ public class TA{
         try {
             Crashlytics.log(Log.DEBUG, "username", Username);
             Crashlytics.log(Log.DEBUG, "password", Password);
+
             //get sesison token and studentID
             String url = "https://ta.yrdsb.ca/live/index.php?";
             String path = "/live/index.php?";
             HashMap<String, String> headers = new HashMap<>();
             HashMap<String, String> parameters = new HashMap<>();
             HashMap<String, String> cookies = new HashMap<>();
+
+            parameters.put("subject_id", "0");
             parameters.put("username", Username);
             parameters.put("password", Password);
-            parameters.put("subject_id", "0");
+            parameters.put("submit", "Login");
 
             //get response
             SendRequest sr = new SendRequest();
             String[] response = sr.send(url, headers, parameters, cookies, path);
+            System.out.println(response[0]);
 
             try {
 
@@ -205,6 +209,7 @@ public class TA{
                 parameters.put("student_id ", student_id);
 
                 String[] resp = sr.send(url, headers, parameters, cookies, path);
+                //System.out.println(resp[0]);
 
                 Marks = new LinkedHashMap();
 
@@ -265,6 +270,7 @@ public class TA{
 
                 }
                 System.out.println(Marks);
+                System.out.println("HERE123");
                 return Marks;
 
             }
