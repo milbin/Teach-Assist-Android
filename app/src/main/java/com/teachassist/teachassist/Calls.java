@@ -18,6 +18,9 @@ import java.util.Map;
 public class Calls {
     public static void main(String args[]) {
 
+        TA ta = new TA();
+        System.out.println(ta.GetTAData2("335525291", "6rx8836f"));
+
 /*
         String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
         String path = "/live/students/viewReport.php?";

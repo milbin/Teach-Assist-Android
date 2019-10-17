@@ -16,11 +16,13 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -35,9 +37,12 @@ public class SendRequest {
 
 
 
-    public String[] send(String URL, HashMap<String, String> headers, HashMap<String, String> Parameters, final HashMap<String, String> Cookies, final String path) throws IOException {
+    public String[] send(String URL, HashMap<String, String> headers,
+                         LinkedHashMap<String, String> Parameters, final HashMap<String, String> Cookies,
+                         final String path, boolean shouldFollowRedirects) throws IOException {
 
         try {
+            System.out.println(Cookies+"2");
             final List<String> TAcookies = new ArrayList();
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .cookieJar(new CookieJar() {
@@ -66,6 +71,7 @@ public class SendRequest {
                             return oneCookie;
                         }
                     })
+                    .followRedirects(shouldFollowRedirects)
                     .build();
 
 
@@ -92,13 +98,13 @@ public class SendRequest {
 
 
             // add parameters
-            MultipartBody.Builder requestBodyForm = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM);
+            FormBody.Builder requestBodyForm = new FormBody.Builder();
+                    //.setType(MultipartBody.FORM);
             for (Map.Entry<String, String> entry : Parameters.entrySet()) {
-                requestBodyForm.addFormDataPart(entry.getKey(), entry.getValue());
+                requestBodyForm.add(entry.getKey(), entry.getValue());
             }
 
-            MultipartBody requestBody = requestBodyForm.build();
+            FormBody requestBody = requestBodyForm.build();
 
 
             //build request

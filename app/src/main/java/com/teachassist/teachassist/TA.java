@@ -113,14 +113,14 @@ public class TA{
             String url = "https://ta.yrdsb.ca/live/index.php?";
             String path = "/live/index.php?";
             HashMap<String, String> headers = new HashMap<>();
-            HashMap<String, String> parameters = new HashMap<>();
+            LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
             HashMap<String, String> cookies = new HashMap<>();
             parameters.put("subject_id", "0");
             parameters.put("username", Username);
             parameters.put("password", Password);
             cookies.put("session_token", session_token);
             cookies.put("student_id", student_id);
-            String[] resp = sr.send(url, headers, parameters, cookies, path);
+            String[] resp = sr.send(url, headers, parameters, cookies, path, true);
             if(resp == null){
                 LinkedHashMap<String, List<String>> resp2 = GetTAData2(username, password);
                 if(resp2 != null){
@@ -183,32 +183,36 @@ public class TA{
             Crashlytics.log(Log.DEBUG, "username", Username);
             Crashlytics.log(Log.DEBUG, "password", Password);
 
-            //get sesison token and studentID
+            //get session token and student id
+            SendRequest sr = new SendRequest();
             String url = "https://ta.yrdsb.ca/live/index.php?";
             String path = "/live/index.php?";
             HashMap<String, String> headers = new HashMap<>();
-            HashMap<String, String> parameters = new HashMap<>();
+            LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
             HashMap<String, String> cookies = new HashMap<>();
-
             parameters.put("subject_id", "0");
             parameters.put("username", Username);
             parameters.put("password", Password);
             parameters.put("submit", "Login");
 
-            //get response
-            SendRequest sr = new SendRequest();
-            String[] response = sr.send(url, headers, parameters, cookies, path);
-            System.out.println(response[0]);
+            String[] response = sr.send(url, headers, parameters, cookies, path, false);
+            if(response == null){
+                return null;
+            }
+            for(String i:response){
+                if(i.contains("session_token")) {
+                    session_token = i.split("=")[1].split(";")[0];
+                }else if(i.contains("student_id")){
+                    student_id = i.split("=")[1].split(";")[0];
+                }
+            }
 
             try {
-
-                session_token = response[1].split("=")[1].split(";")[0];
-                student_id = response[2].split("=")[1].split(";")[0];
                 cookies.put("session_token", session_token);
                 cookies.put("student_id", student_id);
                 parameters.put("student_id ", student_id);
 
-                String[] resp = sr.send(url, headers, parameters, cookies, path);
+                String[] resp = sr.send(url, headers, parameters, cookies, path, true);
                 //System.out.println(resp[0]);
 
                 Marks = new LinkedHashMap();
@@ -413,7 +417,7 @@ public class TA{
 
                 //get response
                 SendRequest sr = new SendRequest();
-                marksResponse = sr.send(url, headers, parameters, cookies, path);
+                marksResponse = sr.send(url, headers, parameters, cookies, path, true);
 
                 LinkedHashMap<String, List<Map<String, List<String>>>> marks = new LinkedHashMap<>();
 
