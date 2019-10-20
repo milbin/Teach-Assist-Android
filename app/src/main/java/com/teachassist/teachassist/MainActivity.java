@@ -52,6 +52,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
@@ -60,6 +62,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
@@ -93,7 +96,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("test", "getInstanceId failed", task.getException());
+                            return;
+                        }
 
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        System.out.println("TOKEN "+token);
+                    }
+                });
 
 
         //progress dialog
@@ -340,9 +357,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_email:
+                Auth auth = new Auth();
                 drawer.closeDrawer(GravityCompat.START);
 
-                String mailto = "mailto:TaAppYRDSB@gmail.com";
+                String mailto = "mailto:TaAppYRDSB@gmail.com" +
+                        "?subject=" + Uri.encode("Insert Subject Here") +
+                        "&body=" + Uri.encode("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Support Token: (please do not delete) \n" +
+                        auth.getSupportToken(username, password));
 
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
                 emailIntent.setData(Uri.parse(mailto));
@@ -355,8 +376,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_bug_report:
+                Auth auth1 = new Auth();
                 drawer.closeDrawer(GravityCompat.START);
-                String mailtoBug = "mailto:TaAppYRDSB@gmail.com";
+                String mailtoBug = "mailto:TaAppYRDSB@gmail.com" +
+                        "?subject=" + Uri.encode("Insert Subject Here") +
+                        "&body=" + Uri.encode("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Support Token: (please do not delete) \n" +
+                        auth1.getSupportToken(username, password));
 
                 Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
                 BugIntent.setData(Uri.parse(mailtoBug));
@@ -494,11 +519,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     json.put("platform", "ANDROID");
                     json.put("auth", "TAAPPYRDSB123!PASSWORD");
                     SendRequest sr = new SendRequest();
-                    if(sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", json.toString()) != null){
+                    /*if(sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", json.toString()) != null){
                         SharedPreferences.Editor editorNotifications =   sharedPreferencesNotifications.edit();
                         editorNotifications.putBoolean("hasRegistered", true);
                         editorNotifications.apply();
-                    }
+                    }*/
 
                 }catch (Exception e){}
             } else if(token.equals("")){
@@ -775,8 +800,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected Object[] doInBackground(JSONObject... params){
             try {
-                SendRequest sr = new SendRequest();
-                sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", params[0].toString());
+                //SendRequest sr = new SendRequest();
+                //sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", params[0].toString());
             }catch (Exception e){}
             return null;
 
