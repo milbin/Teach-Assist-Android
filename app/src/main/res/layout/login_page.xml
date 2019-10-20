@@ -18,6 +18,18 @@
         android:layout_marginTop="75dp"
         app:srcCompat="@drawable/ta_logo_v3"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:text="Teachassist"
+        android:textColor="@android:color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        style="@style/Title"
+        />
+
     <RelativeLayout
         android:id="@+id/relativeLayoutLogin"
         android:layout_width="wrap_content"
@@ -31,42 +43,36 @@
 
         <EditText
             android:id="@+id/Username"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
             android:layout_marginTop="25dp"
             android:background="@drawable/et_style"
             android:drawableStart="@drawable/ic_person_black_24dp"
             android:drawablePadding="10dp"
-            android:elevation="5dp"
-            android:ems="17"
             android:hint="Username"
             android:inputType="textPersonName"
             android:padding="10dp"
             android:paddingStart="20dp"
             android:textColorHint="@color/SecondaryTextColor"
-            android:theme="@style/EditTextTheme" />
-
-
-
-
-
-        <!--android:background="@drawable/rounded_corner"-->
+            style="@style/Body1"
+            />
 
         <EditText
             android:id="@+id/Password"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Username"
             android:layout_marginTop="20dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
             android:layout_centerHorizontal="true"
             android:inputType="textPassword"
             android:background="@drawable/et_style"
-            android:theme="@style/EditTextTheme"
-            android:ems="17"
+            style="@style/Body1"
             android:textColorHint="@color/SecondaryTextColor"
-            android:elevation="-5dp"
             android:padding="10dp"
             android:hint="Password"
             android:drawablePadding="10dp"
@@ -80,14 +86,15 @@
 
         <CheckBox
             android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Password"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="70dp"
             android:layout_centerVertical="@+id/Password"
             android:layout_marginTop="20dp"
             android:button="@drawable/checkbox"
             android:text="Remember me"
+            style="@style/Subtitle2"
             android:paddingLeft="10dp"
 
             android:textColor="@color/TextColor" />
@@ -103,8 +110,8 @@
             android:elevation="0dp"
             android:text="LOGIN"
             android:textSize="25dp"
+            style="@style/Button"
             android:textColor="@color/White"
-            android:fontFamily="@font/nunito_bold"
             />
 
 
