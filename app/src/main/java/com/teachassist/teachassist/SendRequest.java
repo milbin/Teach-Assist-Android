@@ -42,7 +42,6 @@ public class SendRequest {
                          final String path, boolean shouldFollowRedirects) throws IOException {
 
         try {
-            System.out.println(Cookies+"2");
             final List<String> TAcookies = new ArrayList();
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .cookieJar(new CookieJar() {
@@ -60,7 +59,7 @@ public class SendRequest {
                             for (Map.Entry<String, String> entry : Cookies.entrySet()) {
                                 oneCookie.add(new Cookie.Builder()
                                         .domain("ta.yrdsb.ca")
-                                        .path(path)
+                                        .path("/")
                                         .name(entry.getKey())
                                         .value(entry.getValue())
                                         .httpOnly()
@@ -132,12 +131,15 @@ public class SendRequest {
         }
         catch (IOException e) {
             e.printStackTrace();
-            System.out.print("POST Request failed");
+            System.out.println("POST Request failed");
             Crashlytics.log(Log.ERROR, "network request failed", "line 131 SR");
             return null;
         }
 
     }
+
+
+
 
 
     public JSONArray sendJson(String URL, String json) throws IOException {

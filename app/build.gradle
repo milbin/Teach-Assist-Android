@@ -11,6 +11,9 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
+googleServices {
+    disableVersionCheck = true
+}
 
 android {
     compileSdkVersion 28
@@ -18,8 +21,8 @@ android {
         applicationId "com.teachassist.teachassist"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 37
-        versionName "2.3"
+        versionCode 40
+        versionName "2.4.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -37,7 +40,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -57,9 +60,18 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-lang/commons-lang
     implementation group: 'commons-lang', name: 'commons-lang', version: '2.6'
     // Check for v11.4.2 or higher
-    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
     // Add dependency
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.google.android.gms:play-services-plus:17.0.0'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.1'
+    api 'io.jsonwebtoken:jjwt-api:0.10.7'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.10.7'
+    runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.7') {
+        exclude group: 'org.json', module: 'json' //provided by Android natively
+    }
+}
+configurations {
+    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
 }
