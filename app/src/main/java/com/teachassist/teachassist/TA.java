@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.components.LimitLine;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import org.decimal4j.util.DoubleRounder;
@@ -25,6 +27,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
@@ -54,7 +58,7 @@ public class TA{
             JSONObject json = new JSONObject();
             json.put("student_number", Username);
             json.put("password", Password);
-            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString()).getJSONObject(0);
+            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", json.toString()).getJSONObject(0);
             if(respJson == null){
                 LinkedHashMap<String, List<String>> resp2 = GetTAData2(username, password);
                 if(resp2 != null){
@@ -73,7 +77,7 @@ public class TA{
             marksJson.put("token", session_token);
             marksJson.put("student_id", student_id);
             marksJson.put("subject_id", 0);
-            JSONArray marksResp = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", marksJson.toString())
+            JSONArray marksResp = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", marksJson.toString())
                     .getJSONObject(0)
                     .getJSONArray("data")
                     .getJSONObject(0)
@@ -86,7 +90,6 @@ public class TA{
                 Crashlytics.log(Log.ERROR, "network request failed", "line 77 TA");
                 return null;
             }
-            System.out.println(marksResp);
             Marks = new LinkedHashMap<>();
             for (int i = 0; i < marksResp.length(); i++) {
                 ArrayList<String> fields = new ArrayList<>();
@@ -206,6 +209,9 @@ public class TA{
                     student_id = i.split("=")[1].split(";")[0];
                 }
             }
+            if(session_token == null || session_token.isEmpty() || student_id == null || student_id.isEmpty()){
+                return null;
+            }
 
             try {
                 cookies.put("session_token", session_token);
@@ -213,7 +219,9 @@ public class TA{
                 parameters.put("student_id ", student_id);
 
                 String[] resp = sr.send(url, headers, parameters, cookies, path, true);
-                //System.out.println(resp[0]);
+                if(resp == null){
+                    return null;
+                }
 
                 Marks = new LinkedHashMap();
 
@@ -237,7 +245,6 @@ public class TA{
                         Marks.put(Subject_id, Stats);
                     }
                     else if(i.contains("Please see teacher for current status regarding achievement in the course")){
-                        System.out.println("Please see teacher for current status regarding achievement in the course");
                         ArrayList<String> Stats = new ArrayList<>();
                         String Course_Name = i.split(":")[0].trim();
                         String Course_code = i.split(":")[1].split("<br>")[0].trim();
@@ -255,10 +262,8 @@ public class TA{
                     else if(i.contains("Click Here") || i.contains("Level")){
                         String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
                         subjects.add(Subject_id);
-                        LinkedHashMap<String,List<Map<String,List<String>>>> marks = GetMarks(courseNum);
 
-
-                        String Current_mark = ParseAverageFromMarksView(marks).toString();
+                        String Current_mark = CalculateAverageFromMarksView(newGetMarks(courseNum).get(0), 0);
                         String Course_Name = i.split(":")[0].trim();
                         String Course_code = i.split(":")[1].split("<br>")[0].trim();
                         String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
@@ -273,8 +278,6 @@ public class TA{
                     }
 
                 }
-                System.out.println(Marks);
-                System.out.println("HERE123");
                 return Marks;
 
             }
@@ -350,16 +353,13 @@ public class TA{
             json.put("student_id", student_id);
             json.put("token", session_token);
             json.put("subject_id", subjects.get(subject_number));
-            System.out.println(subjects);
-            System.out.println(json);
-            JSONObject respJsonAssignments = sr.sendJson("https://ta.yrdsb.ca/v4/students/json.php", json.toString())
+            JSONObject respJsonAssignments = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", json.toString())
                     .getJSONObject(0)
                     .getJSONObject("data");
             if(respJsonAssignments == null){
-                LinkedHashMap<String,List<Map<String,List<String>>>> resp2 = GetMarks(subject_number);
+                List<JSONObject> resp2 = GetMarks(subject_number);
                 if(resp2 != null){
-                    System.out.println(resp2);
-                    //return resp2;
+                    return resp2;
                 }
                 Crashlytics.log(Log.ERROR, "network request failed", "line 275 TA");
                 return null;
@@ -370,10 +370,9 @@ public class TA{
                         .getJSONObject("assessment")
                         .getJSONObject("data");
             }catch (Exception e){
-                LinkedHashMap<String,List<Map<String,List<String>>>> resp2 = GetMarks(subject_number);
+                List<JSONObject> resp2 = GetMarks(subject_number);
                 if(resp2 != null){
-                    System.out.println(resp2);
-                    //return resp2;
+                    return resp2;
                 }
                 Crashlytics.log(Log.ERROR, "network request probably failed", "line 284 TA");
                 return null;
@@ -383,10 +382,9 @@ public class TA{
             return respJsonList;
 
         }catch (Exception e){
-            LinkedHashMap<String,List<Map<String,List<String>>>> resp2 = GetMarks(subject_number);
+            List<JSONObject> resp2 = GetMarks(subject_number);
             if(resp2 != null){
-                System.out.println(resp2);
-                //return resp2;
+                return resp2;
             }
             e.printStackTrace();
             Crashlytics.log(Log.ERROR, "Error in newGetMarks", "line 293 TA");
@@ -395,7 +393,7 @@ public class TA{
 
     }
 
-    public LinkedHashMap<String,List<Map<String,List<String>>>> GetMarks(int subject_number){
+    public List<JSONObject> GetMarks(int subject_number){
         try {
             if(subject_number >=0) {
                 String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
@@ -404,300 +402,104 @@ public class TA{
                 LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
                 LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
                 parameters.put("subject_id", subjects.get(subject_number));
+                cookies.put("token", session_token);
                 parameters.put("student_id", student_id);
                 cookies.put("session_token", session_token);
                 cookies.put("student_id", student_id);
 
-                Map<String, String> colors = new HashMap<>();
-                colors.put("knowledge", "ffffaa");
-                colors.put("thinking", "c0fea4");
-                colors.put("communication", "afafff");
-                colors.put("application", "ffd490");
-                colors.put("other", "#dedede");
-
                 //get response
                 SendRequest sr = new SendRequest();
                 marksResponse = sr.send(url, headers, parameters, cookies, path, true);
+                if(marksResponse == null){
+                    return null;
+                }
+                String courseName = marksResponse[0].split("<h2>")[1].split("</h2>")[0];
+                int assignmentNumber = 0;
+                JSONObject assignments = new JSONObject();
+                for (String i : marksResponse[0].split("rowspan=")){
+                    JSONObject assignment = new JSONObject();
 
-                LinkedHashMap<String, List<Map<String, List<String>>>> marks = new LinkedHashMap<>();
-
-                for (String i : marksResponse[0].split("rowspan")) {
-                    ArrayList<Map<String, List<String>>> stats = new ArrayList<>();
-                    if (i.charAt(0) == '=') {
-                        String assignment = i.split(">")[1].split("<")[0].trim().replaceAll("&eacute;", "é").replaceAll("&#039;", "'");
-                        ArrayList knowledge = new ArrayList<>();
-                        ArrayList thinking = new ArrayList<>();
-                        ArrayList communication = new ArrayList<>();
-                        ArrayList application = new ArrayList<>();
-                        ArrayList other = new ArrayList<>();
-
+                    if(i.contains("bgcolor=\"white\"")) {
                         try {
-                            String weight;
-                            String field;
-                            Map<String, List<String>> mark = new HashMap<>();
-
-                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
-                                if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                } else {
-                                    field = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("knowledge"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                }
-                            } else {
-                                field = "";
-                                weight = "";
-                            }
-
-                            knowledge.add(field);
-                            knowledge.add(weight);
-
-                            mark.put("knowledge", knowledge);
-                            stats.add(mark);
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            String weight;
-                            String field;
-
-                            try {
-                                Map<String, List<String>> mark = new HashMap<>();
-
-                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("knowledge"))[1].split("</td>")[0].contains("border")) {
-                                    if (i.contains("<font color=\"red\">")) {
-                                        field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    } else {
-                                        field = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("knowledge"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
+                            String title = i.split("\"2\">")[1].split("</td>")[0];
+                            assignment.put("title", title);
+                            assignment.put("feedback", "");
+                            ArrayList<String> categories = new ArrayList<String>(Arrays.asList("K", "T", "C", "A", "O"));
+                            int categoryNumber = -1;
+                            for (String j : i.split(" align=\"center\">")) {
+                                if (categoryNumber < 0) {
+                                    categoryNumber++;
+                                    continue;
+                                } else if (j.contains("<td colspan=\"4\"")) { //feedback
+                                    if (j.contains("Feedback:")) {
+                                        String feedback = j.split("Feedback:")[1].split("</td>")[0]
+                                                .replace("<br>", "")
+                                                .replace("\n", "");
+                                        assignment.put("feedback", feedback);
                                     }
-                                } else {
-                                    field = "";
-                                    weight = "";
                                 }
-
-
-                                knowledge.add(field);
-                                knowledge.add(weight);
-
-                                mark.put("knowledge", knowledge);
-                                stats.add(mark);
-
-                            } catch (ArrayIndexOutOfBoundsException e1) {
+                                String regexFloat = "[+-]?([0-9]*[.])?[0-9]+";
+                                Pattern regex = Pattern.compile(regexFloat + "\\s/\\s" + regexFloat + "\\s.\\s" + regexFloat); //this will capture any number not just an int
+                                Matcher matcher = regex.matcher(j);
+                                if (matcher.find()) {
+                                    String markString = matcher.group(0);
+                                    assignment.put(categories.get(categoryNumber), new JSONObject());
+                                    String mark = markString.split(" / ")[0].trim();
+                                    String outOf = markString.split(" / ")[1].split("=")[0].trim();
+                                    String weight = j.split("<font size=\"-2\">")[1].split("</")[0].trim();
+                                    try {
+                                        Double.parseDouble(mark); //see if this raises an error
+                                        ((JSONObject) assignment.get(categories.get(categoryNumber))).put("mark", mark);
+                                    } catch (NumberFormatException e) {
+                                        ((JSONObject) assignment.get(categories.get(categoryNumber))).put("mark", "");
+                                    }
+                                    try {
+                                        Double.parseDouble(outOf); //see if this raises an error
+                                        ((JSONObject) assignment.get(categories.get(categoryNumber))).put("outOf", outOf);
+                                    } catch (NumberFormatException e) {
+                                        ((JSONObject) assignment.get(categories.get(categoryNumber))).put("outOf", "");
+                                    }
+                                    if (weight.contains("weight=")) {
+                                        ((JSONObject) assignment.get(categories.get(categoryNumber))).put("weight", weight.split("weight=")[1]);
+                                    } else if (weight.contains("no weight")) {
+                                        ((JSONObject) assignment.get(categories.get(categoryNumber))).put("weight", "0");
+                                    }
+                                } else if (j.contains("No Mark") || j.contains("No mark") || j.contains("no Mark") || j.contains("no mark")) {
+                                    ((JSONObject) assignment.get(categories.get(categoryNumber))).put("mark", "");
+                                    ((JSONObject) assignment.get(categories.get(categoryNumber))).put("outOf", "");
+                                    ((JSONObject) assignment.get(categories.get(categoryNumber))).put("weight", "");
+                                }
+                                assignments.put(String.valueOf(assignmentNumber), assignment);
+                                categoryNumber++;
 
                             }
-                        }
+                        }catch (JSONException e){}
+                        assignmentNumber++;
+                    }
+                    if(marksResponse[0].split("rowspan=").length == assignmentNumber+1){
+                        Double k = Double.parseDouble(i.split("<td>Knowledge/Understanding</td>")[1].split(">")[1].split("%<")[0])/100;
+                        Double t = Double.parseDouble(i.split("<td>Thinking</td>")[1].split(">")[1].split("%<")[0])/100;
+                        Double c = Double.parseDouble(i.split("<td>Communication</td>")[1].split(">")[1].split("%<")[0])/100;
+                        Double a = Double.parseDouble(i.split("<td>Application</td>")[1].split(">")[1].split("%<")[0])/100;
                         try {
-                            String weight;
-                            String field;
-                            Map<String, List<String>> mark = new HashMap<>();
-
-                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
-                                if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                } else {
-                                    field = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("thinking"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                }
-                            } else {
-                                field = "";
-                                weight = "";
-                            }
-
-                            thinking.add(field);
-                            thinking.add(weight);
-
-                            mark.put("thinking", thinking);
-                            stats.add(mark);
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            String weight;
-                            String field;
-                            try {
-                                Map<String, List<String>> mark = new HashMap<>();
-                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("thinking"))[1].split("</td>")[0].contains("border")) {
-                                    if (i.contains("<font color=\"red\">")) {
-                                        field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    } else {
-                                        field = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("thinking"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    }
-                                } else {
-                                    field = "";
-                                    weight = "";
-                                }
-
-                                thinking.add(field);
-                                thinking.add(weight);
-
-                                mark.put("thinking", thinking);
-                                stats.add(mark);
-
-                            } catch (ArrayIndexOutOfBoundsException e1) {
-
-                            }
-
-                        }
-                        try {
-                            String weight;
-                            String field;
-                            Map<String, List<String>> mark = new HashMap<>();
-                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
-                                if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                } else {
-                                    field = i.split("bgcolor=\"" + colors.get("communication"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("communication"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                }
-                            } else {
-                                field = "";
-                                weight = "";
-                            }
-
-                            communication.add(field);
-                            communication.add(weight);
-
-                            mark.put("communication", communication);
-                            stats.add(mark);
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            String weight;
-                            String field;
-                            try {
-                                Map<String, List<String>> mark = new HashMap<>();
-                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("communication"))[1].split("</td>")[0].contains("border")) {
-                                    if (i.contains("<font color=\"red\">")) {
-                                        field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    } else {
-                                        field = i.split("bgcolor=\"" + colors.get("communication"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("communication"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    }
-                                } else {
-                                    field = "";
-                                    weight = "";
-                                }
-
-                                communication.add(field);
-                                communication.add(weight);
-
-                                mark.put("communication", communication);
-                                stats.add(mark);
-                            } catch (ArrayIndexOutOfBoundsException e1) {
-
-                            }
-                        }
-
-
-                        try {
-                            //List Crash = new ArrayList();
-                            //Crash.get(1);
-                            String weight;
-                            String field;
-                            Map<String, List<String>> mark = new HashMap<>();
-                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
-                                if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                } else {
-                                    field = i.split("bgcolor=\"" + colors.get("application"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("application"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                }
-                            } else {
-                                field = "";
-                                weight = "";
-                            }
-
-                            application.add(field);
-                            application.add(weight);
-
-                            mark.put("application", application);
-                            stats.add(mark);
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            String weight;
-                            String field;
-                            try {
-                                Map<String, List<String>> mark = new HashMap<>();
-                                if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("application"))[1].split("</td>")[0].contains("border")) {
-                                    if (i.contains("<font color=\"red\">")) {
-                                        field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    } else {
-                                        field = i.split("bgcolor=\"" + colors.get("application"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("application"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    }
-                                } else {
-                                    field = "";
-                                    weight = "";
-                                }
-
-                                application.add(field);
-                                application.add(weight);
-
-                                mark.put("application", application);
-                                stats.add(mark);
-
-                            } catch (ArrayIndexOutOfBoundsException e1) {
-
-                            }
-                        }
-                        try {
-                            String weight;
-                            String field;
-                            Map<String, List<String>> mark = new HashMap<>();
-                            if (i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
-                                if (i.contains("<font color=\"red\">")) {
-                                    field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                } else {
-                                    field = i.split("bgcolor=\"" + colors.get("other"))[2].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    weight = i.split("bgcolor=\"" + colors.get("other"))[2].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                }
-                            } else {
-                                field = "";
-                                weight = "";
-                            }
-
-                            other.add(field);
-                            other.add(weight);
-
-                            mark.put("other", other);
-                            stats.add(mark);
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            String weight;
-                            String field;
-                            try {
-                                Map<String, List<String>> mark = new HashMap<>();
-                                if (i.split("bgcolor=\"" + colors.get("other"))[1].split("</td>")[0].contains("border")) {
-                                    if (i.contains("<font color=\"red\">")) {
-                                        field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    } else {
-                                        field = i.split("colspan=")[0].split("bgcolor=\"" + colors.get("other"))[1].split("id=")[1].replaceAll("<font color=\"red\">", "").split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                        weight = i.split("bgcolor=\"" + colors.get("other"))[1].split("font size=")[1].split(">")[1].split("<")[0].replaceAll("\\s+", "");
-                                    }
-                                } else {
-                                    field = "";
-                                    weight = "";
-                                }
-
-                                other.add(field);
-                                other.add(weight);
-
-                                mark.put("other", other);
-                                stats.add(mark);
-
-                            } catch (ArrayIndexOutOfBoundsException e1) {
-
-                            }
-                        }
-
-                        marks.put(assignment, stats);
+                            JSONObject categories = new JSONObject();
+                            categories.put("K", k);
+                            categories.put("T", t);
+                            categories.put("C", c);
+                            categories.put("A", a);
+                            assignments.put("categories", categories);
+                        }catch (JSONException e){}
                     }
 
                 }
-
-
-                return marks;
+                List<JSONObject> returnList = new ArrayList<>();
+                returnList.add(assignments);
+                JSONObject courseNameJson = new JSONObject();
+                try{
+                    courseNameJson.put("course", courseName);
+                }catch (JSONException e){}
+                returnList.add(courseNameJson); //as far as i can tell this second item in the list is probably useless
+                return returnList;
             }else{
                 return null;
             }
@@ -707,40 +509,6 @@ public class TA{
             return null;
         }
 
-    }
-
-    public LinkedHashMap<String, Double> GetCourseWeights(){ //doesnt need course parameter because its being called with the same class instance as GetMarks
-        LinkedHashMap<String, Double> weights = new LinkedHashMap();
-        String response = marksResponse[0];
-        Double Knowledge;
-        Double Thinking;
-        Double Communication;
-        Double Application;
-        try {
-            response = response.split("<th>Course Weighting</th>")[1].split("</table>")[0];
-            String knowledge = response.split("Knowledge/Understanding")[1].split("\"right\">")[1].split("%</td>")[0];
-            String thinking = response.split("Thinking")[1].split("\"right\">")[1].split("%</td>")[0];
-            String communication = response.split("Communication")[1].split("\"right\">")[1].split("%</td>")[0];
-            String application = response.split("Application")[1].split("\"right\">")[1].split("%</td>")[0];
-
-            Knowledge = Double.parseDouble(knowledge);
-            Thinking = Double.parseDouble(thinking);
-            Communication = Double.parseDouble(communication);
-            Application = Double.parseDouble(application);
-        }catch (ArrayIndexOutOfBoundsException e){
-            Knowledge = 1.0;
-            Thinking = 1.0;
-            Communication = 1.0;
-            Application = 1.0;
-        }
-
-
-
-        weights.put("Knowledge", Knowledge);
-        weights.put("Thinking", Thinking);
-        weights.put("Communication", Communication);
-        weights.put("Application", Application);
-        return weights;
     }
 
     public String CalculateAverageFromMarksView(JSONObject marks, int numberOfRemovedAssignments) { //CalculateTotalAverage
@@ -884,125 +652,6 @@ public class TA{
             return null;
         }
     }
-
-    public Double ParseAverageFromMarksView(LinkedHashMap<String,List<Map<String,List<String>>>> marks){
-        LinkedHashMap<String, Double> weights = GetCourseWeights();
-        Double Knowledge = weights.get("Knowledge");
-        Double Thinking = weights.get("Thinking");
-        Double Communication = weights.get("Communication");
-        Double Application = weights.get("Application");
-
-
-
-
-        Double knowledge = 0.0;
-        Double thinking = 0.0;
-        Double communication = 0.0;
-        Double application = 0.0;
-
-        Double totalWeightKnowledge = 0.0;
-        Double totalWeightThinking = 0.0;
-        Double totalWeightCommunication = 0.0;
-        Double totalWeightApplication = 0.0;
-
-        for(List<Map<String,List<String>>> Assignment: marks.values()){
-            for(Map<String,List<String>> CategoryList:Assignment){
-                for(Map.Entry<String,List<String>> Category:CategoryList.entrySet()){
-                    if(Category.getKey().equals("knowledge") && !Category.getValue().get(0).split("/")[0].isEmpty()){
-                        if(Category.getValue().get(0).split("=").length > 1) {
-                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightKnowledge += weight;
-                            knowledge += mark * weight;
-                        }else{
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightKnowledge += weight;
-                            //got a zero
-                        }
-                    }
-                    else if(Category.getKey().equals("thinking") && !Category.getValue().get(0).split("/")[0].isEmpty()){
-                        if(Category.getValue().get(0).split("=").length > 1) {
-                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightThinking += weight;
-                            thinking += mark * weight;
-                        }else{
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightThinking += weight;
-                            //got a zero
-                        }
-                    }
-                    else if(Category.getKey().equals("communication") && !Category.getValue().get(0).split("/")[0].isEmpty()){
-                        if(Category.getValue().get(0).split("=").length > 1) {
-                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightCommunication += weight;
-                            communication += mark * weight;
-                        }else{
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightCommunication += weight;
-                            //got a zero
-                        }
-                    }
-                    else if(Category.getKey().equals("application") && !Category.getValue().get(0).split("/")[0].isEmpty()){
-                        if(Category.getValue().get(0).split("=").length > 1) {
-                            Double mark = Double.parseDouble(Category.getValue().get(0).split("=")[1].split("%")[0]);
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightApplication += weight;
-                            application += mark * weight;
-                        }else{
-                            Double weight = Double.parseDouble(Category.getValue().get(1).split("=")[1]);
-                            totalWeightApplication += weight;
-                            //got a zero
-                        }
-                    }
-
-                }
-            }
-        }
-        Double finalKnowledge;
-        Double finalThinking;
-        Double finalCommunication;
-        Double finalApplication;
-
-        //omit category if there is no assignment in it
-        if(totalWeightKnowledge != 0.0) {
-            finalKnowledge = knowledge / totalWeightKnowledge;
-        }else{
-            finalKnowledge = 0.0;
-            Knowledge = 0.0;
-        }
-        if(totalWeightThinking != 0.0) {
-            finalThinking = thinking/totalWeightThinking;
-        }else{
-            finalThinking = 0.0;
-            Thinking = 0.0;
-        }
-        if(totalWeightCommunication != 0.0) {
-            finalCommunication = communication/totalWeightCommunication;
-        }else{
-            finalCommunication = 0.0;
-            Communication = 0.0;
-        }
-        if(totalWeightApplication != 0.0) {
-            finalApplication = application/totalWeightApplication;
-        }else{
-            finalApplication = 0.0;
-            Application = 0.0;
-        }
-        finalKnowledge = finalKnowledge*Knowledge;
-        finalThinking = finalThinking*Thinking;
-        finalCommunication = finalCommunication*Communication;
-        finalApplication = finalApplication*Application;
-
-        Double Average = (finalApplication + finalKnowledge + finalThinking +finalCommunication) / (Knowledge+Thinking+Communication+Application);
-
-
-        return DoubleRounder.round(Average, 1);
-
-
-    }
-
 
 }
 

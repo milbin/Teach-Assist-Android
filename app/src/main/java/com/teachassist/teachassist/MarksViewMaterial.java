@@ -159,7 +159,6 @@ public class MarksViewMaterial extends AppCompatActivity {
     //without this overide if there is no internet the activity will raise an error because you are showing the no internet dialog when it has already been destroyed
     @Override
     public void onBackPressed() {
-        System.out.println("OVERRIDE");
         getMarksTask.cancel(true);
         super.onBackPressed();
     }
@@ -218,6 +217,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                 return null;
             }
             Marks = returnValue.get(0);
+
             try {
                 CourseName = returnValue.get(1).getString("course");
             }catch (JSONException e){
@@ -1305,7 +1305,6 @@ public class MarksViewMaterial extends AppCompatActivity {
             weightC *= 10;
             weightA *= 10;
             weightS *= 10;
-            System.out.println(String.valueOf(Smark) +"HERE");
             return Arrays.asList(String.valueOf(Kmark), String.valueOf(Tmark), String.valueOf(Cmark), String.valueOf(Amark),String.valueOf(Smark), String.valueOf(weightK), String.valueOf(weightT), String.valueOf(weightC), String.valueOf(weightA), String.valueOf(weightS));
 
 

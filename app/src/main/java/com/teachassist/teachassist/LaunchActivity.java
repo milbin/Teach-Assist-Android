@@ -57,13 +57,26 @@ public class LaunchActivity extends AppCompatActivity {
                 final FirebaseAuth auth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = auth.getCurrentUser();
                 if(currentUser == null){
-                    auth.createUserWithEmailAndPassword(username+"@"+password+".android", password);
-                }
-                if(!token.equals("") && !currentUser.getDisplayName().equals(token)){
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(token)
-                            .build();
-                    currentUser.updateProfile(profileUpdates);
+                    auth.signInWithEmailAndPassword(username+"@"+password+".android", password)
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        System.out.println("Does Not Exist");
+                                        auth.createUserWithEmailAndPassword(username+"@"+password+".android", password);
+                                    }else{
+                                        System.out.println("ALREADY LOGGED IN");
+                                    }
+                                }
+                            });
+
+                }else {
+                    if (!token.equals("") && !currentUser.getDisplayName().equals(token)) {
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(token)
+                                .build();
+                        currentUser.updateProfile(profileUpdates);
+                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();
