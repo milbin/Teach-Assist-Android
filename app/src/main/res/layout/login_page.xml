@@ -50,7 +50,7 @@
             android:layout_marginEnd="50dp"
             android:layout_marginTop="25dp"
             android:background="@drawable/et_style"
-            android:drawableStart="@drawable/ic_person_black_24dp"
+            android:drawableStart="@drawable/ic_person_outline_black_24dp"
             android:drawablePadding="10dp"
             android:hint="Username"
             android:inputType="textPersonName"
@@ -77,7 +77,7 @@
             android:hint="Password"
             android:drawablePadding="10dp"
             android:paddingStart="20dp"
-            android:drawableStart="@drawable/ic_lock_black_24dp"
+            android:drawableStart="@drawable/ic_lock_outline_black_24dp"
             android:singleLine="true"
             android:imeOptions="actionDone"
 
@@ -96,8 +96,10 @@
             android:text="Remember me"
             style="@style/Subtitle2"
             android:paddingLeft="10dp"
+            android:textColor="@color/SecondaryTextColor"
 
-            android:textColor="@color/TextColor" />
+            />
+
     </RelativeLayout>
         <Button
             android:id="@+id/login_button"
