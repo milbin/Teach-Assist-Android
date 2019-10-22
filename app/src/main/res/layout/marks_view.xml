@@ -40,7 +40,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="0dp"
             android:background="@color/Background"
             android:minHeight="150dp"
             android:paddingStart="50dp"
@@ -57,7 +57,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/circle"
-                android:fontFamily="@font/roboto_mono"
+                style="@style/Subtitle2"
                 android:paddingTop="2dp"
                 android:text="@string/Average"
                 android:textColor="@color/AverageTextColor"
@@ -93,8 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/AverageText"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="47dp"
-                android:fontFamily="@font/roboto"
+                android:layout_marginTop="50dp"
+                style="@style/Subtitle1"
                 android:text=""
                 android:textColor="@color/TextColor"
                 android:textSize="20sp"
@@ -103,17 +103,29 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
 
+
+        <RelativeLayout
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            >
+            android:layout_height="139dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Subtitle1"
+                android:text="Course Weighting: "
+                android:textColor="@android:color/black"
+                android:layout_above="@id/mark_bars"
+                android:layout_centerHorizontal="true"
+                />
             <RelativeLayout
                 android:id="@+id/mark_bars"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
                 android:paddingBottom="0dp">
+
                 <View
                     android:id="@+id/BarAverage1"
                     android:layout_width="40dp"
@@ -128,7 +140,10 @@
                     android:layout_above="@+id/BarAverage1"
                     android:layout_alignStart="@+id/BarAverage1"
                     android:paddingLeft="10dp"
-                    android:text="K" />
+                    android:textColor="@android:color/black"
+                    style="@style/Subtitle2"
+                    android:text="K"
+                    />
 
                 <TextView
                     android:id="@+id/KpercentAverage"
@@ -138,6 +153,7 @@
                     android:layout_alignTop="@+id/BarAverage1"
                     android:paddingLeft="2dp"
                     android:textColor="@color/White"
+                    style="@style/Subtitle1"
                     android:text="" />
                 <TextView
                     android:id="@+id/weightKAverage"
@@ -146,6 +162,7 @@
                     android:layout_alignStart="@id/BarAverage1"
                     android:text="W:"
                     android:layout_alignParentBottom="true"
+                    style="@style/Body2"
 
                     />
 
@@ -164,6 +181,8 @@
                     android:layout_above="@+id/BarAverage2"
                     android:layout_alignStart="@+id/BarAverage2"
                     android:paddingLeft="10dp"
+                    android:textColor="@android:color/black"
+                    style="@style/Subtitle2"
                     android:text="T" />
 
                 <TextView
@@ -174,6 +193,7 @@
                     android:layout_alignTop="@+id/BarAverage2"
                     android:paddingLeft="2dp"
                     android:textColor="@color/White"
+                    style="@style/Subtitle1"
                     android:text="" />
                 <TextView
                     android:id="@+id/weightTAverage"
@@ -182,6 +202,7 @@
                     android:layout_alignStart="@id/BarAverage2"
                     android:text="W:"
                     android:layout_alignParentBottom="true"
+                    style="@style/Body2"
 
                     />
 
@@ -200,6 +221,8 @@
                     android:layout_above="@+id/BarAverage3"
                     android:layout_alignStart="@+id/BarAverage3"
                     android:paddingLeft="10dp"
+                    android:textColor="@android:color/black"
+                    style="@style/Subtitle2"
                     android:text="C" />
 
                 <TextView
@@ -210,6 +233,7 @@
                     android:layout_alignTop="@+id/BarAverage3"
                     android:paddingLeft="2dp"
                     android:textColor="@color/White"
+                    style="@style/Subtitle1"
                     android:text="" />
                 <TextView
                     android:id="@+id/weightCAverage"
@@ -218,6 +242,7 @@
                     android:layout_alignStart="@id/BarAverage3"
                     android:text="W:"
                     android:layout_alignParentBottom="true"
+                    style="@style/Body2"
 
                     />
 
@@ -237,6 +262,8 @@
                     android:layout_above="@+id/BarAverage4"
                     android:layout_alignStart="@+id/BarAverage4"
                     android:paddingLeft="10dp"
+                    android:textColor="@android:color/black"
+                    style="@style/Subtitle2"
                     android:text="A" />
 
                 <TextView
@@ -247,6 +274,7 @@
                     android:layout_alignTop="@+id/BarAverage4"
                     android:paddingEnd="2dp"
                     android:textColor="@color/White"
+                    style="@style/Subtitle1"
                     android:text="" />
                 <TextView
                     android:id="@+id/weightAAverage"
@@ -255,6 +283,7 @@
                     android:layout_alignStart="@id/BarAverage4"
                     android:text="W:"
                     android:layout_alignParentBottom="true"
+                    style="@style/Body2"
 
                     />
 
@@ -274,6 +303,8 @@
                     android:layout_above="@+id/BarAverage5"
                     android:layout_alignStart="@+id/BarAverage5"
                     android:paddingLeft="10dp"
+                    android:textColor="@android:color/black"
+                    style="@style/Subtitle2"
                     android:text="O" />
 
                 <TextView
@@ -284,6 +315,7 @@
                     android:layout_alignTop="@+id/BarAverage5"
                     android:paddingEnd="2dp"
                     android:textColor="@color/White"
+                    style="@style/Subtitle1"
                     android:text="" />
                 <TextView
                     android:id="@+id/weightOAverage"
@@ -292,6 +324,7 @@
                     android:layout_alignStart="@id/BarAverage5"
                     android:text="W:"
                     android:layout_alignParentBottom="true"
+                    style="@style/Body2"
 
                     />
             </RelativeLayout>
@@ -315,7 +348,13 @@
             android:elevation="10dp"
             android:minHeight="@dimen/Toolbar_Height"
             android:uiOptions="splitActionBarWhenNarrow"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            app:layout_scrollFlags="scroll|enterAlways">
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ToolbarTitle"/>
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -249,7 +251,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                 }
                 numberOfAssignments = marks.length() - 1;
                 String title;
-                final DecimalFormat round = new DecimalFormat(".#");
+                final DecimalFormat round = new DecimalFormat("#.#");
 
                 //setup course bars
                 RelativeLayout barAverageRL = findViewById(R.id.mark_bars);
@@ -547,17 +549,18 @@ public class MarksViewMaterial extends AppCompatActivity {
                         finalStringAFraction = stringAFraction;
                         finalStringOFraction = stringOFraction;
 
-                        final TextView KWeight = new TextView(context);
-                        final TextView TWeight = new TextView(context);
-                        final TextView CWeight = new TextView(context);
-                        final TextView AWeight = new TextView(context);
-                        final TextView OWeight = new TextView(context);
-                        final TextView feedbackTextView = new TextView(context);
-                        final TextView markFractionK = new TextView(context);
-                        final TextView markFractionT = new TextView(context);
-                        final TextView markFractionC = new TextView(context);
-                        final TextView markFractionA = new TextView(context);
-                        final TextView markFractionO = new TextView(context);
+                        final TextView KWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
+                        final TextView TWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
+                        final TextView CWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
+                        final TextView AWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
+                        final TextView OWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
+                        final TextView feedbackTextView = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView markFractionK = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView markFractionT = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView markFractionC = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView markFractionA = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView markFractionO = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView assignmentWeightTV = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Subtitle1));
 
                         rl.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -568,23 +571,31 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     original_height_of_assignment = rlNested.getHeight();
                                 }
                                 if (rlNested.getHeight() == original_height_of_assignment) {
-                                    params.height = (int) Math.round(rlNested.getHeight() * 2.3 + v.findViewById(R.id.AveragePercent).getHeight() + (feedback.length()/40) * 28);
+                                    params.height = (int) Math.round(rlNested.getHeight() * 2.4 + v.findViewById(R.id.AveragePercent).getHeight() + (feedback.length()/40) * 28);
 
                                     rlNested.setLayoutParams(params);
-
                                     View bar1 = v.findViewById(R.id.BarGraph1);
                                     View bar2 = v.findViewById(R.id.BarGraph2);
                                     View bar3 = v.findViewById(R.id.BarGraph3);
                                     View bar4 = v.findViewById(R.id.BarGraph4);
                                     View bar5 = v.findViewById(R.id.BarGraph5);
 
+                                    assignmentWeightTV.setId(View.generateViewId());
+                                    assignmentWeightTV.setText("Assignment Weights");
+                                    assignmentWeightTV.setTextColor(Color.parseColor("#000000"));
+                                    RelativeLayout.LayoutParams assignmentWeightTVParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                                    assignmentWeightTVParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                                    assignmentWeightTVParams.bottomMargin = 20;
+                                    assignmentWeightTVParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                    assignmentWeightTV.setLayoutParams(assignmentWeightTVParams);
+                                    rlNested.addView(assignmentWeightTV);
+
                                     RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
                                     RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
                                     barsRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
                                     barsRLParams.height = barsRL.getHeight() * 3;
                                     barsRLParams.addRule(RelativeLayout.BELOW, R.id.AveragePercent);
-                                    barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
-                                    barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                    barsRLParams.addRule(RelativeLayout.ABOVE, assignmentWeightTV.getId());
                                     barsRL.setLayoutParams(barsRLParams);
 
                                     RelativeLayout.LayoutParams paramsKweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -592,7 +603,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsKweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     paramsKweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph1);
                                     KWeight.setLayoutParams(paramsKweight);
-                                    KWeight.setText("W: " + String.valueOf(Kweight));
+                                    KWeight.setText(String.valueOf(Kweight));
                                     barsRL.addView(KWeight);
 
                                     RelativeLayout.LayoutParams paramsTweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -600,7 +611,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsTweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     paramsTweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph2);
                                     TWeight.setLayoutParams(paramsTweight);
-                                    TWeight.setText("W: " + String.valueOf(Tweight));
+                                    TWeight.setText(String.valueOf(Tweight));
                                     barsRL.addView(TWeight);
 
                                     RelativeLayout.LayoutParams paramsCweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -608,7 +619,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsCweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     paramsCweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph3);
                                     CWeight.setLayoutParams(paramsCweight);
-                                    CWeight.setText("W: " + String.valueOf(Cweight));
+                                    CWeight.setText(String.valueOf(Cweight));
                                     barsRL.addView(CWeight);
 
                                     RelativeLayout.LayoutParams paramsAweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -616,7 +627,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsAweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     paramsAweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph4);
                                     AWeight.setLayoutParams(paramsAweight);
-                                    AWeight.setText("W: " + String.valueOf(Aweight));
+                                    AWeight.setText(String.valueOf(Aweight));
                                     barsRL.addView(AWeight);
 
                                     RelativeLayout.LayoutParams paramsOweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -624,12 +635,12 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsOweight.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     paramsOweight.addRule(RelativeLayout.ALIGN_START, R.id.BarGraph5);
                                     OWeight.setLayoutParams(paramsOweight);
-                                    OWeight.setText("W: " + String.valueOf(Oweight));
+                                    OWeight.setText(String.valueOf(Oweight));
                                     barsRL.addView(OWeight);
 
                                     RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
                                     layoutParamsBar1.height = (int) Math.round(bar1.getHeight() * 2.3);
-                                    layoutParamsBar1.width = (int) Math.round(bar1.getWidth() * 2);
+                                    layoutParamsBar1.width = (int) Math.round(bar1.getWidth() * 1.8);
                                     layoutParamsBar1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar1.addRule(RelativeLayout.ABOVE, KWeight.getId());
                                     layoutParamsBar1.setMarginStart(0);
@@ -637,7 +648,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) bar2.getLayoutParams();
                                     layoutParamsBar2.height = (int) Math.round(bar2.getHeight() * 2.3);
-                                    layoutParamsBar2.width = (int) Math.round(bar2.getWidth() * 2);
+                                    layoutParamsBar2.width = (int) Math.round(bar2.getWidth() * 1.8);
                                     layoutParamsBar2.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar2.addRule(RelativeLayout.ABOVE, TWeight.getId());
                                     layoutParamsBar2.setMarginStart(30);
@@ -645,7 +656,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
                                     layoutParamsBar3.height = (int) Math.round(bar3.getHeight() * 2.3);
-                                    layoutParamsBar3.width = (int) Math.round(bar3.getWidth() * 2);
+                                    layoutParamsBar3.width = (int) Math.round(bar3.getWidth() * 1.8);
                                     layoutParamsBar3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar3.addRule(RelativeLayout.ABOVE, CWeight.getId());
                                     layoutParamsBar3.setMarginStart(30);
@@ -653,7 +664,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
                                     layoutParamsBar4.height = (int) Math.round(bar4.getHeight() * 2.3);
-                                    layoutParamsBar4.width = (int) Math.round(bar4.getWidth() * 2);
+                                    layoutParamsBar4.width = (int) Math.round(bar4.getWidth() * 1.8);
                                     layoutParamsBar4.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar4.addRule(RelativeLayout.ABOVE, AWeight.getId());
                                     layoutParamsBar4.setMarginStart(30);
@@ -661,7 +672,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) bar5.getLayoutParams();
                                     layoutParamsBar5.height = (int) Math.round(bar5.getHeight() * 2.3);
-                                    layoutParamsBar5.width = (int) Math.round(bar5.getWidth() * 2);
+                                    layoutParamsBar5.width = (int) Math.round(bar5.getWidth() * 1.8);
                                     layoutParamsBar5.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar5.addRule(RelativeLayout.ABOVE, OWeight.getId());
                                     layoutParamsBar5.setMarginStart(30);
@@ -759,6 +770,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     barsRL.removeView(AWeight);
                                     barsRL.removeView(OWeight);
                                     rlNested.removeView(feedbackTextView);
+                                    rlNested.removeView(assignmentWeightTV);
 
                                     barsRL.removeView(markFractionK);
                                     barsRL.removeView(markFractionT);
@@ -768,7 +780,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
                                     layoutParamsBar1.height = (int) Math.round(bar1.getHeight() / 2.3);
-                                    layoutParamsBar1.width = (int) Math.round(bar1.getWidth() / 2);
+                                    layoutParamsBar1.width = (int) Math.round(bar1.getWidth() / 1.8);
                                     layoutParamsBar1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar1.addRule(RelativeLayout.ABOVE, 0);
                                     layoutParamsBar1.setMarginStart(30);
@@ -776,7 +788,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) bar2.getLayoutParams();
                                     layoutParamsBar2.height = (int) Math.round(bar2.getHeight() / 2.3);
-                                    layoutParamsBar2.width = (int) Math.round(bar2.getWidth() / 2);
+                                    layoutParamsBar2.width = (int) Math.round(bar2.getWidth() / 1.8);
                                     layoutParamsBar2.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar2.addRule(RelativeLayout.ABOVE, 0);
                                     layoutParamsBar2.setMarginStart(3);
@@ -784,7 +796,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
                                     layoutParamsBar3.height = (int) Math.round(bar3.getHeight() / 2.3);
-                                    layoutParamsBar3.width = (int) Math.round(bar3.getWidth() / 2);
+                                    layoutParamsBar3.width = (int) Math.round(bar3.getWidth() / 1.8);
                                     layoutParamsBar3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar3.addRule(RelativeLayout.ABOVE, 0);
                                     layoutParamsBar3.setMarginStart(3);
@@ -792,7 +804,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
                                     layoutParamsBar4.height = (int) Math.round(bar4.getHeight() / 2.3);
-                                    layoutParamsBar4.width = (int) Math.round(bar4.getWidth() / 2);
+                                    layoutParamsBar4.width = (int) Math.round(bar4.getWidth() / 1.8);
                                     layoutParamsBar4.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar4.addRule(RelativeLayout.ABOVE, 0);
                                     layoutParamsBar4.setMarginStart(3);
@@ -800,7 +812,7 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) bar5.getLayoutParams();
                                     layoutParamsBar5.height = (int) Math.round(bar5.getHeight() / 2.3);
-                                    layoutParamsBar5.width = (int) Math.round(bar5.getWidth() / 2);
+                                    layoutParamsBar5.width = (int) Math.round(bar5.getWidth() / 1.8);
                                     layoutParamsBar5.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar5.addRule(RelativeLayout.ABOVE, 0);
                                     layoutParamsBar5.setMarginStart(3);
@@ -945,7 +957,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                         trashButton.setVisibility(View.INVISIBLE);
 
                         // Setup toolbar text
-                        getSupportActionBar().setTitle(CourseName);
+                        ((TextView)findViewById(R.id.toolbar_title)).setText(CourseName);
+                        getSupportActionBar().setTitle("");
                         Crashlytics.log(Log.DEBUG, "coursename", CourseName);
                         //set title
                         TextView Title = rl.findViewById(R.id.title);
@@ -1168,7 +1181,6 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
     public List<String> GetWeightAndAverageByCategory(JSONObject marks) {
-        DecimalFormat round = new DecimalFormat(".#");
         try {
             JSONObject weights = marks.getJSONObject("categories");
             Double weightK = weights.getDouble("K") * 10 * 0.7;

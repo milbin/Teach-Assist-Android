@@ -179,9 +179,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         // Setup toolbar text
-        //  TextView ToolbarText =  findViewById(R.id.toolbar_title);
-        //ToolbarText.setText("Student Report for: "+ username);
-        getSupportActionBar().setTitle("Student: " + username);
+        TextView ToolbarText =  findViewById(R.id.toolbar_title);
+        ToolbarText.setText("Student: "+ username);
+        getSupportActionBar().setTitle("");
+        //getSupportActionBar().setTitle("Student: " + username);
 
         new getTaData().execute();
 

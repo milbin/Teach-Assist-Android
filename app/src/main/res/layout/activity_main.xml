@@ -50,7 +50,16 @@
                     android:background="@color/colorPrimary"
                     android:elevation="10dp"
                     android:minHeight="@dimen/Toolbar_Height"
-                    android:uiOptions="splitActionBarWhenNarrow"/>
+                    android:uiOptions="splitActionBarWhenNarrow">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/toolbar_title"
+                        android:gravity="center"
+                        style="@style/ToolbarTitle"
+                        />
+
+                </androidx.appcompat.widget.Toolbar>
 
 
 
@@ -82,9 +91,9 @@
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
                         android:background="@drawable/circle"
-                        android:fontFamily="@font/roboto_mono"
                         android:text="@string/Average"
                         android:textColor="@color/AverageTextColor"
+                        style="@style/Subtitle2"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:paddingTop="2dp"/>
@@ -120,12 +129,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/AverageText"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="@font/roboto"
-                android:layout_marginTop="47dp"
+                android:layout_marginTop="50dp"
                 android:text=""
+                style="@style/Subtitle1"
                 android:textColor="@color/TextColor"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
 
         </RelativeLayout>
@@ -161,6 +169,7 @@
         android:layout_height="30dp"
         android:text="It looks like you dont have any courses right now!"
         android:gravity="center"
+        style="@style/Subtitle2"
         />
 
 

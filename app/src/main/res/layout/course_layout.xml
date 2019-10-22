@@ -14,7 +14,7 @@
         android:background="@drawable/button_bg_rectangle_solid"
         android:minHeight="@dimen/Row_Height"
         android:layout_gravity="top"
-        android:elevation="3dp"
+        android:elevation="2dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -28,12 +28,13 @@
             android:layout_alignParentTop="true"
             android:gravity="top"
             android:textStyle="normal"
-            android:fontFamily="@font/roboto_mono"
             android:layout_marginTop="3dp"
-            android:textSize="20sp"
+            android:textSize="16sp"
+            android:letterSpacing="0.1"
             android:text="Period 1:"
+            style="@style/Subtitle1"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/SecondaryTextColor"
+            android:textColor="@android:color/black"
             />
         <TextView
             android:id="@+id/RoomNumber"
@@ -41,12 +42,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/Period"
             android:textStyle="normal"
-            android:fontFamily="@font/roboto_mono"
+            style="@style/Subtitle2"
             android:layout_marginTop="3dp"
             android:textSize="15sp"
             android:text=""
             android:layout_centerHorizontal="true"
-            android:textColor="@color/TextColor"
+            android:textColor="@color/SecondaryTextColor"
             />
         <TextView
             android:id="@+id/EmptyCourse"
@@ -57,6 +58,7 @@
             android:gravity="start"
             android:layout_marginStart="15dp"
             android:layout_centerHorizontal="false"
+            style="@style/Subtitle1"
             android:text=""
             android:textStyle="bold"
             android:textSize="16sp"
@@ -89,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignStart="@id/SubjectBar"
-            android:fontFamily="@font/roboto"
+            style="@style/Subtitle1"
             android:layout_marginStart="20dp"
             android:text=""
             android:textColor="@color/TextColor"
@@ -107,7 +109,7 @@
             android:text=""
             android:textColor="@color/TextColor"
             android:textSize="15sp"
-            android:fontFamily="@font/roboto"
+            style="@style/Subtitle1"
             android:textStyle="bold" />
 
         <TextView
@@ -121,8 +123,7 @@
             android:text=""
             android:textColor="@color/SecondaryTextColor"
             android:textSize="15sp"
-            android:fontFamily="@font/roboto"
-            android:textStyle="italic" />
+            style="@style/Body1"/>
         <ImageButton
             android:id="@+id/trash_can"
             android:layout_width="wrap_content"
