@@ -14,7 +14,6 @@
         android:background="@drawable/button_bg_rectangle_solid"
         android:minHeight="@dimen/Row_Height"
         android:layout_gravity="top"
-        android:elevation="2dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -28,13 +27,13 @@
             android:layout_alignParentTop="true"
             android:gravity="top"
             android:textStyle="normal"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="5dp"
             android:textSize="16sp"
             android:letterSpacing="0.1"
             android:text="Period 1:"
             style="@style/Subtitle1"
             android:layout_centerHorizontal="true"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             />
         <TextView
             android:id="@+id/RoomNumber"
@@ -47,7 +46,7 @@
             android:textSize="15sp"
             android:text=""
             android:layout_centerHorizontal="true"
-            android:textColor="@color/SecondaryTextColor"
+            android:textColor="@color/White"
             />
         <TextView
             android:id="@+id/EmptyCourse"
@@ -62,6 +61,7 @@
             android:text=""
             android:textStyle="bold"
             android:textSize="16sp"
+            android:textColor="@color/White"
 
             />
 
@@ -69,18 +69,17 @@
         <io.netopen.hotbitmapgg.library.view.RingProgressBar
             android:id="@+id/SubjectBar"
             android:layout_width="wrap_content"
-            android:layout_height="90dp"
+            android:layout_height="100dp"
             android:layout_centerInParent="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
-            android:elevation="5dp"
             app:max="101"
-            app:ringColor="@android:color/transparent"
-            app:ringDiameter="90"
-            app:ringProgressColor="@color/BarColor1"
-            app:ringWidth="9dp"
+            app:ringColor="@color/primaryColorDark"
+            app:ringDiameter="100"
+            app:ringProgressColor="@color/primaryGreen"
+            app:ringWidth="5dp"
             app:style="STROKE"
-            app:textColor="@color/TextColor"
+            app:textColor="@color/White"
             app:textIsShow="false"
             app:textSize="16sp" />
 
@@ -94,7 +93,7 @@
             style="@style/Subtitle1"
             android:layout_marginStart="20dp"
             android:text=""
-            android:textColor="@color/TextColor"
+            android:textColor="@color/White"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -107,7 +106,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginTop="25dp"
             android:text=""
-            android:textColor="@color/TextColor"
+            android:textColor="@color/White"
             android:textSize="15sp"
             style="@style/Subtitle1"
             android:textStyle="bold" />
@@ -121,7 +120,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
             android:text=""
-            android:textColor="@color/SecondaryTextColor"
+            android:textColor="@color/White"
             android:textSize="15sp"
             style="@style/Body1"/>
         <ImageButton

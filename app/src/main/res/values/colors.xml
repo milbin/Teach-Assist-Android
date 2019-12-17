@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Material design pallet: pink500, Green400-->
-    <color name="colorPrimary">#25af2b</color>
-    <color name="colorPrimaryDark">#087f23</color>
-    <color name="colorAccent">#80e27e</color>
-    <color name="AverageBarColor">#e91e63</color>
-    <color name="BarColor1">#4caf50</color>
-    <color name="BarColor2">#4caf50</color>
-    <color name="BarColor3">#4caf50</color>
-    <color name="BarColor4">#4caf50</color>
+    <color name="colorPrimary">#27272f</color>
+    <color name="primaryColor">#33333d</color>
+    <color name="primaryColorDark">#27272f</color>
+    <color name="primaryGreen">#045d56</color>
+    <color name="primaryPink">#ff4181</color>
     <color name="TextColor">#000000</color>
     <color name="SecondaryTextColor">#C7C7C7</color>
     <color name="DarkGray">@android:color/darker_gray</color>
     <color name="AverageTextColor">#BAB9B9</color>
-    <color name="Background">#FAFAFA</color>
+    <color name="Background">@color/primaryColor</color>
     <color name="White">#ffffff</color>
     <color name="knowledge">#E7CB00</color>
     <color name="thinking">#85E700</color>
