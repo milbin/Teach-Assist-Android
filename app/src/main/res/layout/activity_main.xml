@@ -84,14 +84,14 @@
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
                 android:id="@+id/AverageBar"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="170dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="10dp"
-                android:minHeight="150dp"
+                android:minHeight="170dp"
                 android:layout_centerHorizontal="true"
                 app:max="101"
                 app:ringColor="@color/primaryColorDark"
-                app:ringDiameter="150"
+                app:ringDiameter="170"
                 app:ringProgressColor="@color/primaryPink"
                 app:ringWidth="5dp"
                 app:style="STROKE"
@@ -106,11 +106,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="80dp"
                 android:text=""
                 style="@style/Subtitle1"
                 android:textColor="@color/White"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
 
         </RelativeLayout>

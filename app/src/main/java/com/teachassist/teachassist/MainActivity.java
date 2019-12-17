@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Setup toolbar text
         TextView ToolbarText =  findViewById(R.id.toolbar_title);
-        ToolbarText.setText("Student: "+ username);
+        ToolbarText.setText("Student "+ username);
         getSupportActionBar().setTitle("");
         //getSupportActionBar().setTitle("Student: " + username);
 
@@ -626,9 +626,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView SubjectName = relativeLayout.findViewById(R.id.SubjectName);
                 SubjectName.setText(SubjectNameString);
                 TextView roomNumber  = relativeLayout.findViewById(R.id.RoomNumber);
-                roomNumber.setText("Room " + RoomNumber );
+                roomNumber.setText("Rm " + RoomNumber );
                 TextView period = relativeLayout.findViewById(R.id.Period);
-                period.setText("Period "+periodNum+":");
+                period.setText("Period "+periodNum+"-");
 
                 Courses.add(relativeLayout);
                 periodNum++;
