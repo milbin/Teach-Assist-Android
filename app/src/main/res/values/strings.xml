@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TeachAssist</string>
+    <string name="app_name">Teachassist</string>
     <string name="edit_activity">Edit</string>
     <string name="Average">Average</string>
     <string name="EmptyText">Please See Teacher For Current Achievement In This Course</string>
@@ -7,7 +7,7 @@
     <string name="title_activity_nav__drawer">Nav_Drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">TeachAssist</string>
+    <string name="nav_header_title">Teachassist</string>
 
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -17,9 +17,6 @@
 
     <string name="Username">Username</string>
     <string name="Password">Password</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

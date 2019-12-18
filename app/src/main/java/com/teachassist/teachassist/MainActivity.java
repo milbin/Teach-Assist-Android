@@ -320,10 +320,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
                 break;
 
-            case R.id.nav_home:
-                drawer.closeDrawer(GravityCompat.START);
-                break;
-
             case R.id.nav_settings:
                 drawer.closeDrawer(GravityCompat.START);
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -355,25 +351,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 settingsIntent.putStringArrayListExtra("key", list); //Optional parameters
 
                 startActivity(settingsIntent);
-                break;
-
-            case R.id.nav_email:
-                Auth auth = new Auth();
-                drawer.closeDrawer(GravityCompat.START);
-
-                String mailto = "mailto:TaAppYRDSB@gmail.com" +
-                        "?subject=" + Uri.encode("Insert Subject Here") +
-                        "&body=" + Uri.encode("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Support Token: (please do not delete) \n" +
-                        auth.getSupportToken(username, password));
-
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse(mailto));
-
-                try {
-                    startActivity(emailIntent);
-                } catch (ActivityNotFoundException e) {
-                    showToast("No email app currently installed");
-                }
                 break;
 
             case R.id.nav_bug_report:

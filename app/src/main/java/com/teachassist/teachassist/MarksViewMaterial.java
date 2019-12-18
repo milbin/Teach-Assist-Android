@@ -690,6 +690,10 @@ public class MarksViewMaterial extends AppCompatActivity {
 
                                     feedbackTextView.setId(View.generateViewId()); //without these IDs the bars float in the air for some reason
                                     feedbackTextView.setText("Feedback: " + feedback);
+                                    if(feedback.isEmpty()){
+                                        feedbackTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                        feedbackTextView.setText("No Feedback");
+                                    }
                                     feedbackTextView.setTextColor(getResources().getColor(R.color.textColor));
                                     RelativeLayout.LayoutParams paramsFeedback = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     paramsFeedback.addRule(RelativeLayout.BELOW, R.id.AveragePercent);

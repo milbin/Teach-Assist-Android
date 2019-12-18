@@ -137,6 +137,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@color/primaryColorDark"
+        app:itemTextColor="@color/textColor"
+        app:itemIconTint="@color/textColor"
+        app:itemTextAppearance="@style/Subtitle2"
         app:headerLayout="@layout/nav_header_main_drawer"
         app:menu="@menu/activity_main_drawer" />
     <TextView
