@@ -37,52 +37,29 @@
         <RelativeLayout
 
             android:id="@+id/relativeLayoutAverage"
-
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginBottom="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
             android:background="@color/Background"
-            android:minHeight="150dp"
             android:paddingStart="50dp"
-            android:paddingTop="0dp"
             android:paddingEnd="50dp"
-            android:paddingBottom="5dp"
             tools:context=".Average">
-
-
-            <TextView
-                android:id="@+id/AverageText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/circle"
-                style="@style/Subtitle2"
-                android:paddingTop="2dp"
-                android:text="@string/Average"
-                android:textColor="@color/AverageTextColor"
-                android:textSize="16sp"
-                android:textStyle="bold"
-
-                />
 
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
                 android:id="@+id/AverageBar"
                 android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="115dp"
-                android:layout_below="@id/AverageText"
-                android:layout_marginTop="5dp"
-                android:elevation="15dp"
-                android:minHeight="115dp"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:minHeight="170dp"
                 app:max="101"
-                app:ringColor="@android:color/transparent"
-                app:ringDiameter="115"
+                app:ringColor="@color/primaryColorDark"
+                app:ringDiameter="170"
                 app:ringProgressColor="@color/primaryPink"
-                app:ringWidth="12dp"
+                app:ringWidth="5dp"
                 app:style="STROKE"
-                app:textColor="@color/TextColor"
+                app:textColor="@color/primaryColor"
                 app:textIsShow="false"
                 app:textSize="26sp" />
 
@@ -91,13 +68,11 @@
                 android:id="@+id/AverageInt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/AverageText"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_centerInParent="true"
                 style="@style/Subtitle1"
                 android:text=""
-                android:textColor="@color/TextColor"
-                android:textSize="20sp"
+                android:textColor="@color/textColor"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
 
@@ -108,221 +83,222 @@
         <RelativeLayout
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="139dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Subtitle1"
-                android:text="Course Weighting: "
-                android:textColor="@android:color/black"
-                android:layout_above="@id/mark_bars"
-                android:layout_centerHorizontal="true"
-                />
+            android:layout_height="140dp">
             <RelativeLayout
                 android:id="@+id/mark_bars"
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:paddingBottom="0dp">
+                android:layout_alignParentBottom="true">
 
-                <View
+                <RelativeLayout
                     android:id="@+id/BarAverage1"
-                    android:layout_width="40dp"
+                    android:layout_width="45dp"
                     android:layout_height="80dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/rounded_rectangle_bar_graph"
-                    android:layout_above="@+id/weightKAverage"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/BarAverage1"
-                    android:layout_alignStart="@+id/BarAverage1"
-                    android:paddingLeft="10dp"
-                    android:textColor="@android:color/black"
-                    style="@style/Subtitle2"
-                    android:text="K"
-                    />
-
+                    android:layout_above="@+id/weightKAverage">
                 <TextView
                     android:id="@+id/KpercentAverage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/BarAverage1"
-                    android:layout_alignTop="@+id/BarAverage1"
-                    android:paddingLeft="2dp"
-                    android:textColor="@color/White"
-                    style="@style/Subtitle1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/textColor"
+                    style="@style/Body2"
                     android:text="" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Subtitle2"
+                        android:text="K" />
+
+                </RelativeLayout>
+
+
                 <TextView
                     android:id="@+id/weightKAverage"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:layout_alignStart="@id/BarAverage1"
+                    android:layout_alignEnd="@+id/BarAverage1"
+                    android:textAlignment="center"
                     android:text="W:"
+                    android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
                     style="@style/Body2"
 
                     />
 
-                <View
+                <RelativeLayout
                     android:id="@+id/BarAverage2"
-                    android:layout_width="40dp"
+                    android:layout_width="45dp"
                     android:layout_height="80dp"
                     android:layout_above="@+id/weightTAverage"
                     android:layout_marginStart="3dp"
                     android:layout_toRightOf="@+id/BarAverage1"
-                    android:background="@drawable/rounded_rectangle_bar_graph" />
+                    android:background="@drawable/rounded_rectangle_bar_graph" >
+                    <TextView
+                        android:id="@+id/TpercentAverage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Body2"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Subtitle2"
+                        android:text="T" />
+                </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/BarAverage2"
-                    android:layout_alignStart="@+id/BarAverage2"
-                    android:paddingLeft="10dp"
-                    android:textColor="@android:color/black"
-                    style="@style/Subtitle2"
-                    android:text="T" />
-
-                <TextView
-                    android:id="@+id/TpercentAverage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/BarAverage2"
-                    android:layout_alignTop="@+id/BarAverage2"
-                    android:paddingLeft="2dp"
-                    android:textColor="@color/White"
-                    style="@style/Subtitle1"
-                    android:text="" />
                 <TextView
                     android:id="@+id/weightTAverage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/BarAverage2"
+                    android:layout_alignEnd="@+id/BarAverage2"
+                    android:textAlignment="center"
                     android:text="W:"
+                    android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
                     style="@style/Body2"
 
                     />
 
-                <View
+                <RelativeLayout
                     android:id="@+id/BarAverage3"
-                    android:layout_width="40dp"
+                    android:layout_width="45dp"
                     android:layout_height="80dp"
                     android:layout_above="@+id/weightCAverage"
                     android:layout_marginStart="3dp"
                     android:layout_toRightOf="@+id/BarAverage2"
-                    android:background="@drawable/rounded_rectangle_bar_graph" />
+                    android:background="@drawable/rounded_rectangle_bar_graph" >
+                    <TextView
+                        android:id="@+id/CpercentAverage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Body2"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Subtitle2"
+                        android:text="C" />
+                </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/BarAverage3"
-                    android:layout_alignStart="@+id/BarAverage3"
-                    android:paddingLeft="10dp"
-                    android:textColor="@android:color/black"
-                    style="@style/Subtitle2"
-                    android:text="C" />
-
-                <TextView
-                    android:id="@+id/CpercentAverage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/BarAverage3"
-                    android:layout_alignTop="@+id/BarAverage3"
-                    android:paddingLeft="2dp"
-                    android:textColor="@color/White"
-                    style="@style/Subtitle1"
-                    android:text="" />
                 <TextView
                     android:id="@+id/weightCAverage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/BarAverage3"
+                    android:layout_alignEnd="@+id/BarAverage3"
+                    android:textAlignment="center"
                     android:text="W:"
+                    android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
                     style="@style/Body2"
 
                     />
 
-                <View
+                <RelativeLayout
                     android:id="@+id/BarAverage4"
-                    android:layout_width="40dp"
+                    android:layout_width="45dp"
                     android:layout_height="80dp"
                     android:layout_above="@+id/weightAAverage"
                     android:layout_marginStart="3dp"
                     android:layout_toRightOf="@+id/BarAverage3"
 
-                    android:background="@drawable/rounded_rectangle_bar_graph" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/BarAverage4"
-                    android:layout_alignStart="@+id/BarAverage4"
-                    android:paddingLeft="10dp"
-                    android:textColor="@android:color/black"
-                    style="@style/Subtitle2"
-                    android:text="A" />
-
-                <TextView
-                    android:id="@+id/ApercentAverage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/BarAverage4"
-                    android:layout_alignTop="@+id/BarAverage4"
-                    android:paddingEnd="2dp"
-                    android:textColor="@color/White"
-                    style="@style/Subtitle1"
-                    android:text="" />
+                    android:background="@drawable/rounded_rectangle_bar_graph" >
+                    <TextView
+                        android:id="@+id/ApercentAverage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Body2"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Subtitle2"
+                        android:text="A" />
+                </RelativeLayout>
                 <TextView
                     android:id="@+id/weightAAverage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/BarAverage4"
+                    android:layout_alignEnd="@+id/BarAverage4"
+                    android:textAlignment="center"
                     android:text="W:"
+                    android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
                     style="@style/Body2"
 
                     />
 
-                <View
+                <RelativeLayout
                     android:id="@+id/BarAverage5"
-                    android:layout_width="40dp"
+                    android:layout_width="45dp"
                     android:layout_height="80dp"
                     android:layout_above="@+id/weightOAverage"
                     android:layout_marginStart="3dp"
                     android:layout_toRightOf="@+id/BarAverage4"
                     android:layout_marginEnd="10dp"
-                    android:background="@drawable/rounded_rectangle_bar_graph" />
+                    android:background="@drawable/rounded_rectangle_bar_graph" >
+                    <TextView
+                        android:id="@+id/OpercentAverage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Body2"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/textColor"
+                        style="@style/Subtitle2"
+                        android:text="O" />
+                </RelativeLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/BarAverage5"
-                    android:layout_alignStart="@+id/BarAverage5"
-                    android:paddingLeft="10dp"
-                    android:textColor="@android:color/black"
-                    style="@style/Subtitle2"
-                    android:text="O" />
 
-                <TextView
-                    android:id="@+id/OpercentAverage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/BarAverage5"
-                    android:layout_alignTop="@+id/BarAverage5"
-                    android:paddingEnd="2dp"
-                    android:textColor="@color/White"
-                    style="@style/Subtitle1"
-                    android:text="" />
+
+
+
                 <TextView
                     android:id="@+id/weightOAverage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/BarAverage5"
+                    android:layout_alignEnd="@+id/BarAverage5"
+                    android:textAlignment="center"
                     android:text="W:"
+                    android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
                     style="@style/Body2"
 
@@ -349,11 +325,16 @@
             android:minHeight="@dimen/Toolbar_Height"
             android:uiOptions="splitActionBarWhenNarrow"
             app:layout_scrollFlags="scroll|enterAlways">
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ToolbarTitle"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    style="@style/ToolbarTitle"/>
+            </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

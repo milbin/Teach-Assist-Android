@@ -51,13 +51,17 @@
                     android:elevation="10dp"
                     android:minHeight="@dimen/Toolbar_Height"
                     android:uiOptions="splitActionBarWhenNarrow">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/toolbar_title"
-                        android:gravity="center"
+                        android:layout_centerInParent="true"
                         style="@style/ToolbarTitle"
                         />
+                    </RelativeLayout>
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -74,11 +78,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/Background"
                     android:layout_weight="5"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="0dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp"
                     android:paddingEnd="50dp"
                     android:paddingStart="50dp"
-                    android:layout_marginBottom="5dp"
                     >
 
             <io.netopen.hotbitmapgg.library.view.RingProgressBar
@@ -86,7 +89,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="170dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="10dp"
                 android:minHeight="170dp"
                 android:layout_centerHorizontal="true"
                 app:max="101"
@@ -104,12 +106,10 @@
                 android:id="@+id/AverageInt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="80dp"
+                android:layout_centerInParent="true"
                 android:text=""
                 style="@style/Subtitle1"
-                android:textColor="@color/White"
+                android:textColor="@color/textColor"
                 android:textSize="22sp" />
 
 

@@ -47,7 +47,7 @@
             style="@style/Subtitle2"
             android:textSize="14sp"
             android:text=""
-            android:textColor="@color/White"
+            android:textColor="@color/textColor"
             />
         <TextView
             android:id="@+id/EmptyCourse"
@@ -62,7 +62,7 @@
             android:text=""
             android:textStyle="bold"
             android:textSize="16sp"
-            android:textColor="@color/White"
+            android:textColor="@color/textColor"
 
             />
 
@@ -72,8 +72,8 @@
             android:layout_width="wrap_content"
             android:layout_height="110dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toStartOf="@+id/subjectArrow"
             app:max="101"
             app:ringColor="@color/primaryColorDark"
             app:ringDiameter="110"
@@ -92,11 +92,19 @@
             android:layout_centerVertical="true"
             android:layout_alignStart="@id/SubjectBar"
             style="@style/Subtitle1"
-            android:layout_marginStart="34dp"
+            android:layout_marginStart="33dp"
             android:text=""
-            android:textColor="@color/White"
-            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
             android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/subjectArrow"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"/>
 
         <TextView
             android:id="@+id/SubjectAbrv"
@@ -105,8 +113,8 @@
             android:layout_alignStart="@+id/Period"
             android:layout_below="@+id/Period"
             android:text=""
-            android:textColor="@color/White"
-            android:textSize="15sp"
+            android:textColor="@color/textColor"
+            android:textSize="14sp"
             style="@style/Body1"
             android:textStyle="bold" />
 
@@ -117,8 +125,8 @@
             android:layout_below="@id/SubjectAbrv"
             android:layout_alignStart="@id/SubjectAbrv"
             android:text=""
-            android:textColor="@color/White"
-            android:textSize="15sp"
+            android:textColor="@color/textColor"
+            android:textSize="14sp"
             style="@style/Body1"/>
         <ImageButton
             android:id="@+id/trash_can"

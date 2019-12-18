@@ -6,12 +6,10 @@
     <color name="primaryColorDark">#27272f</color>
     <color name="primaryGreen">#045d56</color>
     <color name="primaryPink">#ff4181</color>
-    <color name="TextColor">#000000</color>
     <color name="SecondaryTextColor">#C7C7C7</color>
     <color name="DarkGray">@android:color/darker_gray</color>
-    <color name="AverageTextColor">#BAB9B9</color>
     <color name="Background">@color/primaryColor</color>
-    <color name="White">#ffffff</color>
+    <color name="textColor">#ffffff</color>
     <color name="knowledge">#E7CB00</color>
     <color name="thinking">#85E700</color>
     <color name="communication">#007BE7</color>
