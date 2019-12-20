@@ -50,7 +50,8 @@
                     android:background="@color/primaryColorDark"
                     android:elevation="10dp"
                     android:minHeight="@dimen/Toolbar_Height"
-                    android:uiOptions="splitActionBarWhenNarrow">
+                    android:uiOptions="splitActionBarWhenNarrow"
+                    >
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -60,6 +61,7 @@
                         android:id="@+id/toolbar_title"
                         android:layout_centerInParent="true"
                         style="@style/ToolbarTitle"
+                        android:paddingEnd="16dp"
                         />
                     </RelativeLayout>
 
