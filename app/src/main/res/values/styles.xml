@@ -21,6 +21,8 @@
         <item name="colorPrimary">@color/primaryColorDark</item>
         <item name="colorPrimaryDark">@color/primaryColor</item>
         <item name="colorAccent">@color/primaryPink</item>
+        <item name="android:textColorSecondary">@color/textColor</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">

@@ -12,6 +12,7 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:contentDescription="@string/nav_header_desc"
+        android:paddingTop="5dp"
         app:srcCompat="@drawable/ta_logo_v3" />
 
     <TextView
