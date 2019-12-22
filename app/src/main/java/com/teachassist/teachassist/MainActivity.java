@@ -759,7 +759,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int currentSubject = (int) params[1];
                 View currentRL = Courses.get(currentSubject);
                 TextView EmptyCourse = currentRL.findViewById(R.id.EmptyCourse);
-                final RingProgressBar ProgressBarAverage = (RingProgressBar) currentRL.findViewById(R.id.SubjectBar);
+                final View ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
+                ProgressBarAverage.setVisibility(View.GONE);
                 EmptyCourse.setText(R.string.EmptyText);
                 currentRL.setClickable(false);
             }
