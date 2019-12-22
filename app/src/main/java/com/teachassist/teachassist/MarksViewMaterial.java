@@ -164,6 +164,16 @@ public class MarksViewMaterial extends AppCompatActivity {
         getMarksTask.cancel(true);
         super.onBackPressed();
     }
+    @Override
+    public void onStop(){
+        getMarksTask.cancel(true);
+        super.onStop();
+    }
+    @Override
+    public void onDestroy(){
+        getMarksTask.cancel(true);
+        super.onDestroy();
+    }
 
     //2 methods below for edit button
     @Override
