@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/textColor"
+    android:background="@color/Background"
     android:theme="@android:style/Theme.Black.NoTitleBar"
     >
 
@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp"
-        app:srcCompat="@drawable/ta_logo_v3"
+        app:srcCompat="@drawable/ta_logo_transparent"
         />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView"
         android:text="Teachassist"
-        android:textColor="@android:color/black"
+        android:textColor="@color/textColor"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         style="@style/Title"
@@ -49,6 +49,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginTop="25dp"
+            android:textColor="@color/textColor"
             android:background="@drawable/et_style"
             android:drawableStart="@drawable/ic_person_outline_black_24dp"
             android:drawablePadding="10dp"
@@ -56,7 +57,7 @@
             android:inputType="textPersonName"
             android:padding="10dp"
             android:paddingStart="20dp"
-            android:textColorHint="@color/SecondaryTextColor"
+            android:textColorHint="@color/primaryColorDark"
             style="@style/Body1"
             />
 
@@ -69,10 +70,11 @@
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_centerHorizontal="true"
+            android:textColor="@color/textColor"
             android:inputType="textPassword"
             android:background="@drawable/et_style"
             style="@style/Body1"
-            android:textColorHint="@color/SecondaryTextColor"
+            android:textColorHint="@color/primaryColorDark"
             android:padding="10dp"
             android:hint="Password"
             android:drawablePadding="10dp"
@@ -96,7 +98,7 @@
             android:text="Remember me"
             style="@style/Subtitle2"
             android:paddingLeft="10dp"
-            android:textColor="@color/SecondaryTextColor"
+            android:textColor="@color/textColor"
 
             />
 
@@ -110,7 +112,7 @@
             android:layout_marginTop="100dp"
             android:background="@drawable/rounded_corner"
             android:elevation="0dp"
-            android:text="LOGIN"
+            android:text="Login"
             android:textSize="25dp"
             style="@style/Button"
             android:textColor="@color/textColor"
