@@ -13,7 +13,7 @@
         android:layout_centerInParent="true"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="5dp"
-        app:srcCompat="@drawable/ta_logo_transparent"
+        android:src="@drawable/ta_logo"
         />
 
     <TextView

@@ -10,19 +10,19 @@
     >
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp"
-        app:srcCompat="@drawable/ta_logo_transparent"
+        android:src="@drawable/ta_logo"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/logo"
         android:text="Teachassist"
         android:textColor="@color/textColor"
         android:layout_centerHorizontal="true"
@@ -34,7 +34,7 @@
         android:id="@+id/relativeLayoutLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/logo"
         android:layout_marginTop="125dp"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
