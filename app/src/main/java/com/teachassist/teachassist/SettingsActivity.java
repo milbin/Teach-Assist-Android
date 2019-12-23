@@ -1,32 +1,17 @@
 package com.teachassist.teachassist;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.app.NavUtils;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.appcompat.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.preference.PreferenceManager;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -48,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
         //setup toolbar
         getSupportActionBar().setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //back button
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
         //load settings fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.settings_fragment,
                 new PrefsFragment()).commit();

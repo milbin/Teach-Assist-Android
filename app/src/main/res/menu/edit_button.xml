@@ -6,7 +6,7 @@
         android:id="@+id/main_menu_group">
     <item
         android:id="@+id/action_edit"
-        android:icon="@drawable/ic_edit_black_24dp"
+        android:icon="@drawable/edit_icon"
         android:title=""
         app:showAsAction="ifRoom"/>
     </group>

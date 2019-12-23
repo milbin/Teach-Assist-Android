@@ -10,10 +10,5 @@
     <color name="DarkGray">@android:color/darker_gray</color>
     <color name="Background">@color/primaryColor</color>
     <color name="textColor">#ffffff</color>
-    <color name="knowledge">#E7CB00</color>
-    <color name="thinking">#85E700</color>
-    <color name="communication">#007BE7</color>
-    <color name="application">#E76900</color>
-    <color name="other">#dedede</color>
 
 </resources>

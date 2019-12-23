@@ -97,7 +97,7 @@
             android:id="@+id/subjectArrow"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:src="@drawable/arrow_forward"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"/>
@@ -128,7 +128,7 @@
             android:id="@+id/trash_can"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_actual_black_24dp"
+            android:src="@drawable/delete_icon"
             android:background="@null"
             android:padding="5dp"
             android:clickable="true"
