@@ -141,7 +141,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/primaryColorDark"
+        android:background="@color/primaryColor"
         app:itemTextColor="@color/textColor"
         app:itemIconTint="@color/textColor"
         app:itemTextAppearance="@style/Subtitle2"

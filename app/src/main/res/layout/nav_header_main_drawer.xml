@@ -4,24 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@color/primaryColorDark">
+    android:background="@color/primaryColor">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="5dp"
-        app:srcCompat="@drawable/ta_logo_transparent" />
+        app:srcCompat="@drawable/ta_logo_transparent"
+        />
 
     <TextView
+        android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nav_header_title"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/logo"
         android:layout_centerHorizontal="true"
         android:textColor="@color/textColor"
-        style="@style/Subtitle1" />
+        style="@style/AppTitle"
+        android:textSize="18sp"
+        />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primaryColorDark"
+        />
 
 </RelativeLayout>

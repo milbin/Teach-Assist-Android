@@ -4,8 +4,8 @@
     <style name="AppTheme" parent="Base.Theme.Design"></style>-->
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/primaryColorDark</item>
-        <item name="colorPrimaryDark">@color/primaryColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColorDark</item>
         <item name="colorAccent">@color/primaryPink</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
@@ -18,8 +18,8 @@
     </style>
 
     <style name="preferenceTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primaryColorDark</item>
-        <item name="colorPrimaryDark">@color/primaryColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColorDark</item>
         <item name="colorAccent">@color/primaryPink</item>
         <item name="android:textColorSecondary">@color/textColor</item>
         <item name="android:textColorPrimary">@color/textColor</item>
