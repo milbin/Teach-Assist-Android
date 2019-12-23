@@ -31,13 +31,20 @@
 
 
     <!--Fonts-->
+    <style name="AppTitle" parent="AppTheme">
+        <item name="android:fontFamily">@font/eczar_bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="sandstoneBold" parent="AppTheme">
         <item name="android:fontFamily">@font/sandstone_bold</item>
     </style>
+
     <style name="Title" parent="sandstoneBold">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="ToolbarTitle" parent="sandstoneBold">
         <item name="android:textSize">17sp</item>
         <item name="android:fontFamily">@font/sandstone_bold</item>
@@ -78,6 +85,7 @@
         <item name="android:letterSpacing">0.0625</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
+
     <style name="Body2" parent="Body1">
         <item name="android:letterSpacing">0.0625</item>
         <item name="android:textSize">13sp</item>

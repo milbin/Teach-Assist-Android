@@ -26,8 +26,8 @@
         android:text="Teachassist"
         android:textColor="@color/textColor"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        style="@style/Title"
+        android:layout_marginTop="5dp"
+        style="@style/AppTitle"
         />
 
     <RelativeLayout
@@ -46,19 +46,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
             android:layout_marginTop="25dp"
             android:textColor="@color/textColor"
-            android:background="@drawable/et_style"
-            android:drawableStart="@drawable/person_icon"
-            android:drawablePadding="10dp"
+            android:background="@drawable/flush_rounded_courner"
             android:hint="Username"
             android:inputType="textPersonName"
             android:padding="10dp"
             android:paddingStart="20dp"
-            android:textColorHint="@color/primaryColorDark"
+            android:textColorHint="@color/primaryColor"
             style="@style/Body1"
+            />
+
+        <ImageView
+            android:src="@drawable/person_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignStart="@id/Username"
+            android:layout_marginStart="-35dp"
+            android:layout_alignBottom="@id/Username"
+            android:layout_alignTop="@id/Username"
             />
 
         <EditText
@@ -67,22 +75,29 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/Username"
             android:layout_marginTop="20dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
             android:layout_centerHorizontal="true"
             android:textColor="@color/textColor"
             android:inputType="textPassword"
-            android:background="@drawable/et_style"
+            android:background="@drawable/flush_rounded_courner"
             style="@style/Body1"
-            android:textColorHint="@color/primaryColorDark"
+            android:textColorHint="@color/primaryColor"
             android:padding="10dp"
             android:hint="Password"
-            android:drawablePadding="10dp"
             android:paddingStart="20dp"
-            android:drawableStart="@drawable/lock_icon"
             android:singleLine="true"
             android:imeOptions="actionDone"
+            />
 
+        <ImageView
+            android:src="@drawable/lock_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignStart="@id/Password"
+            android:layout_marginStart="-35dp"
+            android:layout_alignBottom="@id/Password"
+            android:layout_alignTop="@id/Password"
             />
 
 
@@ -91,16 +106,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Password"
-            android:layout_marginStart="70dp"
-            android:layout_centerVertical="@+id/Password"
+            android:layout_alignStart="@id/Username"
             android:layout_marginTop="20dp"
             android:button="@drawable/checkbox"
             android:text="Remember me"
             style="@style/Subtitle2"
             android:paddingLeft="10dp"
             android:textColor="@color/textColor"
-
             />
+
 
     </RelativeLayout>
         <Button
@@ -111,9 +125,8 @@
             android:layout_below="@id/relativeLayoutLogin"
             android:layout_marginTop="100dp"
             android:background="@drawable/rounded_corner"
-            android:elevation="0dp"
             android:text="Login"
-            android:textSize="25dp"
+            android:textSize="20dp"
             style="@style/Button"
             android:textColor="@color/textColor"
             />
