@@ -27,13 +27,13 @@
             android:layout_alignParentTop="true"
             android:gravity="top"
             android:textStyle="normal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:textSize="20sp"
-            android:letterSpacing="0.1"
             android:text="Period 1"
             style="@style/Subtitle1"
+            android:fontFamily="@font/gilroy_extrabold"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="15dp"
             android:textColor="@android:color/white"
             />
         <TextView
@@ -45,7 +45,7 @@
             android:layout_marginStart="5dp"
             android:textStyle="normal"
             style="@style/Subtitle2"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:text=""
             android:textColor="@color/textColor"
             />
@@ -70,6 +70,7 @@
             android:layout_height="110dp"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/subjectArrow"
+            android:layout_marginEnd="15dp"
             app:max="101"
             app:ringColor="@color/primaryColorDark"
             app:ringDiameter="110"
@@ -78,8 +79,8 @@
             app:style="STROKE"
             app:textColor="@color/primaryColor"
             app:textIsShow="false"
-            app:textSize="16sp" />
-
+            app:textSize="16sp"
+            />
 
         <TextView
             android:id="@+id/SubjectInt"
@@ -87,20 +88,24 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignStart="@id/SubjectBar"
+            android:layout_alignEnd="@id/SubjectBar"
             style="@style/Subtitle1"
-            android:layout_marginStart="33dp"
             android:text=""
+            android:textAlignment="center"
             android:textColor="@color/textColor"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
         <ImageView
             android:id="@+id/subjectArrow"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:src="@drawable/arrow_forward"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="5dp"/>
+            android:layout_marginEnd="15dp"
+            />
 
         <TextView
             android:id="@+id/SubjectAbrv"
@@ -108,33 +113,43 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/Period"
             android:layout_below="@+id/Period"
+            android:layout_marginTop="3dp"
             android:text=""
             android:textColor="@color/textColor"
             android:textSize="14sp"
             style="@style/Body1"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
 
         <TextView
             android:id="@+id/SubjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/SubjectAbrv"
+            android:layout_marginTop="3dp"
             android:layout_alignStart="@id/SubjectAbrv"
             android:text=""
             android:textColor="@color/textColor"
             android:textSize="14sp"
-            style="@style/Body1"/>
+            style="@style/Body1"
+            />
+
         <ImageButton
             android:id="@+id/trash_can"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/delete_icon"
             android:background="@null"
             android:padding="5dp"
             android:clickable="true"
             android:focusable="true"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
             android:contentDescription="provides ability to remove and expand assignment"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            />
+
     </RelativeLayout>
     </RelativeLayout>

@@ -91,6 +91,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="170dp"
                 android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:minHeight="170dp"
                 android:layout_centerHorizontal="true"
                 app:max="101"
@@ -112,7 +114,7 @@
                 android:text=""
                 style="@style/Subtitle1"
                 android:textColor="@color/textColor"
-                android:textSize="22sp" />
+                android:textSize="25sp" />
 
 
         </RelativeLayout>

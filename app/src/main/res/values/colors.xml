@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Material design pallet: pink500, Green400-->
-    <color name="colorPrimary">#27272f</color>
+    <color name="colorPrimary">#33333d</color>
+    <color name="colorPrimaryDark">#27272f</color>
     <color name="primaryColor">#33333d</color>
     <color name="primaryColorDark">#27272f</color>
     <color name="primaryGreen">#045d56</color>
