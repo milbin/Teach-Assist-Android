@@ -143,8 +143,8 @@ public class login extends AppCompatActivity {
             if (response == null /*|| response.isEmpty()*/){
                 dialog.dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
-                builder.setTitle("Sign in Failure")
-                .setMessage("We could not reach TeachAssist, please check your Username, Password and Internet connection")
+                builder.setTitle("Invalid Login")
+                .setMessage("Please check your username, password and Internet connection")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         usernameInput.getText().clear();

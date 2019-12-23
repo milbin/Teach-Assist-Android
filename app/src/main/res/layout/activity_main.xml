@@ -150,7 +150,7 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:text="It looks like you dont have any courses right now!"
+        android:text="It looks like you don't have any courses right now!"
         android:gravity="center"
         style="@style/Subtitle2"
         />
