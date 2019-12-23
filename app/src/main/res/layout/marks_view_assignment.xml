@@ -10,9 +10,8 @@
     android:id="@+id/relativeLayout_marks_view"
     android:layout_weight="1"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="145dp"
     android:background="@drawable/button_bg_rectangle_solid_marks_view"
-    android:minHeight="@dimen/Row_Height"
     android:layout_gravity="top"
     android:layout_marginTop="3dp"
     android:layout_marginStart="10dp"
@@ -25,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="35dp"
+        android:layout_marginEnd="180dp"
         android:paddingStart="@dimen/album_title_padding"
         android:paddingTop="@dimen/album_title_padding"
         android:text="Uh oh! if your seeing this something has gone wrong"
@@ -54,6 +53,7 @@
         style="@style/Subtitle1"
         android:textColor="@color/textColor"
         android:textSize="38sp"
+        android:fontFamily="@font/gilroy_extrabold"
         android:text="-1%"
         android:textStyle="bold" />
 
@@ -63,8 +63,7 @@
         android:layout_height="110dp"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="20dp"
-        android:paddingBottom="10dp">
+        android:layout_marginEnd="20dp">
 
         <RelativeLayout
             android:id="@+id/BarGraph1"
@@ -90,6 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/BarGraph1"
+            android:layout_marginBottom="2dp"
             android:layout_alignStart="@+id/BarGraph1"
             android:layout_alignEnd="@+id/BarGraph1"
             android:textAlignment="center"
@@ -121,6 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/BarGraph2"
+            android:layout_marginBottom="2dp"
             android:layout_alignStart="@+id/BarGraph2"
             android:layout_alignEnd="@+id/BarGraph2"
             android:textAlignment="center"
@@ -152,6 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/BarGraph3"
+            android:layout_marginBottom="2dp"
             android:layout_alignStart="@+id/BarGraph3"
             android:layout_alignEnd="@+id/BarGraph3"
             android:textAlignment="center"
@@ -183,6 +185,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/BarGraph4"
+            android:layout_marginBottom="2dp"
             android:layout_alignStart="@+id/BarGraph4"
             android:layout_alignEnd="@+id/BarGraph4"
             android:textAlignment="center"
@@ -214,6 +217,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/BarGraph5"
+            android:layout_marginBottom="2dp"
             android:layout_alignStart="@+id/BarGraph5"
             android:layout_alignEnd="@+id/BarGraph5"
             android:textAlignment="center"
