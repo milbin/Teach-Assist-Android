@@ -13,3 +13,50 @@
     <color name="textColor">#ffffff</color>
 
 </resources>
+
+    <!--
+    dark theme:
+    BLACK DARK TO LIGHT
+
+    27272f (red: 39/255, green: 39/255, blue: 47/255, alpha: 1.0)
+
+    33333d (red: 51/255, green: 51/255, blue: 61/255, alpha: 1.0)
+
+    ffffff (red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
+
+
+
+    GREEN
+
+    045d56 (red: 4/255, green: 93/255, blue: 86/255, alpha: 1.0)
+
+
+
+    PINK
+
+    ff4181 (red: 255/255, green: 65/255, blue: 128/255, alpha: 1.0)
+
+
+
+    light theme:
+    WHITE DARK TO LIGHT
+
+    000000 (red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
+
+    e4e4eb (red: 228/255, green: 228/255, blue: 235/255, alpha: 1.0)
+
+    ffffff (red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
+
+
+
+    GREEN
+
+    37efba (red: 55/255, green: 239/255, blue: 186/255, alpha: 1.0)
+
+
+
+    PURPLE
+
+    729fff (red: 114/255, green: 159/255, blue: 255/255, alpha: 1.0)
+
+    -->
