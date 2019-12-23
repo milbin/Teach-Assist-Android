@@ -63,6 +63,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
@@ -185,11 +188,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //getSupportActionBar().setTitle("Student: " + username);
 
         new getTaData().execute();
-
-
-
-
-
     }
 
     private void showToast(String text){
@@ -597,6 +595,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try{
                         RoomNumber  = entry.getValue().get(2);
                     }catch (Exception e){}
+                    TextView EmptyCourse = relativeLayout.findViewById(R.id.EmptyCourse);
+                    final View ProgressBarAverage = relativeLayout.findViewById(R.id.SubjectBar);
+                    ProgressBarAverage.setVisibility(View.GONE);
+                    EmptyCourse.setText(R.string.EmptyText);
+                    relativeLayout.setClickable(false);
                 }
                 TextView SubjectAbrv = relativeLayout.findViewById(R.id.SubjectAbrv);
                 SubjectAbrv.setText(SubjectAbrvString);
@@ -613,15 +616,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             dialog.dismiss();
             RunTasks(response);
-
         }
 
 
-        private void RunTasks(LinkedHashMap<String, List<String>> response){
-            new MainActivity.Average().execute(response);
+        private void RunTasks(final LinkedHashMap<String, List<String>> response){
+            final int animationTimeInMs = 20;
+           //animate overall average
+            new Thread(new Runnable(){
+                public void run() {
+                    TA ta = new TA();
+                    double average = ta.GetAverage(response);
+                    Float Average = (float) average;
+                    try {
+                        for (int i = 0; i < Math.round(Average); i+=4) {
+                            final RingProgressBar ProgressBarAverage = findViewById(R.id.AverageBar);
+                            ProgressBarAverage.setProgress(i);
+                            Thread.sleep(animationTimeInMs);
+                        }
+                    }
+                    catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+            //animate subjects
             int currentSubject = 0;
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                new MainActivity.Subject().execute(response, currentSubject);
+                //get mark
+                final View currentRL = Courses.get(currentSubject);
+                Float Mark = 0f;
+                int counter = 0;
+                for (Map.Entry<String, List<String>> unusedVar :response.entrySet()) {
+                    if(counter == currentSubject) {
+                        if(!entry.getKey().contains("NA")) {
+                            Mark = Float.parseFloat(entry.getValue().get(0));
+                        }
+                    }
+                    counter++;
+                }
+                final float finalMark = Mark;
+                new Thread(new Runnable(){
+                    public void run() {
+                        try {
+                            //animate
+                            for (int i = 0; i < Math.round(finalMark); i+=4) {
+                                final RingProgressBar ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
+                                if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
+                                    ProgressBarAverage.setVisibility(View.VISIBLE);
+                                }
+                                ProgressBarAverage.setProgress(i);
+                                Thread.sleep(animationTimeInMs);
+                            }
+                        }
+                        catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 currentSubject++;
             }
 
@@ -634,142 +686,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
-    //---------------------------------------------------------------------------------------------------------------------------------------
-    private class Average extends AsyncTask<HashMap<String, List<String>>, Integer, Float>{
-        @Override
-        protected void onPreExecute(){
-
-
-        }
-
-        @Override
-        protected Float doInBackground(HashMap<String, List<String>>... response){
-            TA ta = new TA();
-            double average = ta.GetAverage(response[0]);
-            Float Average = (float) average;
-
-
-            try {
-                final RingProgressBar ProgressBarAverage =  findViewById(R.id.AverageBar);
-                for (int i = 0; i < Math.round(Average); i+=4) {
-                    publishProgress (i);
-                    Thread.sleep(0, 50);
-
-
-                }
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return Average;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-            ProgressBarAverage.setProgress(progress[0]);
-
-        }
-        @Override
-        protected void onPostExecute(Float Average) {
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
-            ProgressBarAverage.setProgress(Math.round(Average));
-
-        }
-
-    }
-    //---------------------------------------------------------------------------------------------------------------------------------------
-    private class Subject extends AsyncTask<Object, Object, Object[]> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Object[] doInBackground(Object... params){
-            LinkedHashMap<String, List<String>> response =(LinkedHashMap<String, List<String>>) params[0];
-            int currentSubject = (int) params[1];
-            if(Courses.size() == 0){ //stop execution because if courses is equal to zero it means view has been refreshed and async task is now useless
-                return new Object[]{1f, currentSubject};
-            }
-            View currentRL = Courses.get(currentSubject);
-            Float Mark = 0f;
-            int counter = 0;
-            for (Map.Entry<String, List<String>> entry :response.entrySet()) {
-                if(counter == currentSubject) {
-                    if(!entry.getKey().contains("NA")) {
-
-                        Mark = Float.parseFloat(entry.getValue().get(0));
-
-                    }
-                    else {
-                        return new Object[]{-1f, currentSubject};
-
-                    }
-
-                }
-                counter++;
-            }
-
-            //try {
-                final RingProgressBar ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
-                ProgressBarAverage.setOnProgressListener(new RingProgressBar.OnProgressListener() {
-                    @Override
-                    public void progressToComplete() {
-                        // Progress reaches the maximum callback default Max value is 100
-                        Toast.makeText(MainActivity.this, "100", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                /*
-                for (int i = 0; i < Math.round(Mark); i+=4) {
-                    publishProgress (i, currentSubject);
-                    Thread.sleep(0, 50);
-                }*/
-                publishProgress(Math.round(Mark), currentSubject);
-
-            //}
-            //catch (InterruptedException e){
-            //    e.printStackTrace();
-            //}
-            return new Object[]{Mark, currentSubject};
-
-        }
-
-        protected void onProgressUpdate(Object... params) {
-            int currentSubject = (int) params[1];
-            View currentRL = Courses.get(currentSubject);
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) currentRL.findViewById(R.id.SubjectBar);
-            if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                ProgressBarAverage.setVisibility(View.VISIBLE);
-            }
-            ProgressBarAverage.setProgress((int)params[0]);
-
-        }
-
-        protected void onPostExecute(Object... params) {
-            if(params[0].equals(-1f)){
-                int currentSubject = (int) params[1];
-                View currentRL = Courses.get(currentSubject);
-                TextView EmptyCourse = currentRL.findViewById(R.id.EmptyCourse);
-                final View ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
-                ProgressBarAverage.setVisibility(View.GONE);
-                EmptyCourse.setText(R.string.EmptyText);
-                currentRL.setClickable(false);
-            }
-
-
-        }
-    }
-
-
     private class unregisterFromNotificationServer extends AsyncTask<JSONObject, Object, Object[]> {
         @Override
         protected void onPreExecute(){
