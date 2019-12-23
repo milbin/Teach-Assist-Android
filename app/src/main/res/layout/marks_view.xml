@@ -131,6 +131,7 @@
                     android:text="W:"
                     android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginTop="2dp"
                     style="@style/Body2"
 
                     />
@@ -172,6 +173,7 @@
                     android:text="W:"
                     android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginTop="2dp"
                     style="@style/Body2"
 
                     />
@@ -213,6 +215,7 @@
                     android:text="W:"
                     android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginTop="2dp"
                     style="@style/Body2"
 
                     />
@@ -243,7 +246,9 @@
                         android:textColor="@color/textColor"
                         style="@style/Subtitle2"
                         android:text="A" />
+
                 </RelativeLayout>
+
                 <TextView
                     android:id="@+id/weightAAverage"
                     android:layout_width="wrap_content"
@@ -254,6 +259,7 @@
                     android:text="W:"
                     android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginTop="2dp"
                     style="@style/Body2"
 
                     />
@@ -300,6 +306,7 @@
                     android:text="W:"
                     android:textColor="@color/textColor"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginTop="2dp"
                     style="@style/Body2"
 
                     />

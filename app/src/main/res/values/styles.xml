@@ -88,7 +88,7 @@
 
     <style name="Body2" parent="Body1">
         <item name="android:letterSpacing">0.0625</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <!--for nav drawer-->

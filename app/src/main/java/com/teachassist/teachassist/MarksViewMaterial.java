@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -287,23 +288,23 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
                 RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
-                layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.5 + 100);
+                layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.75 + 100);
                 BarAverage1.setLayoutParams(layoutParamsBar1);
 
                 RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
-                layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.5 + 100);
+                layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.75 + 100);
                 BarAverage2.setLayoutParams(layoutParamsBar2);
 
                 RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
-                layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.5 + 100);
+                layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.75 + 100);
                 BarAverage3.setLayoutParams(layoutParamsBar3);
 
                 RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
-                layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.5 + 100);
+                layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.75 + 100);
                 BarAverage4.setLayoutParams(layoutParamsBar4);
 
                 RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
-                layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.5 + 100);
+                layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.75 + 100);
                 BarAverage5.setLayoutParams(layoutParamsBar5);
 
                 if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
@@ -592,8 +593,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
                                     RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
                                     barsRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                                    barsRLParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
                                     barsRLParams.height = barsRL.getHeight() * 3;
                                     barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                                    barsRLParams.setMargins(0, 0, 0, 30);
                                     barsRL.setLayoutParams(barsRLParams);
 
                                     RelativeLayout.LayoutParams paramsKweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -605,6 +608,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     KWeight.setText(String.valueOf(Kweight));
                                     KWeight.setTextColor(getResources().getColor(R.color.textColor));
                                     KWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    KWeight.setTextSize(12);
                                     barsRL.addView(KWeight);
 
                                     RelativeLayout.LayoutParams paramsTweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -616,6 +620,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     TWeight.setText(String.valueOf(Tweight));
                                     TWeight.setTextColor(getResources().getColor(R.color.textColor));
                                     TWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    TWeight.setTextSize(12);
                                     barsRL.addView(TWeight);
 
                                     RelativeLayout.LayoutParams paramsCweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -627,6 +632,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     CWeight.setText(String.valueOf(Cweight));
                                     CWeight.setTextColor(getResources().getColor(R.color.textColor));
                                     CWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    CWeight.setTextSize(12);
                                     barsRL.addView(CWeight);
 
                                     RelativeLayout.LayoutParams paramsAweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -638,6 +644,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     AWeight.setText(String.valueOf(Aweight));
                                     AWeight.setTextColor(getResources().getColor(R.color.textColor));
                                     AWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    AWeight.setTextSize(12);
                                     barsRL.addView(AWeight);
 
                                     RelativeLayout.LayoutParams paramsOweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -649,6 +656,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     OWeight.setText(String.valueOf(Oweight));
                                     OWeight.setTextColor(getResources().getColor(R.color.textColor));
                                     OWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    OWeight.setTextSize(12);
                                     barsRL.addView(OWeight);
 
                                     RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) bar1.getLayoutParams();
@@ -664,7 +672,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar2.width = (int) Math.round(bar2.getWidth() * 1.8);
                                     layoutParamsBar2.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar2.addRule(RelativeLayout.ABOVE, TWeight.getId());
-                                    layoutParamsBar2.setMarginStart(30);
+                                    layoutParamsBar2.setMarginStart(10);
                                     bar2.setLayoutParams(layoutParamsBar2);
 
                                     RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
@@ -672,7 +680,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar3.width = (int) Math.round(bar3.getWidth() * 1.8);
                                     layoutParamsBar3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar3.addRule(RelativeLayout.ABOVE, CWeight.getId());
-                                    layoutParamsBar3.setMarginStart(30);
+                                    layoutParamsBar3.setMarginStart(10);
                                     bar3.setLayoutParams(layoutParamsBar3);
 
                                     RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
@@ -680,7 +688,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar4.width = (int) Math.round(bar4.getWidth() * 1.8);
                                     layoutParamsBar4.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar4.addRule(RelativeLayout.ABOVE, AWeight.getId());
-                                    layoutParamsBar4.setMarginStart(30);
+                                    layoutParamsBar4.setMarginStart(10);
                                     bar4.setLayoutParams(layoutParamsBar4);
 
                                     RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) bar5.getLayoutParams();
@@ -688,7 +696,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar5.width = (int) Math.round(bar5.getWidth() * 1.8);
                                     layoutParamsBar5.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
                                     layoutParamsBar5.addRule(RelativeLayout.ABOVE, OWeight.getId());
-                                    layoutParamsBar5.setMarginStart(30);
+                                    layoutParamsBar5.setMarginStart(10);
                                     bar5.setLayoutParams(layoutParamsBar5);
 
                                     TextView AveragePercent = v.findViewById(R.id.AveragePercent);
@@ -704,6 +712,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         feedbackTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                         feedbackTextView.setText("No Feedback");
                                     }
+
                                     feedbackTextView.setTextColor(getResources().getColor(R.color.textColor));
                                     RelativeLayout.LayoutParams paramsFeedback = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     paramsFeedback.addRule(RelativeLayout.BELOW, R.id.AveragePercent);
@@ -785,6 +794,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     barsRLParams.height = barsRL.getHeight() / 2;
                                     barsRLParams.addRule(RelativeLayout.BELOW, 0);
                                     barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                                    barsRLParams.setMargins(0, 0, 0, 25);
                                     barsRL.setLayoutParams(barsRLParams);
 
                                     barsRL.removeView(KWeight);
@@ -905,23 +915,23 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
                                         RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
-                                        layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.5 + 45);
+                                        layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.75 + 45);
                                         BarAverage1.setLayoutParams(layoutParamsBar1);
 
                                         RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
-                                        layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.5 + 45);
+                                        layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.75 + 45);
                                         BarAverage2.setLayoutParams(layoutParamsBar2);
 
                                         RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
-                                        layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.5 + 45);
+                                        layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.75 + 45);
                                         BarAverage3.setLayoutParams(layoutParamsBar3);
 
                                         RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
-                                        layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.5 + 45);
+                                        layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.75 + 45);
                                         BarAverage4.setLayoutParams(layoutParamsBar4);
 
                                         RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
-                                        layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.5 + 45);
+                                        layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.75 + 45);
                                         BarAverage5.setLayoutParams(layoutParamsBar5);
 
 
@@ -1004,11 +1014,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                         View bar3 = rl.findViewById(R.id.BarGraph3);
                         View bar4 = rl.findViewById(R.id.BarGraph4);
                         View bar5 = rl.findViewById(R.id.BarGraph5);
-                        bar1.getLayoutParams().height = (int) Math.round(1.5 * (Kmark)) + 45;
-                        bar2.getLayoutParams().height = (int) Math.round(1.5 * (Tmark)) + 45;
-                        bar3.getLayoutParams().height = (int) Math.round(1.5 * (Cmark)) + 45;
-                        bar4.getLayoutParams().height = (int) Math.round(1.5 * (Amark)) + 45;
-                        bar5.getLayoutParams().height = (int) Math.round(1.5 * (Omark)) + 45;
+                        bar1.getLayoutParams().height = (int) Math.round(1.75 * (Kmark)) + 45;
+                        bar2.getLayoutParams().height = (int) Math.round(1.75 * (Tmark)) + 45;
+                        bar3.getLayoutParams().height = (int) Math.round(1.75 * (Cmark)) + 45;
+                        bar4.getLayoutParams().height = (int) Math.round(1.75 * (Amark)) + 45;
+                        bar5.getLayoutParams().height = (int) Math.round(1.75 * (Omark)) + 45;
 
                         //set percentage texts
                         TextView Kpercent = rl.findViewById(R.id.Kpercent);
