@@ -19,6 +19,7 @@
         <item name="textColor">#ffffff</item>
         <item name="preferenceTheme">@style/preferenceTheme</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="selectableItemBackground">?android:selectableItemBackground</item>
     </style>
     <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#ffffff</item>
@@ -32,6 +33,7 @@
         <item name="textColor">#000000</item>
         <item name="preferenceTheme">@style/preferenceTheme</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
     </style>
     <style name="preferenceTheme" parent="Theme.AppCompat.Light.DarkActionBar">
