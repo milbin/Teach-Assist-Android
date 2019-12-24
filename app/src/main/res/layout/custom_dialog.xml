@@ -8,16 +8,18 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/ta_logo"
+        android:src="@drawable/backdrops"
         />
     <TextView
         android:id="@+id/TV1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image"
+        android:layout_marginTop="20dp"
         style="@style/Subtitle1"
+        android:textSize="16sp"
         android:textColor="@color/textColor"
-        android:text="Carbon"
+        android:text="The Redesign Has Arrived!"
         android:textAlignment="center"
         />
     <TextView
@@ -29,8 +31,8 @@
         android:layout_margin="16dp"
         android:textAlignment="center"
         android:textColor="@color/textColor"
-        android:textSize="12dp"
-        android:text="Carbon is the 15th most abundant element in the Earth's crust, and the fourth most abundant element in the universe by mass after hydrogen, helium, and oxygen. Carbon's abundance, its unique diversity of organic compounds, and its unusual ability to form polymers at the temperatures commonly encountered on Earth enables this element to serve as a common element of all known life. It is the second most abundant element in the human body by mass (about 18.5%) after oxygen.[16] "
+        android:textSize="13dp"
+        android:text="After many hours of work, we're happy to share that the complete redesign of the Teachassist app has arrived! This includes all new fonts, colours, logos, and designs. An additional option to enable light theme is available in the app settings. We hope you enjoy! \n \n Note: an assignment calculator and support for offline usage are coming soon!"
         />
     <Button
         android:id="@+id/dialogButtonOK"
@@ -40,7 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Ok"
+        android:text="Done"
         style="@style/Subtitle1"
         android:textColor="@color/textColor"
         android:background="@drawable/button_bg_rectangle_solid"

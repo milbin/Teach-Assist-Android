@@ -27,13 +27,8 @@
         android:layout_alignParentStart="true"
         android:paddingStart="@dimen/album_title_padding"
         android:paddingTop="@dimen/album_title_padding"
-<<<<<<< HEAD
-        android:text="Uh oh! if your seeing this something has gone wrong"
         android:textColor="?textColor"
-=======
         android:text="Uh oh! If your seeing this, something has gone wrong!"
-        android:textColor="@color/textColor"
->>>>>>> 61cc07c6c2a49ee19ba24901e7dbb643e94640a3
         style="@style/Subtitle2"
         android:textSize="16sp" />
 
