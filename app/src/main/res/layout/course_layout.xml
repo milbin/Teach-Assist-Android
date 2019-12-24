@@ -34,36 +34,32 @@
             android:fontFamily="@font/gilroy_extrabold"
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
-            android:textColor="@android:color/white"
+            android:textColor="?textColor"
             />
         <TextView
             android:id="@+id/RoomNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/Period"
-            android:layout_toStartOf="@id/SubjectBar"
-            android:layout_marginEnd="15dp"
             android:layout_toEndOf="@+id/Period"
             android:layout_marginStart="5dp"
             android:textStyle="normal"
             style="@style/Subtitle2"
             android:textSize="12sp"
             android:text=""
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             />
-
         <TextView
             android:id="@+id/EmptyCourse"
-            style="@style/Subtitle1"
-            android:layout_width="140dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/subjectArrow"
+            style="@style/Subtitle1"
             android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/textColor"
-            android:textSize="14sp"
             android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="?textColor"
 
             />
 
@@ -76,12 +72,12 @@
             android:layout_toStartOf="@+id/subjectArrow"
             android:layout_marginEnd="15dp"
             app:max="101"
-            app:ringColor="@color/primaryColorDark"
+            app:ringColor="?primaryColorDark"
             app:ringDiameter="110"
-            app:ringProgressColor="@color/primaryGreen"
+            app:ringProgressColor="?primaryGreen"
             app:ringWidth="5dp"
             app:style="STROKE"
-            app:textColor="@color/primaryColor"
+            app:textColor="?primaryColor"
             app:textIsShow="false"
             app:textSize="16sp"
             />
@@ -96,7 +92,7 @@
             style="@style/Subtitle1"
             android:text=""
             android:textAlignment="center"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             android:textSize="20sp"
             android:textStyle="bold"
             />
@@ -117,11 +113,9 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/Period"
             android:layout_below="@+id/Period"
-            android:layout_toStartOf="@id/EmptyCourse"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="3dp"
             android:text=""
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             android:textSize="14sp"
             style="@style/Body1"
             android:textStyle="bold"
@@ -132,12 +126,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/SubjectAbrv"
-            android:layout_toStartOf="@id/EmptyCourse"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="3dp"
             android:layout_alignStart="@id/SubjectAbrv"
             android:text=""
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             android:textSize="14sp"
             style="@style/Body1"
             />
@@ -160,4 +152,4 @@
             />
 
     </RelativeLayout>
-    </RelativeLayout>
+</RelativeLayout>
