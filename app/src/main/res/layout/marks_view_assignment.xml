@@ -28,7 +28,7 @@
         android:paddingStart="@dimen/album_title_padding"
         android:paddingTop="@dimen/album_title_padding"
         android:text="Uh oh! if your seeing this something has gone wrong"
-        android:textColor="@color/textColor"
+        android:textColor="?textColor"
         style="@style/Subtitle2"
         android:textSize="16sp" />
 
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/delete_icon"
-        android:background="@null"
+        android:background="@android:color/transparent"
         android:padding="5dp"
         android:clickable="true"
         android:focusable="true"
@@ -51,7 +51,7 @@
         android:layout_alignParentBottom="true"
         android:padding="15dp"
         style="@style/Subtitle1"
-        android:textColor="@color/textColor"
+        android:textColor="?textColor"
         android:textSize="38sp"
         android:fontFamily="@font/gilroy_extrabold"
         android:text="-1%"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             style="@style/Body2"
             android:text="-1" />
         </RelativeLayout>
@@ -93,7 +93,7 @@
             android:layout_alignStart="@+id/BarGraph1"
             android:layout_alignEnd="@+id/BarGraph1"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             style="@style/Body2"
             android:text="K" />
 
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
-                android:textColor="@color/textColor"
+                android:textColor="?textColor"
                 style="@style/Body2"
                 android:text="-1" />
         </RelativeLayout>
@@ -125,7 +125,7 @@
             android:layout_alignStart="@+id/BarGraph2"
             android:layout_alignEnd="@+id/BarGraph2"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             style="@style/Body2"
             android:text="T" />
 
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
-                android:textColor="@color/textColor"
+                android:textColor="?textColor"
                 style="@style/Body2"
                 android:text="-1" />
         </RelativeLayout>
@@ -157,7 +157,7 @@
             android:layout_alignStart="@+id/BarGraph3"
             android:layout_alignEnd="@+id/BarGraph3"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             style="@style/Body2"
             android:text="C" />
 
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
-                android:textColor="@color/textColor"
+                android:textColor="?textColor"
                 style="@style/Body2"
                 android:text="-1" />
         </RelativeLayout>
@@ -189,7 +189,7 @@
             android:layout_alignStart="@+id/BarGraph4"
             android:layout_alignEnd="@+id/BarGraph4"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             style="@style/Body2"
             android:text="A" />
 
@@ -207,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
-                android:textColor="@color/textColor"
+                android:textColor="?textColor"
                 style="@style/Body2"
                 android:text="-1" />
         </RelativeLayout>
@@ -221,7 +221,7 @@
             android:layout_alignStart="@+id/BarGraph5"
             android:layout_alignEnd="@+id/BarGraph5"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             style="@style/Body2"
             android:text="O" />
     </RelativeLayout>

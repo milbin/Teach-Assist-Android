@@ -7,8 +7,6 @@
     <color name="primaryColorDark">#27272f</color>
     <color name="primaryGreen">#045d56</color>
     <color name="primaryPink">#ff4181</color>
-    <color name="SecondaryTextColor">#C7C7C7</color>
-    <color name="DarkGray">@android:color/darker_gray</color>
     <color name="Background">@color/primaryColor</color>
     <color name="textColor">#ffffff</color>
 

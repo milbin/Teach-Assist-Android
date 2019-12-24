@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:background="@color/Background"
+            android:background="?Background"
             android:theme="@android:style/Theme.Black.NoTitleBar"
             android:fillViewport="false">
 
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
-                android:background="@color/Background"
+                android:background="?Background"
 
                 >
 
@@ -47,8 +47,8 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/primaryColorDark"
-                    android:elevation="10dp"
+                    android:background="?toolbarColor"
+                    android:elevation="2dp"
                     android:minHeight="@dimen/Toolbar_Height"
                     android:uiOptions="splitActionBarWhenNarrow"
                     >
@@ -62,6 +62,7 @@
                         android:layout_centerInParent="true"
                         style="@style/ToolbarTitle"
                         android:paddingEnd="16dp"
+                        android:textColor="?textColor"
                         />
                     </RelativeLayout>
 
@@ -78,7 +79,7 @@
                     android:minHeight="@dimen/Average_Row_Height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/Background"
+                    android:background="?Background"
                     android:layout_weight="5"
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="15dp"
@@ -96,12 +97,12 @@
                 android:minHeight="170dp"
                 android:layout_centerHorizontal="true"
                 app:max="101"
-                app:ringColor="@color/primaryColorDark"
+                app:ringColor="?primaryColorDark"
                 app:ringDiameter="170"
-                app:ringProgressColor="@color/primaryPink"
+                app:ringProgressColor="?primaryPink"
                 app:ringWidth="5dp"
                 app:style="STROKE"
-                app:textColor="@color/primaryColor"
+                app:textColor="?primaryColor"
                 app:textIsShow="false"
                 app:textSize="26sp" />
 
@@ -113,7 +114,7 @@
                 android:layout_centerInParent="true"
                 android:text=""
                 style="@style/Subtitle1"
-                android:textColor="@color/textColor"
+                android:textColor="?textColor"
                 android:textSize="25sp" />
 
 
@@ -141,9 +142,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/primaryColor"
-        app:itemTextColor="@color/textColor"
-        app:itemIconTint="@color/textColor"
+        android:background="?primaryColor"
+        app:itemTextColor="?textColor"
+        app:itemIconTint="?textColor"
         app:itemTextAppearance="@style/Subtitle2"
         app:headerLayout="@layout/nav_header_main_drawer"
         app:menu="@menu/activity_main_drawer" />

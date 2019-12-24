@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Background"
-    android:theme="@android:style/Theme.Black.NoTitleBar"
+    android:background="?Background"
     >
 
     <ImageView
@@ -24,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/logo"
         android:text="Teachassist"
-        android:textColor="@color/textColor"
+        android:textColor="?textColor"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         style="@style/AppTitle"
@@ -49,14 +46,13 @@
             android:layout_marginStart="100dp"
             android:layout_marginEnd="100dp"
             android:layout_marginTop="25dp"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             android:background="@drawable/flush_rounded_courner"
             android:hint="Username"
             android:inputType="textPersonName"
             android:textCursorDrawable="@null"
             android:padding="10dp"
-            android:paddingStart="20dp"
-            android:textColorHint="@color/primaryColor"
+            android:textColorHint="?primaryColor"
             style="@style/Body1"
             />
 
@@ -79,15 +75,14 @@
             android:layout_marginStart="100dp"
             android:layout_marginEnd="100dp"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             android:inputType="textPassword"
             android:background="@drawable/flush_rounded_courner"
             style="@style/Body1"
             android:textCursorDrawable="@null"
-            android:textColorHint="@color/primaryColor"
+            android:textColorHint="?primaryColor"
             android:padding="10dp"
             android:hint="Password"
-            android:paddingStart="20dp"
             android:singleLine="true"
             android:imeOptions="actionDone"
             />
@@ -114,7 +109,7 @@
             android:text="Remember me"
             style="@style/Subtitle2"
             android:paddingLeft="10dp"
-            android:textColor="@color/textColor"
+            android:textColor="?textColor"
             />
 
 

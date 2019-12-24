@@ -1,13 +1,16 @@
 package com.teachassist.teachassist;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,6 +28,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,6 +38,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -98,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
         setContentView(R.layout.activity_main);
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -223,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Crashlytics.log(Log.DEBUG, "subject Mark", subjectMark);
             startActivity(myIntent);
             dialog.dismiss();
+
 
         }
     }
@@ -615,6 +629,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             dialog.dismiss();
+
+            SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+            if(!sharedPreferences.getBoolean("hasShownPopup", false)) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("hasShownPopup", true);
+                editor.apply();
+                // custom popup dialog
+                final Dialog dialog1 = new Dialog(context);
+                dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog1.setContentView(R.layout.custom_dialog);
+                Button dialogButton = (Button) dialog1.findViewById(R.id.dialogButtonOK);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog1.dismiss();
+                    }
+                });
+                dialog1.show();
+            }
             RunTasks(response);
         }
 

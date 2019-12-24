@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -44,6 +46,12 @@ public class login extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
         setContentView(R.layout.login_page);
         getWindow().setStatusBarColor(getResources().getColor(R.color.primaryColor));
 

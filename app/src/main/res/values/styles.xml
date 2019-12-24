@@ -1,36 +1,55 @@
-<resources>
-
-    <!-- Base application theme.
-    <style name="AppTheme" parent="Base.Theme.Design"></style>-->
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryColorDark</item>
         <item name="colorAccent">@color/primaryPink</item>
-        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
-
-    <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorControlNormal">@color/primaryColor</item>
-        <item name="colorControlActivated">@color/primaryColor</item>
-        <item name="colorControlHighlight">@color/primaryColor</item>
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#33333d</item>
+        <item name="colorPrimaryDark">#27272f</item>
+        <item name="primaryColor">#33333d</item>
+        <item name="primaryColorDark">#27272f</item>
+        <item name="toolbarColor">#27272f</item>
+        <item name="primaryGreen">#045d56</item>
+        <item name="primaryPink">#ff4181</item>
+        <item name="Background">#33333d</item>
+        <item name="textColor">#ffffff</item>
+        <item name="preferenceTheme">@style/preferenceTheme</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
-
+    <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#ffffff</item>
+        <item name="colorPrimaryDark">#e4e4eb</item>
+        <item name="primaryColor">#ffffff</item>
+        <item name="primaryColorDark">#e4e4eb</item>
+        <item name="toolbarColor">#ffffff</item>
+        <item name="primaryGreen">#37efba</item>
+        <item name="primaryPink">#729fff</item>
+        <item name="Background">#ffffff</item>
+        <item name="textColor">#000000</item>
+        <item name="preferenceTheme">@style/preferenceTheme</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+    </style>
     <style name="preferenceTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryColorDark</item>
-        <item name="colorAccent">@color/primaryPink</item>
-        <item name="android:textColorSecondary">@color/textColor</item>
-        <item name="android:textColorPrimary">@color/textColor</item>
-    </style>
+        <item name="colorPrimary">?primaryPink</item>
+        <item name="colorPrimaryDark">?primaryColorDark</item>
+        <item name="colorAccent">?primaryPink</item>
+        <item name="android:textColorSecondary">?textColor</item>
+        <item name="android:textColorPrimary">?textColor</item>
+        <item name="colorControlNormal">?primaryPink</item>
+        <item name="colorControlActivated">?primaryPink</item>
+</style>
+<style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+    <item name="spinBars">true</item>
+    <item name="color">?textColor</item>
+</style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
-    <item name="android:windowNoTitle">true</item>
-    </style>
 
-
-    <!--Fonts-->
+<!--Fonts-->
     <style name="AppTitle" parent="AppTheme">
         <item name="android:fontFamily">@font/eczar_bold</item>
         <item name="android:textSize">20sp</item>
@@ -91,14 +110,7 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!--for nav drawer-->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
-        <item name="color">@android:color/white</item>
-    </style>
 
 
 </resources>

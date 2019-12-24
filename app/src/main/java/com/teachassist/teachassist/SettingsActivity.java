@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import android.view.MenuItem;
 import android.preference.PreferenceManager;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,12 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
         setContentView(R.layout.settings);
         Intent intent = getIntent();
         courses =  intent.getStringArrayListExtra("key");
@@ -31,7 +39,9 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         //setup toolbar
-        getSupportActionBar().setTitle("Settings");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ((TextView)toolbar.findViewById(R.id.toolbar_title)).setText("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //back button
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);
         //load settings fragment

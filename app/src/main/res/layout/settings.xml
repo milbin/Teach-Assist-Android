@@ -1,24 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.percentlayout.widget.PercentFrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Background"
+    android:background="?Background"
     android:fitsSystemWindows="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?toolbarColor"
+        android:elevation="2dp"
+        android:minHeight="@dimen/Toolbar_Height"
+        android:uiOptions="splitActionBarWhenNarrow"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar_title"
+                android:layout_centerInParent="true"
+                style="@style/ToolbarTitle"
+                android:paddingEnd="60dp"
+                android:textColor="?textColor"
+                />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/settings_fragment"
         android:layout_height="match_parent"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_gravity="top|start"
-        android:layout_marginStart="-30dp"
-
-        app:layout_heightPercent="100%"
-        app:layout_widthPercent="100%" />
-
-
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="0dp"
+        android:layout_below="@+id/toolbar" />
+    </RelativeLayout>
 
 
-</androidx.percentlayout.widget.PercentFrameLayout>
+
+
+</RelativeLayout>

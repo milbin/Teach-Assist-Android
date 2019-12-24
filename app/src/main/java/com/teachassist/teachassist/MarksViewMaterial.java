@@ -4,17 +4,27 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +51,6 @@ import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 
 public class MarksViewMaterial extends AppCompatActivity {
-    private Context mContext;
     LinearLayout linearLayout;
     Menu menu;
     JSONObject Marks;
@@ -61,14 +70,22 @@ public class MarksViewMaterial extends AppCompatActivity {
     int original_height_of_assignment = -1;
     SwipeRefreshLayout SwipeRefresh;
     private AsyncTask getMarksTask;
+    Typeface font;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Request window feature action bar
-        //requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
         setContentView(R.layout.marks_view);
+
+        //setup font
+        font = ResourcesCompat.getFont(context, R.font.sandstone_regular);
 
         //progress dialog
         dialog = ProgressDialog.show(MarksViewMaterial.this, "",
@@ -78,10 +95,6 @@ public class MarksViewMaterial extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);//back button
-
-
-        // Get the application context
-        mContext = getApplicationContext();
 
         //get intents
         Intent intent = getIntent();
@@ -288,63 +301,73 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
                 RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
-                layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.75 + 100);
+                layoutParamsBar1.height = dpToPx(Math.round(Double.parseDouble(list.get(0)) * 0.7 + 40));
                 BarAverage1.setLayoutParams(layoutParamsBar1);
 
                 RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
-                layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.75 + 100);
+                layoutParamsBar2.height = dpToPx(Math.round(Double.parseDouble(list.get(1)) * 0.7 + 40));
                 BarAverage2.setLayoutParams(layoutParamsBar2);
 
                 RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
-                layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.75 + 100);
+                layoutParamsBar3.height = dpToPx(Math.round(Double.parseDouble(list.get(2)) * 0.7 + 40));
                 BarAverage3.setLayoutParams(layoutParamsBar3);
 
                 RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
-                layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.75 + 100);
+                layoutParamsBar4.height = dpToPx(Math.round(Double.parseDouble(list.get(3)) * 0.7 + 40));
                 BarAverage4.setLayoutParams(layoutParamsBar4);
 
                 RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
-                layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.75 + 100);
+                layoutParamsBar5.height = dpToPx(Math.round(Double.parseDouble(list.get(4)) * 0.7 + 40));
                 BarAverage5.setLayoutParams(layoutParamsBar5);
 
-                if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
+                if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals("0")){
                     KpercentAverage.setText("NA");
-                    BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    KpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+                    ((TextView)findViewById(R.id.K)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
                 }else {
                     KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
-                    BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                    BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                 }
 
-                if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals(".0")){
+                if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals("0")){
                     TpercentAverage.setText("NA");
-                    BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    TpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+                    ((TextView)findViewById(R.id.T)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
                 }else {
                     TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
-                    BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                    BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                 }
 
-                if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals(".0")){
+                if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals("0")){
                     CpercentAverage.setText("NA");
-                    BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    CpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+                    ((TextView)findViewById(R.id.C)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
                 }else {
                     CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
-                    BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                    BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                 }
 
-                if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals(".0")){
+                if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals("0")){
                     ApercentAverage.setText("NA");
-                    BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    ApercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+                    ((TextView)findViewById(R.id.A)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
                 }else {
                     ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
-                    BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                    BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                 }
-
-                if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals(".0")){
+                System.out.println(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
+                if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals("0")){
                     OpercentAverage.setText("NA");
-                    BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                    OpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+                    ((TextView)findViewById(R.id.O)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
                 }else {
                     OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
-                    BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                    BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                 }
 
                 weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
@@ -380,7 +403,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                     String stringCFraction = "";
                     String stringAFraction = "";
                     String stringOFraction = "";
-                    rl = LayoutInflater.from(mContext).inflate(R.layout.marks_view_assignment, null);
+                    rl = LayoutInflater.from(context).inflate(R.layout.marks_view_assignment, null);
                     linearLayout.addView(rl);
                     rlList.add(rl);
                     try {
@@ -560,11 +583,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                         finalStringAFraction = stringAFraction;
                         finalStringOFraction = stringOFraction;
 
-                        final TextView KWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
-                        final TextView TWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
-                        final TextView CWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
-                        final TextView AWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
-                        final TextView OWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body1));
+                        final TextView KWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView TWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView CWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView AWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+                        final TextView OWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
                         final TextView feedbackTextView = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
                         final TextView markFractionK = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
                         final TextView markFractionT = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
@@ -591,12 +614,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     RelativeLayout bar5 = v.findViewById(R.id.BarGraph5);
 
                                     RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
-                                    RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
+                                    RelativeLayout.LayoutParams barsRLParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     barsRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                                    barsRLParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
                                     barsRLParams.height = barsRL.getHeight() * 3;
                                     barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                                    barsRLParams.setMargins(0, 0, 0, 30);
+                                    barsRLParams.setMargins(0, 0, 0, dpToPx(8));
                                     barsRL.setLayoutParams(barsRLParams);
 
                                     RelativeLayout.LayoutParams paramsKweight = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -606,8 +628,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsKweight.addRule(RelativeLayout.ALIGN_END, R.id.BarGraph1);
                                     KWeight.setLayoutParams(paramsKweight);
                                     KWeight.setText(String.valueOf(Kweight));
-                                    KWeight.setTextColor(getResources().getColor(R.color.textColor));
+                                    KWeight.setTextColor(resolveColorAttr(context, R.attr.textColor));
                                     KWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    KWeight.setTypeface(font);
                                     KWeight.setTextSize(12);
                                     barsRL.addView(KWeight);
 
@@ -618,8 +641,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsTweight.addRule(RelativeLayout.ALIGN_END, R.id.BarGraph2);
                                     TWeight.setLayoutParams(paramsTweight);
                                     TWeight.setText(String.valueOf(Tweight));
-                                    TWeight.setTextColor(getResources().getColor(R.color.textColor));
+                                    TWeight.setTextColor(resolveColorAttr(context, R.attr.textColor));
                                     TWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    TWeight.setTypeface(font);
                                     TWeight.setTextSize(12);
                                     barsRL.addView(TWeight);
 
@@ -630,8 +654,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsCweight.addRule(RelativeLayout.ALIGN_END, R.id.BarGraph3);
                                     CWeight.setLayoutParams(paramsCweight);
                                     CWeight.setText(String.valueOf(Cweight));
-                                    CWeight.setTextColor(getResources().getColor(R.color.textColor));
+                                    CWeight.setTextColor(resolveColorAttr(context, R.attr.textColor));
                                     CWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    CWeight.setTypeface(font);
                                     CWeight.setTextSize(12);
                                     barsRL.addView(CWeight);
 
@@ -642,8 +667,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsAweight.addRule(RelativeLayout.ALIGN_END, R.id.BarGraph4);
                                     AWeight.setLayoutParams(paramsAweight);
                                     AWeight.setText(String.valueOf(Aweight));
-                                    AWeight.setTextColor(getResources().getColor(R.color.textColor));
+                                    AWeight.setTextColor(resolveColorAttr(context, R.attr.textColor));
                                     AWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    AWeight.setTypeface(font);
                                     AWeight.setTextSize(12);
                                     barsRL.addView(AWeight);
 
@@ -654,8 +680,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     paramsOweight.addRule(RelativeLayout.ALIGN_END, R.id.BarGraph5);
                                     OWeight.setLayoutParams(paramsOweight);
                                     OWeight.setText(String.valueOf(Oweight));
-                                    OWeight.setTextColor(getResources().getColor(R.color.textColor));
+                                    OWeight.setTextColor(resolveColorAttr(context, R.attr.textColor));
                                     OWeight.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
+                                    OWeight.setTypeface(font);
                                     OWeight.setTextSize(12);
                                     barsRL.addView(OWeight);
 
@@ -712,14 +739,15 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         feedbackTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                                         feedbackTextView.setText("No Feedback");
                                     }
+                                    feedbackTextView.setTypeface(font);
 
-                                    feedbackTextView.setTextColor(getResources().getColor(R.color.textColor));
+                                    feedbackTextView.setTextColor(resolveColorAttr(context, R.attr.textColor));
                                     RelativeLayout.LayoutParams paramsFeedback = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                     paramsFeedback.addRule(RelativeLayout.BELOW, R.id.AveragePercent);
                                     paramsFeedback.addRule(RelativeLayout.ALIGN_PARENT_END);
                                     paramsFeedback.addRule(RelativeLayout.ALIGN_PARENT_START);
-                                    paramsFeedback.setMarginStart(30);
-                                    paramsFeedback.setMarginEnd(30);
+                                    paramsFeedback.setMarginStart(dpToPx(10));
+                                    paramsFeedback.setMarginEnd(dpToPx(10));
                                     feedbackTextView.setLayoutParams(paramsFeedback);
                                     rlNested.addView(feedbackTextView);
 
@@ -728,16 +756,22 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     markFractionC.setText(finalStringCFraction);
                                     markFractionA.setText(finalStringAFraction);
                                     markFractionO.setText(finalStringOFraction);
+                                    markFractionK.setTypeface(font);
+                                    markFractionT.setTypeface(font);
+                                    markFractionC.setTypeface(font);
+                                    markFractionA.setTypeface(font);
+                                    markFractionO.setTypeface(font);
+
                                     markFractionK.setId(View.generateViewId());
                                     markFractionT.setId(View.generateViewId());
                                     markFractionC.setId(View.generateViewId());
                                     markFractionA.setId(View.generateViewId());
                                     markFractionO.setId(View.generateViewId());
-                                    markFractionK.setTextColor(getResources().getColor(R.color.textColor));
-                                    markFractionT.setTextColor(getResources().getColor(R.color.textColor));
-                                    markFractionC.setTextColor(getResources().getColor(R.color.textColor));
-                                    markFractionA.setTextColor(getResources().getColor(R.color.textColor));
-                                    markFractionO.setTextColor(getResources().getColor(R.color.textColor));
+                                    markFractionK.setTextColor(resolveColorAttr(context, R.attr.textColor));
+                                    markFractionT.setTextColor(resolveColorAttr(context, R.attr.textColor));
+                                    markFractionC.setTextColor(resolveColorAttr(context, R.attr.textColor));
+                                    markFractionA.setTextColor(resolveColorAttr(context, R.attr.textColor));
+                                    markFractionO.setTextColor(resolveColorAttr(context, R.attr.textColor));
 
                                     RelativeLayout.LayoutParams markFractionKLP = new RelativeLayout.LayoutParams(
                                             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -788,21 +822,17 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     RelativeLayout bar5 = v.findViewById(R.id.BarGraph5);
 
                                     RelativeLayout barsRL = v.findViewById(R.id.mark_bars);
-                                    RelativeLayout.LayoutParams barsRLParams = (RelativeLayout.LayoutParams) barsRL.getLayoutParams();
-                                    barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                                    barsRLParams.removeRule(RelativeLayout.ABOVE);
-                                    barsRLParams.height = barsRL.getHeight() / 2;
-                                    barsRLParams.addRule(RelativeLayout.BELOW, 0);
-                                    barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-                                    barsRLParams.setMargins(0, 0, 0, 25);
-                                    barsRL.setLayoutParams(barsRLParams);
-
                                     barsRL.removeView(KWeight);
                                     barsRL.removeView(TWeight);
                                     barsRL.removeView(CWeight);
                                     barsRL.removeView(AWeight);
                                     barsRL.removeView(OWeight);
                                     rlNested.removeView(feedbackTextView);
+
+                                    RelativeLayout.LayoutParams barsRLParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dpToPx(110));
+                                    barsRLParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                                    barsRLParams.setMargins(0, dpToPx(25), dpToPx(20), 0);
+                                    barsRL.setLayoutParams(barsRLParams);
 
                                     bar1.removeView(markFractionK);
                                     bar2.removeView(markFractionT);
@@ -815,7 +845,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar1.width = (int) Math.round(bar1.getWidth() / 1.8);
                                     layoutParamsBar1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar1.addRule(RelativeLayout.ABOVE, 0);
-                                    layoutParamsBar1.setMarginStart(30);
+                                    layoutParamsBar1.setMarginStart(0);
                                     bar1.setLayoutParams(layoutParamsBar1);
 
                                     RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) bar2.getLayoutParams();
@@ -823,7 +853,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar2.width = (int) Math.round(bar2.getWidth() / 1.8);
                                     layoutParamsBar2.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar2.addRule(RelativeLayout.ABOVE, 0);
-                                    layoutParamsBar2.setMarginStart(3);
+                                    layoutParamsBar2.setMarginStart(dpToPx(2));
                                     bar2.setLayoutParams(layoutParamsBar2);
 
                                     RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) bar3.getLayoutParams();
@@ -831,7 +861,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar3.width = (int) Math.round(bar3.getWidth() / 1.8);
                                     layoutParamsBar3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar3.addRule(RelativeLayout.ABOVE, 0);
-                                    layoutParamsBar3.setMarginStart(3);
+                                    layoutParamsBar3.setMarginStart(dpToPx(2));
                                     bar3.setLayoutParams(layoutParamsBar3);
 
                                     RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) bar4.getLayoutParams();
@@ -839,7 +869,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar4.width = (int) Math.round(bar4.getWidth() / 1.8);
                                     layoutParamsBar4.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar4.addRule(RelativeLayout.ABOVE, 0);
-                                    layoutParamsBar4.setMarginStart(3);
+                                    layoutParamsBar4.setMarginStart(dpToPx(2));
                                     bar4.setLayoutParams(layoutParamsBar4);
 
                                     RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) bar5.getLayoutParams();
@@ -847,7 +877,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                     layoutParamsBar5.width = (int) Math.round(bar5.getWidth() / 1.8);
                                     layoutParamsBar5.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                     layoutParamsBar5.addRule(RelativeLayout.ABOVE, 0);
-                                    layoutParamsBar5.setMarginStart(3);
+                                    layoutParamsBar5.setMarginStart(dpToPx(2));
                                     bar5.setLayoutParams(layoutParamsBar5);
 
 
@@ -915,64 +945,64 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
                                         RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
-                                        layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * 1.75 + 45);
+                                        layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * dpToPx(0.7 + 20));
                                         BarAverage1.setLayoutParams(layoutParamsBar1);
 
                                         RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
-                                        layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * 1.75 + 45);
+                                        layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * dpToPx(0.7 + 20));
                                         BarAverage2.setLayoutParams(layoutParamsBar2);
 
                                         RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
-                                        layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * 1.75 + 45);
+                                        layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * dpToPx(0.7 + 20));
                                         BarAverage3.setLayoutParams(layoutParamsBar3);
 
                                         RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
-                                        layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * 1.75 + 45);
+                                        layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * dpToPx(0.7 + 20));
                                         BarAverage4.setLayoutParams(layoutParamsBar4);
 
                                         RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
-                                        layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * 1.75 + 45);
+                                        layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * dpToPx(0.7 + 20));
                                         BarAverage5.setLayoutParams(layoutParamsBar5);
 
 
                                         if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
                                             KpercentAverage.setText("NA");
-                                            BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                                         }else {
                                             KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
-                                            BarAverage1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                                         }
 
                                         if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals(".0")){
                                             TpercentAverage.setText("NA");
-                                            BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                                         }else {
                                             TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
-                                            BarAverage2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                                         }
 
                                         if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals(".0")){
                                             CpercentAverage.setText("NA");
-                                            BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                                         }else {
                                             CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
-                                            BarAverage3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                                         }
 
                                         if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals(".0")){
                                             ApercentAverage.setText("NA");
-                                            BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                                         }else {
                                             ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
-                                            BarAverage4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                                         }
 
                                         if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals(".0")){
                                             OpercentAverage.setText("NA");
-                                            BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                                            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                                         }else {
                                             OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
-                                            BarAverage5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+                                            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                                         }
 
                                         weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
@@ -1014,11 +1044,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                         View bar3 = rl.findViewById(R.id.BarGraph3);
                         View bar4 = rl.findViewById(R.id.BarGraph4);
                         View bar5 = rl.findViewById(R.id.BarGraph5);
-                        bar1.getLayoutParams().height = (int) Math.round(1.75 * (Kmark)) + 45;
-                        bar2.getLayoutParams().height = (int) Math.round(1.75 * (Tmark)) + 45;
-                        bar3.getLayoutParams().height = (int) Math.round(1.75 * (Cmark)) + 45;
-                        bar4.getLayoutParams().height = (int) Math.round(1.75 * (Amark)) + 45;
-                        bar5.getLayoutParams().height = (int) Math.round(1.75 * (Omark)) + 45;
+                        bar1.getLayoutParams().height = dpToPx(Math.round(0.7 * (Kmark)) + 20);
+                        bar2.getLayoutParams().height = dpToPx(Math.round(0.7 * (Tmark)) + 20);
+                        bar3.getLayoutParams().height = dpToPx(Math.round(0.7 * (Cmark)) + 20);
+                        bar4.getLayoutParams().height = dpToPx(Math.round(0.7 * (Amark)) + 20);
+                        bar5.getLayoutParams().height = dpToPx(Math.round(0.7 * (Omark)) + 20);
 
                         //set percentage texts
                         TextView Kpercent = rl.findViewById(R.id.Kpercent);
@@ -1032,7 +1062,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                         } else if (Kmark == 0.0) {
                             Kpercent.setText("0.0");
                         } else if (Kmark == 0.000000001) {
-                            bar1.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                            bar1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                             Kpercent.setTextColor(Color.WHITE);
                             Kpercent.setText("NA");
                         } else {
@@ -1044,7 +1074,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                         } else if (Tmark == 0.0) {
                             Tpercent.setText("0.0");
                         } else if (Tmark == 0.000000001) {
-                            bar2.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                            bar2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                             Tpercent.setTextColor(Color.WHITE);
                             Tpercent.setText("NA");
                         } else {
@@ -1056,7 +1086,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                         } else if (Cmark == 0.0) {
                             Cpercent.setText("0.0");
                         } else if (Cmark == 0.000000001) {
-                            bar3.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                            bar3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                             Cpercent.setTextColor(Color.WHITE);
                             Cpercent.setText("NA");
                         } else {
@@ -1068,7 +1098,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                         } else if (Amark == 0.0) {
                             Apercent.setText("0.0");
                         } else if (Amark == 0.000000001) {
-                            bar4.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                            bar4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                             Apercent.setTextColor(Color.WHITE);
                             Apercent.setText("NA");
                         } else {
@@ -1080,7 +1110,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                         } else if (Amark == 0.0) {
                             Opercent.setText("0.0");
                         } else if (Omark == 0.000000001) {
-                            bar5.setBackground(getResources().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                            bar5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                             Opercent.setTextColor(Color.WHITE);
                             Opercent.setText("NA");
                         } else {
@@ -1359,5 +1389,18 @@ public class MarksViewMaterial extends AppCompatActivity {
             Crashlytics.log(Log.ERROR, "MarksViewMaterial Calculate total average returns null", Arrays.toString(e.getStackTrace()));
             return null;
         }
+    }
+    private int dpToPx(double dp) {
+        float fdp =(float) dp;
+        return Math.round(fdp * context.getResources().getDisplayMetrics().density);
+    }
+    @ColorInt
+    public static int resolveColorAttr(Context context, @AttrRes int colorAttr) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(colorAttr, typedValue, true);
+        TypedArray arr =context.obtainStyledAttributes(typedValue.data, new int[]{
+                colorAttr});
+        return arr.getColor(0, -1);
     }
 }
