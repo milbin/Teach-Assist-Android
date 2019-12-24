@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(response == null){
                     new AlertDialog.Builder(context)
                             .setTitle("Connection Error")
-                            .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                            .setMessage("Something went wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
                             .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -368,9 +368,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_bug_report:
                 Auth auth1 = new Auth();
                 drawer.closeDrawer(GravityCompat.START);
-                String mailtoBug = "mailto:TaAppYRDSB@gmail.com" +
-                        "?subject=" + Uri.encode("Insert Subject Here") +
-                        "&body=" + Uri.encode("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Support Token: (please do not delete) \n" +
+                String mailtoBug = "mailto:taappyrdsb@gmail.com" +
+                        "?subject=" + Uri.encode("") +
+                        "&body=" + Uri.encode(" \n \n Support Token (please do not delete): \n" +
                         auth1.getSupportToken(username, password));
 
                 Intent BugIntent = new Intent(Intent.ACTION_SENDTO);
@@ -382,6 +382,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     showToast("No email app currently installed");
                 }
                 break;
+
+            case R.id.nav_open_in:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse("https://ta.yrdsb.ca/yrdsb/"));
+                startActivity(intent);
+                break;
+
 
         }
 
