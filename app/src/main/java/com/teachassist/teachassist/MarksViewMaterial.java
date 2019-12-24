@@ -14,6 +14,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -707,10 +709,10 @@ public class MarksViewMaterial extends AppCompatActivity {
 
 
                                     feedbackTextView.setId(View.generateViewId()); //without these IDs the bars float in the air for some reason
-                                    feedbackTextView.setText("Feedback: " + feedback);
+                                    feedbackTextView.setText(Html.fromHtml("<u><b>Feedback:</u></b> <br>" + feedback));
                                     if(feedback.isEmpty()){
                                         feedbackTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                        feedbackTextView.setText("No Feedback");
+                                        feedbackTextView.setText(Html.fromHtml("<b>No Feedback</b>"));
                                     }
 
                                     feedbackTextView.setTextColor(getResources().getColor(R.color.textColor));
