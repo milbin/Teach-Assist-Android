@@ -27,7 +27,6 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:background="?Background"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:fillViewport="false">
 
 
@@ -50,7 +49,6 @@
                     android:background="?toolbarColor"
                     android:elevation="2dp"
                     android:minHeight="@dimen/Toolbar_Height"
-                    android:uiOptions="splitActionBarWhenNarrow"
                     >
                     <RelativeLayout
                         android:layout_width="match_parent"

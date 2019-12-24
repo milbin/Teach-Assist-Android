@@ -1,5 +1,7 @@
 package com.teachassist.teachassist;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -82,6 +84,13 @@ public class SettingsActivity extends AppCompatActivity {
                         editor.putBoolean("lightThemeEnabled", false);
                     }
                     editor.apply();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Please Restart App")
+                            .setMessage("Theme changes will not take effect until the app is restarted")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {}
+                            }).show();
                     return true;
                 }
             });
