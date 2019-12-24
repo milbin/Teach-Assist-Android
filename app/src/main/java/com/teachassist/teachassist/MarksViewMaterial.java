@@ -22,11 +22,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-<<<<<<< HEAD
 import android.preference.PreferenceManager;
-=======
 import android.text.Html;
->>>>>>> 61cc07c6c2a49ee19ba24901e7dbb643e94640a3
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
