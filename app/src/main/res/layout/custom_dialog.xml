@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Background">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/ta_logo"
+        />
+    <TextView
+        android:id="@+id/TV1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image"
+        style="@style/Subtitle1"
+        android:textColor="@color/textColor"
+        android:text="Carbon"
+        android:textAlignment="center"
+        />
+    <TextView
+        android:id="@+id/TV2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TV1"
+        style="@style/Body1"
+        android:layout_margin="16dp"
+        android:textAlignment="center"
+        android:textColor="@color/textColor"
+        android:textSize="12dp"
+        android:text="Carbon is the 15th most abundant element in the Earth's crust, and the fourth most abundant element in the universe by mass after hydrogen, helium, and oxygen. Carbon's abundance, its unique diversity of organic compounds, and its unusual ability to form polymers at the temperatures commonly encountered on Earth enables this element to serve as a common element of all known life. It is the second most abundant element in the human body by mass (about 18.5%) after oxygen.[16] "
+        />
+    <Button
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TV2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Ok"
+        style="@style/Subtitle1"
+        android:textColor="@color/textColor"
+        android:background="@drawable/button_bg_rectangle_solid"
+        />
+</RelativeLayout>

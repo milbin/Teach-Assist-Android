@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorPrimary" format="reference|color"/>
+    <attr name="colorPrimaryDark" format="reference|color"/>
+    <attr name="primaryColor" format="reference|color"/>
+    <attr name="primaryColorDark" format="reference|color"/>
+    <attr name="toolbarColor" format="reference|color"/>
+    <attr name="primaryGreen" format="reference|color"/>
+    <attr name="primaryPink" format="reference|color"/>
+    <attr name="SecondaryTextColor" format="reference|color"/>
+    <attr name="DarkGray" format="reference|color"/>
+    <attr name="Background" format="reference|color"/>
+    <attr name="textColor" format="reference|color"/>
+    <attr name="averageBarsTextColor" format="reference|color"/>
+
+</resources>
