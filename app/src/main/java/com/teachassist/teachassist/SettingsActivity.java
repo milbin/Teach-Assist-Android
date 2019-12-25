@@ -87,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Please Restart App")
-                            .setMessage("Theme changes will not take effect until the app is restarted")
+                            .setMessage("Theme changes will not take effect until the app has been restarted.")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {}
                             }).show();
