@@ -43,7 +43,8 @@
         <activity android:name=".MainActivity"
             android:launchMode="singleTop"/>
 
-        <activity android:name=".login"/>
+        <activity android:name=".login"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".SettingsActivity"
             android:theme="@style/preferenceTheme">
