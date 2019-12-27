@@ -1,6 +1,9 @@
 package com.teachassist.teachassist;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -85,10 +88,21 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     editor.apply();
 
+
+                    final Context context = getContext();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Please Restart App")
                             .setMessage("Theme changes will not take effect until the app has been restarted.")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            .setPositiveButton(R.string.restart_now, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent mStartActivity = new Intent(context, MainActivity.class);
+                                    PendingIntent intent = PendingIntent.getActivity(context, 55555, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                                    AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+                                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 200, intent);
+                                    Runtime.getRuntime().exit(0);
+                                }
+                            })
+                            .setNeutralButton(R.string.restart_later, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {}
                             }).show();
                     return true;

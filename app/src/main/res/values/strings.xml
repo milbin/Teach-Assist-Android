@@ -17,6 +17,8 @@
 
     <string name="Username">Username</string>
     <string name="Password">Password</string>
+    <string name="restart_later">Restart Later</string>
+    <string name="restart_now">Restart Now</string>
 
 
 </resources>
