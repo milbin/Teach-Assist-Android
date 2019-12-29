@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/Period"
             android:layout_toEndOf="@+id/Period"
-            android:layout_toStartOf="@id/EmptyCourse"
+            android:layout_toStartOf="@id/SubjectBar"
             android:layout_marginEnd="15dp"
             android:layout_marginStart="5dp"
             android:textStyle="normal"
@@ -50,20 +50,6 @@
             android:textSize="12sp"
             android:text=""
             android:textColor="?textColor"
-            />
-        <TextView
-            android:id="@+id/EmptyCourse"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/subjectArrow"
-            style="@style/Subtitle1"
-            android:text=""
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:textAlignment="center"
-            android:textColor="?textColor"
-
             />
 
 
@@ -117,7 +103,7 @@
             android:layout_alignStart="@+id/Period"
             android:layout_below="@+id/Period"
             android:layout_marginTop="3dp"
-            android:layout_toStartOf="@id/EmptyCourse"
+            android:layout_toStartOf="@id/SubjectBar"
             android:layout_marginEnd="15dp"
             android:text=""
             android:textColor="?textColor"
@@ -133,7 +119,7 @@
             android:layout_below="@id/SubjectAbrv"
             android:layout_marginTop="3dp"
             android:layout_alignStart="@id/SubjectAbrv"
-            android:layout_toStartOf="@id/EmptyCourse"
+            android:layout_toStartOf="@id/SubjectBar"
             android:layout_marginEnd="15dp"
             android:text=""
             android:textColor="?textColor"

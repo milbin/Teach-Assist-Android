@@ -582,6 +582,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             LinearLayout linearLayout = findViewById(R.id.CourseLinearLayout);
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 View relativeLayout = LayoutInflater.from(context).inflate(R.layout.course_layout, null);
+                TextView SubjectInt = relativeLayout.findViewById(R.id.SubjectInt);
                 linearLayout.addView(relativeLayout);
                 relativeLayout.setOnClickListener(new subject_click());
                 Float Mark = 0f;
@@ -592,7 +593,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         Mark = Float.parseFloat(entry.getValue().get(0));
                     }catch (Exception e){}
-                    TextView SubjectInt = relativeLayout.findViewById(R.id.SubjectInt);
                     if(Mark == 100.0){
                         SubjectInt.setText("100%");
                     }else {
@@ -618,10 +618,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try{
                         RoomNumber  = entry.getValue().get(2);
                     }catch (Exception e){}
-                    TextView EmptyCourse = relativeLayout.findViewById(R.id.EmptyCourse);
                     final View ProgressBarAverage = relativeLayout.findViewById(R.id.SubjectBar);
                     ProgressBarAverage.setVisibility(View.GONE);
-                    EmptyCourse.setText(R.string.EmptyText);
+                    SubjectInt.setText(R.string.EmptyText);
                     relativeLayout.setClickable(false);
                 }
                 TextView SubjectAbrv = relativeLayout.findViewById(R.id.SubjectAbrv);
@@ -693,12 +692,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new Thread(new Runnable(){
                     public void run() {
                         //get view & average
-                        final View currentRL = Courses.get(thisSubject);
-                        final RingProgressBar ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
+                        final RingProgressBar ProgressBarAverage =
+                                Courses.get(thisSubject).findViewById(R.id.SubjectBar);
                         ProgressBarAverage.setVisibility(View.VISIBLE);
-                        int roundedCourseAvg=0;
-                        if(!entry.getKey().contains("NA")) {
-                            roundedCourseAvg = (int)Float.parseFloat(entry.getValue().get(0));
+                        int roundedCourseAvg = 0;
+                        if (!entry.getKey().contains("NA")) {
+                            roundedCourseAvg = (int) Float.parseFloat(entry.getValue().get(0));
                         }
 
                         //animate
@@ -708,7 +707,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Thread.sleep(animationTimeInMs);
                             }
                             ProgressBarAverage.setProgress(roundedCourseAvg);
-                        } catch (InterruptedException e){
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
