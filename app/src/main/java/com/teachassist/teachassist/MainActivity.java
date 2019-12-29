@@ -664,21 +664,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         private void RunTasks(final LinkedHashMap<String, List<String>> response){
-            final int animationTimeInMs = 20;
+            final int animationTimeInMs = 10;
            //animate overall average
             new Thread(new Runnable(){
                 public void run() {
                     TA ta = new TA();
-                    double average = ta.GetAverage(response);
-                    Float Average = (float) average;
+                    int roundedAvg = (int) Math.round(ta.GetAverage(response));
+                    final RingProgressBar ProgressBarAverage = findViewById(R.id.AverageBar);
+
                     try {
-                        for (int i = 0; i < Math.round(Average); i+=4) {
-                            final RingProgressBar ProgressBarAverage = findViewById(R.id.AverageBar);
+                        for (int i = 0; i < roundedAvg; i += 2) {
                             ProgressBarAverage.setProgress(i);
                             Thread.sleep(animationTimeInMs);
                         }
-                    }
-                    catch (InterruptedException e){
+                        ProgressBarAverage.setProgress(roundedAvg);
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -686,46 +686,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //animate subjects
             int currentSubject = 0;
-            for (Map.Entry<String, List<String>> entry : response.entrySet()) {
-                //get mark
-                final View currentRL = Courses.get(currentSubject);
-                Float Mark = 0f;
-                int counter = 0;
-                for (Map.Entry<String, List<String>> unusedVar :response.entrySet()) {
-                    if(counter == currentSubject) {
-                        if(!entry.getKey().contains("NA")) {
-                            Mark = Float.parseFloat(entry.getValue().get(0));
-                        }
-                    }
-                    counter++;
-                }
-                final float finalMark = Mark;
+            for (final Map.Entry<String, List<String>> entry : response.entrySet()) {
+                final int thisSubject=currentSubject;
+                currentSubject++;
+
                 new Thread(new Runnable(){
                     public void run() {
+                        //get view & average
+                        final View currentRL = Courses.get(thisSubject);
+                        final RingProgressBar ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
+                        ProgressBarAverage.setVisibility(View.VISIBLE);
+                        int roundedCourseAvg=0;
+                        if(!entry.getKey().contains("NA")) {
+                            roundedCourseAvg = (int)Float.parseFloat(entry.getValue().get(0));
+                        }
+
+                        //animate
                         try {
-                            //animate
-                            for (int i = 0; i < Math.round(finalMark); i+=4) {
-                                final RingProgressBar ProgressBarAverage = currentRL.findViewById(R.id.SubjectBar);
-                                if(ProgressBarAverage.getVisibility() == View.INVISIBLE){
-                                    ProgressBarAverage.setVisibility(View.VISIBLE);
-                                }
+                            for (int i = 0; i < roundedCourseAvg; i += 2) {
                                 ProgressBarAverage.setProgress(i);
                                 Thread.sleep(animationTimeInMs);
                             }
-                        }
-                        catch (InterruptedException e){
+                            ProgressBarAverage.setProgress(roundedCourseAvg);
+                        } catch (InterruptedException e){
                             e.printStackTrace();
                         }
                     }
                 }).start();
-                currentSubject++;
             }
 
             if(Refresh.equals(true)) {
                 SwipeRefresh.setRefreshing(false);
                 Refresh = false;
             }
-
         }
 
 
