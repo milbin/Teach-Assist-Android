@@ -2,7 +2,7 @@
     <string name="app_name">Teachassist</string>
     <string name="edit_activity">Edit</string>
     <string name="Average">Average</string>
-    <string name="EmptyText">Please See Teacher For Current Mark In This Course</string>
+    <string name="EmptyText">N/A</string>
 
     <string name="title_activity_nav__drawer">Nav_Drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
