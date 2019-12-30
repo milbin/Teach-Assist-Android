@@ -583,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 View relativeLayout = LayoutInflater.from(context).inflate(R.layout.course_layout, null);
                 linearLayout.addView(relativeLayout);
                 relativeLayout.setOnClickListener(new subject_click());
-                String markString = "N/A";
+                String markString = "Please See Teacher For Current Mark In This Course";
                 String subjectAbrvString = "";
                 String subjectNameString = "";
                 String roomNumber = "";
@@ -599,6 +599,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     subjectAbrvString = getOrBlank(courseData, 0);
                     subjectNameString = getOrBlank(courseData, 1);
+                    if(subjectNameString.contains("SHAL")){ // this is almost always contained within the spare course code ex: SHAL.1-03
+                        subjectNameString = "Spare";
+                    }
                     roomNumber = getOrBlank(courseData, 2);
                     final View ProgressBarAverage = relativeLayout.findViewById(R.id.SubjectBar);
                     ProgressBarAverage.setVisibility(View.GONE);
@@ -679,7 +682,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //get view & average
                         final RingProgressBar ProgressBarAverage =
                                 Courses.get(thisSubject).findViewById(R.id.SubjectBar);
-                        ProgressBarAverage.setVisibility(View.VISIBLE);
+                        if(ProgressBarAverage.getVisibility() != View.GONE) {
+                            ProgressBarAverage.setVisibility(View.VISIBLE);
+                        }
                         int roundedCourseAvg = 0;
                         if (!entry.getKey().contains("NA")) {
                             roundedCourseAvg = (int) Float.parseFloat(entry.getValue().get(0));
