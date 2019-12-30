@@ -598,13 +598,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     roomNumber = getOrBlank(courseData, 3);
                 } else {
                     subjectAbrvString = getOrBlank(courseData, 0);
-                    subjectNameString = getOrBlank(courseData, 1);
-                    if(subjectNameString.contains("SHAL")){ // this is almost always contained within the spare course code ex: SHAL.1-03
-                        subjectNameString = "Spare";
+                    if(subjectAbrvString.contains("SHAL")){ // this is almost always contained within the spare course code ex: SHAL.1-03
+                        subjectAbrvString = "Spare";
                     }
+                    subjectNameString = getOrBlank(courseData, 1);
                     roomNumber = getOrBlank(courseData, 2);
                     final View ProgressBarAverage = relativeLayout.findViewById(R.id.SubjectBar);
-                    ProgressBarAverage.setVisibility(View.GONE);
+                    ProgressBarAverage.setVisibility(View.INVISIBLE);
                     relativeLayout.setClickable(false);
                 }
                 TextView SubjectAbrv = relativeLayout.findViewById(R.id.SubjectAbrv);
@@ -613,6 +613,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 SubjectName.setText(subjectNameString);
                 TextView subjectInt = relativeLayout.findViewById(R.id.SubjectInt);
                 subjectInt.setText(markString);
+                if(markString.equals("Please See Teacher For Current Mark In This Course")){
+                    subjectInt.setTextSize(14);
+                }
                 TextView period = relativeLayout.findViewById(R.id.Period);
                 period.setText("Period " + periodNum);
                 if (!roomNumber.equals("")) {
@@ -682,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         //get view & average
                         final RingProgressBar ProgressBarAverage =
                                 Courses.get(thisSubject).findViewById(R.id.SubjectBar);
-                        if(ProgressBarAverage.getVisibility() != View.GONE) {
+                        if(ProgressBarAverage.getVisibility() != View.INVISIBLE) {
                             ProgressBarAverage.setVisibility(View.VISIBLE);
                         }
                         int roundedCourseAvg = 0;
