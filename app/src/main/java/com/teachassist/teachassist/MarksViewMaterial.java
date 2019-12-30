@@ -45,6 +45,7 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -360,7 +361,6 @@ public class MarksViewMaterial extends AppCompatActivity {
                     ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
                     BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
                 }
-                System.out.println(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
                 if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals("0")){
                     OpercentAverage.setText("NA");
                     BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
@@ -1029,9 +1029,26 @@ public class MarksViewMaterial extends AppCompatActivity {
                         TextView Title = rl.findViewById(R.id.title);
                         Title.setText(title);
 
+                        //this code creates a dictionary that the CalculateAverage method uses to
+                        // multiply the course weighting by the assignment weightings
+                        HashMap weightDict = new HashMap<String, Double>();
+                        if(Kweight == 0.0 && Tweight == 0.0 && Cweight == 0.0 && Aweight == 0.0 &&Oweight == 0.0) {
+                            weightDict.put("K", 1.0);
+                            weightDict.put("T", 1.0);
+                            weightDict.put("C", 1.0);
+                            weightDict.put("A", 1.0);
+                            weightDict.put("O", 1.0);
+                        }else {
+                            weightDict.put("K", Kweight);
+                            weightDict.put("T", Tweight);
+                            weightDict.put("C", Cweight);
+                            weightDict.put("A", Aweight);
+                            weightDict.put("O", Oweight);
+                        }
+
                         //set mark
                         TextView Average = rl.findViewById(R.id.AveragePercent);
-                        String returnval = CalculateAverage(marks, String.valueOf(i));
+                        String returnval = CalculateAverage(marks, String.valueOf(i), weightDict);
                         if(returnval == null || returnval.equals("NaN")||returnval.equals("null")){
                             Average.setText("No Mark");
                         }else {
@@ -1131,13 +1148,13 @@ public class MarksViewMaterial extends AppCompatActivity {
         }
     }
 
-    private String CalculateAverage(JSONObject marks, String assingmentNumber){
+    private String CalculateAverage(JSONObject marks, String assingmentNumber, HashMap weightDict){
     try {
         JSONObject weights = marks.getJSONObject("categories");
-        Double weightK = weights.getDouble("K")*10 * 0.7;
-        Double weightT = weights.getDouble("T")*10 * 0.7;
-        Double weightC = weights.getDouble("C")*10 * 0.7;
-        Double weightA = weights.getDouble("A")*10 * 0.7;
+        Double weightK = weights.getDouble("K")*10 * 0.7 * ((Double)weightDict.get("K"));
+        Double weightT = weights.getDouble("T")*10 * 0.7 * ((Double)weightDict.get("T"));
+        Double weightC = weights.getDouble("C")*10 * 0.7 * ((Double)weightDict.get("C"));
+        Double weightA = weights.getDouble("A")*10 * 0.7 * ((Double)weightDict.get("A"));
         Double weightO = 3.0;
         Double Kmark = 0.0;
         Double Tmark = 0.0;
@@ -1391,6 +1408,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             return null;
         }
     }
+
     private int dpToPx(double dp) {
         float fdp =(float) dp;
         return Math.round(fdp * context.getResources().getDisplayMetrics().density);
