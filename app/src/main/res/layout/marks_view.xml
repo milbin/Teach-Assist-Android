@@ -50,9 +50,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:backgroundTint="?Background"
-        android:id="@+id/LinearLayoutMarksView"
         android:gravity="top"
         >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="?Background"
+            android:id="@+id/LinearLayoutMarksView"
+            android:gravity="top"
+            >
 
 
         <!--Average-->
@@ -339,11 +347,16 @@
                     />
             </RelativeLayout>
         </RelativeLayout>
-
-
     </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="145dp"
+            android:background="@color/primaryPink">
+
+        </RelativeLayout>
+    </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 </RelativeLayout>

@@ -259,7 +259,7 @@ public class MarksViewMaterial extends AppCompatActivity {
         protected void onProgressUpdate(Integer... temp) {
             super.onProgressUpdate();
         }
-        protected void onPostExecute(JSONObject marks){
+        protected void onPostExecute(final JSONObject marks){
             if(!isCancelled()) {
                 if (marks == null) {
                     new AlertDialog.Builder(context)
@@ -277,111 +277,9 @@ public class MarksViewMaterial extends AppCompatActivity {
                 }
                 numberOfAssignments = marks.length() - 1;
                 String title;
+                setupCourseBars(marks);
+
                 final DecimalFormat round = new DecimalFormat("#.#");
-
-                //setup course bars
-                RelativeLayout barAverageRL = findViewById(R.id.mark_bars);
-
-                TextView weightKAverage = findViewById(R.id.weightKAverage);
-                TextView weightTAverage = findViewById(R.id.weightTAverage);
-                TextView weightCAverage = findViewById(R.id.weightCAverage);
-                TextView weightAAverage = findViewById(R.id.weightAAverage);
-                TextView weightOAverage = findViewById(R.id.weightOAverage);
-
-                TextView KpercentAverage = findViewById(R.id.KpercentAverage);
-                TextView TpercentAverage = findViewById(R.id.TpercentAverage);
-                TextView CpercentAverage = findViewById(R.id.CpercentAverage);
-                TextView ApercentAverage = findViewById(R.id.ApercentAverage);
-                TextView OpercentAverage = findViewById(R.id.OpercentAverage);
-
-                View BarAverage1 = findViewById(R.id.BarAverage1);
-                View BarAverage2 = findViewById(R.id.BarAverage2);
-                View BarAverage3 = findViewById(R.id.BarAverage3);
-                View BarAverage4 = findViewById(R.id.BarAverage4);
-                View BarAverage5 = findViewById(R.id.BarAverage5);
-                List<String> list = GetWeightAndAverageByCategory(marks);
-
-
-                RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
-                layoutParamsBar1.height = dpToPx(Math.round(Double.parseDouble(list.get(0)) * 0.7 + 40));
-                BarAverage1.setLayoutParams(layoutParamsBar1);
-
-                RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
-                layoutParamsBar2.height = dpToPx(Math.round(Double.parseDouble(list.get(1)) * 0.7 + 40));
-                BarAverage2.setLayoutParams(layoutParamsBar2);
-
-                RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
-                layoutParamsBar3.height = dpToPx(Math.round(Double.parseDouble(list.get(2)) * 0.7 + 40));
-                BarAverage3.setLayoutParams(layoutParamsBar3);
-
-                RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
-                layoutParamsBar4.height = dpToPx(Math.round(Double.parseDouble(list.get(3)) * 0.7 + 40));
-                BarAverage4.setLayoutParams(layoutParamsBar4);
-
-                RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
-                layoutParamsBar5.height = dpToPx(Math.round(Double.parseDouble(list.get(4)) * 0.7 + 40));
-                BarAverage5.setLayoutParams(layoutParamsBar5);
-
-                if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals("0")){
-                    KpercentAverage.setText("NA");
-                    BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                    KpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                    ((TextView)findViewById(R.id.K)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                }else {
-                    KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
-                    BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                }
-
-                if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals("0")){
-                    TpercentAverage.setText("NA");
-                    BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                    TpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                    ((TextView)findViewById(R.id.T)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                }else {
-                    TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
-                    BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                }
-
-                if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals("0")){
-                    CpercentAverage.setText("NA");
-                    BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                    CpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                    ((TextView)findViewById(R.id.C)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                }else {
-                    CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
-                    BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                }
-
-                if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals("0")){
-                    ApercentAverage.setText("NA");
-                    BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                    ApercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                    ((TextView)findViewById(R.id.A)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                }else {
-                    ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
-                    BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                }
-                if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals("0")){
-                    OpercentAverage.setText("NA");
-                    BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                    OpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                    ((TextView)findViewById(R.id.O)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
-                }else {
-                    OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
-                    BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                }
-
-                weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
-                weightTAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
-                weightCAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
-                weightAAverage.setText(round.format(Double.parseDouble(list.get(8))).replaceAll(",", "."));
-                weightOAverage.setText(round.format(Double.parseDouble(list.get(9))).replaceAll(",", "."));
-
-                RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
-                barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                barAverageRL.setLayoutParams(barAverageRLParams);
-
-
                 for (int i = 0; i < numberOfAssignments; i++) {
                     Double Kmark = 0.000000001;
                     Double Tmark = 0.000000001;
@@ -922,99 +820,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
                                         ProgressBarAverage.setProgress(Average);
 
-                                        //setup course bars
-                                        RelativeLayout barAverageRL = findViewById(R.id.mark_bars);
-
-                                        TextView weightKAverage = findViewById(R.id.weightKAverage);
-                                        TextView weightTAverage = findViewById(R.id.weightTAverage);
-                                        TextView weightCAverage = findViewById(R.id.weightCAverage);
-                                        TextView weightAAverage = findViewById(R.id.weightAAverage);
-                                        TextView weightOAverage = findViewById(R.id.weightOAverage);
-
-                                        TextView KpercentAverage = findViewById(R.id.KpercentAverage);
-                                        TextView TpercentAverage = findViewById(R.id.TpercentAverage);
-                                        TextView CpercentAverage = findViewById(R.id.CpercentAverage);
-                                        TextView ApercentAverage = findViewById(R.id.ApercentAverage);
-                                        TextView OpercentAverage = findViewById(R.id.OpercentAverage);
-
-                                        View BarAverage1 = findViewById(R.id.BarAverage1);
-                                        View BarAverage2 = findViewById(R.id.BarAverage2);
-                                        View BarAverage3 = findViewById(R.id.BarAverage3);
-                                        View BarAverage4 = findViewById(R.id.BarAverage4);
-                                        View BarAverage5 = findViewById(R.id.BarAverage5);
-                                        List<String> list = GetWeightAndAverageByCategory(Marks);
-
-
-                                        RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
-                                        layoutParamsBar1.height = (int) Math.round(Double.parseDouble(list.get(0)) * dpToPx(0.7 + 20));
-                                        BarAverage1.setLayoutParams(layoutParamsBar1);
-
-                                        RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
-                                        layoutParamsBar2.height = (int) Math.round(Double.parseDouble(list.get(1)) * dpToPx(0.7 + 20));
-                                        BarAverage2.setLayoutParams(layoutParamsBar2);
-
-                                        RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
-                                        layoutParamsBar3.height = (int) Math.round(Double.parseDouble(list.get(2)) * dpToPx(0.7 + 20));
-                                        BarAverage3.setLayoutParams(layoutParamsBar3);
-
-                                        RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
-                                        layoutParamsBar4.height = (int) Math.round(Double.parseDouble(list.get(3)) * dpToPx(0.7 + 20));
-                                        BarAverage4.setLayoutParams(layoutParamsBar4);
-
-                                        RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
-                                        layoutParamsBar5.height = (int) Math.round(Double.parseDouble(list.get(4)) * dpToPx(0.7 + 20));
-                                        BarAverage5.setLayoutParams(layoutParamsBar5);
-
-
-                                        if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals(".0")){
-                                            KpercentAverage.setText("NA");
-                                            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                                        }else {
-                                            KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
-                                            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                                        }
-
-                                        if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals(".0")){
-                                            TpercentAverage.setText("NA");
-                                            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                                        }else {
-                                            TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
-                                            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                                        }
-
-                                        if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals(".0")){
-                                            CpercentAverage.setText("NA");
-                                            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                                        }else {
-                                            CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
-                                            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                                        }
-
-                                        if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals(".0")){
-                                            ApercentAverage.setText("NA");
-                                            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                                        }else {
-                                            ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
-                                            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                                        }
-
-                                        if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals(".0")){
-                                            OpercentAverage.setText("NA");
-                                            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-                                        }else {
-                                            OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
-                                            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
-                                        }
-
-                                        weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
-                                        weightTAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
-                                        weightCAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
-                                        weightAAverage.setText(round.format(Double.parseDouble(list.get(8))).replaceAll(",", "."));
-                                        weightOAverage.setText(round.format(Double.parseDouble(list.get(9))).replaceAll(",", "."));
-
-                                        RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
-                                        barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                                        barAverageRL.setLayoutParams(barAverageRLParams);
+                                        setupCourseBars(marks);
 
                                     }
                                 });
@@ -1407,6 +1213,110 @@ public class MarksViewMaterial extends AppCompatActivity {
             Crashlytics.log(Log.ERROR, "MarksViewMaterial Calculate total average returns null", Arrays.toString(e.getStackTrace()));
             return null;
         }
+    }
+    private void setupCourseBars(JSONObject marks){
+        final DecimalFormat round = new DecimalFormat("#.#");
+        //setup course bars
+        RelativeLayout barAverageRL = findViewById(R.id.mark_bars);
+
+        TextView weightKAverage = findViewById(R.id.weightKAverage);
+        TextView weightTAverage = findViewById(R.id.weightTAverage);
+        TextView weightCAverage = findViewById(R.id.weightCAverage);
+        TextView weightAAverage = findViewById(R.id.weightAAverage);
+        TextView weightOAverage = findViewById(R.id.weightOAverage);
+
+        TextView KpercentAverage = findViewById(R.id.KpercentAverage);
+        TextView TpercentAverage = findViewById(R.id.TpercentAverage);
+        TextView CpercentAverage = findViewById(R.id.CpercentAverage);
+        TextView ApercentAverage = findViewById(R.id.ApercentAverage);
+        TextView OpercentAverage = findViewById(R.id.OpercentAverage);
+
+        View BarAverage1 = findViewById(R.id.BarAverage1);
+        View BarAverage2 = findViewById(R.id.BarAverage2);
+        View BarAverage3 = findViewById(R.id.BarAverage3);
+        View BarAverage4 = findViewById(R.id.BarAverage4);
+        View BarAverage5 = findViewById(R.id.BarAverage5);
+        List<String> list = GetWeightAndAverageByCategory(marks);
+
+
+        RelativeLayout.LayoutParams layoutParamsBar1 = (RelativeLayout.LayoutParams) BarAverage1.getLayoutParams();
+        layoutParamsBar1.height = dpToPx(Math.round(Double.parseDouble(list.get(0)) * 0.7 + 40));
+        BarAverage1.setLayoutParams(layoutParamsBar1);
+
+        RelativeLayout.LayoutParams layoutParamsBar2 = (RelativeLayout.LayoutParams) BarAverage2.getLayoutParams();
+        layoutParamsBar2.height = dpToPx(Math.round(Double.parseDouble(list.get(1)) * 0.7 + 40));
+        BarAverage2.setLayoutParams(layoutParamsBar2);
+
+        RelativeLayout.LayoutParams layoutParamsBar3 = (RelativeLayout.LayoutParams) BarAverage3.getLayoutParams();
+        layoutParamsBar3.height = dpToPx(Math.round(Double.parseDouble(list.get(2)) * 0.7 + 40));
+        BarAverage3.setLayoutParams(layoutParamsBar3);
+
+        RelativeLayout.LayoutParams layoutParamsBar4 = (RelativeLayout.LayoutParams) BarAverage4.getLayoutParams();
+        layoutParamsBar4.height = dpToPx(Math.round(Double.parseDouble(list.get(3)) * 0.7 + 40));
+        BarAverage4.setLayoutParams(layoutParamsBar4);
+
+        RelativeLayout.LayoutParams layoutParamsBar5 = (RelativeLayout.LayoutParams) BarAverage5.getLayoutParams();
+        layoutParamsBar5.height = dpToPx(Math.round(Double.parseDouble(list.get(4)) * 0.7 + 40));
+        BarAverage5.setLayoutParams(layoutParamsBar5);
+
+        if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals("0")){
+            KpercentAverage.setText("NA");
+            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            KpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)findViewById(R.id.K)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+        }else {
+            KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
+            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+        }
+
+        if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals("0")){
+            TpercentAverage.setText("NA");
+            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            TpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)findViewById(R.id.T)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+        }else {
+            TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
+            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+        }
+
+        if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals("0")){
+            CpercentAverage.setText("NA");
+            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            CpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)findViewById(R.id.C)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+        }else {
+            CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
+            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+        }
+
+        if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals("0")){
+            ApercentAverage.setText("NA");
+            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            ApercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)findViewById(R.id.A)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+        }else {
+            ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
+            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+        }
+        if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals("0")){
+            OpercentAverage.setText("NA");
+            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            OpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)findViewById(R.id.O)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+        }else {
+            OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
+            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+        }
+
+        weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
+        weightTAverage.setText(round.format(Double.parseDouble(list.get(6))).replaceAll(",", "."));
+        weightCAverage.setText(round.format(Double.parseDouble(list.get(7))).replaceAll(",", "."));
+        weightAAverage.setText(round.format(Double.parseDouble(list.get(8))).replaceAll(",", "."));
+        weightOAverage.setText(round.format(Double.parseDouble(list.get(9))).replaceAll(",", "."));
+
+        RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
+        barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        barAverageRL.setLayoutParams(barAverageRLParams);
     }
 
     private int dpToPx(double dp) {
