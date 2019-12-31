@@ -349,9 +349,30 @@
         </RelativeLayout>
     </LinearLayout>
         <RelativeLayout
+            android:id="@+id/addAssignmentButton"
             android:layout_width="match_parent"
             android:layout_height="145dp"
-            android:background="@color/primaryPink">
+            android:background="@drawable/button_bg_rectangle_solid_marks_view"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
+            >
+            <ImageView
+                android:id="@+id/plusIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="40dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/plus_icon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Assignment"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/plusIcon"
+                android:textColor="?textColor"
+                style="@style/Subtitle1"/>
 
         </RelativeLayout>
     </LinearLayout>
