@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -73,6 +74,10 @@ public class MarksViewMaterial extends AppCompatActivity {
     SwipeRefreshLayout SwipeRefresh;
     private AsyncTask getMarksTask;
     Typeface font;
+    RelativeLayout addAssignmentButton;
+    boolean isAddAssignmentButtonExpanded = false;
+    TextView addAssignmentAdvancedModeButton;
+    boolean isAddAssignmentAdvancedModeButtonExpanded = false;
 
 
     @Override
@@ -85,6 +90,10 @@ public class MarksViewMaterial extends AppCompatActivity {
             setTheme(R.style.DarkTheme);
         }
         setContentView(R.layout.marks_view);
+
+        //setup add assignment button
+        addAssignmentButton = findViewById(R.id.addAssignmentButton);
+        addAssignmentAdvancedModeButton = findViewById(R.id.addAssignmentAdvancedModeTV);
 
         //setup font
         font = ResourcesCompat.getFont(context, R.font.sandstone_regular);
@@ -950,6 +959,52 @@ public class MarksViewMaterial extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                addAssignmentButton.setVisibility(View.VISIBLE);
+                addAssignmentButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) addAssignmentButton.getLayoutParams();
+                        RelativeLayout addAssignmentAllButtonsRL = findViewById(R.id.addAssignmentAllButtonsRL);
+                        RelativeLayout plusIconRL = findViewById(R.id.plusIconRL);
+                        if(isAddAssignmentButtonExpanded){ //button is expanded, must now collapse
+                            params.height = (int) Math.round(addAssignmentButton.getHeight() / 2);
+                            addAssignmentAllButtonsRL.setVisibility(View.GONE);
+                            plusIconRL.setVisibility(View.VISIBLE);
+                            isAddAssignmentButtonExpanded = false;
+
+                        }else{//button is not expanded, must now expand
+                            params.height = (int) Math.round(addAssignmentButton.getHeight() * 2);
+                            plusIconRL.setVisibility(View.GONE);
+                            addAssignmentAllButtonsRL.setVisibility(View.VISIBLE);
+                            isAddAssignmentButtonExpanded = true;
+                        }
+                        addAssignmentButton.setLayoutParams(params);
+                    }
+                });
+                addAssignmentAdvancedModeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) addAssignmentButton.getLayoutParams();
+                        RelativeLayout addAssignmentAdvancedModeRL = findViewById(R.id.addAssignmentAdvancedModeRL);
+                        ImageView addAssignmentAdvancedModeDropdownButton = findViewById(R.id.addAssignmentAdvancedModeDropdownButton);
+
+                        if(isAddAssignmentAdvancedModeButtonExpanded) { //currently expanded
+                            params.height = (int) Math.round(addAssignmentButton.getHeight() / 1.8);
+                            addAssignmentAdvancedModeRL.setVisibility(View.GONE);
+                            addAssignmentAdvancedModeDropdownButton.setImageDrawable(getTheme().getDrawable(R.drawable.arrow_up));
+                            isAddAssignmentAdvancedModeButtonExpanded = false;
+                        }else{//not currently expanded
+                            params.height = (int) Math.round(addAssignmentButton.getHeight() * 1.8);
+                            addAssignmentAdvancedModeRL.setVisibility(View.VISIBLE);
+                            addAssignmentAdvancedModeDropdownButton.setImageDrawable(getTheme().getDrawable(R.drawable.arrow_down));
+                            isAddAssignmentAdvancedModeButtonExpanded = true;
+                        }
+                        addAssignmentButton.setLayoutParams(params);
+
+                    }
+                });
+
+
             }
         }
     }

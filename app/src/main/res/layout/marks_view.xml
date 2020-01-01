@@ -328,9 +328,6 @@
                 </RelativeLayout>
 
 
-
-
-
                 <TextView
                     android:id="@+id/weightOAverage"
                     android:layout_width="wrap_content"
@@ -356,13 +353,19 @@
             android:layout_marginTop="3dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="invisible"
             >
+            <RelativeLayout
+                android:id="@+id/plusIconRL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_centerHorizontal="true">
             <ImageView
                 android:id="@+id/plusIcon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="40dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/plus_icon"/>
             <TextView
@@ -373,6 +376,328 @@
                 android:layout_below="@+id/plusIcon"
                 android:textColor="?textColor"
                 style="@style/Subtitle1"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/addAssignmentAllButtonsRL"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <TextView
+                    android:id="@+id/addAssignmentTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="30dp"
+                    android:text="Calculate New Assignment Mark"
+                    android:textColor="?textColor"
+                    style="@style/Subtitle1"
+                    />
+                <EditText
+                    android:id="@+id/addAssignmentTitleET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/addAssignmentTitle"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="?textColor"
+                    android:background="@drawable/flush_rounded_courner"
+                    android:hint="Assignment Title"
+                    android:textCursorDrawable="@null"
+                    android:padding="10dp"
+                    android:textColorHint="?primaryColor"
+                    style="@style/Body1"
+                    />
+                <TextView
+                    android:id="@+id/addAssignmentOverallMarkTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/addAssignmentTitleET"
+                    android:layout_alignStart="@id/addAssignmentTitleET"
+                    android:layout_marginTop="10dp"
+                    android:text="Overall Mark"
+                    android:textColor="?textColor"
+                    style="@style/Subtitle2"/>
+                <EditText
+                    android:id="@+id/addAssignmentOverallMarkET"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/addAssignmentOverallMarkTV"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignStart="@+id/addAssignmentOverallMarkTV"
+                    android:textColor="?textColor"
+                    android:background="@drawable/flush_rounded_courner"
+                    android:hint="Mark"
+                    android:textCursorDrawable="@null"
+                    android:padding="10dp"
+                    android:textColorHint="?primaryColor"
+                    style="@style/Body1"
+                    />
+                <EditText
+                    android:id="@+id/addAssignmentOverallWeightET"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/addAssignmentOverallMarkTV"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/addAssignmentOverallMarkET"
+                    android:layout_marginStart="30dp"
+                    android:textColor="?textColor"
+                    android:background="@drawable/flush_rounded_courner"
+                    android:hint="Weight"
+                    android:textCursorDrawable="@null"
+                    android:padding="10dp"
+                    android:textColorHint="?primaryColor"
+                    style="@style/Body1"
+                    />
+                <View
+                    android:id="@+id/addAssignmentDividerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:layout_alignStart="@+id/addAssignmentTitleET"
+                    android:layout_alignEnd="@+id/addAssignmentTitleET"
+                    android:layout_below="@+id/addAssignmentOverallMarkET"
+                    android:layout_marginTop="10dp"
+                    android:background="?primaryColorDark"
+                    />
+
+                <TextView
+                    android:id="@+id/addAssignmentAdvancedModeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/addAssignmentDividerView"
+                    android:paddingEnd="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_alignStart="@+id/addAssignmentDividerView"
+                    android:textColor="?textColor"
+                    style="@style/Subtitle2"
+                    android:text="Advanced Mode"/>
+                <ImageView
+                    android:id="@+id/addAssignmentAdvancedModeDropdownButton"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_alignEnd="@+id/addAssignmentAdvancedModeTV"
+                    android:layout_below="@+id/addAssignmentDividerView"
+                    android:src="@drawable/arrow_up"
+                    />
+
+
+                <RelativeLayout
+                    android:id="@+id/addAssignmentAdvancedModeRL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/addAssignmentDividerView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/addAssignmentAdvancedModeTV"
+                    android:visibility="gone">
+                    <EditText
+                        android:id="@+id/addAssignmentKMarkET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentStart="true"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Mark"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <EditText
+                        android:id="@+id/addAssignmentKWeightET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@+id/addAssignmentKMarkET"
+                        android:layout_marginStart="30dp"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Weight"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="(Knowledge)"
+                        android:textColor="?textColor"
+                        style="@style/Body2"
+                        android:layout_toEndOf="@+id/addAssignmentKWeightET"
+                        android:layout_alignBaseline="@+id/addAssignmentKWeightET"/>
+                    <EditText
+                        android:id="@+id/addAssignmentTMarkET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentKMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentStart="true"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Mark"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <EditText
+                        android:id="@+id/addAssignmentTWeightET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentKMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@+id/addAssignmentTMarkET"
+                        android:layout_marginStart="30dp"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Weight"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="(Thinking)"
+                        android:textColor="?textColor"
+                        style="@style/Body2"
+                        android:layout_toEndOf="@+id/addAssignmentTWeightET"
+                        android:layout_alignBaseline="@+id/addAssignmentTWeightET"/>
+                    <EditText
+                        android:id="@+id/addAssignmentCMarkET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentTMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentStart="true"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Mark"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <EditText
+                        android:id="@+id/addAssignmentCWeightET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentTMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@+id/addAssignmentCMarkET"
+                        android:layout_marginStart="30dp"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Weight"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="(Communication)"
+                        android:textColor="?textColor"
+                        style="@style/Body2"
+                        android:layout_toEndOf="@+id/addAssignmentCWeightET"
+                        android:layout_alignBaseline="@+id/addAssignmentCWeightET"/>
+                    <EditText
+                        android:id="@+id/addAssignmentAMarkET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentCMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentStart="true"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Mark"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <EditText
+                        android:id="@+id/addAssignmentAWeightET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentCMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@+id/addAssignmentAMarkET"
+                        android:layout_marginStart="30dp"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Weight"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="(Application)"
+                        android:textColor="?textColor"
+                        style="@style/Body2"
+                        android:layout_toEndOf="@+id/addAssignmentAWeightET"
+                        android:layout_alignBaseline="@+id/addAssignmentAWeightET"/>
+                    <EditText
+                        android:id="@+id/addAssignmentOMarkET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentAMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_alignParentStart="true"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Mark"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <EditText
+                        android:id="@+id/addAssignmentOWeightET"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addAssignmentAMarkET"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@+id/addAssignmentOMarkET"
+                        android:layout_marginStart="30dp"
+                        android:textColor="?textColor"
+                        android:background="@drawable/flush_rounded_courner"
+                        android:hint="Weight"
+                        android:textCursorDrawable="@null"
+                        android:padding="10dp"
+                        android:textColorHint="?primaryColor"
+                        style="@style/Body1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="(Other)"
+                        android:textColor="?textColor"
+                        style="@style/Body2"
+                        android:layout_toEndOf="@+id/addAssignmentOWeightET"
+                        android:layout_alignBaseline="@+id/addAssignmentOWeightET"/>
+                </RelativeLayout>
+
+
+            </RelativeLayout>
 
         </RelativeLayout>
     </LinearLayout>
