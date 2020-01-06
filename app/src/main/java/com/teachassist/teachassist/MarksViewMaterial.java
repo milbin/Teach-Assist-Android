@@ -967,13 +967,13 @@ public class MarksViewMaterial extends AppCompatActivity {
                         RelativeLayout addAssignmentAllButtonsRL = findViewById(R.id.addAssignmentAllButtonsRL);
                         RelativeLayout plusIconRL = findViewById(R.id.plusIconRL);
                         if(isAddAssignmentButtonExpanded){ //button is expanded, must now collapse
-                            params.height = (int) Math.round(addAssignmentButton.getHeight() / 2);
+                            params.height = (int) Math.round(addAssignmentButton.getHeight() / 2.3);
                             addAssignmentAllButtonsRL.setVisibility(View.GONE);
                             plusIconRL.setVisibility(View.VISIBLE);
                             isAddAssignmentButtonExpanded = false;
 
                         }else{//button is not expanded, must now expand
-                            params.height = (int) Math.round(addAssignmentButton.getHeight() * 2);
+                            params.height = (int) Math.round(addAssignmentButton.getHeight() * 2.3);
                             plusIconRL.setVisibility(View.GONE);
                             addAssignmentAllButtonsRL.setVisibility(View.VISIBLE);
                             isAddAssignmentButtonExpanded = true;

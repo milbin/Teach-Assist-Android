@@ -696,6 +696,35 @@
                         android:layout_alignBaseline="@+id/addAssignmentOWeightET"/>
                 </RelativeLayout>
 
+                <Button
+                    android:id="@+id/addAssignmentCancelButton"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:layout_alignStart="@+id/addAssignmentDividerView"
+                    android:layout_marginBottom="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/done_button_background_pink"
+                    android:text="Cancel"
+                    android:textSize="14sp"
+                    style="@style/Button"
+                    android:textColor="@color/textColor"
+                    />
+
+                <Button
+                    android:id="@+id/addAssignmentDoneButton"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:layout_alignEnd="@+id/addAssignmentDividerView"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/done_button_background"
+                    android:text="Done"
+                    android:textSize="14sp"
+                    style="@style/Button"
+                    android:textColor="@color/textColor"
+                    />
+
+
 
             </RelativeLayout>
 
