@@ -556,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(average == null || response == null){
                 new AlertDialog.Builder(context)
                         .setTitle("Connection Error")
-                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setMessage("Something went wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
                         .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
