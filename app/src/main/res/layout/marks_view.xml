@@ -360,20 +360,23 @@
                 android:id="@+id/plusIconRL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginTop="40dp"
                 android:layout_centerHorizontal="true">
             <ImageView
                 android:id="@+id/plusIcon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/plus_icon"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Assignment"
+                android:text="Calculate New Assignment Mark"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/plusIcon"
+                android:layout_above="@+id/plusIcon"
+                android:layout_marginBottom="5dp"
                 android:textColor="?textColor"
                 style="@style/Subtitle1"/>
             </RelativeLayout>
