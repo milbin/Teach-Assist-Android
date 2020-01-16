@@ -323,12 +323,26 @@ public class MarksViewMaterial extends AppCompatActivity {
                         RelativeLayout addAssignmentAdvancedModeRL = findViewById(R.id.addAssignmentAdvancedModeRL);
                         ImageView addAssignmentAdvancedModeDropdownButton = findViewById(R.id.addAssignmentAdvancedModeDropdownButton);
 
+                        EditText addAssignmentOverallMark = findViewById(R.id.addAssignmentOverallMarkET);
+                        EditText addAssignmentOverallWeight  = findViewById(R.id.addAssignmentOverallWeightET);
                         if(isAddAssignmentAdvancedModeButtonExpanded) { //currently expanded
+                            addAssignmentOverallMark.setAlpha(1f);
+                            addAssignmentOverallMark.setFocusable(true);
+                            addAssignmentOverallMark.setFocusableInTouchMode(true);
+                            addAssignmentOverallWeight.setAlpha(1f);
+                            addAssignmentOverallWeight.setFocusable(true);
+                            addAssignmentOverallWeight.setFocusableInTouchMode(true);
                             params.height = (int) Math.round(addAssignmentButton.getHeight() / 1.8);
                             addAssignmentAdvancedModeRL.setVisibility(View.GONE);
                             addAssignmentAdvancedModeDropdownButton.setImageDrawable(getTheme().getDrawable(R.drawable.arrow_up));
                             isAddAssignmentAdvancedModeButtonExpanded = false;
                         }else{//not currently expanded
+                            addAssignmentOverallMark.setAlpha(0.5f);
+                            addAssignmentOverallMark.setFocusable(false);
+                            addAssignmentOverallMark.setFocusableInTouchMode(false);
+                            addAssignmentOverallWeight.setAlpha(0.5f);
+                            addAssignmentOverallWeight.setFocusable(false);
+                            addAssignmentOverallWeight.setFocusableInTouchMode(false);
                             params.height = (int) Math.round(addAssignmentButton.getHeight() * 1.8);
                             addAssignmentAdvancedModeRL.setVisibility(View.VISIBLE);
                             addAssignmentAdvancedModeDropdownButton.setImageDrawable(getTheme().getDrawable(R.drawable.arrow_down));
@@ -423,7 +437,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 assignment.put("C", (CMark == -1)?null:new JSONObject() {{put("category", "C"); put("mark", CMark.toString()); put("outOf", "100"); put("weight", CWeight.toString());}});
                                 assignment.put("A", (AMark == -1)?null:new JSONObject() {{put("category", "A"); put("mark", AMark.toString()); put("outOf", "100"); put("weight", AWeight.toString());}});
                                 assignment.put("", (OMark == -1)?null:new JSONObject() {{put("category", ""); put("mark", OMark.toString()); put("outOf", "100"); put("weight", OWeight.toString());}});
-                            } else {
+                            } else { //non advanced mode
                                 if(!NumberUtils.isNumber(addAssignmentOverallMark.getText().toString())){
                                     new AlertDialog.Builder(context)
                                             .setTitle("Please Add A Mark")
@@ -456,7 +470,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 assignment.put("T", new JSONObject() {{put("category", "T"); put("mark", mark.toString()); put("outOf", "100"); put("weight", weight.toString());}});
                                 assignment.put("C", new JSONObject() {{put("category", "C"); put("mark", mark.toString()); put("outOf", "100"); put("weight", weight.toString());}});
                                 assignment.put("A", new JSONObject() {{put("category", "A"); put("mark", mark.toString()); put("outOf", "100"); put("weight", weight.toString());}});
-                                assignment.put("", new JSONObject() {{put("category", ""); put("mark", mark.toString()); put("outOf", "100"); put("weight", weight.toString());}});
+                                //assignment.put("", new JSONObject() {{put("category", ""); put("mark", mark.toString()); put("outOf", "100"); put("weight", weight.toString());}});
                             }
                         }catch (JSONException e){
                             new AlertDialog.Builder(context)
@@ -485,6 +499,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                             System.out.println(assignment);
 
                         }catch (JSONException ignore){}
+                        addAssignmentCancelButton.callOnClick();
                         clearAddAssignmentEditTextViews();
 
                     }
@@ -1533,6 +1548,8 @@ public class MarksViewMaterial extends AppCompatActivity {
         }else {
             KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
             BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            KpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)findViewById(R.id.K)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals("0")){
@@ -1543,6 +1560,8 @@ public class MarksViewMaterial extends AppCompatActivity {
         }else {
             TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
             BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            TpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)findViewById(R.id.T)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals("0")){
@@ -1553,6 +1572,8 @@ public class MarksViewMaterial extends AppCompatActivity {
         }else {
             CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
             BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            CpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)findViewById(R.id.C)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals("0")){
@@ -1563,6 +1584,8 @@ public class MarksViewMaterial extends AppCompatActivity {
         }else {
             ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
             BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            ApercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)findViewById(R.id.A)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
         if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals("0")){
             OpercentAverage.setText("NA");
@@ -1572,6 +1595,8 @@ public class MarksViewMaterial extends AppCompatActivity {
         }else {
             OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
             BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            OpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)findViewById(R.id.O)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));
