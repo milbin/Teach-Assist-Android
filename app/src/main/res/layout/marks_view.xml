@@ -360,20 +360,23 @@
                 android:id="@+id/plusIconRL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginTop="40dp"
                 android:layout_centerHorizontal="true">
             <ImageView
                 android:id="@+id/plusIcon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/plus_icon"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Assignment"
+                android:text="Calculate New Assignment Mark"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/plusIcon"
+                android:layout_above="@+id/plusIcon"
+                android:layout_marginBottom="5dp"
                 android:textColor="?textColor"
                 style="@style/Subtitle1"/>
             </RelativeLayout>
@@ -499,7 +502,7 @@
                         android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:layout_alignParentStart="true"
                         android:textColor="?textColor"
                         android:background="@drawable/flush_rounded_courner"
@@ -514,7 +517,7 @@
                         android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:layout_toEndOf="@+id/addAssignmentKMarkET"
                         android:layout_marginStart="30dp"
                         android:textColor="?textColor"
@@ -528,7 +531,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="15dp"
                         android:text="(Knowledge)"
                         android:textColor="?textColor"
                         style="@style/Body2"
@@ -568,7 +571,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="15dp"
                         android:text="(Thinking)"
                         android:textColor="?textColor"
                         style="@style/Body2"
@@ -608,7 +611,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="15dp"
                         android:text="(Communication)"
                         android:textColor="?textColor"
                         style="@style/Body2"
@@ -648,7 +651,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="15dp"
                         android:text="(Application)"
                         android:textColor="?textColor"
                         style="@style/Body2"
@@ -688,7 +691,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="15dp"
                         android:text="(Other)"
                         android:textColor="?textColor"
                         style="@style/Body2"
@@ -701,6 +704,7 @@
                     android:layout_width="100dp"
                     android:layout_height="35dp"
                     android:layout_alignStart="@+id/addAssignmentDividerView"
+                    android:layout_marginStart="30dp"
                     android:layout_marginBottom="20dp"
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/done_button_background_pink"
@@ -715,6 +719,7 @@
                     android:layout_width="100dp"
                     android:layout_height="35dp"
                     android:layout_alignEnd="@+id/addAssignmentDividerView"
+                    android:layout_marginEnd="30dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/done_button_background"

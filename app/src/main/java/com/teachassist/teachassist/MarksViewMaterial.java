@@ -229,7 +229,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             if(Mark == null){
                 new AlertDialog.Builder(context)
                         .setTitle("Connection Error")
-                        .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                        .setMessage("Something went wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -281,7 +281,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                 if (marks == null) {
                     new AlertDialog.Builder(context)
                             .setTitle("Connection Error")
-                            .setMessage("Something went Wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
+                            .setMessage("Something went wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
                             .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -374,8 +374,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                         //check for user entry errors
                         if(addAssignmentTitle.getText().toString().isEmpty()){
                             new AlertDialog.Builder(context)
-                                    .setTitle("Please add a title")
-                                    .setMessage("An assignment title is required for all new assignments")
+                                    .setTitle("Please Add a Title")
+                                    .setMessage("An assignment title is required for all new assignments.")
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -396,8 +396,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                         !NumberUtils.isNumber(addAssignmentAMark.getText().toString()) &&
                                         !NumberUtils.isNumber(addAssignmentOMark.getText().toString())){
                                     new AlertDialog.Builder(context)
-                                            .setTitle("Please Add A Mark")
-                                            .setMessage("At least one mark is required in any category in order to add an assignment")
+                                            .setTitle("Please Add a Mark")
+                                            .setMessage("At least one mark is required in any category to add an assignment.")
                                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -440,8 +440,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                             } else { //non advanced mode
                                 if(!NumberUtils.isNumber(addAssignmentOverallMark.getText().toString())){
                                     new AlertDialog.Builder(context)
-                                            .setTitle("Please Add A Mark")
-                                            .setMessage("At least one mark is required in any category in order to add an assignment")
+                                            .setTitle("Please Add a Mark")
+                                            .setMessage("At least one mark is required in any category to add an assignment.")
                                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -452,8 +452,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                                 }
                                 if(!NumberUtils.isNumber(addAssignmentOverallWeight.getText().toString())){
                                     new AlertDialog.Builder(context)
-                                            .setTitle("Please Add A Weight")
-                                            .setMessage("An assignment weighting is required to calculate your course average")
+                                            .setTitle("Please Add a Weight")
+                                            .setMessage("An assignment weighting is required to calculate your course average.")
                                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
