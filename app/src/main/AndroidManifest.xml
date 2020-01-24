@@ -44,7 +44,8 @@
             android:launchMode="singleTop"/>
 
         <activity android:name=".login"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity android:name=".SettingsActivity"
             android:theme="@style/preferenceTheme">
@@ -64,7 +65,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MarksViewMaterial">
+        <activity android:name=".MarksViewMaterial"
+            android:windowSoftInputMode="stateHidden|adjustResize">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.teachassist.teachassist.MainActivity" />
