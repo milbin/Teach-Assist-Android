@@ -371,18 +371,18 @@
 
                     <RelativeLayout
                         android:id="@+id/plusIconRL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="40dp">
+                        android:layout_centerVertical="true">
 
                         <ImageView
                             android:id="@+id/plusIcon"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="40dp"
                             android:src="@drawable/plus_icon" />
 
                         <TextView
@@ -453,6 +453,7 @@
                             android:background="@drawable/flush_rounded_courner"
                             android:hint="Mark"
                             android:inputType="number|numberDecimal"
+                            android:nextFocusDown="@id/addAssignmentOverallWeightET"
                             android:padding="10dp"
                             android:singleLine="true"
                             android:textColor="?textColor"
@@ -528,6 +529,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Mark"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentKWeightET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -545,6 +547,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Weight"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentTMarkET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -571,6 +574,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Mark"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentTWeightET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -588,6 +592,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Weight"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentCMarkET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -614,6 +619,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Mark"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentCWeightET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -631,6 +637,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Weight"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentAMarkET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -657,6 +664,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Mark"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentAWeightET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -674,6 +682,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Weight"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentOMarkET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
@@ -700,6 +709,7 @@
                                 android:background="@drawable/flush_rounded_courner"
                                 android:hint="Mark"
                                 android:inputType="numberDecimal"
+                                android:nextFocusDown="@id/addAssignmentOWeightET"
                                 android:padding="10dp"
                                 android:textColor="?textColor"
                                 android:textColorHint="?primaryColor"
