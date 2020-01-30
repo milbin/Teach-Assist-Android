@@ -263,6 +263,7 @@ public class TA{
                         String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
                         subjects.add(Subject_id);
 
+
                         String Current_mark = CalculateAverageFromMarksView(newGetMarks(courseNum).get(0), 0);
                         String Course_Name = i.split(":")[0].trim();
                         String Course_code = i.split(":")[1].split("<br>")[0].trim();
@@ -410,7 +411,7 @@ public class TA{
                 //get response
                 SendRequest sr = new SendRequest();
                 marksResponse = sr.send(url, headers, parameters, cookies, path, true);
-                if(marksResponse == null){
+                if(marksResponse == null || marksResponse.length == 0 || marksResponse[0].split("<h2>").length <= 1){
                     return null;
                 }
                 String courseName = marksResponse[0].split("<h2>")[1].split("</h2>")[0];
@@ -424,7 +425,7 @@ public class TA{
                             String title = i.split("\"2\">")[1].split("</td>")[0];
                             assignment.put("title", title);
                             assignment.put("feedback", "");
-                            ArrayList<String> categories = new ArrayList<String>(Arrays.asList("K", "T", "C", "A", "O"));
+                            ArrayList<String> categories = new ArrayList<String>(Arrays.asList("K", "T", "C", "A", ""));
                             int categoryNumber = -1;
                             for (String j : i.split(" align=\"center\">")) {
                                 if (categoryNumber < 0) {
@@ -439,11 +440,11 @@ public class TA{
                                     }
                                 }
                                 String regexFloat = "[+-]?([0-9]*[.])?[0-9]+";
-                                Pattern regex = Pattern.compile(regexFloat + "\\s/\\s" + regexFloat + "\\s.\\s" + regexFloat); //this will capture any number not just an int
+                                Pattern regex = Pattern.compile(regexFloat + "\\s/\\s" + regexFloat + "\\s.\\s"); //this will capture any number not just an int
                                 Matcher matcher = regex.matcher(j);
                                 if (matcher.find()) {
-                                    String markString = matcher.group(0);
                                     assignment.put(categories.get(categoryNumber), new JSONObject());
+                                    String markString = matcher.group(0);
                                     String mark = markString.split(" / ")[0].trim();
                                     String outOf = markString.split(" / ")[1].split("=")[0].trim();
                                     String weight = j.split("<font size=\"-2\">")[1].split("</")[0].trim();
@@ -465,7 +466,8 @@ public class TA{
                                         ((JSONObject) assignment.get(categories.get(categoryNumber))).put("weight", "0");
                                     }
                                 } else if (j.contains("No Mark") || j.contains("No mark") || j.contains("no Mark") || j.contains("no mark")) {
-                                    ((JSONObject) assignment.get(categories.get(categoryNumber))).put("mark", "");
+                                    assignment.put(categories.get(categoryNumber), new JSONObject());
+                                    ((JSONObject) assignment.get(categories.get(categoryNumber))).put("mark", "no mark");
                                     ((JSONObject) assignment.get(categories.get(categoryNumber))).put("outOf", "");
                                     ((JSONObject) assignment.get(categories.get(categoryNumber))).put("weight", "");
                                 }
@@ -473,14 +475,27 @@ public class TA{
                                 categoryNumber++;
 
                             }
-                        }catch (JSONException e){}
+                        }catch (JSONException e){
+                            System.out.println("HERE");
+                        }
                         assignmentNumber++;
                     }
                     if(marksResponse[0].split("rowspan=").length == assignmentNumber+1){
-                        Double k = Double.parseDouble(i.split("<td>Knowledge/Understanding</td>")[1].split(">")[1].split("%<")[0])/100;
-                        Double t = Double.parseDouble(i.split("<td>Thinking</td>")[1].split(">")[1].split("%<")[0])/100;
-                        Double c = Double.parseDouble(i.split("<td>Communication</td>")[1].split(">")[1].split("%<")[0])/100;
-                        Double a = Double.parseDouble(i.split("<td>Application</td>")[1].split(">")[1].split("%<")[0])/100;
+                        Double k;
+                        Double t;
+                        Double c;
+                        Double a;
+                        try {
+                            k = Double.parseDouble(i.split("<td>Knowledge/Understanding</td>")[1].split(">")[1].split("%<")[0]) / 100;
+                            t = Double.parseDouble(i.split("<td>Thinking</td>")[1].split(">")[1].split("%<")[0]) / 100;
+                            c = Double.parseDouble(i.split("<td>Communication</td>")[1].split(">")[1].split("%<")[0]) / 100;
+                            a = Double.parseDouble(i.split("<td>Application</td>")[1].split(">")[1].split("%<")[0]) / 100;
+                        }catch (ArrayIndexOutOfBoundsException ignore){
+                            k = 25.0;
+                            t = 25.0;
+                            c = 25.0;
+                            a = 25.0;
+                        }
                         try {
                             JSONObject categories = new JSONObject();
                             categories.put("K", k);

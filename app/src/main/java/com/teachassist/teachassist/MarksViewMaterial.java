@@ -1122,7 +1122,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             //this code creates a dictionary that the CalculateAverage method uses to
             // multiply the course weighting by the assignment weightings
             HashMap weightDict = new HashMap<String, Double>();
-            if(Kweight == 0.0 && Tweight == 0.0 && Cweight == 0.0 && Aweight == 0.0 &&Oweight == 0.0) {
+            if(Kweight == 0.0 && Tweight == 0.0 && Cweight == 0.0 && Aweight == 0.0 && Oweight == 0.0) {
                 weightDict.put("K", 1.0);
                 weightDict.put("T", 1.0);
                 weightDict.put("C", 1.0);

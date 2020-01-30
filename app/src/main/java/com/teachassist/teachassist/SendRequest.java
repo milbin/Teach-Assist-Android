@@ -124,7 +124,6 @@ public class SendRequest {
             for (String i : TAcookies) {
                 returnList[TAcookies.indexOf(i)+1] = i;
             }
-
             return returnList;
 
 
