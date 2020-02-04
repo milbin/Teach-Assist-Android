@@ -228,6 +228,10 @@ public class TA{
                 int courseNum = 0;
                 int numberOfEmptyCourses = 0;
                 for(String i :resp[0].split("<td>")){
+                    System.out.println("HERE");
+                    if(i.contains("<td align=\"right\">\n\t\t</td>")){
+                        System.out.println(i);
+                    }
                     if(i.contains("current mark =  ")){
                         String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
                         String Current_mark = i.split("current mark =  ")[1].split("%")[0].trim();
@@ -244,7 +248,7 @@ public class TA{
                         subjects.add(Subject_id);
                         Marks.put(Subject_id, Stats);
                     }
-                    else if(i.contains("Please see teacher for current status regarding achievement in the course")){
+                    else if(i.contains("Please see teacher for current status regarding achievement in the course")|| i.contains("<td align=\"right\">\n\t\t</td>")){
                         ArrayList<String> Stats = new ArrayList<>();
                         String Course_Name = i.split(":")[0].trim();
                         String Course_code = i.split(":")[1].split("<br>")[0].trim();
@@ -258,7 +262,6 @@ public class TA{
                         subjects.add("0");
                         Marks.put("NA"+numberOfEmptyCourses, Stats);
                     }
-
                     else if(i.contains("Click Here") || i.contains("Level")){
                         String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
                         subjects.add(Subject_id);
