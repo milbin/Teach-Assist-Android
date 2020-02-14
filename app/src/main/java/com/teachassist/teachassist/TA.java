@@ -232,9 +232,10 @@ public class TA{
                     if(i.contains("<td align=\"right\">\n\t\t</td>")){
                         System.out.println(i);
                     }
-                    if(i.contains("current mark =  ")){
+                    if(i.contains("current mark = ")){
                         String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
-                        String Current_mark = i.split("current mark =  ")[1].split("%")[0].trim();
+                        String Current_mark = i.split("current mark = ")[1].split("%")[0].trim();
+                        System.out.println(Current_mark);
                         String Course_Name = i.split(":")[0].trim();
                         String Course_code = i.split(":")[1].split("<br>")[0].trim();
                         String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
