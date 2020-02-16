@@ -533,6 +533,7 @@ public class TA{
     public String CalculateAverageFromMarksView(JSONObject marks, int numberOfRemovedAssignments) { //CalculateTotalAverage
         DecimalFormat round = new DecimalFormat(".#");
         try {
+            boolean markExists = false;
             JSONObject weights = marks.getJSONObject("categories");
             Double weightK = weights.getDouble("K") * 10 * 0.7;
             Double weightT = weights.getDouble("T") * 10 * 0.7;
@@ -565,6 +566,7 @@ public class TA{
                     if (!assignment.getJSONObject("K").isNull("mark") && !assignment.getJSONObject("K").getString("mark").equals("no mark")) {
                         Double assignmentK = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                        markExists = true;
                         KweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("K").getString("weight"));
                         if(KweightAssignmentTemp != -1.0) {
                             Kmark += assignmentK * KweightAssignmentTemp;
@@ -578,6 +580,7 @@ public class TA{
                         Double assignmentT = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
                         TweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("T").getString("weight"));
+                        markExists = true;
                         if(TweightAssignmentTemp != -1.0) {
                             Tmark += assignmentT * TweightAssignmentTemp;
                             TweightAssignment += TweightAssignmentTemp;
@@ -590,6 +593,7 @@ public class TA{
                         Double assignmentC = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
                         CweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("C").getString("weight"));
+                        markExists = true;
                         if(CweightAssignmentTemp != -1.0) {
                             Cmark += assignmentC * CweightAssignmentTemp;
                             CweightAssignment += CweightAssignmentTemp;
@@ -602,6 +606,7 @@ public class TA{
                         Double assignmentA = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
                         AweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("A").getString("weight"));
+                        markExists = true;
                         if(AweightAssignmentTemp != -1.0) {
                             Amark += assignmentA * AweightAssignmentTemp;
                             AweightAssignment += AweightAssignmentTemp;
@@ -614,6 +619,7 @@ public class TA{
                         Double assignmentS = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
                                 Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
                         SweightAssignmentTemp = Double.parseDouble(assignment.getJSONObject("").getString("weight"));
+                        markExists = true;
                         if(SweightAssignmentTemp != -1.0) {
                             Smark += assignmentS * SweightAssignmentTemp;
                             SweightAssignment += SweightAssignmentTemp;
@@ -662,8 +668,12 @@ public class TA{
             Cmark *= weightC;
             Amark *= weightA;
             Smark *= weightS;
-            String Average = String.valueOf(round.format((Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100).replaceAll(",", "."));
-            return Average;
+
+            Double AverageDouble = (Kmark + Tmark + Cmark + Amark +Smark) / (weightK + weightT + weightC + weightA +weightS) * 100;
+            if(AverageDouble.isNaN() && markExists){
+                return "0.0";
+            }
+            return String.valueOf(round.format(AverageDouble).replaceAll(",", "."));
 
         }catch (JSONException e){
             e.printStackTrace();
