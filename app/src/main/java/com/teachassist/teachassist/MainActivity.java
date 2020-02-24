@@ -630,9 +630,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             dialog.dismiss();
 
             SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-            if(!sharedPreferences.getBoolean("hasShownPopup", false)) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("hasShownPopup", true);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("didAskForRating", false);
+            editor.apply();
+            if(!sharedPreferences.getBoolean("didAskForRating", false)) {
+                //SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("didAskForRating", true);
+                editor.putBoolean("hasShownPopup", false); //reset the value from last popup
                 editor.apply();
                 // custom popup dialog
                 final Dialog dialog1 = new Dialog(context);
@@ -644,6 +648,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialog1.dismiss();
+                    }
+                });
+                Button dialogButtonRate = (Button) dialog1.findViewById(R.id.dialogButtonRate);
+                // if button is clicked, close the custom dialog
+                dialogButtonRate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                        try {
+                            startActivity(myAppLinkToMarket);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(context, " unable to find market app", Toast.LENGTH_LONG).show();
+                        }
                         dialog1.dismiss();
                     }
                 });

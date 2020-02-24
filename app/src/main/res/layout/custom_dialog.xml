@@ -17,9 +17,9 @@
         android:layout_below="@+id/image"
         android:layout_marginTop="0dp"
         style="@style/Subtitle1"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="@color/textColor"
-        android:text="The Redesign Has Arrived!"
+        android:text="Please consider rating our app"
         android:textAlignment="center"
         />
     <TextView
@@ -32,19 +32,34 @@
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="13dp"
-        android:text="After many hours of work, we're happy to share that the complete redesign of the Teachassist app has arrived! This includes all new fonts, colours, logos, and designs. An additional option to enable light theme is available in the app settings. We hope you enjoy! \n \n Note: an assignment calculator and support for offline usage are coming soon!"
+        android:text="We have put literally hundreds of hours of work into building this app and would really appreciate a 5 star rating on the Play Store!"
         />
     <Button
         android:id="@+id/dialogButtonOK"
-        android:layout_width="200dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/TV2"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Done"
+        android:text="Dismiss"
         style="@style/Subtitle1"
-        android:textColor="@color/textColor"
+        android:textColor="?attr/textColor"
+        android:background="@drawable/button_bg_rectangle_solid"
+        />
+    <Button
+        android:id="@+id/dialogButtonRate"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TV2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Rate"
+        style="@style/Subtitle1"
+        android:textColor="?attr/textColor"
         android:background="@drawable/button_bg_rectangle_solid"
         />
 </RelativeLayout>
