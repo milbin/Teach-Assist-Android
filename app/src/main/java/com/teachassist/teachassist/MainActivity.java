@@ -630,11 +630,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             dialog.dismiss();
 
             SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("didAskForRating", false);
-            editor.apply();
             if(!sharedPreferences.getBoolean("didAskForRating", false)) {
-                //SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("didAskForRating", true);
                 editor.putBoolean("hasShownPopup", false); //reset the value from last popup
                 editor.apply();
