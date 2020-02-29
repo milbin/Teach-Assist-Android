@@ -17,9 +17,11 @@
         <item name="primaryPink">#ff4181</item>
         <item name="Background">#33333d</item>
         <item name="textColor">#ffffff</item>
+        <item name="unhighlightedTextColor">#484857</item>
         <item name="preferenceTheme">@style/preferenceTheme</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
+
     </style>
     <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#ffffff</item>
@@ -27,10 +29,11 @@
         <item name="primaryColor">#ffffff</item>
         <item name="primaryColorDark">#e4e4eb</item>
         <item name="toolbarColor">#ffffff</item>
-        <item name="primaryGreen">#37efba</item> n
+        <item name="primaryGreen">#37efba</item>
         <item name="primaryPink">#729fff</item>
         <item name="Background">#ffffff</item>
         <item name="textColor">#000000</item>
+        <item name="unhighlightedTextColor">#e4e4eb</item>
         <item name="preferenceTheme">@style/preferenceTheme</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="selectableItemBackground">?android:selectableItemBackground</item>

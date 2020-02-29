@@ -8,6 +8,8 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.29.0'
     }
 }
+
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
@@ -21,8 +23,8 @@ android {
         applicationId "com.teachassist.teachassist"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 54
-        versionName "3.2.5"
+        versionCode 56
+        versionName "3.3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -71,6 +73,11 @@ dependencies {
     runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.7') {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
+
+    //'Room' for sqlite
+    def room_version = "2.2.4"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }
 configurations {
     all*.exclude group: 'com.google.guava', module: 'listenablefuture'

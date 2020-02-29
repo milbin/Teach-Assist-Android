@@ -65,10 +65,23 @@
                     </RelativeLayout>
 
                 </androidx.appcompat.widget.Toolbar>
-
-
-
-
+                <RelativeLayout
+                    android:id="@+id/offlineIndicatorBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/offlineWarningColour"
+                    android:visibility="invisible"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="No connection. Marks may not be up to date while offline."
+                        android:textAlignment="center"
+                        android:paddingTop="2dp"
+                        android:textColor="@android:color/black"
+                        style="@style/Body2"
+                        />
+                </RelativeLayout>
 
                 <!--Average-->
                 <RelativeLayout
@@ -106,7 +119,7 @@
 
 
             <TextView
-                android:id="@+id/AverageInt"
+                android:id="@+id/semesterAverageTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

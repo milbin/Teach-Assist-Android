@@ -11,5 +11,6 @@
     <attr name="DarkGray" format="reference|color"/>
     <attr name="Background" format="reference|color"/>
     <attr name="textColor" format="reference|color"/>
+    <attr name="unhighlightedTextColor" format="reference|color"/>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.teachassist.teachassist;
 
+import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,8 +16,8 @@ import android.os.Bundle;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,7 +42,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.JsonIOException;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.json.JSONException;
@@ -53,10 +53,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
-import io.opencensus.internal.StringUtils;
 
 
 public class MarksViewMaterial extends AppCompatActivity {
@@ -65,8 +63,8 @@ public class MarksViewMaterial extends AppCompatActivity {
     JSONObject Marks;
     String username;
     String password;
-    int subject_number;
-    String CourseName;
+    int subjectNumber;
+    String courseCode;
     String Mark;
     ProgressDialog dialog;
     Context context = this;
@@ -86,6 +84,7 @@ public class MarksViewMaterial extends AppCompatActivity {
     boolean isAddAssignmentAdvancedModeButtonExpanded = false;
     Button addAssignmentDoneButton;
     Button addAssignmentCancelButton;
+    Button statisticsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +97,16 @@ public class MarksViewMaterial extends AppCompatActivity {
         }
         setContentView(R.layout.marks_view);
 
+
         //setup add assignment button
         addAssignmentButton = findViewById(R.id.addAssignmentButton);
         addAssignmentAdvancedModeButton = findViewById(R.id.addAssignmentAdvancedModeTV);
         addAssignmentDoneButton = findViewById(R.id.addAssignmentDoneButton);
         addAssignmentCancelButton = findViewById(R.id.addAssignmentCancelButton);
+
+        // setup statistics button
+        statisticsButton = findViewById(R.id.statisticsButton);
+        statisticsButton.setOnClickListener(new onStatisticsButtonClick());
 
         //setup font
         font = ResourcesCompat.getFont(context, R.font.sandstone_regular);
@@ -113,14 +117,15 @@ public class MarksViewMaterial extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_back);//back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        findViewById(R.id.backButton).setOnClickListener(new onBackPressed());
 
         //get intents
         Intent intent = getIntent();
         username = intent.getStringExtra("username").replaceAll("\\s+", "");
         password = intent.getStringExtra("password").replaceAll("\\s+", "");
-        subject_number = intent.getIntExtra("subject", 0);
+        subjectNumber = intent.getIntExtra("subjectNumber", 0);
+        courseCode = intent.getStringExtra("courseCode").replaceAll("\\s+", "");
         Mark = intent.getStringExtra("subject Mark");
         Crashlytics.setUserIdentifier(username);
         Crashlytics.setString("username", username);
@@ -151,6 +156,29 @@ public class MarksViewMaterial extends AppCompatActivity {
 
         //instantiate this class to cancel it later if the back button is pressed
         getMarksTask = new GetMarks().execute();
+    }
+
+    public class onStatisticsButtonClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            statisticsButton.setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((Button)findViewById(R.id.assignmentsButton)).setTextColor(resolveColorAttr(context, R.attr.unhighlightedTextColor));
+            Intent myIntent = new Intent(MarksViewMaterial.this, AssignmentStatsActivity.class);
+            startActivity(myIntent);
+            overridePendingTransition(0, 0);
+        }
+    }
+    public class onBackPressed implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        statisticsButton.setTextColor(resolveColorAttr(context, R.attr.unhighlightedTextColor));
+        ((Button)findViewById(R.id.assignmentsButton)).setTextColor(resolveColorAttr(context, R.attr.textColor));
     }
 
     @Override
@@ -242,8 +270,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                 }
                 return;
             }
-            TextView AverageInt = findViewById(R.id.AverageInt);
-            AverageInt.setText(Mark+"%");
+            TextView semesterAverageTV = findViewById(R.id.semesterAverageTV);
+            semesterAverageTV.setText(Mark+"%");
             if(Mark.contains("NA") && !Mark.contains("NaN")){
                 finish();
             }
@@ -253,29 +281,32 @@ public class MarksViewMaterial extends AppCompatActivity {
         }
 
         @Override
-        protected JSONObject doInBackground(String... temp) {
+        protected JSONObject doInBackground(String... ignore) {
             TA ta = new TA();
-            ta.GetTAData(username, password);
-            List<JSONObject> returnValue = ta.newGetMarks(subject_number);
-            if(returnValue == null){
-                Crashlytics.log(Log.ERROR, "network request failed", "line 184 MVM");
-                return null;
+            ta.GetCoursesHTML(username, password);
+            JSONObject returnValue = ta.GetAssignmentsHTML(subjectNumber);
+            AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                    AppDatabase.class, username).build();
+            if (returnValue == null) {
+                try {
+                    Marks = new JSONObject(db.coursesDao().getCourseByCourseCode(courseCode).assignments);
+                } catch (Exception ignored) {
+                    return null;
+                }
+            }else{
+                Marks = returnValue;
             }
-            Marks = returnValue.get(0);
-
-            try {
-                CourseName = returnValue.get(1).getString("course");
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
+            // Write all the individual assignments of this course as one big json string to the database
+            // Android requires that the action be performed within a thread
+            String jsonAssignmentString = Marks.toString();
+            //it should not be possible for this call to return nothing since you need an unhidden course to click on it
+            CoursesEntity coursesEntity = db.coursesDao().getCourseByCourseCode(courseCode);
+            coursesEntity.assignments = jsonAssignmentString;
+            db.coursesDao().updateCourse(coursesEntity);
+            db.close();
             return Marks;
-
-
         }
 
-        protected void onProgressUpdate(Integer... temp) {
-            super.onProgressUpdate();
-        }
         protected void onPostExecute(final JSONObject marks){
             if(!isCancelled()) {
                 if (marks == null) {
@@ -489,8 +520,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                             addAssignmentToLinearLayout(Marks, numberOfAssignments, false);
                             numberOfAssignments++;
                             TA ta = new TA();
-                            String returnval = ta.CalculateAverageFromMarksView(Marks, numberOfRemovedAssignments);
-                            TextView AverageInt = findViewById(R.id.AverageInt);
+                            String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments);
+                            TextView AverageInt = findViewById(R.id.semesterAverageTV);
                             AverageInt.setText(returnval + "%");
                             int Average = Math.round(Float.parseFloat(returnval));
                             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
@@ -1097,8 +1128,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                             removedAssignmentIndexList.add(index);
                             numberOfRemovedAssignments++;
                             TA ta = new TA();
-                            String returnval = ta.CalculateAverageFromMarksView(Marks, numberOfRemovedAssignments);
-                            TextView AverageInt = findViewById(R.id.AverageInt);
+                            String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments);
+                            TextView AverageInt = findViewById(R.id.semesterAverageTV);
                             AverageInt.setText(returnval + "%");
                             int Average = Math.round(Float.parseFloat(returnval));
                             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
@@ -1112,9 +1143,9 @@ public class MarksViewMaterial extends AppCompatActivity {
             trashButton.setVisibility(View.INVISIBLE);
 
             // Setup toolbar text
-            ((TextView)findViewById(R.id.toolbar_title)).setText(CourseName);
+            ((TextView)findViewById(R.id.toolbar_title)).setText(courseCode);
             getSupportActionBar().setTitle("");
-            Crashlytics.log(Log.DEBUG, "coursename", CourseName);
+            Crashlytics.log(Log.DEBUG, "coursename", courseCode);
             //set title
             TextView Title = rl.findViewById(R.id.title);
             Title.setText(title);

@@ -1,25 +1,19 @@
 package com.teachassist.teachassist;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.room.Room;
+
 import com.crashlytics.android.Crashlytics;
-import com.github.mikephil.charting.components.LimitLine;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import org.decimal4j.util.DoubleRounder;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.sql.SQLSyntaxErrorException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,158 +24,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.teachassist.teachassist.LaunchActivity.CREDENTIALS;
-import static com.teachassist.teachassist.LaunchActivity.PASSWORD;
-import static com.teachassist.teachassist.LaunchActivity.USERNAME;
-
 
 public class TA{
-    String student_id;
-    String session_token;
-    ArrayList<String> subjects = new ArrayList<>();
-    LinkedHashMap<String, List<String>> Marks;
-    String[] marksResponse;
-    String username;
-    String password;
-
-
-
-    public LinkedHashMap<String, List<String>> GetTAData(String Username, String Password) {
-        username = Username;
-        password = Password;
-        Crashlytics.log(Log.DEBUG, "username", Username);
-        Crashlytics.log(Log.DEBUG, "password", Password);
-        SendRequest sr = new SendRequest();
-        try {
-            //get token and student id
-            JSONObject json = new JSONObject();
-            json.put("student_number", Username);
-            json.put("password", Password);
-            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", json.toString()).getJSONObject(0);
-            if(respJson == null){
-                LinkedHashMap<String, List<String>> resp2 = GetTAData2(username, password);
-                if(resp2 != null){
-                    return resp2;
-                }
-                Crashlytics.log(Log.ERROR, "network request failed", "line 58 TA");
-                return null;
-            }
-
-            session_token = respJson.getString("token");
-            student_id = respJson.getString("student_id");
-
-
-            //get marks and course code
-            JSONObject marksJson = new JSONObject();
-            marksJson.put("token", session_token);
-            marksJson.put("student_id", student_id);
-            marksJson.put("subject_id", 0);
-            JSONArray marksResp = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", marksJson.toString())
-                    .getJSONObject(0)
-                    .getJSONArray("data")
-                    .getJSONObject(0)
-                    .getJSONArray("subjects");
-            if(marksResp == null){
-                LinkedHashMap<String, List<String>> resp2 = GetTAData2(username, password);
-                if(resp2 != null){
-                    return resp2;
-                }
-                Crashlytics.log(Log.ERROR, "network request failed", "line 77 TA");
-                return null;
-            }
-            Marks = new LinkedHashMap<>();
-            for (int i = 0; i < marksResp.length(); i++) {
-                ArrayList<String> fields = new ArrayList<>();
-                JSONObject subject = marksResp.getJSONObject(i);
-                subjects.add(subject.getString("subject_id"));
-                if(subject.getString("mark").equals("Please see teacher for current status regarding achievement in the course")) {
-                    fields.add(subject.getString("course"));
-                    Marks.put("NA"+i, fields);
-                }else{
-                    if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")|| subject.getString("mark").contains("Click") || subject.getString("mark").contains("click")) {
-                        fields.add(CalculateAverageFromMarksView(newGetMarks(i).get(0), 0));
-                    }else {
-                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", ""));
-                    }
-                    fields.add(subject.getString("course"));
-                    Marks.put(subject.getString("subject_id"), fields);
-                }
-
-            }
-
-
-
-            //get room number and course name
-            String url = "https://ta.yrdsb.ca/live/index.php?";
-            String path = "/live/index.php?";
-            HashMap<String, String> headers = new HashMap<>();
-            LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
-            HashMap<String, String> cookies = new HashMap<>();
-            parameters.put("subject_id", "0");
-            parameters.put("username", Username);
-            parameters.put("password", Password);
-            cookies.put("session_token", session_token);
-            cookies.put("student_id", student_id);
-            String[] resp = sr.send(url, headers, parameters, cookies, path, true);
-            if(resp == null){
-                LinkedHashMap<String, List<String>> resp2 = GetTAData2(username, password);
-                if(resp2 != null){
-                    return resp2;
-                }
-                Crashlytics.log(Log.ERROR, "network request failed", "line 112 TA");
-                return null;
-            }
-
-            //parse return
-            int courseCounter1 = 0;
-            for(String i :resp[0].split("<td>")){
-                if((i.contains("current mark = ") || i.contains("Please see teacher for current status regarding achievement in the course")||i.contains("Click Here")||i.contains("Level")||i.contains("Block")) && !i.contains("0000-00-00")) {
-                    String Course_Name = i.split(":")[1].split("<br>")[0].trim();
-                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
-                    String course = i.split(" :")[0].trim();
-                    //String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
-                    int courseCounter2 = 0;
-                    if(courseCounter1>=Marks.size()){
-                        ArrayList<String> fields = new ArrayList<>();
-                        fields.add(course);
-                        fields.add(Course_Name);
-                        fields.add(Room_Number);
-                        Marks.put("NA"+courseCounter1, fields);
-                    }else {
-                        for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-                            if (courseCounter1 == courseCounter2) {
-                                entry.getValue().add(Course_Name);
-                                entry.getValue().add(Room_Number);
-                            }
-                            courseCounter2++;
-
-                        }
-                    }
-                    courseCounter1++;
-                }
-
-
-                    //Marks.put(Subject_id, Stats);
-
-            }
-            System.out.println(Marks+"marks RESPONSE HERE<----");
-            return Marks;
-
-
-
-        }catch (Exception e){
-            LinkedHashMap<String, List<String>> resp2 = GetTAData2(username, password);
-            if(resp2 != null){
-                return resp2;
-            }
-            e.printStackTrace();
-            Crashlytics.log(Log.ERROR, "Error in GetTaData in TA()", Arrays.toString(e.getStackTrace()));
-            return null;
-        }
-    }
-
-    public LinkedHashMap<String, List<String>> GetTAData2(String Username, String Password){
+    private String student_id;
+    private String session_token;
+    private ArrayList<String> subjects = new ArrayList<>();
+    public LinkedHashMap<String, List<String>> GetCoursesHTML(String Username, String Password){
         try {
             Crashlytics.log(Log.DEBUG, "username", Username);
             Crashlytics.log(Log.DEBUG, "password", Password);
@@ -223,12 +71,11 @@ public class TA{
                     return null;
                 }
 
-                Marks = new LinkedHashMap();
+                LinkedHashMap<String, List<String>> assignments = new LinkedHashMap<>();
 
                 int courseNum = 0;
                 int numberOfEmptyCourses = 0;
                 for(String i :resp[0].split("<td>")){
-                    System.out.println("HERE");
                     if(i.contains("<td align=\"right\">\n\t\t</td>")){
                         System.out.println(i);
                     }
@@ -247,7 +94,7 @@ public class TA{
                         courseNum++;
 
                         subjects.add(Subject_id);
-                        Marks.put(Subject_id, Stats);
+                        assignments.put(Subject_id, Stats);
                     }
                     else if(i.contains("Please see teacher for current status regarding achievement in the course")|| i.contains("<td align=\"right\">\n\t\t</td>")){
                         ArrayList<String> Stats = new ArrayList<>();
@@ -261,14 +108,14 @@ public class TA{
                         courseNum++;
                         numberOfEmptyCourses++;
                         subjects.add("0");
-                        Marks.put("NA"+numberOfEmptyCourses, Stats);
+                        assignments.put("NA"+numberOfEmptyCourses, Stats);
                     }
                     else if(i.contains("Click Here") || i.contains("Level")){
                         String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
                         subjects.add(Subject_id);
 
 
-                        String Current_mark = CalculateAverageFromMarksView(newGetMarks(courseNum).get(0), 0);
+                        String Current_mark = CalculateCourseAverageFromAssignments(GetAssignmentsHTML(courseNum), 0);
                         String Course_Name = i.split(":")[0].trim();
                         String Course_code = i.split(":")[1].split("<br>")[0].trim();
                         String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
@@ -279,127 +126,29 @@ public class TA{
                         Stats.add(Room_Number);
                         courseNum++;
 
-                        Marks.put(Subject_id, Stats);
+                        assignments.put(Subject_id, Stats);
                     }
 
                 }
-                return Marks;
+                return assignments;
 
             }
             catch (ArrayIndexOutOfBoundsException e){
                 e.printStackTrace();
                 return null;
             }
-
-
-
-
         }
         catch(IOException e) {
             e.printStackTrace();
             return null;
         }
-
     }
 
-
-
-
-    public Double GetAverage(HashMap<String, List<String>> Marks){
-
-        //Get average
-        double Average = 0;
-        int x = 0;
+    public JSONObject GetAssignmentsHTML(int subject_number){
         try {
-            for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-                if (!entry.getKey().contains("NA")) {
-                    x++;
-                }
-            }
-        }catch (Exception e){
-            Crashlytics.log(Log.ERROR, "Error in GetAverage TA()", "line 232 TA");
-            return null;
-        }
-        double[] grades = new double[x];
-        int i = 0;
-        int counter = 0;
-        for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
-            if (!entry.getKey().contains("NA")) {
-                if(entry.getValue().get(0).contains("Level") || entry.getValue().get(0).contains("level") || entry.getValue().get(0).contains("Click") || entry.getValue().get(0).contains("click")){
-                    grades[i] = Double.parseDouble(CalculateAverageFromMarksView(newGetMarks(counter).get(0), 0));
-                }else {
-                    grades[i] = Double.parseDouble(entry.getValue().get(0));
-                }
-
-                i++;
-            }
-            counter++;
-
-
-        }
-        for (double value:grades)
-            Average += value;
-        Average = DoubleRounder.round(Average/grades.length, 1);
-
-        return Average;
-
-    }
-
-
-
-    public List<JSONObject> newGetMarks(int subject_number) {
-        SendRequest sr = new SendRequest();
-        Crashlytics.log(Log.DEBUG, "username", username);
-        Crashlytics.log(Log.DEBUG, "password", password);
-        try {
-            //get marks
-            JSONObject json = new JSONObject();
-
-            json.put("student_id", student_id);
-            json.put("token", session_token);
-            json.put("subject_id", subjects.get(subject_number));
-            JSONObject respJsonAssignments = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", json.toString())
-                    .getJSONObject(0)
-                    .getJSONObject("data");
-            if(respJsonAssignments == null){
-                List<JSONObject> resp2 = GetMarks(subject_number);
-                if(resp2 != null){
-                    return resp2;
-                }
-                Crashlytics.log(Log.ERROR, "network request failed", "line 275 TA");
+            if(subjects.size()-1 < subject_number){ //this will happen when we call this method from a hidden course ei: in offline mode
                 return null;
             }
-            JSONObject respJsonName = respJsonAssignments;
-            try {
-                respJsonAssignments = respJsonAssignments
-                        .getJSONObject("assessment")
-                        .getJSONObject("data");
-            }catch (Exception e){
-                List<JSONObject> resp2 = GetMarks(subject_number);
-                if(resp2 != null){
-                    return resp2;
-                }
-                Crashlytics.log(Log.ERROR, "network request probably failed", "line 284 TA");
-                return null;
-            }
-            System.out.println(respJsonAssignments + "JSON RESPONSE HERE<----");
-            List respJsonList = Arrays.asList(respJsonAssignments, respJsonName);
-            return respJsonList;
-
-        }catch (Exception e){
-            List<JSONObject> resp2 = GetMarks(subject_number);
-            if(resp2 != null){
-                return resp2;
-            }
-            e.printStackTrace();
-            Crashlytics.log(Log.ERROR, "Error in newGetMarks", "line 293 TA");
-            return null;
-        }
-
-    }
-
-    public List<JSONObject> GetMarks(int subject_number){
-        try {
             if(subject_number >=0) {
                 String url = "https://ta.yrdsb.ca/live/students/viewReport.php?";
                 String path = "/live/students/viewReport.php?";
@@ -407,14 +156,14 @@ public class TA{
                 LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
                 LinkedHashMap<String, String> cookies = new LinkedHashMap<>();
                 parameters.put("subject_id", subjects.get(subject_number));
-                cookies.put("token", session_token);
                 parameters.put("student_id", student_id);
+                cookies.put("token", session_token);
                 cookies.put("session_token", session_token);
                 cookies.put("student_id", student_id);
 
                 //get response
                 SendRequest sr = new SendRequest();
-                marksResponse = sr.send(url, headers, parameters, cookies, path, true);
+                String[] marksResponse = sr.send(url, headers, parameters, cookies, path, true);
                 if(marksResponse == null || marksResponse.length == 0 || marksResponse[0].split("<h2>").length <= 1){
                     return null;
                 }
@@ -511,14 +260,7 @@ public class TA{
                     }
 
                 }
-                List<JSONObject> returnList = new ArrayList<>();
-                returnList.add(assignments);
-                JSONObject courseNameJson = new JSONObject();
-                try{
-                    courseNameJson.put("course", courseName);
-                }catch (JSONException e){}
-                returnList.add(courseNameJson); //as far as i can tell this second item in the list is probably useless
-                return returnList;
+                return assignments;
             }else{
                 return null;
             }
@@ -530,7 +272,7 @@ public class TA{
 
     }
 
-    public String CalculateAverageFromMarksView(JSONObject marks, int numberOfRemovedAssignments) { //CalculateTotalAverage
+    public String CalculateCourseAverageFromAssignments(JSONObject marks, int numberOfRemovedAssignments) { //CalculateTotalAverage
         DecimalFormat round = new DecimalFormat(".#");
         try {
             boolean markExists = false;
@@ -681,6 +423,255 @@ public class TA{
             return null;
         }
     }
+    public Double GetSemesterAverage(HashMap<String, List<String>> Marks){
+
+        //Get average
+        double Average = 0;
+        int x = 0;
+        try {
+            for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
+                if (!entry.getKey().contains("NA")) {
+                    x++;
+                }
+            }
+        }catch (Exception e){
+            Crashlytics.log(Log.ERROR, "Error in GetSemesterAverage TA()", "line 232 TA");
+            return null;
+        }
+        double[] grades = new double[x];
+        int i = 0;
+        int counter = 0;
+        for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
+            if (!entry.getKey().contains("NA")) {
+                if(entry.getValue().get(0).contains("Level") || entry.getValue().get(0).contains("level") || entry.getValue().get(0).contains("Click") || entry.getValue().get(0).contains("click")){
+                    grades[i] = Double.parseDouble(CalculateCourseAverageFromAssignments(GetAssignmentsHTML(counter), 0));
+                }else {
+                    grades[i] = Double.parseDouble(entry.getValue().get(0));
+                }
+
+                i++;
+            }
+            counter++;
+
+
+        }
+        for (double value:grades)
+            Average += value;
+        Average = DoubleRounder.round(Average/grades.length, 1);
+
+        return Average;
+
+    }
+
+    public LinkedHashMap<String, List<String>> GetCoursesOffline(final String username, final Context applicationContext){
+        final LinkedHashMap<String, List<String>> courses = new LinkedHashMap<>();
+        AppDatabase db = Room.databaseBuilder(applicationContext,
+                AppDatabase.class, username).build();
+        CoursesEntity[] coursesEntities = db.coursesDao().getAllCoureses();
+        for(CoursesEntity coursesEntity:coursesEntities) {
+            ArrayList<String> courseProperties = new ArrayList<>();
+            if(!coursesEntity.subjectID.contains("NA")) {
+                courseProperties.add(String.valueOf(coursesEntity.average));
+            }
+            courseProperties.add(coursesEntity.courseCode);
+            courseProperties.add(coursesEntity.courseName);
+            courseProperties.add(coursesEntity.roomNumber);
+            courses.put(coursesEntity.subjectID, courseProperties);
+        }
+        db.close();
+        System.out.println(courses);
+        System.out.println("HERE12345");
+        return courses;
+    }
+
+
+
+    /*public List<JSONObject> GetAssignmentsJson(int subjectNumber) {
+        SendRequest sr = new SendRequest();
+        Crashlytics.log(Log.DEBUG, "username", username);
+        Crashlytics.log(Log.DEBUG, "password", password);
+        try {
+            //get marks
+            JSONObject json = new JSONObject();
+
+            json.put("student_id", student_id);
+            json.put("token", session_token);
+            json.put("subject_id", subjects.get(subjectNumber));
+            JSONObject respJsonAssignments = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", json.toString())
+                    .getJSONObject(0)
+                    .getJSONObject("data");
+            if(respJsonAssignments == null){
+                List<JSONObject> resp2 = GetAssignmentsHTML(subjectNumber);
+                if(resp2 != null){
+                    return resp2;
+                }
+                Crashlytics.log(Log.ERROR, "network request failed", "line 275 TA");
+                return null;
+            }
+            JSONObject respJsonName = respJsonAssignments;
+            try {
+                respJsonAssignments = respJsonAssignments
+                        .getJSONObject("assessment")
+                        .getJSONObject("data");
+            }catch (Exception e){
+                List<JSONObject> resp2 = GetAssignmentsHTML(subjectNumber);
+                if(resp2 != null){
+                    return resp2;
+                }
+                Crashlytics.log(Log.ERROR, "network request probably failed", "line 284 TA");
+                return null;
+            }
+            System.out.println(respJsonAssignments + "JSON RESPONSE HERE<----");
+            List respJsonList = Arrays.asList(respJsonAssignments, respJsonName);
+            return respJsonList;
+
+        }catch (Exception e){
+            List<JSONObject> resp2 = GetAssignmentsHTML(subjectNumber);
+            if(resp2 != null){
+                return resp2;
+            }
+            e.printStackTrace();
+            Crashlytics.log(Log.ERROR, "Error in GetAssignmentsJson", "line 293 TA");
+            return null;
+        }
+
+    }*/
+    /*public LinkedHashMap<String, List<String>> GetCoursesJson(String Username, String Password) {
+        username = Username;
+        password = Password;
+        Crashlytics.log(Log.DEBUG, "username", Username);
+        Crashlytics.log(Log.DEBUG, "password", Password);
+        SendRequest sr = new SendRequest();
+        try {
+            //get token and student id
+            JSONObject json = new JSONObject();
+            json.put("student_number", Username);
+            json.put("password", Password);
+            JSONObject respJson = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", json.toString()).getJSONObject(0);
+            if(respJson == null){
+                LinkedHashMap<String, List<String>> resp2 = GetCoursesHTML(username, password);
+                if(resp2 != null){
+                    return resp2;
+                }
+                Crashlytics.log(Log.ERROR, "network request failed", "line 58 TA");
+                return null;
+            }
+
+            session_token = respJson.getString("token");
+            student_id = respJson.getString("student_id");
+
+
+            //get marks and course code
+            JSONObject marksJson = new JSONObject();
+            marksJson.put("token", session_token);
+            marksJson.put("student_id", student_id);
+            marksJson.put("subject_id", 0);
+            JSONArray marksResp = sr.sendJson("https://ta.yrdsb.ca/v4/students/json-20180628.php", marksJson.toString())
+                    .getJSONObject(0)
+                    .getJSONArray("data")
+                    .getJSONObject(0)
+                    .getJSONArray("subjects");
+            if(marksResp == null){
+                LinkedHashMap<String, List<String>> resp2 = GetCoursesHTML(username, password);
+                if(resp2 != null){
+                    return resp2;
+                }
+                Crashlytics.log(Log.ERROR, "network request failed", "line 77 TA");
+                return null;
+            }
+            assignments = new LinkedHashMap<>();
+            for (int i = 0; i < marksResp.length(); i++) {
+                ArrayList<String> fields = new ArrayList<>();
+                JSONObject subject = marksResp.getJSONObject(i);
+                subjects.add(subject.getString("subject_id"));
+                if(subject.getString("mark").equals("Please see teacher for current status regarding achievement in the course")) {
+                    fields.add(subject.getString("course"));
+                    assignments.put("NA"+i, fields);
+                }else{
+                    if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")|| subject.getString("mark").contains("Click") || subject.getString("mark").contains("click")) {
+                        fields.add(CalculateCourseAverageFromAssignments(GetAssignmentsJson(i).get(0), 0));
+                    }else {
+                        fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", ""));
+                    }
+                    fields.add(subject.getString("course"));
+                    assignments.put(subject.getString("subject_id"), fields);
+                }
+
+            }
+
+
+
+            //get room number and course name
+            String url = "https://ta.yrdsb.ca/live/index.php?";
+            String path = "/live/index.php?";
+            HashMap<String, String> headers = new HashMap<>();
+            LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
+            HashMap<String, String> cookies = new HashMap<>();
+            parameters.put("subject_id", "0");
+            parameters.put("username", Username);
+            parameters.put("password", Password);
+            cookies.put("session_token", session_token);
+            cookies.put("student_id", student_id);
+            String[] resp = sr.send(url, headers, parameters, cookies, path, true);
+            if(resp == null){
+                LinkedHashMap<String, List<String>> resp2 = GetCoursesHTML(username, password);
+                if(resp2 != null){
+                    return resp2;
+                }
+                Crashlytics.log(Log.ERROR, "network request failed", "line 112 TA");
+                return null;
+            }
+
+            //parse return
+            int courseCounter1 = 0;
+            for(String i :resp[0].split("<td>")){
+                if((i.contains("current mark = ") || i.contains("Please see teacher for current status regarding achievement in the course")||i.contains("Click Here")||i.contains("Level")||i.contains("Block")) && !i.contains("0000-00-00")) {
+                    String Course_Name = i.split(":")[1].split("<br>")[0].trim();
+                    String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
+                    String course = i.split(" :")[0].trim();
+                    //String Subject_id = i.split("subject_id=")[1].split("&")[0].trim();
+                    int courseCounter2 = 0;
+                    if(courseCounter1>=assignments.size()){
+                        ArrayList<String> fields = new ArrayList<>();
+                        fields.add(course);
+                        fields.add(Course_Name);
+                        fields.add(Room_Number);
+                        assignments.put("NA"+courseCounter1, fields);
+                    }else {
+                        for (Map.Entry<String, List<String>> entry : assignments.entrySet()) {
+                            if (courseCounter1 == courseCounter2) {
+                                entry.getValue().add(Course_Name);
+                                entry.getValue().add(Room_Number);
+                            }
+                            courseCounter2++;
+
+                        }
+                    }
+                    courseCounter1++;
+                }
+
+
+                    //assignments.put(Subject_id, Stats);
+
+            }
+            System.out.println(assignments+"marks RESPONSE HERE<----");
+            return assignments;
+
+
+
+        }catch (Exception e){
+            LinkedHashMap<String, List<String>> resp2 = GetCoursesHTML(username, password);
+            if(resp2 != null){
+                return resp2;
+            }
+            e.printStackTrace();
+            Crashlytics.log(Log.ERROR, "Error in GetTaData in TA()", Arrays.toString(e.getStackTrace()));
+            return null;
+        }
+    }*/
 
 }
+
+
+
 

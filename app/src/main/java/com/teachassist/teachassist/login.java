@@ -134,7 +134,7 @@ public class login extends AppCompatActivity {
             TA ta = new TA();
             String Username = params[0];
             String Password = params[1];
-            LinkedHashMap<String, List<String>> response = ta.GetTAData(Username, Password);
+            LinkedHashMap<String, List<String>> response = ta.GetCoursesHTML(Username, Password);
 
             return response;
 
