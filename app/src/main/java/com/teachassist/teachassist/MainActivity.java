@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Context context = (Context) this;
     LinkedList<View> Courses = new LinkedList<View>();
     boolean offlineBannerIsDisplayed = false;
+    boolean hasInternetConnection = true;
 
 
     ArrayList<Integer> removedCourseIndexes = new ArrayList<>();
@@ -419,8 +420,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             System.out.println(offlineResponse.size());
             System.out.println("HEREYEHEREYE");
             if(response == null && offlineResponse.size() == 0){
+                hasInternetConnection = false;
                 return null;
             }else if(response == null){
+                hasInternetConnection = false;
                 response = offlineResponse;
                 return response;
             }else {
@@ -561,21 +564,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     offlineIndicator.setVisibility(View.VISIBLE);
                     if(!offlineBannerIsDisplayed) {
                         final RelativeLayout offlineIndicatorBanner = findViewById(R.id.offlineIndicatorBanner);
+                        if(hasInternetConnection) {
+                            ((TextView) offlineIndicatorBanner.findViewById(R.id.offlineIndicatorBannerTV))
+                                    .setText("Some courses are currently hidden, they may not be up to date.");
+                        }
                         offlineIndicatorBanner.setVisibility(View.VISIBLE);
                         offlineBannerIsDisplayed = true;
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
                                     Thread.sleep(10000);
+                                    offlineIndicatorBanner.post(new Runnable() {
+                                        public void run() {
+                                            ObjectAnimator animation = ObjectAnimator.ofFloat(offlineIndicatorBanner, "translationX", offlineIndicatorBanner.getWidth());
+                                            animation.setDuration(700);
+                                            animation.start();
+                                        }
+                                    });
+                                    Thread.sleep(1000);
+                                    offlineIndicatorBanner.post(new Runnable() {
+                                        public void run() {
+                                            offlineIndicatorBanner.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
                                 }catch (Exception ignored){}
-                                offlineIndicatorBanner.post(new Runnable() {
-                                    public void run() {
-                                        ObjectAnimator animation = ObjectAnimator.ofFloat(offlineIndicatorBanner, "translationX", 10000f);
-                                        animation.setDuration(800);
-                                        animation.start();
-                                        offlineIndicatorBanner.setVisibility(View.INVISIBLE);
-                                    }
-                                });
                             }
                         }).start();
                     }
