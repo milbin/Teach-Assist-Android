@@ -1,11 +1,9 @@
 package com.teachassist.teachassist;
 
-import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -17,20 +15,17 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -57,7 +52,7 @@ import java.util.List;
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
 
-public class MarksViewMaterial extends AppCompatActivity {
+public class AssignmentsFragment extends Fragment {
     LinearLayout linearLayout;
     Menu menu;
     JSONObject Marks;
@@ -67,7 +62,7 @@ public class MarksViewMaterial extends AppCompatActivity {
     String courseCode;
     String Mark;
     ProgressDialog dialog;
-    Context context = this;
+    Context context;
     ArrayList<View> rlList = new ArrayList<>();
     int numberOfAssignments;
     int numberOfRemovedAssignments;
@@ -84,44 +79,41 @@ public class MarksViewMaterial extends AppCompatActivity {
     boolean isAddAssignmentAdvancedModeButtonExpanded = false;
     Button addAssignmentDoneButton;
     Button addAssignmentCancelButton;
-    Button statisticsButton;
+    View fragment;
+    AppCompatActivity activity;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
-            setTheme(R.style.LightTheme);
-        }else{
-            setTheme(R.style.DarkTheme);
-        }
-        setContentView(R.layout.marks_view);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.assignments_fragment, container, false);
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        context = getContext();
+        fragment = getView();
+        activity = (AppCompatActivity)getActivity();
 
         //setup add assignment button
-        addAssignmentButton = findViewById(R.id.addAssignmentButton);
-        addAssignmentAdvancedModeButton = findViewById(R.id.addAssignmentAdvancedModeTV);
-        addAssignmentDoneButton = findViewById(R.id.addAssignmentDoneButton);
-        addAssignmentCancelButton = findViewById(R.id.addAssignmentCancelButton);
+        addAssignmentButton = fragment.findViewById(R.id.addAssignmentButton);
+        addAssignmentAdvancedModeButton = fragment.findViewById(R.id.addAssignmentAdvancedModeTV);
+        addAssignmentDoneButton = fragment.findViewById(R.id.addAssignmentDoneButton);
+        addAssignmentCancelButton = fragment.findViewById(R.id.addAssignmentCancelButton);
 
-        // setup statistics button
-        statisticsButton = findViewById(R.id.statisticsButton);
-        statisticsButton.setOnClickListener(new onStatisticsButtonClick());
+
+        //setup edit button
+        activity.findViewById(R.id.editButton).setOnClickListener(new onEditButtonClick());
 
         //setup font
         font = ResourcesCompat.getFont(context, R.font.sandstone_regular);
 
         //progress dialog
-        dialog = ProgressDialog.show(MarksViewMaterial.this, "",
+        dialog = ProgressDialog.show(context, "",
                 "Loading...", true);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        findViewById(R.id.backButton).setOnClickListener(new onBackPressed());
 
         //get intents
-        Intent intent = getIntent();
+        Intent intent = activity.getIntent();
         username = intent.getStringExtra("username").replaceAll("\\s+", "");
         password = intent.getStringExtra("password").replaceAll("\\s+", "");
         subjectNumber = intent.getIntExtra("subjectNumber", 0);
@@ -133,14 +125,14 @@ public class MarksViewMaterial extends AppCompatActivity {
         Crashlytics.log(Log.DEBUG, "username", username);
         Crashlytics.log(Log.DEBUG, "password", password);
 
-        linearLayout = findViewById(R.id.LinearLayoutMarksView);
+        linearLayout = fragment.findViewById(R.id.LinearLayoutMarksView);
 
-        SwipeRefresh = findViewById(R.id.swipeRefresh);
+        SwipeRefresh = fragment.findViewById(R.id.swipeRefresh);
         SwipeRefresh.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Intent intent = getIntent();
+                        Intent intent = activity.getIntent();
                         Mark = intent.getStringExtra("subject Mark");
                         int length = linearLayout.getChildCount();
                         for (int i = 2; i < length; i++) {
@@ -158,74 +150,45 @@ public class MarksViewMaterial extends AppCompatActivity {
         getMarksTask = new GetMarks().execute();
     }
 
-    public class onStatisticsButtonClick implements View.OnClickListener {
+    public class onEditButtonClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            statisticsButton.setTextColor(resolveColorAttr(context, R.attr.textColor));
-            ((Button)findViewById(R.id.assignmentsButton)).setTextColor(resolveColorAttr(context, R.attr.unhighlightedTextColor));
-            Intent myIntent = new Intent(MarksViewMaterial.this, AssignmentStatsActivity.class);
-            startActivity(myIntent);
-            overridePendingTransition(0, 0);
-        }
-    }
-    public class onBackPressed implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        statisticsButton.setTextColor(resolveColorAttr(context, R.attr.unhighlightedTextColor));
-        ((Button)findViewById(R.id.assignmentsButton)).setTextColor(resolveColorAttr(context, R.attr.textColor));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                getMarksTask.cancel(true);
-                return true;
-            case R.id.action_edit:
-                if(!trashShown) {
-                    for (int i = 0; i < linearLayout.getChildCount(); i++) {
-                        View v = linearLayout.getChildAt(i);
-                        if (v instanceof RelativeLayout) {
-                            try {
-                                ImageButton trashButton = (ImageButton) v.findViewById(R.id.trash_can);
-                                trashButton.setVisibility(View.VISIBLE);
-                                trashShown = true;
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-                }else{
-                    for (int i = 0; i < linearLayout.getChildCount(); i++) {
-                        View v = linearLayout.getChildAt(i);
-                        if (v instanceof RelativeLayout) {
-                            try {
-                                ImageButton trashButton = (ImageButton) v.findViewById(R.id.trash_can);
-                                trashButton.setVisibility(View.INVISIBLE);
-                                trashShown = false;
-                            } catch (Exception e) {
-                            }
+            if(!trashShown) {
+                for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                    View assignmentView = linearLayout.getChildAt(i);
+                    if (assignmentView instanceof RelativeLayout) {
+                        try {
+                            ImageButton trashButton = (ImageButton) assignmentView.findViewById(R.id.trash_can);
+                            trashButton.setVisibility(View.VISIBLE);
+                            trashShown = true;
+                        } catch (Exception e) {
                         }
                     }
                 }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            }else{
+                for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                    View assignmentView = linearLayout.getChildAt(i);
+                    if (assignmentView instanceof RelativeLayout) {
+                        try {
+                            ImageButton trashButton = (ImageButton) assignmentView.findViewById(R.id.trash_can);
+                            trashButton.setVisibility(View.INVISIBLE);
+                            trashShown = false;
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            }
         }
     }
 
-    //without this overide if there is no internet the activity will raise an error because you are showing the no internet dialog when it has already been destroyed
     @Override
-    public void onBackPressed() {
-        getMarksTask.cancel(true);
-        super.onBackPressed();
+    public void onResume() {
+        super.onResume();
+        ((Button)activity.findViewById(R.id.statisticsButton)).setTextColor(resolveColorAttr(context, R.attr.unhighlightedTextColor));
+        ((Button)activity.findViewById(R.id.assignmentsButton)).setTextColor(resolveColorAttr(context, R.attr.textColor));
     }
+
+    //without this overide if there is no internet the activity will raise an error because you are showing the no internet dialog when it has already been destroyed
     @Override
     public void onStop(){
         getMarksTask.cancel(true);
@@ -236,19 +199,6 @@ public class MarksViewMaterial extends AppCompatActivity {
         getMarksTask.cancel(true);
         super.onDestroy();
     }
-
-    //2 methods below for edit button
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.edit_button, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-
-
 
     private class GetMarks extends AsyncTask<String, Integer, JSONObject> {
 
@@ -270,13 +220,13 @@ public class MarksViewMaterial extends AppCompatActivity {
                 }
                 return;
             }
-            TextView semesterAverageTV = findViewById(R.id.semesterAverageTV);
+            TextView semesterAverageTV = fragment.findViewById(R.id.semesterAverageTV);
             semesterAverageTV.setText(Mark+"%");
             if(Mark.contains("NA") && !Mark.contains("NaN")){
-                finish();
+                activity.finish();
             }
             int Average = Math.round(Float.parseFloat(Mark.replaceAll("%", "")));
-            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+            final RingProgressBar ProgressBarAverage = (RingProgressBar) fragment.findViewById(R.id.AverageBar);
             ProgressBarAverage.setProgress(Average);
         }
 
@@ -285,7 +235,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             TA ta = new TA();
             ta.GetCoursesHTML(username, password);
             JSONObject returnValue = ta.GetAssignmentsHTML(subjectNumber);
-            AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+            AppDatabase db = Room.databaseBuilder(activity.getApplicationContext(),
                     AppDatabase.class, username).build();
             if (returnValue == null) {
                 try {
@@ -316,7 +266,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                             .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    recreate();
+                                    activity.recreate();
                                 }
                             })
                             .show();
@@ -336,8 +286,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                     public void onClick(View v) {
                         if(!isAddAssignmentButtonExpanded) { //button is expanded, must now collapse
                             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) addAssignmentButton.getLayoutParams();
-                            RelativeLayout addAssignmentAllButtonsRL = findViewById(R.id.addAssignmentAllButtonsRL);
-                            RelativeLayout plusIconRL = findViewById(R.id.plusIconRL);
+                            RelativeLayout addAssignmentAllButtonsRL = fragment.findViewById(R.id.addAssignmentAllButtonsRL);
+                            RelativeLayout plusIconRL = fragment.findViewById(R.id.plusIconRL);
 
                             params.height = (int) Math.round(addAssignmentButton.getHeight() * 2.3);
                             plusIconRL.setVisibility(View.GONE);
@@ -351,11 +301,11 @@ public class MarksViewMaterial extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) addAssignmentButton.getLayoutParams();
-                        RelativeLayout addAssignmentAdvancedModeRL = findViewById(R.id.addAssignmentAdvancedModeRL);
-                        ImageView addAssignmentAdvancedModeDropdownButton = findViewById(R.id.addAssignmentAdvancedModeDropdownButton);
+                        RelativeLayout addAssignmentAdvancedModeRL = fragment.findViewById(R.id.addAssignmentAdvancedModeRL);
+                        ImageView addAssignmentAdvancedModeDropdownButton = fragment.findViewById(R.id.addAssignmentAdvancedModeDropdownButton);
 
-                        EditText addAssignmentOverallMark = findViewById(R.id.addAssignmentOverallMarkET);
-                        EditText addAssignmentOverallWeight  = findViewById(R.id.addAssignmentOverallWeightET);
+                        EditText addAssignmentOverallMark = fragment.findViewById(R.id.addAssignmentOverallMarkET);
+                        EditText addAssignmentOverallWeight  = fragment.findViewById(R.id.addAssignmentOverallWeightET);
                         if(isAddAssignmentAdvancedModeButtonExpanded) { //currently expanded
                             addAssignmentOverallMark.setAlpha(1f);
                             addAssignmentOverallMark.setFocusable(true);
@@ -365,7 +315,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                             addAssignmentOverallWeight.setFocusableInTouchMode(true);
                             params.height = (int) Math.round(addAssignmentButton.getHeight() / 1.8);
                             addAssignmentAdvancedModeRL.setVisibility(View.GONE);
-                            addAssignmentAdvancedModeDropdownButton.setImageDrawable(getTheme().getDrawable(R.drawable.arrow_up));
+                            addAssignmentAdvancedModeDropdownButton.setImageDrawable(context.getTheme().getDrawable(R.drawable.arrow_up));
                             isAddAssignmentAdvancedModeButtonExpanded = false;
                         }else{//not currently expanded
                             addAssignmentOverallMark.setAlpha(0.5f);
@@ -376,7 +326,7 @@ public class MarksViewMaterial extends AppCompatActivity {
                             addAssignmentOverallWeight.setFocusableInTouchMode(false);
                             params.height = (int) Math.round(addAssignmentButton.getHeight() * 1.8);
                             addAssignmentAdvancedModeRL.setVisibility(View.VISIBLE);
-                            addAssignmentAdvancedModeDropdownButton.setImageDrawable(getTheme().getDrawable(R.drawable.arrow_down));
+                            addAssignmentAdvancedModeDropdownButton.setImageDrawable(context.getTheme().getDrawable(R.drawable.arrow_down));
                             isAddAssignmentAdvancedModeButtonExpanded = true;
                         }
                         addAssignmentButton.setLayoutParams(params);
@@ -386,21 +336,21 @@ public class MarksViewMaterial extends AppCompatActivity {
                 addAssignmentDoneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText addAssignmentTitle = findViewById(R.id.addAssignmentTitleET);
-                        EditText addAssignmentOverallMark = findViewById(R.id.addAssignmentOverallMarkET);
-                        EditText addAssignmentOverallWeight  = findViewById(R.id.addAssignmentOverallWeightET);
+                        EditText addAssignmentTitle = fragment.findViewById(R.id.addAssignmentTitleET);
+                        EditText addAssignmentOverallMark = fragment.findViewById(R.id.addAssignmentOverallMarkET);
+                        EditText addAssignmentOverallWeight  = fragment.findViewById(R.id.addAssignmentOverallWeightET);
 
-                        EditText addAssignmentKMark = findViewById(R.id.addAssignmentKMarkET);
-                        EditText addAssignmentTMark = findViewById(R.id.addAssignmentTMarkET);
-                        EditText addAssignmentCMark = findViewById(R.id.addAssignmentCMarkET);
-                        EditText addAssignmentAMark = findViewById(R.id.addAssignmentAMarkET);
-                        EditText addAssignmentOMark = findViewById(R.id.addAssignmentOMarkET);
+                        EditText addAssignmentKMark = fragment.findViewById(R.id.addAssignmentKMarkET);
+                        EditText addAssignmentTMark = fragment.findViewById(R.id.addAssignmentTMarkET);
+                        EditText addAssignmentCMark = fragment.findViewById(R.id.addAssignmentCMarkET);
+                        EditText addAssignmentAMark = fragment.findViewById(R.id.addAssignmentAMarkET);
+                        EditText addAssignmentOMark = fragment.findViewById(R.id.addAssignmentOMarkET);
 
-                        EditText addAssignmentKWeight = findViewById(R.id.addAssignmentKWeightET);
-                        EditText addAssignmentTWeight = findViewById(R.id.addAssignmentTWeightET);
-                        EditText addAssignmentCWeight = findViewById(R.id.addAssignmentCWeightET);
-                        EditText addAssignmentAWeight = findViewById(R.id.addAssignmentAWeightET);
-                        EditText addAssignmentOWeight = findViewById(R.id.addAssignmentOWeightET);
+                        EditText addAssignmentKWeight = fragment.findViewById(R.id.addAssignmentKWeightET);
+                        EditText addAssignmentTWeight = fragment.findViewById(R.id.addAssignmentTWeightET);
+                        EditText addAssignmentCWeight = fragment.findViewById(R.id.addAssignmentCWeightET);
+                        EditText addAssignmentAWeight = fragment.findViewById(R.id.addAssignmentAWeightET);
+                        EditText addAssignmentOWeight = fragment.findViewById(R.id.addAssignmentOWeightET);
 
                         //check for user entry errors
                         if(addAssignmentTitle.getText().toString().isEmpty()){
@@ -521,10 +471,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                             numberOfAssignments++;
                             TA ta = new TA();
                             String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments);
-                            TextView AverageInt = findViewById(R.id.semesterAverageTV);
+                            TextView AverageInt = fragment.findViewById(R.id.semesterAverageTV);
                             AverageInt.setText(returnval + "%");
                             int Average = Math.round(Float.parseFloat(returnval));
-                            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+                            final RingProgressBar ProgressBarAverage = (RingProgressBar) fragment.findViewById(R.id.AverageBar);
                             ProgressBarAverage.setProgress(Average);
                             setupCourseBars(Marks);
                             System.out.println(assignment);
@@ -548,8 +498,8 @@ public class MarksViewMaterial extends AppCompatActivity {
                             }else{
                                 params.height = (int) Math.round(addAssignmentButton.getHeight() / 2.3);
                             }
-                            RelativeLayout addAssignmentAllButtonsRL = findViewById(R.id.addAssignmentAllButtonsRL);
-                            RelativeLayout plusIconRL = findViewById(R.id.plusIconRL);
+                            RelativeLayout addAssignmentAllButtonsRL = fragment.findViewById(R.id.addAssignmentAllButtonsRL);
+                            RelativeLayout plusIconRL = fragment.findViewById(R.id.plusIconRL);
                             addAssignmentButton.setLayoutParams(params);
                             addAssignmentAllButtonsRL.setVisibility(View.GONE);
                             plusIconRL.setVisibility(View.VISIBLE);
@@ -562,19 +512,19 @@ public class MarksViewMaterial extends AppCompatActivity {
         }
     }
     private void clearAddAssignmentEditTextViews(){
-        EditText addAssignmentTitle = findViewById(R.id.addAssignmentTitleET);
-        EditText addAssignmentOverallMark = findViewById(R.id.addAssignmentOverallMarkET);
-        EditText addAssignmentOverallWeight  = findViewById(R.id.addAssignmentOverallWeightET);
-        EditText addAssignmentKMark = findViewById(R.id.addAssignmentKMarkET);
-        EditText addAssignmentTMark = findViewById(R.id.addAssignmentTMarkET);
-        EditText addAssignmentCMark = findViewById(R.id.addAssignmentCMarkET);
-        EditText addAssignmentAMark = findViewById(R.id.addAssignmentAMarkET);
-        EditText addAssignmentOMark = findViewById(R.id.addAssignmentOMarkET);
-        EditText addAssignmentKWeight = findViewById(R.id.addAssignmentKWeightET);
-        EditText addAssignmentTWeight = findViewById(R.id.addAssignmentTWeightET);
-        EditText addAssignmentCWeight = findViewById(R.id.addAssignmentCWeightET);
-        EditText addAssignmentAWeight = findViewById(R.id.addAssignmentAWeightET);
-        EditText addAssignmentOWeight = findViewById(R.id.addAssignmentOWeightET);
+        EditText addAssignmentTitle = fragment.findViewById(R.id.addAssignmentTitleET);
+        EditText addAssignmentOverallMark = fragment.findViewById(R.id.addAssignmentOverallMarkET);
+        EditText addAssignmentOverallWeight  = fragment.findViewById(R.id.addAssignmentOverallWeightET);
+        EditText addAssignmentKMark = fragment.findViewById(R.id.addAssignmentKMarkET);
+        EditText addAssignmentTMark = fragment.findViewById(R.id.addAssignmentTMarkET);
+        EditText addAssignmentCMark = fragment.findViewById(R.id.addAssignmentCMarkET);
+        EditText addAssignmentAMark = fragment.findViewById(R.id.addAssignmentAMarkET);
+        EditText addAssignmentOMark = fragment.findViewById(R.id.addAssignmentOMarkET);
+        EditText addAssignmentKWeight = fragment.findViewById(R.id.addAssignmentKWeightET);
+        EditText addAssignmentTWeight = fragment.findViewById(R.id.addAssignmentTWeightET);
+        EditText addAssignmentCWeight = fragment.findViewById(R.id.addAssignmentCWeightET);
+        EditText addAssignmentAWeight = fragment.findViewById(R.id.addAssignmentAWeightET);
+        EditText addAssignmentOWeight = fragment.findViewById(R.id.addAssignmentOWeightET);
 
         //clear all text views
         addAssignmentKMark.setText("");
@@ -797,17 +747,17 @@ public class MarksViewMaterial extends AppCompatActivity {
             finalStringAFraction = stringAFraction;
             finalStringOFraction = stringOFraction;
 
-            final TextView KWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView TWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView CWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView AWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView OWeight = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView feedbackTextView = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView markFractionK = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView markFractionT = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView markFractionC = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView markFractionA = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
-            final TextView markFractionO = new TextView(new ContextThemeWrapper(MarksViewMaterial.this,R.style.Body2));
+            final TextView KWeight = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView TWeight = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView CWeight = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView AWeight = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView OWeight = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView feedbackTextView = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView markFractionK = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView markFractionT = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView markFractionC = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView markFractionA = new TextView(new ContextThemeWrapper(context,R.style.Body2));
+            final TextView markFractionO = new TextView(new ContextThemeWrapper(context,R.style.Body2));
 
             rl.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1129,10 +1079,10 @@ public class MarksViewMaterial extends AppCompatActivity {
                             numberOfRemovedAssignments++;
                             TA ta = new TA();
                             String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments);
-                            TextView AverageInt = findViewById(R.id.semesterAverageTV);
+                            TextView AverageInt = fragment.findViewById(R.id.semesterAverageTV);
                             AverageInt.setText(returnval + "%");
                             int Average = Math.round(Float.parseFloat(returnval));
-                            final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
+                            final RingProgressBar ProgressBarAverage = (RingProgressBar) fragment.findViewById(R.id.AverageBar);
                             ProgressBarAverage.setProgress(Average);
 
                             setupCourseBars(marks);
@@ -1143,8 +1093,8 @@ public class MarksViewMaterial extends AppCompatActivity {
             trashButton.setVisibility(View.INVISIBLE);
 
             // Setup toolbar text
-            ((TextView)findViewById(R.id.toolbar_title)).setText(courseCode);
-            getSupportActionBar().setTitle("");
+            ((TextView)activity.findViewById(R.id.toolbar_title)).setText(courseCode);
+            activity.getSupportActionBar().setTitle("");
             Crashlytics.log(Log.DEBUG, "coursename", courseCode);
             //set title
             TextView Title = rl.findViewById(R.id.title);
@@ -1201,7 +1151,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             } else if (Kmark == 0.0) {
                 Kpercent.setText("0.0");
             } else if (Kmark == 0.000000001) {
-                bar1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                bar1.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                 Kpercent.setTextColor(Color.WHITE);
                 Kpercent.setText("NA");
             } else {
@@ -1213,7 +1163,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             } else if (Tmark == 0.0) {
                 Tpercent.setText("0.0");
             } else if (Tmark == 0.000000001) {
-                bar2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                bar2.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                 Tpercent.setTextColor(Color.WHITE);
                 Tpercent.setText("NA");
             } else {
@@ -1225,7 +1175,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             } else if (Cmark == 0.0) {
                 Cpercent.setText("0.0");
             } else if (Cmark == 0.000000001) {
-                bar3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                bar3.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                 Cpercent.setTextColor(Color.WHITE);
                 Cpercent.setText("NA");
             } else {
@@ -1237,7 +1187,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             } else if (Amark == 0.0) {
                 Apercent.setText("0.0");
             } else if (Amark == 0.000000001) {
-                bar4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                bar4.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                 Apercent.setTextColor(Color.WHITE);
                 Apercent.setText("NA");
             } else {
@@ -1249,7 +1199,7 @@ public class MarksViewMaterial extends AppCompatActivity {
             } else if (Amark == 0.0) {
                 Opercent.setText("0.0");
             } else if (Omark == 0.000000001) {
-                bar5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+                bar5.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
                 Opercent.setTextColor(Color.WHITE);
                 Opercent.setText("NA");
             } else {
@@ -1267,116 +1217,116 @@ public class MarksViewMaterial extends AppCompatActivity {
     }
 
     private String CalculateAverage(JSONObject marks, String assingmentNumber, HashMap weightDict){
-    try {
-        JSONObject weights = marks.getJSONObject("categories");
-        Double weightK = weights.getDouble("K")*10 * 0.7 * ((Double)weightDict.get("K"));
-        Double weightT = weights.getDouble("T")*10 * 0.7 * ((Double)weightDict.get("T"));
-        Double weightC = weights.getDouble("C")*10 * 0.7 * ((Double)weightDict.get("C"));
-        Double weightA = weights.getDouble("A")*10 * 0.7 * ((Double)weightDict.get("A"));
-        Double weightO = 3.0;
-        Double Kmark = 0.0;
-        Double Tmark = 0.0;
-        Double Cmark = 0.0;
-        Double Amark = 0.0;
-        Double Omark = 0.0;
-        DecimalFormat round = new DecimalFormat(".#");
-        JSONObject assignment = marks.getJSONObject(assingmentNumber);
+        try {
+            JSONObject weights = marks.getJSONObject("categories");
+            Double weightK = weights.getDouble("K")*10 * 0.7 * ((Double)weightDict.get("K"));
+            Double weightT = weights.getDouble("T")*10 * 0.7 * ((Double)weightDict.get("T"));
+            Double weightC = weights.getDouble("C")*10 * 0.7 * ((Double)weightDict.get("C"));
+            Double weightA = weights.getDouble("A")*10 * 0.7 * ((Double)weightDict.get("A"));
+            Double weightO = 3.0;
+            Double Kmark = 0.0;
+            Double Tmark = 0.0;
+            Double Cmark = 0.0;
+            Double Amark = 0.0;
+            Double Omark = 0.0;
+            DecimalFormat round = new DecimalFormat(".#");
+            JSONObject assignment = marks.getJSONObject(assingmentNumber);
 
-        if(assignment.has("")) {
-            if(assignment.getJSONObject("").getString("mark").equals("no mark")){
+            if(assignment.has("")) {
+                if(assignment.getJSONObject("").getString("mark").equals("no mark")){
+                    weightO = 0.0;
+                }else {
+                    if (!assignment.getJSONObject("").getString("outOf").equals("0") || !assignment.getJSONObject("").getString("outOf").equals("0.0")) {
+                        if (!assignment.getJSONObject("").isNull("mark")) {
+                            Omark = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
+                                    Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
+                        } else {
+                            weightO = 0.0;
+                        }
+                    }
+                }
+            }else{
                 weightO = 0.0;
-            }else {
-                if (!assignment.getJSONObject("").getString("outOf").equals("0") || !assignment.getJSONObject("").getString("outOf").equals("0.0")) {
-                    if (!assignment.getJSONObject("").isNull("mark")) {
-                        Omark = Double.parseDouble(assignment.getJSONObject("").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("").getString("outOf"));
-                    } else {
-                        weightO = 0.0;
-                    }
-                }
             }
-        }else{
-            weightO = 0.0;
-        }
 
-        if(assignment.has("K")) {
-            if(assignment.getJSONObject("K").getString("mark").equals("no mark")){
+            if(assignment.has("K")) {
+                if(assignment.getJSONObject("K").getString("mark").equals("no mark")){
+                    weightK = 0.0;
+                }else {
+                    if (!assignment.getJSONObject("K").getString("outOf").equals("0") || !assignment.getJSONObject("K").getString("outOf").equals("0.0")) {
+                        if (!assignment.getJSONObject("K").isNull("mark")) {
+                            Kmark = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
+                                    Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
+                        } else {
+                            weightK = 0.0;
+                        }
+                    }
+                }
+            }else{
                 weightK = 0.0;
-            }else {
-                if (!assignment.getJSONObject("K").getString("outOf").equals("0") || !assignment.getJSONObject("K").getString("outOf").equals("0.0")) {
-                    if (!assignment.getJSONObject("K").isNull("mark")) {
-                        Kmark = Double.parseDouble(assignment.getJSONObject("K").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("K").getString("outOf"));
-                    } else {
-                        weightK = 0.0;
+            }
+            if(assignment.has("T")) {
+                if(assignment.getJSONObject("T").getString("mark").equals("no mark")){
+                    weightT = 0.0;
+                }else {
+                    if (!assignment.getJSONObject("T").getString("outOf").equals("0") || !assignment.getJSONObject("T").getString("outOf").equals("0.0")) {
+                        if (!assignment.getJSONObject("T").isNull("mark")) {
+                            Tmark = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
+                                    Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
+                        } else {
+                            weightT = 0.0;
+                        }
                     }
                 }
-            }
-        }else{
-                weightK = 0.0;
-            }
-        if(assignment.has("T")) {
-            if(assignment.getJSONObject("T").getString("mark").equals("no mark")){
-                weightT = 0.0;
-            }else {
-                if (!assignment.getJSONObject("T").getString("outOf").equals("0") || !assignment.getJSONObject("T").getString("outOf").equals("0.0")) {
-                    if (!assignment.getJSONObject("T").isNull("mark")) {
-                        Tmark = Double.parseDouble(assignment.getJSONObject("T").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("T").getString("outOf"));
-                    } else {
-                        weightT = 0.0;
-                    }
-                }
-            }
-        }else{
+            }else{
                 weightT = 0.0;
             }
-        if(assignment.has("C")) {
-            if(assignment.getJSONObject("C").getString("mark").equals("no mark")){
-                weightC = 0.0;
-            }else {
-                if (!assignment.getJSONObject("C").getString("outOf").equals("0") || !assignment.getJSONObject("C").getString("outOf").equals("0.0")) {
-                    if (!assignment.getJSONObject("C").isNull("mark")) {
-                        Cmark = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
-                    } else {
-                        weightC = 0.0;
+            if(assignment.has("C")) {
+                if(assignment.getJSONObject("C").getString("mark").equals("no mark")){
+                    weightC = 0.0;
+                }else {
+                    if (!assignment.getJSONObject("C").getString("outOf").equals("0") || !assignment.getJSONObject("C").getString("outOf").equals("0.0")) {
+                        if (!assignment.getJSONObject("C").isNull("mark")) {
+                            Cmark = Double.parseDouble(assignment.getJSONObject("C").getString("mark")) /
+                                    Double.parseDouble(assignment.getJSONObject("C").getString("outOf"));
+                        } else {
+                            weightC = 0.0;
+                        }
                     }
                 }
-            }
-        }else{
+            }else{
                 weightC = 0.0;
             }
-        if(assignment.has("A")) {
-            if(assignment.getJSONObject("A").getString("mark").equals("no mark")){
-                weightA = 0.0;
-            }else {
-                if (!assignment.getJSONObject("A").getString("outOf").equals("0") || !assignment.getJSONObject("A").getString("outOf").equals("0.0")) {
-                    if (!assignment.getJSONObject("A").isNull("mark")) {
-                        Amark = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
-                                Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
-                    } else {
-                        weightA = 0.0;
+            if(assignment.has("A")) {
+                if(assignment.getJSONObject("A").getString("mark").equals("no mark")){
+                    weightA = 0.0;
+                }else {
+                    if (!assignment.getJSONObject("A").getString("outOf").equals("0") || !assignment.getJSONObject("A").getString("outOf").equals("0.0")) {
+                        if (!assignment.getJSONObject("A").isNull("mark")) {
+                            Amark = Double.parseDouble(assignment.getJSONObject("A").getString("mark")) /
+                                    Double.parseDouble(assignment.getJSONObject("A").getString("outOf"));
+                        } else {
+                            weightA = 0.0;
+                        }
                     }
                 }
-            }
-        }else{
+            }else{
                 weightA = 0.0;
             }
 
-        Kmark*=weightK;
-        Tmark*=weightT;
-        Cmark*=weightC;
-        Amark*=weightA;
-        Omark*=weightO;
-        String Average = round.format((Kmark+Tmark+Cmark+Amark+Omark)/(weightK+weightT+weightC+weightA+weightO)*100).replaceAll(",", ".");
-        if(Average.equals(".0")){
-            Average = "0";
-        }
-        if(Average.equals("100.0")){
-            Average = "100";
-        }
-        return Average;
+            Kmark*=weightK;
+            Tmark*=weightT;
+            Cmark*=weightC;
+            Amark*=weightA;
+            Omark*=weightO;
+            String Average = round.format((Kmark+Tmark+Cmark+Amark+Omark)/(weightK+weightT+weightC+weightA+weightO)*100).replaceAll(",", ".");
+            if(Average.equals(".0")){
+                Average = "0";
+            }
+            if(Average.equals("100.0")){
+                Average = "100";
+            }
+            return Average;
         }catch (JSONException e){
             e.printStackTrace();
             Crashlytics.log(Log.ERROR, "error in Calculate Average MVM", Arrays.toString(e.getStackTrace()));
@@ -1534,25 +1484,25 @@ public class MarksViewMaterial extends AppCompatActivity {
     private void setupCourseBars(JSONObject marks){
         final DecimalFormat round = new DecimalFormat("#.#");
         //setup course bars
-        RelativeLayout barAverageRL = findViewById(R.id.mark_bars);
+        RelativeLayout barAverageRL = fragment.findViewById(R.id.mark_bars);
 
-        TextView weightKAverage = findViewById(R.id.weightKAverage);
-        TextView weightTAverage = findViewById(R.id.weightTAverage);
-        TextView weightCAverage = findViewById(R.id.weightCAverage);
-        TextView weightAAverage = findViewById(R.id.weightAAverage);
-        TextView weightOAverage = findViewById(R.id.weightOAverage);
+        TextView weightKAverage = fragment.findViewById(R.id.weightKAverage);
+        TextView weightTAverage = fragment.findViewById(R.id.weightTAverage);
+        TextView weightCAverage = fragment.findViewById(R.id.weightCAverage);
+        TextView weightAAverage = fragment.findViewById(R.id.weightAAverage);
+        TextView weightOAverage = fragment.findViewById(R.id.weightOAverage);
 
-        TextView KpercentAverage = findViewById(R.id.KpercentAverage);
-        TextView TpercentAverage = findViewById(R.id.TpercentAverage);
-        TextView CpercentAverage = findViewById(R.id.CpercentAverage);
-        TextView ApercentAverage = findViewById(R.id.ApercentAverage);
-        TextView OpercentAverage = findViewById(R.id.OpercentAverage);
+        TextView KpercentAverage = fragment.findViewById(R.id.KpercentAverage);
+        TextView TpercentAverage = fragment.findViewById(R.id.TpercentAverage);
+        TextView CpercentAverage = fragment.findViewById(R.id.CpercentAverage);
+        TextView ApercentAverage = fragment.findViewById(R.id.ApercentAverage);
+        TextView OpercentAverage = fragment.findViewById(R.id.OpercentAverage);
 
-        View BarAverage1 = findViewById(R.id.BarAverage1);
-        View BarAverage2 = findViewById(R.id.BarAverage2);
-        View BarAverage3 = findViewById(R.id.BarAverage3);
-        View BarAverage4 = findViewById(R.id.BarAverage4);
-        View BarAverage5 = findViewById(R.id.BarAverage5);
+        View BarAverage1 = fragment.findViewById(R.id.BarAverage1);
+        View BarAverage2 = fragment.findViewById(R.id.BarAverage2);
+        View BarAverage3 = fragment.findViewById(R.id.BarAverage3);
+        View BarAverage4 = fragment.findViewById(R.id.BarAverage4);
+        View BarAverage5 = fragment.findViewById(R.id.BarAverage5);
         List<String> list = GetWeightAndAverageByCategory(marks);
 
 
@@ -1578,61 +1528,61 @@ public class MarksViewMaterial extends AppCompatActivity {
 
         if(round.format(Double.parseDouble(list.get(0))).replaceAll(",", ".").equals("0")){
             KpercentAverage.setText("NA");
-            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-            KpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-            ((TextView)findViewById(R.id.K)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            BarAverage1.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            KpercentAverage.setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)fragment.findViewById(R.id.K)).setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
         }else {
             KpercentAverage.setText(round.format(Double.parseDouble(list.get(0))).replaceAll(",", "."));
-            BarAverage1.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            BarAverage1.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
             KpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
-            ((TextView)findViewById(R.id.K)).setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)fragment.findViewById(R.id.K)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         if(round.format(Double.parseDouble(list.get(1))).replaceAll(",", ".").equals("0")){
             TpercentAverage.setText("NA");
-            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-            TpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-            ((TextView)findViewById(R.id.T)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            BarAverage2.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            TpercentAverage.setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)fragment.findViewById(R.id.T)).setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
         }else {
             TpercentAverage.setText(round.format(Double.parseDouble(list.get(1))).replaceAll(",", "."));
-            BarAverage2.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            BarAverage2.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
             TpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
-            ((TextView)findViewById(R.id.T)).setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)fragment.findViewById(R.id.T)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         if(round.format(Double.parseDouble(list.get(2))).replaceAll(",", ".").equals("0")){
             CpercentAverage.setText("NA");
-            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-            CpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-            ((TextView)findViewById(R.id.C)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            BarAverage3.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            CpercentAverage.setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)fragment.findViewById(R.id.C)).setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
         }else {
             CpercentAverage.setText(round.format(Double.parseDouble(list.get(2))).replaceAll(",", "."));
-            BarAverage3.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            BarAverage3.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
             CpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
-            ((TextView)findViewById(R.id.C)).setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)fragment.findViewById(R.id.C)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         if(round.format(Double.parseDouble(list.get(3))).replaceAll(",", ".").equals("0")){
             ApercentAverage.setText("NA");
-            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-            ApercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-            ((TextView)findViewById(R.id.A)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            BarAverage4.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            ApercentAverage.setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)fragment.findViewById(R.id.A)).setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
         }else {
             ApercentAverage.setText(round.format(Double.parseDouble(list.get(3))).replaceAll(",", "."));
-            BarAverage4.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            BarAverage4.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
             ApercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
-            ((TextView)findViewById(R.id.A)).setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)fragment.findViewById(R.id.A)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
         if(round.format(Double.parseDouble(list.get(4))).replaceAll(",", ".").equals("0")){
             OpercentAverage.setText("NA");
-            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
-            OpercentAverage.setTextColor(getTheme().getResources().getColor(R.color.textColor));
-            ((TextView)findViewById(R.id.O)).setTextColor(getTheme().getResources().getColor(R.color.textColor));
+            BarAverage5.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_pink));
+            OpercentAverage.setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
+            ((TextView)fragment.findViewById(R.id.O)).setTextColor(context.getTheme().getResources().getColor(R.color.textColor));
         }else {
             OpercentAverage.setText(round.format(Double.parseDouble(list.get(4))).replaceAll(",", "."));
-            BarAverage5.setBackground(getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
+            BarAverage5.setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph));
             OpercentAverage.setTextColor(resolveColorAttr(context, R.attr.textColor));
-            ((TextView)findViewById(R.id.O)).setTextColor(resolveColorAttr(context, R.attr.textColor));
+            ((TextView)fragment.findViewById(R.id.O)).setTextColor(resolveColorAttr(context, R.attr.textColor));
         }
 
         weightKAverage.setText(round.format(Double.parseDouble(list.get(5))).replaceAll(",", "."));

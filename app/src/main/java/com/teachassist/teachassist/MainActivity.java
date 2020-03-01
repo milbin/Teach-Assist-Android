@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
+            Intent myIntent = new Intent(MainActivity.this, CourseInfoActivity.class);
             int subjectNumber = ((LinearLayout) v.getParent()).indexOfChild(v) -3; //this minus three accounts for the toolbar, offline banner and index offset
             int toSubtract = 0;
             for (int i : removedCourseIndexes) {

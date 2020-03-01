@@ -11,7 +11,7 @@
     android:layout_weight="1"
     android:layout_width="match_parent"
     android:layout_height="145dp"
-    android:background="@drawable/button_bg_rectangle_solid_marks_view"
+    android:background="@drawable/button_bg_rectangle_solid"
     android:layout_gravity="top"
     android:layout_marginTop="3dp"
     android:layout_marginStart="10dp"

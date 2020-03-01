@@ -69,13 +69,13 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MarksViewMaterial"
+        <activity android:name=".CourseInfoActivity"
             android:windowSoftInputMode="stateHidden|adjustResize">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.teachassist.teachassist.MainActivity" />
         </activity>
-        <activity android:name=".AssignmentStatsActivity"
+        <activity android:name=".AssignmentStatsFragment"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

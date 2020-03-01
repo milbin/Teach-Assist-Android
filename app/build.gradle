@@ -73,11 +73,12 @@ dependencies {
     runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.7') {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
-
     //'Room' for sqlite
     def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }
 configurations {
     all*.exclude group: 'com.google.guava', module: 'listenablefuture'
