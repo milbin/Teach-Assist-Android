@@ -246,6 +246,7 @@ public class AssignmentsFragment extends Fragment {
             }else{
                 Marks = returnValue;
             }
+            ((CourseInfoActivity) activity).assignments = Marks;
             // Write all the individual assignments of this course as one big json string to the database
             // Android requires that the action be performed within a thread
             String jsonAssignmentString = Marks.toString();

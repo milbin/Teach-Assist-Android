@@ -79,6 +79,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'com.jjoe64:graphview:4.2.2'
 }
 configurations {
     all*.exclude group: 'com.google.guava', module: 'listenablefuture'

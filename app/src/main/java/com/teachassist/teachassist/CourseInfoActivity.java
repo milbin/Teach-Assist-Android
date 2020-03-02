@@ -19,6 +19,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import org.json.JSONObject;
+
 import static java.lang.Math.abs;
 
 public class CourseInfoActivity extends AppCompatActivity {
@@ -30,6 +32,7 @@ public class CourseInfoActivity extends AppCompatActivity {
     private FragmentStateAdapter pagerAdapter;
     private View currentPageSlider;
     private Button editButton;
+    public JSONObject assignments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

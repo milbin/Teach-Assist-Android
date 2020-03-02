@@ -416,9 +416,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
             response = ta.GetCoursesHTML(username, password);
             LinkedHashMap<String, List<String>> offlineResponse = ta.GetCoursesOffline(username, getApplicationContext());
-            System.out.println(offlineResponse);
-            System.out.println(offlineResponse.size());
-            System.out.println("HEREYEHEREYE");
             if(response == null && offlineResponse.size() == 0){
                 hasInternetConnection = false;
                 return null;

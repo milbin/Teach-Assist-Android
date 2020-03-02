@@ -229,7 +229,6 @@ public class TA{
 
                             }
                         }catch (JSONException e){
-                            System.out.println("HERE");
                         }
                         assignmentNumber++;
                     }
@@ -368,7 +367,6 @@ public class TA{
                         }
                     }
                 }catch (JSONException e){}
-
             }
 
             if(KweightAssignment == 0.0){
@@ -480,7 +478,6 @@ public class TA{
         }
         db.close();
         System.out.println(courses);
-        System.out.println("HERE12345");
         return courses;
     }
 
