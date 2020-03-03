@@ -57,7 +57,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'org.decimal4j:decimal4j:1.0.3'
-    implementation project(':Ring Library')
     implementation 'com.google.code.gson:gson:2.8.5'
     // https://mvnrepository.com/artifact/commons-lang/commons-lang
     implementation group: 'commons-lang', name: 'commons-lang', version: '2.6'
@@ -79,7 +78,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation project(path: ':Ring Library')
+    implementation project(path: ':SmoothChart')
 }
 configurations {
     all*.exclude group: 'com.google.guava', module: 'listenablefuture'

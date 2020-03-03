@@ -1,2 +1,5 @@
 include ':app'
 include ':Ring Library'
+include ':SmoothChart'
+include ':SmoothChart'
+include ':SmoothChart'

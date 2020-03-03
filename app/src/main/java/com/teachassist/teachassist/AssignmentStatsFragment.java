@@ -1,27 +1,33 @@
 package com.teachassist.teachassist;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import org.paoloconte.smoothchart.SmoothLineChartEquallySpaced;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static java.lang.Double.parseDouble;
+import static java.lang.Float.parseFloat;
 import static java.lang.String.valueOf;
 
 public class AssignmentStatsFragment extends Fragment {
     Context context;
-    JSONObject assignments;
     View fragment;
     AppCompatActivity activity;
     String courseCode;
@@ -37,33 +43,55 @@ public class AssignmentStatsFragment extends Fragment {
         context = getContext();
         fragment = getView();
         activity = (AppCompatActivity) getActivity();
-        assignments = ((CourseInfoActivity)activity).assignments;
+        JSONObject assignments = ((CourseInfoActivity)activity).assignments;
         if(assignments == null){
             return;
         }
         System.out.println(assignments);
         System.out.println("HERE");
-        calculateAveragesOverTime(assignments);
+        renderGraphs(assignments);
     }
-    private void renderGraphs(){
-        GraphView graph = fragment.findViewById(R.id.courseAverageGraph);
+    private void renderGraphs(JSONObject assignments){
         //GraphView graphK = fragment.findViewById(R.id.graphK);
         //GraphView graphT = fragment.findViewById(R.id.graphT);
         //GraphView graphC = fragment.findViewById(R.id.graphC);
         //GraphView graphA = fragment.findViewById(R.id.graphA);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        graph.addSeries(series);
+        HashMap data = calculateAveragesOverTime(assignments);
+        if(data.get("average") != null) {
+            SmoothLineChartEquallySpaced grid = fragment.findViewById(R.id.courseAverageGraph);
+            grid.setGraphColours(resolveColorAttr(context, R.attr.primaryPink),resolveColorAttr(context, R.attr.Background) );
+            grid.setData((float[])data.get("average"));
+            /*GraphView graph = fragment.findViewById(R.id.courseAverageGraph);
+            LineGraphSeries<DataPoint> lineSeries = new LineGraphSeries<DataPoint>((DataPoint[]) data.get("average"));
+            //PointsGraphSeries<DataPoint> pointSeries = new PointsGraphSeries<DataPoint>((DataPoint[]) data.get("average"));
+            //pointSeries.setSize(10);
+            lineSeries.setAnimated(true);
+            lineSeries.setDrawDataPoints(true);
+            lineSeries.setDataPointsRadius(15);
+            //lineSeries.setThickness(10);
+            //lineSeries.setColor(resolveColorAttr(context, R.attr.primaryPink));
+            // custom paint to make a dotted line
+            Paint paint = new Paint();
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(10);
+            paint.setPathEffect(new CornerPathEffect(20));
+            paint.setColor(resolveColorAttr(context, R.attr.primaryPink));
+            lineSeries.setCustomPaint(paint);
+
+            graph.addSeries(lineSeries);
+            //graph.addSeries(pointSeries);
+            //graph.getViewport().setMinY(0);
+            //graph.getViewport().setMaxY(100);
+            //graph.getViewport().setYAxisBoundsManual(true);
+            graph.getViewport().setBackgroundColor(resolveColorAttr(context, R.attr.Background));
+            graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+            //graph.getGridLabelRenderer().setHu*/
+        }
     }
 
-    private void calculateAveragesOverTime(JSONObject assignments){
+    private HashMap calculateAveragesOverTime(JSONObject assignments){
         TA ta = new TA();
-        ArrayList averageOverTime = new ArrayList();
+        float[] averageOverTime = new float[assignments.length()-1];
         ArrayList kOverTime = new ArrayList();
         ArrayList tOverTime = new ArrayList();
         ArrayList cOverTime = new ArrayList();
@@ -78,11 +106,22 @@ public class AssignmentStatsFragment extends Fragment {
                 JSONObject assignment = assignments.getJSONObject(valueOf(i));
                 assignmentsSoFar.put(valueOf(i), assignment);
                 try {
-                    Double courseAverage = parseDouble(ta.CalculateCourseAverageFromAssignments(assignmentsSoFar, 0));
-                    averageOverTime.add(courseAverage);
+                    float courseAverage = parseFloat(ta.CalculateCourseAverageFromAssignments(assignmentsSoFar, 0));
+                    averageOverTime[i] = courseAverage;
                 }catch (Exception ignore){}
             }catch (Exception ignore){}
         }
-        System.out.println(averageOverTime);
+        HashMap returnMap = new HashMap();
+        returnMap.put("average", averageOverTime);
+        return returnMap;
+    }
+    @ColorInt
+    public static int resolveColorAttr(Context context, @AttrRes int colorAttr) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(colorAttr, typedValue, true);
+        TypedArray arr =context.obtainStyledAttributes(typedValue.data, new int[]{
+                colorAttr});
+        return arr.getColor(0, -1);
     }
 }
