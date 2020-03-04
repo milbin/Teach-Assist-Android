@@ -21,7 +21,7 @@
         android:layout_marginTop="5dp"
         android:layout_below="@+id/courseAverageOverTimeTV"
         android:layout_marginEnd="25dp"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="30dp"
         android:background="?Background" />
     <TextView
         android:text="Marks"
@@ -32,21 +32,108 @@
         android:layout_marginTop="110dp"
         android:rotation="270"
         android:textColor="?textColor"
-        style="@style/Body1"/>
+        style="@style/Body2"/>
     <TextView
-        android:text="Assignment Number"
+        android:text="Time ->"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/courseAverageGraph"
         android:textColor="?textColor"
-        style="@style/Body1"/>
+        style="@style/Body2"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:baselineAligned="false"
+        android:layout_below="@+id/courseAverageGraph"
+        android:layout_marginTop="5dp"
+        >
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:id="@+id/KAverageOverTimeTV"
+                android:text="Knowledge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="8dp"
+                style="@style/Subtitle1"
+                android:textColor="?textColor"
+                android:layout_centerInParent="true"/>
+        <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
+            android:id="@+id/KAverageGraph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/KAverageOverTimeTV"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="25dp"
+            android:background="?Background" />
+        <TextView
+            android:text="Marks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="110dp"
+            android:rotation="270"
+            android:textColor="?textColor"
+            style="@style/Body2"/>
+        <TextView
+            android:text="Time ->"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/KAverageGraph"
+            android:textColor="?textColor"
+            style="@style/Body2"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:id="@+id/TAverageOverTimeTV"
+                android:text="Thinking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="8dp"
+                style="@style/Subtitle1"
+                android:textColor="?textColor"
+                android:layout_centerInParent="true"/>
+            <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
+                android:id="@+id/TAverageGraph"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/TAverageOverTimeTV"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="25dp"
+                android:background="?Background" />
+            <TextView
+                android:text="Marks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="-5dp"
+                android:layout_marginTop="110dp"
+                android:rotation="270"
+                android:textColor="?textColor"
+                style="@style/Body2"/>
+            <TextView
+                android:text="Time ->"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/TAverageGraph"
+                android:textColor="?textColor"
+                style="@style/Body2"/>
+        </RelativeLayout>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        style="@style/Subtitle1"
-        android:textColor="?textColor"
-        android:text="Comming Soon"/>
 </RelativeLayout>

@@ -11,16 +11,23 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
+
 public class SmoothLineChartEquallySpaced extends View {
 	
-	private static int CHART_COLOR = 0xFF0099CC;
-	private static  int CHART_BACKGROUND_COLOUR = 0xffffff;
-	private static final int CIRCLE_SIZE = 8;
-	private static final int STROKE_SIZE = 2;	
-	private static final float SMOOTHNESS = 0.35f; // the higher the smoother, but don't go over 0.5
+	private int CHART_COLOR = 0xFF0099CC;
+	private int CHART_BACKGROUND_COLOUR = 0xffffff;
+	private int CHART_AXES_COLOUR = 0xffffff;
+	private int CHART_INTERVAL_COLOUR;
+	private Typeface GRAPH_FONT;
+	private final int CIRCLE_SIZE = 8;
+	private final int STROKE_SIZE = 2;
+	private final float DATAPOINTS_SCALE_COEFF = 1.2f; //shrink the actual line graph based on this coefficient
+	private final int DATAPOINTS_MARGIN_START = 60; //shrink the actual line graph based on this coefficient
+	private final float SMOOTHNESS = 0.35f; // the higher the smoother, but don't go over 0.5
 	
 	private final Paint mPaint;
 	private final Path mPath;
@@ -31,6 +38,7 @@ public class SmoothLineChartEquallySpaced extends View {
 	private float[] mValues;
 	private float mMinY;
 	private float mMaxY;
+	private int incrementValue = 20;
 	
 
 	public SmoothLineChartEquallySpaced(Context context) {
@@ -50,7 +58,7 @@ public class SmoothLineChartEquallySpaced extends View {
 		
 		mCircleSize = scale * CIRCLE_SIZE;
 		mStrokeSize = scale * STROKE_SIZE;
-		mBorder = mCircleSize;
+		mBorder = 1.5f*mCircleSize;
 		
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
@@ -58,24 +66,41 @@ public class SmoothLineChartEquallySpaced extends View {
 		
 		mPath = new Path();
 	}
-	public void setGraphColours(int primaryColour, int backgroundColour){
+	public void setGraphColours(int primaryColour, int backgroundColour, int axesColour, int intervalColour, Typeface font){
 		CHART_COLOR = primaryColour;
 		CHART_BACKGROUND_COLOUR = backgroundColour;
+		CHART_AXES_COLOUR = axesColour;
+		CHART_INTERVAL_COLOUR = intervalColour;
+		GRAPH_FONT = font;
 		invalidate();
 	}
 	
 	public void setData(float[] values) {
-		mValues = values;		
+		mValues = values;
 		
-		if (values != null && values.length > 0) {
+		if (values != null && values.length > 1) {
+			mMinY = values[0];
 			mMaxY = values[0];
-			//mMinY = values[0].y;
 			for (float y : values) {
-				if (y > mMaxY) 
-					mMaxY = y;
-				/*if (y < mMinY)
-					mMinY = y;*/
+				if (y >= mMaxY)
+					mMaxY = y - (y%incrementValue) + incrementValue; //rounds up to the nearest increment value
+				if (y <= mMinY)
+					mMinY = y - (y%incrementValue); //rounds down to the nearest increment value
 			}
+			System.out.println(mMinY);
+			System.out.println(mMaxY);
+			System.out.println("HERE");
+			if(mMaxY - mMinY <= 20){
+				incrementValue = 5;
+			}else if(mMaxY- mMinY <= 70){
+				incrementValue = 10;
+			}else{
+				incrementValue = 20;
+			}
+		}else{
+			mMaxY = 100;
+			mMinY = 0;
+			incrementValue = 20;
 		}
 				
 		invalidate();
@@ -92,16 +117,49 @@ public class SmoothLineChartEquallySpaced extends View {
 		final float height = getMeasuredHeight() - 2*mBorder;	
 		final float width = getMeasuredWidth() - 2*mBorder;
 		
-		final float dX = mValues.length > 1 ? mValues.length-1  : (2);	
+		final float dX = mValues.length > 1 ? DATAPOINTS_SCALE_COEFF*(mValues.length-1)  : (2);
 		final float dY = (mMaxY-mMinY) > 0 ? (mMaxY-mMinY) : (2);
 				
 		mPath.reset();
+
+		// draw axes
+		Paint axisPaint = new Paint();
+		Path axisPath = new Path();
+		axisPaint.setColor(CHART_AXES_COLOUR);
+		axisPaint.setStyle(Style.STROKE);
+		axisPaint.setStrokeWidth(mStrokeSize);
+		axisPath.moveTo(0, 0);
+		axisPath.lineTo(0, height+mBorder);
+		axisPath.lineTo(width+mBorder, height+mBorder);
+		canvas.drawPath(axisPath, axisPaint);
+
+		//draw data intervals
+		float[] intervals = new float[200/incrementValue + 1];
+		int index = 0;
+		for(float i=0.0f; i<=200f; i+=incrementValue){
+			intervals[index] = i;
+			index++;
+		}
+		axisPaint.setColor(CHART_INTERVAL_COLOUR);
+		axisPaint.setStrokeWidth(mStrokeSize/2);
+
+		Paint textPaint = new Paint();
+		textPaint.setTypeface(GRAPH_FONT);
+		textPaint.setColor(CHART_AXES_COLOUR);
+		textPaint.setTextSize(30);
+		for(float yPoint : intervals){
+			float y = height+mBorder - (yPoint-mMinY)*height/dY;
+			axisPath.moveTo(0, y);
+			canvas.drawText(((int)yPoint)+"%", 6, y-5, textPaint);
+			axisPath.lineTo(width+mBorder, y);
+		}
+		canvas.drawPath(axisPath, axisPaint);
 				
 		// calculate point coordinates
 		List<PointF> points = new ArrayList<PointF>(size);		
 		for (int i=0; i<size; i++) {
-			float x = mBorder + i*width/dX;
-			float y = mBorder + height - (mValues[i]-mMinY)*height/dY; 
+			float x = mBorder + DATAPOINTS_MARGIN_START + i*width/dX;
+			float y = mBorder + height - (mValues[i]-mMinY)*height/dY;
 			points.add(new PointF(x,y));		
 		}
 
@@ -132,18 +190,18 @@ public class SmoothLineChartEquallySpaced extends View {
 		mPaint.setColor(CHART_COLOR);
 		mPaint.setStyle(Style.STROKE);
 		canvas.drawPath(mPath, mPaint);
-		
-		/*
-		// draw area
+
+
+		/*// draw area
 		if (size > 0) {
 			mPaint.setStyle(Style.FILL);
 			mPaint.setColor((CHART_COLOR & 0xFFFFFF) | 0x10000000);
-			mPath.lineTo(points.get(size-1).x, height+mBorder);	
-			mPath.lineTo(points.get(0).x, height+mBorder);	
+			mPath.lineTo(points.get(size-1).x, height+mBorder);
+			mPath.lineTo(points.get(0).x, height+mBorder);
 			mPath.close();
 			canvas.drawPath(mPath, mPaint);
-		}
-		 */
+		}*/
+
 
 		// draw circles
 		mPaint.setColor(CHART_COLOR);

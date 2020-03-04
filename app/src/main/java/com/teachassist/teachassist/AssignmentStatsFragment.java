@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import org.paoloconte.smoothchart.SmoothLineChartEquallySpaced;
+
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.TypedValue;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 
@@ -48,7 +51,6 @@ public class AssignmentStatsFragment extends Fragment {
             return;
         }
         System.out.println(assignments);
-        System.out.println("HERE");
         renderGraphs(assignments);
     }
     private void renderGraphs(JSONObject assignments){
@@ -56,40 +58,38 @@ public class AssignmentStatsFragment extends Fragment {
         //GraphView graphT = fragment.findViewById(R.id.graphT);
         //GraphView graphC = fragment.findViewById(R.id.graphC);
         //GraphView graphA = fragment.findViewById(R.id.graphA);
-        HashMap data = calculateAveragesOverTime(assignments);
-        if(data.get("average") != null) {
-            SmoothLineChartEquallySpaced grid = fragment.findViewById(R.id.courseAverageGraph);
-            grid.setGraphColours(resolveColorAttr(context, R.attr.primaryPink),resolveColorAttr(context, R.attr.Background) );
-            grid.setData((float[])data.get("average"));
-            /*GraphView graph = fragment.findViewById(R.id.courseAverageGraph);
-            LineGraphSeries<DataPoint> lineSeries = new LineGraphSeries<DataPoint>((DataPoint[]) data.get("average"));
-            //PointsGraphSeries<DataPoint> pointSeries = new PointsGraphSeries<DataPoint>((DataPoint[]) data.get("average"));
-            //pointSeries.setSize(10);
-            lineSeries.setAnimated(true);
-            lineSeries.setDrawDataPoints(true);
-            lineSeries.setDataPointsRadius(15);
-            //lineSeries.setThickness(10);
-            //lineSeries.setColor(resolveColorAttr(context, R.attr.primaryPink));
-            // custom paint to make a dotted line
-            Paint paint = new Paint();
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(10);
-            paint.setPathEffect(new CornerPathEffect(20));
-            paint.setColor(resolveColorAttr(context, R.attr.primaryPink));
-            lineSeries.setCustomPaint(paint);
+        ArrayList data = calculateAveragesOverTime(assignments);
+        if(data.get(0) != null) { //average over time is null
+            SmoothLineChartEquallySpaced[] grids = new SmoothLineChartEquallySpaced[]{
+                    fragment.findViewById(R.id.courseAverageGraph),
+                    fragment.findViewById(R.id.KAverageGraph),
+                    fragment.findViewById(R.id.TAverageGraph),
+                    //fragment.findViewById(R.id.courseAverageGraph),
+                    //fragment.findViewById(R.id.courseAverageGraph)
 
-            graph.addSeries(lineSeries);
-            //graph.addSeries(pointSeries);
-            //graph.getViewport().setMinY(0);
-            //graph.getViewport().setMaxY(100);
-            //graph.getViewport().setYAxisBoundsManual(true);
-            graph.getViewport().setBackgroundColor(resolveColorAttr(context, R.attr.Background));
-            graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
-            //graph.getGridLabelRenderer().setHu*/
+            };
+            int gridNumber = 0;
+            for (SmoothLineChartEquallySpaced grid : grids) {
+                Typeface typeface = ResourcesCompat.getFont(context, R.font.sandstone);
+                int lineGraphColour = resolveColorAttr(context, R.attr.primaryGreen);
+                if(gridNumber == 0){
+                    lineGraphColour = resolveColorAttr(context, R.attr.primaryPink);
+                }
+                grid.setGraphColours(
+                        lineGraphColour,
+                        resolveColorAttr(context, R.attr.Background),
+                        resolveColorAttr(context, R.attr.textColor),
+                        resolveColorAttr(context, R.attr.unhighlightedTextColor),
+                        typeface
+                );
+                grid.setData((float[]) data.get(0));
+                //grid.setData(new float[]{95f, 96f, 97f, 98f, 99f, 100f, 1f});
+                gridNumber++;
+            }
         }
     }
 
-    private HashMap calculateAveragesOverTime(JSONObject assignments){
+    private ArrayList calculateAveragesOverTime(JSONObject assignments){
         TA ta = new TA();
         float[] averageOverTime = new float[assignments.length()-1];
         ArrayList kOverTime = new ArrayList();
@@ -111,9 +111,9 @@ public class AssignmentStatsFragment extends Fragment {
                 }catch (Exception ignore){}
             }catch (Exception ignore){}
         }
-        HashMap returnMap = new HashMap();
-        returnMap.put("average", averageOverTime);
-        return returnMap;
+        ArrayList gridDataSets = new ArrayList();
+        gridDataSets.add(averageOverTime);
+        return gridDataSets;
     }
     @ColorInt
     public static int resolveColorAttr(Context context, @AttrRes int colorAttr) {
