@@ -16,6 +16,11 @@ import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     LinkedList<View> Courses = new LinkedList<View>();
     boolean offlineBannerIsDisplayed = false;
     boolean hasInternetConnection = true;
+    private AdView adView;
 
 
     ArrayList<Integer> removedCourseIndexes = new ArrayList<>();
@@ -113,6 +119,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         System.out.println("TOKEN "+token);
                     }
                 });
+
+        // initilize ads
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",

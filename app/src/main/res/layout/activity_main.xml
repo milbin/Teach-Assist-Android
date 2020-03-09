@@ -13,7 +13,9 @@
 
     >
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
@@ -143,10 +145,19 @@
 
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-6294253616632635/8914209983">
+        <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111"> //real ads -->
+        </com.google.android.gms.ads.AdView>
+
+    </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -169,6 +180,7 @@
         android:gravity="center"
         style="@style/Subtitle2"
         />
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

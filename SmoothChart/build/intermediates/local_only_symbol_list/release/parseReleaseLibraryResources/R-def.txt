@@ -1,0 +1,10 @@
+R_DEF: Internal format may change without notice
+local
+dimen margin
+drawable ic_launcher
+id smoothChart
+id smoothChartES
+layout activity_main
+string app_name
+style AppBaseTheme
+style AppTheme

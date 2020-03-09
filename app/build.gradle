@@ -23,8 +23,8 @@ android {
         applicationId "com.teachassist.teachassist"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 57
-        versionName "3.3.2"
+        versionCode 60
+        versionName "3.3.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -80,6 +80,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation project(path: ':Ring Library')
     implementation project(path: ':SmoothChart')
+    implementation 'com.google.android.gms:play-services-ads:19.0.0'
 }
 configurations {
     all*.exclude group: 'com.google.guava', module: 'listenablefuture'
