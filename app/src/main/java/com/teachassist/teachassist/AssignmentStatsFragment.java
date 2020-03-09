@@ -8,6 +8,7 @@ import org.paoloconte.smoothchart.SmoothLineChartEquallySpaced;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,22 +45,33 @@ public class AssignmentStatsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initilize();
+    }
+
+    @Override
+    public void onResume() {
+        initilize();
+        super.onResume();
+    }
+
+    private void initilize(){
         context = getContext();
         fragment = getView();
         activity = (AppCompatActivity) getActivity();
         JSONObject assignments = ((CourseInfoActivity)activity).assignments;
+        int numberOfRemovedAssignments = ((CourseInfoActivity)activity).numberOfRemovedAssignments;
         if(assignments == null){
             return;
         }
         System.out.println(assignments);
-        renderGraphs(assignments);
+        renderGraphs(assignments, numberOfRemovedAssignments);
     }
-    private void renderGraphs(JSONObject assignments){
+    private void renderGraphs(JSONObject assignments, int numberOfRemovedAssignments){
         //GraphView graphK = fragment.findViewById(R.id.graphK);
         //GraphView graphT = fragment.findViewById(R.id.graphT);
         //GraphView graphC = fragment.findViewById(R.id.graphC);
         //GraphView graphA = fragment.findViewById(R.id.graphA);
-        ArrayList data = calculateAveragesOverTime(assignments);
+        ArrayList data = calculateAveragesOverTime(assignments, numberOfRemovedAssignments);
         if(data.get(0) != null) { //average over time is null
             SmoothLineChartEquallySpaced[] grids = new SmoothLineChartEquallySpaced[]{
                     fragment.findViewById(R.id.courseAverageGraph),
@@ -90,7 +102,7 @@ public class AssignmentStatsFragment extends Fragment {
         }
     }
 
-    private ArrayList calculateAveragesOverTime(JSONObject assignments){
+    private ArrayList calculateAveragesOverTime(JSONObject assignments, int numberOfRemovedAssignments){
         TA ta = new TA();
         ArrayList gridDataSets = new ArrayList();
         float[] averageOverTime = new float[assignments.length()-1];
@@ -110,12 +122,26 @@ public class AssignmentStatsFragment extends Fragment {
         try {
             assignmentsSoFar.put("categories", assignments.getJSONObject("categories"));
         }catch (Exception e){}
+        int assignmentNumber = 0;
         for (int i=0; i<(assignments.length()-1); i++) { //the minus 1 is meant to take care of the 'categories' key
-            try {
-                JSONObject assignment = assignments.getJSONObject(valueOf(i));
+            JSONObject assignment = new JSONObject();
+
+            while(true) {
+                try {
+                    assignment = assignments.getJSONObject(valueOf(assignmentNumber));
+                    break;
+                } catch (Exception ignored) {
+                    if(assignmentNumber>1000){
+                        break;
+                    }
+                }finally {
+                    assignmentNumber++;
+                }
+            }
+            try{
                 assignmentsSoFar.put(valueOf(i), assignment);
                 for (int category=0; category<5; category++) {
-                    float average = parseFloat(ta.CalculateCourseAverageFromAssignments(assignmentsSoFar, 0, optionParams[category]));
+                    float average = parseFloat(ta.CalculateCourseAverageFromAssignments(assignmentsSoFar, numberOfRemovedAssignments, optionParams[category]));
                     ((float[]) gridDataSets.get(category))[i] = average;
                 }
             }catch (Exception ignore){

@@ -37,6 +37,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.json.JSONException;
@@ -81,6 +86,8 @@ public class AssignmentsFragment extends Fragment {
     Button addAssignmentCancelButton;
     View fragment;
     AppCompatActivity activity;
+    int adsPerAssignment = 7; //number of assignments in between ads
+    ArrayList<Integer> adIndexList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -277,10 +284,28 @@ public class AssignmentsFragment extends Fragment {
                 numberOfAssignments = marks.length() - 1;
                 setupCourseBars(marks);
 
+                //setup ads
+                MobileAds.initialize(context, new OnInitializationCompleteListener() {
+                    @Override
+                    public void onInitializationComplete(InitializationStatus initializationStatus) {
+                    }
+                });
+
                 //add assignments to lienar layout
                 for (int i = 0; i < numberOfAssignments; i++) {
                     addAssignmentToLinearLayout(marks, i, isCancelled());
+                    if(i == 0 || ((i%adsPerAssignment) == 0)){
+                        View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
+                        AdView adView = adRL.findViewById(R.id.adView);
+                        AdRequest adRequest = new AdRequest.Builder().build();
+                        adView.loadAd(adRequest);
+                        linearLayout.addView(adRL);
+                        adIndexList.add(i);
+                    }
                 }
+
+
+
                 addAssignmentButton.setVisibility(View.VISIBLE);
                 addAssignmentButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1073,11 +1098,17 @@ public class AssignmentsFragment extends Fragment {
                                     toSubtract++;
                                 }
                             }
+                            for (Integer i : adIndexList) {
+                                if (i < assignmentIndex.get(titleOnClick)) {
+                                    toSubtract--;
+                                }
+                            }
 
                             linearLayout.removeViewAt(index + 2 - toSubtract);
                             Marks.remove(String.valueOf(index));
                             removedAssignmentIndexList.add(index);
                             numberOfRemovedAssignments++;
+                            ((CourseInfoActivity)activity).numberOfRemovedAssignments++;
                             TA ta = new TA();
                             String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments, null);
                             TextView AverageInt = fragment.findViewById(R.id.semesterAverageTV);

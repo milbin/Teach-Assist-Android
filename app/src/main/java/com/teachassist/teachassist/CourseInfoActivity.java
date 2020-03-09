@@ -33,6 +33,8 @@ public class CourseInfoActivity extends AppCompatActivity {
     private View currentPageSlider;
     private Button editButton;
     public JSONObject assignments;
+    public int numberOfRemovedAssignments = 0;
+    public AssignmentStatsFragment assignmentStatsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +95,8 @@ public class CourseInfoActivity extends AppCompatActivity {
             if(position == 0){
                 return new AssignmentsFragment();
             }else{
-                return new AssignmentStatsFragment();
+                assignmentStatsFragment = new AssignmentStatsFragment();
+                return assignmentStatsFragment;
             }
         }
         @Override

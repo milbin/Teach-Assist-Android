@@ -109,8 +109,6 @@ public class SmoothLineChartEquallySpaced extends View {
 				mMaxY += 10;
 				mMinY -= 10;
 			}
-			System.out.println(mMinY);
-			System.out.println(mMaxY);
 
 			if(mMaxY - mMinY <= 20){
 				incrementValue = 5;
