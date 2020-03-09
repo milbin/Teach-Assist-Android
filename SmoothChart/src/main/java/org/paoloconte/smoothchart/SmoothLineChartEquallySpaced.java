@@ -76,20 +76,42 @@ public class SmoothLineChartEquallySpaced extends View {
 	}
 	
 	public void setData(float[] values) {
-		mValues = values;
+		ArrayList newValues = new ArrayList();
+
+		for(float value: values){
+			if(value != -1f) { //if it equals -1 then that means there are currently no
+				// assignments in this category and therefore this mark should not count as a zero
+				newValues.add(value);
+			}
+		}
+		float[] valuesArray = new float[newValues.size()];
+		for(int i=0;i<newValues.size(); i++){
+			valuesArray[i] = (float) newValues.get(i);
+		}
+
+		mValues = valuesArray;
 		
-		if (values != null && values.length > 1) {
-			mMinY = values[0];
-			mMaxY = values[0];
-			for (float y : values) {
-				if (y >= mMaxY)
-					mMaxY = y - (y%incrementValue) + incrementValue; //rounds up to the nearest increment value
-				if (y <= mMinY)
-					mMinY = y - (y%incrementValue); //rounds down to the nearest increment value
+		if (mValues != null && mValues.length > 1) {
+			mMinY = mValues[0];
+			mMaxY = mValues[0];
+			for (float y : mValues) {
+				if (y >= mMaxY) {
+					if ((y % incrementValue) == 0) {
+						mMaxY = y;
+					} else
+						mMaxY = y - (y % incrementValue) + incrementValue; //rounds up to the nearest increment value
+				}
+				if (y <= mMinY) {
+					mMinY = y - (y % incrementValue); //rounds down to the nearest increment value
+				}
+			}
+			if(mMaxY == mMinY){
+				mMaxY += 10;
+				mMinY -= 10;
 			}
 			System.out.println(mMinY);
 			System.out.println(mMaxY);
-			System.out.println("HERE");
+
 			if(mMaxY - mMinY <= 20){
 				incrementValue = 5;
 			}else if(mMaxY- mMinY <= 70){
@@ -108,18 +130,15 @@ public class SmoothLineChartEquallySpaced extends View {
 	
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
-		
-		if (mValues == null || mValues.length == 0)
-			return;
 
 		int size = mValues.length;
-		
-		final float height = getMeasuredHeight() - 2*mBorder;	
+
+		final float height = getMeasuredHeight() - 2*mBorder;
 		final float width = getMeasuredWidth() - 2*mBorder;
-		
+
 		final float dX = mValues.length > 1 ? DATAPOINTS_SCALE_COEFF*(mValues.length-1)  : (2);
 		final float dY = (mMaxY-mMinY) > 0 ? (mMaxY-mMinY) : (2);
-				
+
 		mPath.reset();
 
 		// draw axes
@@ -154,13 +173,21 @@ public class SmoothLineChartEquallySpaced extends View {
 			axisPath.lineTo(width+mBorder, y);
 		}
 		canvas.drawPath(axisPath, axisPaint);
+		
+		if (mValues == null || mValues.length == 0) {
+			float y = height+mBorder - (60-mMinY)*height/dY;
+			textPaint.setColor(CHART_INTERVAL_COLOUR);
+			canvas.drawText("No Assignments Yet!", 90, y-5, textPaint);
+			return;
+		}
+
 				
 		// calculate point coordinates
 		List<PointF> points = new ArrayList<PointF>(size);		
 		for (int i=0; i<size; i++) {
-			float x = mBorder + DATAPOINTS_MARGIN_START + i*width/dX;
-			float y = mBorder + height - (mValues[i]-mMinY)*height/dY;
-			points.add(new PointF(x,y));		
+			float x = mBorder + DATAPOINTS_MARGIN_START + i * width / dX;
+			float y = mBorder + height - (mValues[i] - mMinY) * height / dY;
+			points.add(new PointF(x, y));
 		}
 
 		// calculate smooth path

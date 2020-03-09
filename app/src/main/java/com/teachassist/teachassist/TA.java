@@ -115,7 +115,7 @@ public class TA{
                         subjects.add(Subject_id);
 
 
-                        String Current_mark = CalculateCourseAverageFromAssignments(GetAssignmentsHTML(courseNum), 0);
+                        String Current_mark = CalculateCourseAverageFromAssignments(GetAssignmentsHTML(courseNum), 0, null);
                         String Course_Name = i.split(":")[0].trim();
                         String Course_code = i.split(":")[1].split("<br>")[0].trim();
                         String Room_Number = i.split("rm. ")[1].split("</td>")[0].trim();
@@ -271,7 +271,7 @@ public class TA{
 
     }
 
-    public String CalculateCourseAverageFromAssignments(JSONObject marks, int numberOfRemovedAssignments) { //CalculateTotalAverage
+    public String CalculateCourseAverageFromAssignments(JSONObject marks, int numberOfRemovedAssignments, String options) { //CalculateTotalAverage
         DecimalFormat round = new DecimalFormat(".#");
         try {
             boolean markExists = false;
@@ -403,6 +403,30 @@ public class TA{
                 Smark /= SweightAssignment;
             }
 
+            if(options == null){
+                //continue
+            }else if(options.equals("K")){
+                if(weightK == 0.0){
+                    return "-1";
+                }
+               return String.valueOf(Kmark*100);
+           }else if(options.equals("T")){
+                if(weightT == 0.0){
+                    return "-1";
+                }
+               return String.valueOf(Tmark*100);
+           }else if(options.equals("C")){
+                if(weightC == 0.0){
+                    return "-1";
+                }
+               return String.valueOf(Cmark*100);
+           }else if(options.equals("A")){
+                if(weightA == 0.0){
+                    return "-1";
+                }
+               return String.valueOf(Amark*100);
+           }
+
             Kmark *= weightK;
             Tmark *= weightT;
             Cmark *= weightC;
@@ -442,7 +466,7 @@ public class TA{
         for (Map.Entry<String, List<String>> entry : Marks.entrySet()) {
             if (!entry.getKey().contains("NA")) {
                 if(entry.getValue().get(0).contains("Level") || entry.getValue().get(0).contains("level") || entry.getValue().get(0).contains("Click") || entry.getValue().get(0).contains("click")){
-                    grades[i] = Double.parseDouble(CalculateCourseAverageFromAssignments(GetAssignmentsHTML(counter), 0));
+                    grades[i] = Double.parseDouble(CalculateCourseAverageFromAssignments(GetAssignmentsHTML(counter), 0, null));
                 }else {
                     grades[i] = Double.parseDouble(entry.getValue().get(0));
                 }
@@ -586,7 +610,7 @@ public class TA{
                     assignments.put("NA"+i, fields);
                 }else{
                     if(subject.getString("mark").contains("Level") || subject.getString("mark").contains("level")|| subject.getString("mark").contains("Click") || subject.getString("mark").contains("click")) {
-                        fields.add(CalculateCourseAverageFromAssignments(GetAssignmentsJson(i).get(0), 0));
+                        fields.add(CalculateCourseAverageFromAssignments(GetAssignmentsJson(i).get(0), 0, null));
                     }else {
                         fields.add(subject.getString("mark").replaceAll("%", "").replaceAll(",", ".").replaceAll(" ", ""));
                     }

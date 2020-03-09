@@ -52,6 +52,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -608,6 +610,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if(!finalMarkString.equals("Please See Teacher For Current Mark In This Course")) {
                             courseEntity.average = Double.parseDouble(finalMarkString.replace("%", ""));
                             courseEntity.subjectID = "offline"+finalPeriodNum;
+                            if(courseEntity.assignments == null){
+                                JSONObject returnValue = ta.GetAssignmentsHTML(finalPeriodNum-1);
+                                if(returnValue != null) {
+                                    courseEntity.assignments = returnValue.toString();
+                                }
+                            }
                         }
                         if(courseEntity.average == null){
                             courseEntity.subjectID = "NA"+finalPeriodNum; //this means

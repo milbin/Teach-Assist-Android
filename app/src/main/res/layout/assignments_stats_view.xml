@@ -1,76 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="?Background"
-    android:fitsSystemWindows="true">
-    <TextView
-        android:id="@+id/courseAverageOverTimeTV"
-        android:text="Course Average"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        style="@style/Subtitle1"
-        android:textColor="?textColor"
-        android:layout_centerInParent="true"/>
-    <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
-        android:id="@+id/courseAverageGraph"
+    >
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/courseAverageOverTimeTV"
-        android:layout_marginEnd="25dp"
-        android:layout_marginStart="30dp"
-        android:background="?Background" />
-    <TextView
-        android:text="Marks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="-5dp"
-        android:layout_marginTop="110dp"
-        android:rotation="270"
-        android:textColor="?textColor"
-        style="@style/Body2"/>
-    <TextView
-        android:text="Time ->"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/courseAverageGraph"
-        android:textColor="?textColor"
-        style="@style/Body2"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:baselineAligned="false"
-        android:layout_below="@+id/courseAverageGraph"
-        android:layout_marginTop="5dp"
-        >
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
-            <TextView
-                android:id="@+id/KAverageOverTimeTV"
-                android:text="Knowledge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="8dp"
-                style="@style/Subtitle1"
-                android:textColor="?textColor"
-                android:layout_centerInParent="true"/>
+        android:layout_height="match_parent"
+        android:background="?Background"
+        android:fitsSystemWindows="true">
+        <TextView
+            android:id="@+id/courseAverageOverTimeTV"
+            android:text="Course Average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            style="@style/Subtitle1"
+            android:textColor="?textColor"
+            android:layout_centerInParent="true"/>
         <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
-            android:id="@+id/KAverageGraph"
+            android:id="@+id/courseAverageGraph"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="5dp"
-            android:layout_below="@+id/KAverageOverTimeTV"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="25dp"
+            android:layout_below="@+id/courseAverageOverTimeTV"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="30dp"
             android:background="?Background" />
         <TextView
             android:text="Marks"
@@ -87,53 +44,127 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/KAverageGraph"
+            android:layout_below="@+id/courseAverageGraph"
             android:textColor="?textColor"
             style="@style/Body2"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+        <LinearLayout
+            android:id="@+id/KTAverageLL"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:baselineAligned="false"
+            android:layout_below="@+id/courseAverageGraph"
+            android:layout_marginTop="5dp"
             >
-            <TextView
-                android:id="@+id/TAverageOverTimeTV"
-                android:text="Thinking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="8dp"
-                style="@style/Subtitle1"
-                android:textColor="?textColor"
-                android:layout_centerInParent="true"/>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/KAverageOverTimeTV"
+                    android:text="Knowledge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    style="@style/Subtitle1"
+                    android:textColor="?textColor"
+                    android:layout_centerInParent="true"/>
             <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
-                android:id="@+id/TAverageGraph"
+                android:id="@+id/KAverageGraph"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="5dp"
-                android:layout_below="@+id/TAverageOverTimeTV"
+                android:layout_below="@+id/KAverageOverTimeTV"
                 android:layout_marginEnd="10dp"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="15dp"
                 android:background="?Background" />
-            <TextView
-                android:text="Marks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="-5dp"
-                android:layout_marginTop="110dp"
-                android:rotation="270"
-                android:textColor="?textColor"
-                style="@style/Body2"/>
-            <TextView
-                android:text="Time ->"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/TAverageGraph"
-                android:textColor="?textColor"
-                style="@style/Body2"/>
-        </RelativeLayout>
-    </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/TAverageOverTimeTV"
+                    android:text="Thinking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    style="@style/Subtitle1"
+                    android:textColor="?textColor"
+                    android:layout_centerInParent="true"/>
+                <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
+                    android:id="@+id/TAverageGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/TAverageOverTimeTV"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="15dp"
+                    android:background="?Background" />
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/CAAverageLL"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:baselineAligned="false"
+            android:layout_below="@+id/KTAverageLL"
+            android:layout_marginTop="5dp"
+            >
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/CAverageOverTimeTV"
+                    android:text="Communication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    style="@style/Subtitle1"
+                    android:textColor="?textColor"
+                    android:layout_centerInParent="true"/>
+                <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
+                    android:id="@+id/CAverageGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/CAverageOverTimeTV"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="15dp"
+                    android:background="?Background" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/AAverageOverTimeTV"
+                    android:text="Application"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    style="@style/Subtitle1"
+                    android:textColor="?textColor"
+                    android:layout_centerInParent="true"/>
+                <org.paoloconte.smoothchart.SmoothLineChartEquallySpaced
+                    android:id="@+id/AAverageGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/AAverageOverTimeTV"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="15dp"
+                    android:background="?Background" />
+            </RelativeLayout>
+        </LinearLayout>
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -64,8 +65,8 @@ public class AssignmentStatsFragment extends Fragment {
                     fragment.findViewById(R.id.courseAverageGraph),
                     fragment.findViewById(R.id.KAverageGraph),
                     fragment.findViewById(R.id.TAverageGraph),
-                    //fragment.findViewById(R.id.courseAverageGraph),
-                    //fragment.findViewById(R.id.courseAverageGraph)
+                    fragment.findViewById(R.id.CAverageGraph),
+                    fragment.findViewById(R.id.AAverageGraph)
 
             };
             int gridNumber = 0;
@@ -82,7 +83,7 @@ public class AssignmentStatsFragment extends Fragment {
                         resolveColorAttr(context, R.attr.unhighlightedTextColor),
                         typeface
                 );
-                grid.setData((float[]) data.get(0));
+                grid.setData((float[]) data.get(gridNumber));
                 //grid.setData(new float[]{95f, 96f, 97f, 98f, 99f, 100f, 1f});
                 gridNumber++;
             }
@@ -91,11 +92,19 @@ public class AssignmentStatsFragment extends Fragment {
 
     private ArrayList calculateAveragesOverTime(JSONObject assignments){
         TA ta = new TA();
+        ArrayList gridDataSets = new ArrayList();
         float[] averageOverTime = new float[assignments.length()-1];
-        ArrayList kOverTime = new ArrayList();
-        ArrayList tOverTime = new ArrayList();
-        ArrayList cOverTime = new ArrayList();
-        ArrayList aOverTime = new ArrayList();
+        float[] kOverTime = new float[assignments.length()-1];
+        float[] tOverTime = new float[assignments.length()-1];
+        float[] cOverTime = new float[assignments.length()-1];
+        float[] aOverTime = new float[assignments.length()-1];
+        gridDataSets.add(averageOverTime);
+        gridDataSets.add(kOverTime);
+        gridDataSets.add(tOverTime);
+        gridDataSets.add(cOverTime);
+        gridDataSets.add(aOverTime);
+
+        String[] optionParams = new String[]{null, "K", "T", "C", "A"}; //the first index of null is supposed to tell the method to get the course average
 
         JSONObject assignmentsSoFar = new JSONObject();
         try {
@@ -105,14 +114,15 @@ public class AssignmentStatsFragment extends Fragment {
             try {
                 JSONObject assignment = assignments.getJSONObject(valueOf(i));
                 assignmentsSoFar.put(valueOf(i), assignment);
-                try {
-                    float courseAverage = parseFloat(ta.CalculateCourseAverageFromAssignments(assignmentsSoFar, 0));
-                    averageOverTime[i] = courseAverage;
-                }catch (Exception ignore){}
-            }catch (Exception ignore){}
+                for (int category=0; category<5; category++) {
+                    float average = parseFloat(ta.CalculateCourseAverageFromAssignments(assignmentsSoFar, 0, optionParams[category]));
+                    ((float[]) gridDataSets.get(category))[i] = average;
+                }
+            }catch (Exception ignore){
+                ignore.printStackTrace();
+            }
         }
-        ArrayList gridDataSets = new ArrayList();
-        gridDataSets.add(averageOverTime);
+
         return gridDataSets;
     }
     @ColorInt

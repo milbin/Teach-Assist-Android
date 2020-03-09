@@ -471,7 +471,7 @@ public class AssignmentsFragment extends Fragment {
                             addAssignmentToLinearLayout(Marks, numberOfAssignments, false);
                             numberOfAssignments++;
                             TA ta = new TA();
-                            String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments);
+                            String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments, null);
                             TextView AverageInt = fragment.findViewById(R.id.semesterAverageTV);
                             AverageInt.setText(returnval + "%");
                             int Average = Math.round(Float.parseFloat(returnval));
@@ -1079,7 +1079,7 @@ public class AssignmentsFragment extends Fragment {
                             removedAssignmentIndexList.add(index);
                             numberOfRemovedAssignments++;
                             TA ta = new TA();
-                            String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments);
+                            String returnval = ta.CalculateCourseAverageFromAssignments(Marks, numberOfRemovedAssignments, null);
                             TextView AverageInt = fragment.findViewById(R.id.semesterAverageTV);
                             AverageInt.setText(returnval + "%");
                             int Average = Math.round(Float.parseFloat(returnval));
