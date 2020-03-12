@@ -86,7 +86,7 @@ public class AssignmentsFragment extends Fragment {
     Button addAssignmentCancelButton;
     View fragment;
     AppCompatActivity activity;
-    int adsPerAssignment = 7; //number of assignments in between ads
+    int adsPerAssignment = 5; //number of assignments in between ads
     ArrayList<Integer> adIndexList = new ArrayList<>();
 
     @Override
@@ -284,23 +284,39 @@ public class AssignmentsFragment extends Fragment {
                 numberOfAssignments = marks.length() - 1;
                 setupCourseBars(marks);
 
-                //setup ads
-                MobileAds.initialize(context, new OnInitializationCompleteListener() {
-                    @Override
-                    public void onInitializationComplete(InitializationStatus initializationStatus) {
-                    }
-                });
+                if(!((CourseInfoActivity)activity).isPremiumUser){
+                    //setup ads
+                    MobileAds.initialize(context, new OnInitializationCompleteListener() {
+                        @Override
+                        public void onInitializationComplete(InitializationStatus initializationStatus) {
+                        }
+                    });
+                }
 
                 //add assignments to lienar layout
                 for (int i = 0; i < numberOfAssignments; i++) {
-                    addAssignmentToLinearLayout(marks, i, isCancelled());
-                    if(i == 0 || ((i%adsPerAssignment) == 0)){
-                        View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
-                        AdView adView = adRL.findViewById(R.id.adView);
-                        AdRequest adRequest = new AdRequest.Builder().build();
-                        adView.loadAd(adRequest);
-                        linearLayout.addView(adRL);
-                        adIndexList.add(i);
+                    if(!((CourseInfoActivity)activity).isPremiumUser) {
+                        if (i == 0) {
+                            View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
+                            AdView adView = adRL.findViewById(R.id.adView);
+                            AdRequest adRequest = new AdRequest.Builder().build();
+                            adView.loadAd(adRequest);
+                            linearLayout.addView(adRL);
+                            adIndexList.add(i);
+                            addAssignmentToLinearLayout(marks, i, isCancelled());//assignment should be added after
+                        }else if (i == numberOfAssignments-1 && numberOfAssignments > 4) {
+                            addAssignmentToLinearLayout(marks, i, isCancelled());//assignment should be added before
+                            View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
+                            AdView adView = adRL.findViewById(R.id.adView);
+                            AdRequest adRequest = new AdRequest.Builder().build();
+                            adView.loadAd(adRequest);
+                            linearLayout.addView(adRL);
+                            adIndexList.add(i);
+                        }else{
+                            addAssignmentToLinearLayout(marks, i, isCancelled());
+                        }
+                    }else {
+                        addAssignmentToLinearLayout(marks, i, isCancelled());
                     }
                 }
 

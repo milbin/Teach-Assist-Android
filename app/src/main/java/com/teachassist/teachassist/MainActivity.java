@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.ads.AdRequest;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     boolean offlineBannerIsDisplayed = false;
     boolean hasInternetConnection = true;
     private AdView adView;
+    private boolean isPremiumUser = false;
 
 
     ArrayList<Integer> removedCourseIndexes = new ArrayList<>();
@@ -98,10 +100,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+        if(sharedPreferences.getBoolean("lightThemeEnabled", true)){
             setTheme(R.style.LightTheme);
         }else{
             setTheme(R.style.DarkTheme);
+        }
+        if(sharedPreferences.getBoolean("isPremiumUser", false)){
+            isPremiumUser = true;
         }
         setContentView(R.layout.activity_main);
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -120,15 +125,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-        // initilize ads
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        if(isPremiumUser) {
+            findViewById(R.id.adView).setVisibility(View.GONE);
+        }else{
+            // initilize ads
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+            adView = findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",
@@ -358,6 +368,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
 
+            case R.id.nav_release_notes:
+                showReleaseNotesDialogIfFirstLaunch(true);
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+
             case R.id.nav_open_in:
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
@@ -425,7 +440,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void onResume() {
         super.onResume();
-
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if(sharedPreferences.getBoolean("isPremiumUser", false)){
+            isPremiumUser = true;
+            findViewById(R.id.adView).setVisibility(View.GONE);
+            //Toast.makeText(context, "Your Purchase Has Been Restored", Toast.LENGTH_LONG).show();
+        }
     }
 
     private class getCoursesInBackground extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
@@ -673,43 +693,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             dialog.dismiss();
-
-            SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-            if(!sharedPreferences.getBoolean("didAskForRating", false)) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("didAskForRating", true);
-                editor.putBoolean("hasShownPopup", false); //reset the value from last popup
-                editor.apply();
-                // custom popup dialog
-                final Dialog dialog1 = new Dialog(context);
-                dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog1.setContentView(R.layout.custom_dialog);
-                Button dialogButton = (Button) dialog1.findViewById(R.id.dialogButtonOK);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog1.dismiss();
-                    }
-                });
-                Button dialogButtonRate = (Button) dialog1.findViewById(R.id.dialogButtonRate);
-                // if button is clicked, close the custom dialog
-                dialogButtonRate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                        try {
-                            startActivity(myAppLinkToMarket);
-                        } catch (ActivityNotFoundException e) {
-                            Toast.makeText(context, " unable to find market app", Toast.LENGTH_LONG).show();
-                        }
-                        dialog1.dismiss();
-                    }
-                });
-                dialog1.show();
-            }
+            showReleaseNotesDialogIfFirstLaunch(false);
             RunTasks(response);
         }
 
@@ -773,8 +757,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Refresh = false;
             }
         }
+    }
 
-
+    private void showReleaseNotesDialogIfFirstLaunch(boolean showIfNotFirstLaunch){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean("release notes 3.3.7", false) || showIfNotFirstLaunch) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("release notes 3.3.7", true);
+            editor.putBoolean("didAskForRating", false); //reset the value from last popup
+            editor.apply();
+            // custom popup dialog
+            final Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setContentView(R.layout.custom_dialog);
+            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            Button dialogButtonRate = (Button) dialog.findViewById(R.id.dialogButtonRate);
+            // if button is clicked, close the custom dialog
+            dialogButtonRate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckIfUserIsPremium userIsPremiumClass = new CheckIfUserIsPremium();
+                    userIsPremiumClass.check(context, MainActivity.this, true);
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
     }
     /*private class unregisterFromNotificationServer extends AsyncTask<JSONObject, Object, Object[]> {
         @Override

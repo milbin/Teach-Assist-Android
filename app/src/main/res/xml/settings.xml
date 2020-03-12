@@ -7,7 +7,7 @@
         android:key="Theme"
         android:title="Theme">
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="Light Theme Enabled"
             android:summary="Enable or disable light theme for the app"
             android:title="Light Theme Enabled"

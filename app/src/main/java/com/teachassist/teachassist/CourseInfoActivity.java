@@ -35,15 +35,19 @@ public class CourseInfoActivity extends AppCompatActivity {
     public JSONObject assignments;
     public int numberOfRemovedAssignments = 0;
     public AssignmentStatsFragment assignmentStatsFragment;
+    public boolean isPremiumUser = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+        if(sharedPreferences.getBoolean("lightThemeEnabled", true)){
             setTheme(R.style.LightTheme);
         }else{
             setTheme(R.style.DarkTheme);
+        }
+        if(sharedPreferences.getBoolean("isPremiumUser", false)){
+            isPremiumUser = true;
         }
         setContentView(R.layout.course_info_view);
 

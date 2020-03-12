@@ -1,5 +1,6 @@
 package com.teachassist.teachassist;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.Preference;
@@ -16,9 +18,21 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import android.view.MenuItem;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -27,20 +41,29 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String PASSWORD = "PASSWORD";
     public static final String REMEMBERME = "REMEMBERME";
     public static ArrayList<String> courses;
+    Activity activity;
+    Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+        if(sharedPreferences.getBoolean("lightThemeEnabled", true)){
             setTheme(R.style.LightTheme);
         }else{
             setTheme(R.style.DarkTheme);
         }
         setContentView(R.layout.settings);
+
+        if(sharedPreferences.getBoolean("isPremiumUser", false)){
+            findViewById(R.id.upgradeRL).setVisibility(View.GONE);
+            findViewById(R.id.premiumThankYouView).setVisibility(View.VISIBLE);
+        }
+
         Intent intent = getIntent();
         courses =  intent.getStringArrayListExtra("key");
-
+        activity = this;
+        context = this;
 
 
         //setup toolbar
@@ -53,8 +76,15 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.settings_fragment,
                 new PrefsFragment()).commit();
 
+        findViewById(R.id.upgradeButton).setOnClickListener(new upgradeButtonClick());
+    }
 
-
+    public class upgradeButtonClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            CheckIfUserIsPremium userIsPremiumClass = new CheckIfUserIsPremium();
+            userIsPremiumClass.check(context, activity, true);
+        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

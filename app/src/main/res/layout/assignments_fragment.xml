@@ -728,7 +728,7 @@
                             android:layout_alignParentBottom="true"
                             android:layout_marginStart="30dp"
                             android:layout_marginBottom="20dp"
-                            android:background="@drawable/done_button_background_pink"
+                            android:background="@drawable/cancel_button_background"
                             android:text="Cancel"
                             android:textColor="@color/textColor"
                             android:textSize="14sp" />

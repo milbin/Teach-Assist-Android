@@ -33,7 +33,9 @@ public class LaunchActivity extends AppCompatActivity {
         password = sharedPreferences.getString(PASSWORD, "");
         RemeberMe = sharedPreferences.getBoolean(REMEMBERME, false);
         //ReactInstanceManagerSingleton.initializeInstance(getApplicationContext(), getApplication()).getReactInstanceManager();
-
+        //check if user is premium and set shared preferences if they are
+        CheckIfUserIsPremium userIsPremiumClass = new CheckIfUserIsPremium();
+        userIsPremiumClass.check(this, this, false);
 
 
 
