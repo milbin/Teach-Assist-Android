@@ -52,62 +52,62 @@
 
 
 <!--Fonts-->
-    <style name="AppTitle" parent="AppTheme">
+    <style name="AppTitle" parent="AppTheme"> // title
         <item name="android:fontFamily">@font/eczar_bold</item>
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="sandstoneBold" parent="AppTheme">
+    <style name="sandstoneBold" parent="AppTheme"> // none
         <item name="android:fontFamily">@font/sandstone_bold</item>
     </style>
 
-    <style name="Title" parent="sandstoneBold">
+    <style name="Title" parent="sandstoneBold"> // none
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ToolbarTitle" parent="sandstoneBold">
+    <style name="ToolbarTitle" parent="sandstoneBold"> // subtitle
         <item name="android:textSize">17sp</item>
         <item name="android:fontFamily">@font/sandstone_bold</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="Subtitle1" parent="sandstoneBold">
+    <style name="Subtitle1" parent="sandstoneBold"> // subheading1
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.035</item>
         <item name="android:textColor">#6a000000</item>
     </style>
 
-    <style name="Subtitle2" parent="sandstoneBold">
+    <style name="Subtitle2" parent="sandstoneBold"> // subheading2
         <item name="android:fontFamily">@font/sandstone_regular</item>
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.035</item>
         <item name="android:lineSpacingExtra">4dp</item>
     </style>
 
-    <style name="EditTextStyle" parent="sandstoneBold">
+    <style name="EditTextStyle" parent="sandstoneBold"> // none
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">0.17</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="Button" parent="sandstoneBold">
+    <style name="Button" parent="sandstoneBold"> // subheading1
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.01</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="Body1" parent="sandstoneBold">
+    <style name="Body1" parent="sandstoneBold"> // heading
         <item name="android:fontFamily">@font/sandstone_regular</item>
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">0.0625</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="Body2" parent="Body1">
+    <style name="Body2" parent="Body1"> // body
         <item name="android:letterSpacing">0.0625</item>
         <item name="android:textSize">12sp</item>
     </style>
