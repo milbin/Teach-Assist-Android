@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -610,6 +611,22 @@ public class AssignmentsFragment extends Fragment {
         String stringAFraction = "";
         String stringOFraction = "";
         rl = LayoutInflater.from(context).inflate(R.layout.marks_view_assignment, null);
+
+
+        //setup premium theme
+        if(((CourseInfoActivity) activity).isPremiumUser){
+
+            rl.findViewById(R.id.BarGraph1).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+            rl.findViewById(R.id.BarGraph2).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+            rl.findViewById(R.id.BarGraph3).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+            rl.findViewById(R.id.BarGraph4).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+            rl.findViewById(R.id.BarGraph5).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+        }
+
+
+
+
+
         linearLayout.addView(rl);
         rlList.add(rl);
         try {
@@ -1252,6 +1269,15 @@ public class AssignmentsFragment extends Fragment {
                 Opercent.setText("NA");
             } else {
                 Opercent.setText(String.valueOf(Omark));
+            }
+
+            //setup premium theme
+            if(((CourseInfoActivity) activity).isPremiumUser){
+                fragment.findViewById(R.id.BarAverage1).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+                fragment.findViewById(R.id.BarAverage2).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+                fragment.findViewById(R.id.BarAverage3).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+                fragment.findViewById(R.id.BarAverage4).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
+                fragment.findViewById(R.id.BarAverage5).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
             }
 
             if(!isCancelled) {
