@@ -19,7 +19,7 @@
         style="@style/Subtitle1"
         android:textSize="18sp"
         android:textColor="@color/textColor"
-        android:text="Please consider rating our app"
+        android:text="The Inevitable Ad Update and More:"
         android:textAlignment="center"
         />
     <TextView
@@ -32,7 +32,11 @@
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="13dp"
-        android:text="We have put literally hundreds of hours of work into building this app and would really appreciate a 5 star rating on the Play Store!"
+        android:text="Unfortunately, we've decided that the next step in improving our app is to show banner ads. It's a sad day in the history of Teachassist.
+On the bright side, we wanted to soften the blow with a couple of new features: offline mode, and a statistics view. We also have a couple of other features that should arrive in the near future.
+But for those of you who can't stand this development, we've included an option to remove all ads for $1.99.
+
+Please accept our condolences, and we hope you enjoy :)"
         />
     <Button
         android:id="@+id/dialogButtonOK"
@@ -46,7 +50,7 @@
         android:text="Dismiss"
         style="@style/Subtitle1"
         android:textColor="?attr/textColor"
-        android:background="@drawable/button_bg_rectangle_solid"
+        android:background="@drawable/cancel_button_background"
         />
     <Button
         android:id="@+id/dialogButtonRate"
@@ -57,9 +61,9 @@
         android:layout_marginEnd="30dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Rate"
+        android:text="Upgrade!"
         style="@style/Subtitle1"
         android:textColor="?attr/textColor"
-        android:background="@drawable/button_bg_rectangle_solid"
+        android:background="@drawable/upgrade_button_background"
         />
 </RelativeLayout>

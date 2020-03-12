@@ -8,6 +8,8 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.29.0'
     }
 }
+
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
@@ -16,20 +18,35 @@ googleServices {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\mlbbe\\Documents\\android Keystore\\TeachAssist.jks')
+            storePassword '6hG7f6qCc64qKlZm'
+            keyAlias = 'key0'
+            keyPassword '6hG7f6qCc64qKlZm'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.teachassist.teachassist"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 54
-        versionName "3.2.5"
+        versionCode 63
+        versionName "4.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        //checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 }
 
@@ -55,7 +72,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'org.decimal4j:decimal4j:1.0.3'
-    implementation project(':Ring Library')
     implementation 'com.google.code.gson:gson:2.8.5'
     // https://mvnrepository.com/artifact/commons-lang/commons-lang
     implementation group: 'commons-lang', name: 'commons-lang', version: '2.6'
@@ -71,6 +87,16 @@ dependencies {
     runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.7') {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
+    //'Room' for sqlite
+    def room_version = "2.2.4"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation project(path: ':Ring Library')
+    implementation project(path: ':SmoothChart')
+    implementation 'com.google.android.gms:play-services-ads:19.0.0'
+    implementation 'com.android.billingclient:billing:2.1.0'
 }
 configurations {
     all*.exclude group: 'com.google.guava', module: 'listenablefuture'

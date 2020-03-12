@@ -1,20 +1,10 @@
 package com.teachassist.teachassist;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
-import android.os.SystemClock;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,8 +13,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-
-import static com.teachassist.teachassist.MainActivity.CREDENTIALS;
 
 public class LaunchActivity extends AppCompatActivity {
     String username;
@@ -44,7 +32,10 @@ public class LaunchActivity extends AppCompatActivity {
         username = sharedPreferences.getString(USERNAME, "");
         password = sharedPreferences.getString(PASSWORD, "");
         RemeberMe = sharedPreferences.getBoolean(REMEMBERME, false);
-
+        //ReactInstanceManagerSingleton.initializeInstance(getApplicationContext(), getApplication()).getReactInstanceManager();
+        //check if user is premium and set shared preferences if they are
+        CheckIfUserIsPremium userIsPremiumClass = new CheckIfUserIsPremium();
+        userIsPremiumClass.check(this, this, false);
 
 
 

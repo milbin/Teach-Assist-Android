@@ -19,11 +19,15 @@
             android:id="@+id/nav_open_in"
             android:icon="@drawable/open_in_icon"
             android:title="Teachassist Website" />
+        <item
+            android:id="@+id/nav_release_notes"
+            android:icon="@drawable/ic_info_24px"
+            android:title="Release Notes" />
 
         <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/logout_icon"
-            android:title="Logout" />
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/logout_icon"
+        android:title="Logout" />
 
     </group>
 

@@ -47,7 +47,7 @@ public class login extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+        if(sharedPreferences.getBoolean("lightThemeEnabled", true)){
             setTheme(R.style.LightTheme);
         }else{
             setTheme(R.style.DarkTheme);
@@ -134,7 +134,7 @@ public class login extends AppCompatActivity {
             TA ta = new TA();
             String Username = params[0];
             String Password = params[1];
-            LinkedHashMap<String, List<String>> response = ta.GetTAData(Username, Password);
+            LinkedHashMap<String, List<String>> response = ta.GetCoursesHTML(Username, Password);
 
             return response;
 

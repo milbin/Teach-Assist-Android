@@ -37,15 +37,75 @@
 
     <FrameLayout
         android:id="@+id/settings_fragment"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_gravity="top|start"
         android:layout_marginTop="4dp"
         android:layout_marginStart="0dp"
         android:layout_below="@+id/toolbar" />
+        <RelativeLayout
+            android:id="@+id/upgradeRL"
+            android:layout_below="@id/settings_fragment"
+            android:layout_marginBottom="12dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+            <TextView
+                android:layout_above="@+id/upgradeDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="4dp"
+                android:text="Teachassist Pro"
+                style="@style/Subtitle1"
+                android:textSize="20dp"
+                android:textColor="?textColor"
+                android:layout_marginStart="16dp"
+                />
+            <TextView
+                android:id="@+id/upgradeDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/upgradeButton"
+                android:text="Please consider supporting us by upgrading to Teachassist Pro. This will remove ads forever and give you a small perk ;)"
+                style="@style/Body1"
+                android:textSize="12dp"
+                android:textColor="?textColor"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="12dp"
+                android:textAlignment="center"
+                />
+            <Button
+                android:id="@+id/upgradeButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="24dp"
+                android:layout_marginStart="24dp"
+                style="@style/Subtitle1"
+                android:background="@drawable/upgrade_button_background"
+                android:text="Upgrade to Teachassist Pro"
+                android:textColor="?textColor"
+                />
+
+        </RelativeLayout>
+        <Button
+            android:id="@+id/premiumThankYouView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:visibility="gone"
+            style="@style/Subtitle1"
+            android:background="@drawable/upgrade_button_background"
+            android:text="Thank You For Supporting Us!"
+            android:textColor="?textColor"
+            />
+
     </RelativeLayout>
-
-
 
 
 </RelativeLayout>

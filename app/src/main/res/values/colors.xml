@@ -9,6 +9,8 @@
     <color name="primaryPink">#ff4181</color>
     <color name="Background">@color/primaryColor</color>
     <color name="textColor">#ffffff</color>
+    <color name="unhighlightedTextColor">#e4e4eb</color>
+    <color name="offlineWarningColour">#ffae42</color>
 
 </resources>
 

@@ -1,6 +1,6 @@
 package com.teachassist.teachassist;
 
-import android.app.Activity;
+import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -13,66 +13,58 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
+
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.github.mikephil.charting.utils.EntryXIndexComparator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.google.gson.Gson;
 
-import org.decimal4j.util.DoubleRounder;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 
@@ -84,20 +76,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SwipeRefreshLayout SwipeRefresh;
     private DrawerLayout drawer;
     LinkedHashMap<String, List<String>> response;
-    LinkedHashMap<String, List<String>> settingsResponse;
     List<String> removed = new ArrayList<>();
     ProgressDialog dialog;
     NavigationView navigationView;
     Menu menu;
     Context context = (Context) this;
     LinkedList<View> Courses = new LinkedList<View>();
+    boolean offlineBannerIsDisplayed = false;
+    boolean hasInternetConnection = true;
+    private AdView adView;
+    private boolean isPremiumUser = false;
+
 
     ArrayList<Integer> removedCourseIndexes = new ArrayList<>();
     Boolean isEditing = false;
 
     public static final String CREDENTIALS = "credentials";
     public static final String USERNAME = "USERNAME";
-    public static final String RESPONSE = "RESPONSE";
     public static final String PASSWORD = "PASSWORD";
     public static final String REMEMBERME = "REMEMBERME";
 
@@ -105,10 +100,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if(sharedPreferences.getBoolean("lightThemeEnabled", false)){
+        if(sharedPreferences.getBoolean("lightThemeEnabled", true)){
             setTheme(R.style.LightTheme);
         }else{
             setTheme(R.style.DarkTheme);
+        }
+        if(sharedPreferences.getBoolean("isPremiumUser", false)){
+            isPremiumUser = true;
         }
         setContentView(R.layout.activity_main);
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -127,14 +125,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
+        if(isPremiumUser) {
+            findViewById(R.id.adView).setVisibility(View.GONE);
+        }else{
+            // initilize ads
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+            adView = findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
 
         //progress dialog
         dialog = ProgressDialog.show(MainActivity.this, "",
                 "Loading...", true);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_mono);
-
-
-
 
 
         //intent
@@ -164,13 +173,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         LinearLayout linearLayout = findViewById(R.id.CourseLinearLayout);
                         for(View rl: Courses) {
-                            linearLayout.removeViewAt(2);
-
+                            linearLayout.removeViewAt(3);
                         }
                         removedCourseIndexes = new ArrayList<>();
                         isEditing = false;
                         Courses = new LinkedList<View>();
-                        new getTaData().execute();
+                        new getCoursesInBackground().execute();
 
                     }
                 }
@@ -199,19 +207,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle("");
         //getSupportActionBar().setTitle("Student: " + username);
 
-        new getTaData().execute();
+        new getCoursesInBackground().execute();
     }
+
 
     private void showToast(String text){
         Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
 
-    public class subject_click implements View.OnClickListener{
+    public class subjectClick implements View.OnClickListener{
 
         @Override
         public void onClick(View v){
-            Intent myIntent = new Intent(MainActivity.this, MarksViewMaterial.class);
-            int subjectNumber = ((LinearLayout) v.getParent()).indexOfChild(v) -2;
+            Intent myIntent = new Intent(MainActivity.this, CourseInfoActivity.class);
+            int subjectNumber = ((LinearLayout) v.getParent()).indexOfChild(v) -3; //this minus three accounts for the toolbar, offline banner and index offset
             int toSubtract = 0;
             for (int i : removedCourseIndexes) {
                 if (i < subjectNumber) {
@@ -221,17 +230,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView p = v.findViewById(R.id.Period);
             subjectNumber -= toSubtract;
             String subjectMark = "";
+            String courseCode = "";
             int counter = 0;
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 if(counter == subjectNumber){
                     subjectMark = entry.getValue().get(0);
+                    courseCode = entry.getValue().get(1);
                 }
                 counter++;
             }
             myIntent.putExtra("username", username);
             myIntent.putExtra("password", password);
-            myIntent.putExtra("subject", subjectNumber+toSubtract);
+            myIntent.putExtra("subjectNumber", subjectNumber + toSubtract);
             myIntent.putExtra("subject Mark", subjectMark);
+            myIntent.putExtra("courseCode", courseCode);
             Crashlytics.log(Log.DEBUG, "subject Mark", subjectMark);
             startActivity(myIntent);
             dialog.dismiss();
@@ -275,8 +287,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             removedCourseIndexes.add(courseNum);
             response.remove(toRemove);
-            newAverage = ta.GetAverage(response);
-            TextView AverageInt = findViewById(R.id.AverageInt);
+            newAverage = ta.GetSemesterAverage(response);
+            TextView AverageInt = findViewById(R.id.semesterAverageTV);
             AverageInt.setText(newAverage.toString() + "%");
             final RingProgressBar ProgressBarAverage = (RingProgressBar) findViewById(R.id.AverageBar);
             if (newAverage < 1) {
@@ -308,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //logout of firebase
                 FirebaseAuth.getInstance().signOut();
 
+                /*
                 //register for notifications if not already registered
                 SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
                 String token = sharedPreferencesNotifications.getString("token", "");
@@ -324,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         editorNotifications.apply();
                     }catch (Exception e){}
 
-                }
+                }*/
 
                 Intent myIntent = new Intent(MainActivity.this, login.class);
                 startActivity(myIntent);
@@ -334,33 +347,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 drawer.closeDrawer(GravityCompat.START);
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                //add names of courses to list for settings summaries
-                ArrayList list = new ArrayList<String>();
-
-
-                if(response == null){
-                    new AlertDialog.Builder(context)
-                            .setTitle("Connection Error")
-                            .setMessage("Something went wrong while trying to reach TeachAssist. Please check your internet connection and try again.")
-                            .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.d("MainActivity", "No internet connection");
-                                    recreate();
-                                }
-                            })
-                            .show();
-                    break;
-                }
-                for (Map.Entry<String, List<String>> entry : settingsResponse.entrySet()) {
-                    try {
-                        list.add(entry.getValue().get(1));
-                    }catch (IndexOutOfBoundsException e){
-                        list.add(entry.getValue().get(0));
-                    }
-                }
-                settingsIntent.putStringArrayListExtra("key", list); //Optional parameters
-
                 startActivity(settingsIntent);
                 break;
 
@@ -382,6 +368,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
 
+            case R.id.nav_release_notes:
+                showReleaseNotesDialogIfFirstLaunch(true);
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+
             case R.id.nav_open_in:
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
@@ -389,11 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.setData(Uri.parse("https://ta.yrdsb.ca/yrdsb/"));
                 startActivity(intent);
                 break;
-
-
         }
-
-
         return false;
     }
 
@@ -425,9 +412,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     isEditing = false;
                 }
+
                 return true;
-
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -435,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
 
     //close drawer when back button pressed
     @Override
@@ -453,55 +440,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void onResume() {
         super.onResume();
-
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if(sharedPreferences.getBoolean("isPremiumUser", false)){
+            isPremiumUser = true;
+            findViewById(R.id.adView).setVisibility(View.GONE);
+            //Toast.makeText(context, "Your Purchase Has Been Restored", Toast.LENGTH_LONG).show();
+        }
     }
 
-
-
-
-    private class getTaData extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
+    private class getCoursesInBackground extends AsyncTask<String, Integer, LinkedHashMap<String, List<String>>>{
         TA ta = new TA();
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
-
-
-            response = ta.GetTAData(username, password);
-            /*
-            ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
-            ArrayList list2 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
-            ArrayList list3 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
-            ArrayList list4 = new ArrayList<>(Arrays.asList("87.1", "MCR3U1-01", "Functions and Relations", "142"));
-            ArrayList list5 = new ArrayList<>(Arrays.asList("93.7", "SPH3U1-01", "Physics", "167"));
-            ArrayList list6 = new ArrayList<>(Arrays.asList("80.6", "FIF3U1-01", "", "214"));
-            ArrayList list7 = new ArrayList<>(Arrays.asList("87.1", "MCR3U1-01", "Functions and Relations", "142"));
+            response = ta.GetCoursesHTML(username, password);
+            LinkedHashMap<String, List<String>> offlineResponse = ta.GetCoursesOffline(username, getApplicationContext());
+            if(response == null && offlineResponse.size() == 0){
+                hasInternetConnection = false;
+                return null;
+            }else if(response == null){
+                hasInternetConnection = false;
+                response = offlineResponse;
+                return response;
+            }else {
+                //this disgusting block of code just merges the 2 responses so that the online response takes precidence
+                LinkedHashMap<String, List<String>> mergedResponse = new LinkedHashMap<>();
+                int courseNumberResponse = 0;
+                for (Map.Entry<String, List<String>> entry : ((LinkedHashMap<String, List<String>>) response.clone()).entrySet()) {
+                    if (entry.getKey().contains("NA")) {
+                        if(offlineResponse.size() == 0){
+                            mergedResponse.put(entry.getKey(), entry.getValue());
+                        }else {
+                            int courseNumberOfflineResponse = 0;
+                            for (Map.Entry<String, List<String>> entryOffline : offlineResponse.entrySet()) {
+                                if (courseNumberResponse == courseNumberOfflineResponse) {
+                                    if (entryOffline.getKey().contains("NA")) {
+                                        mergedResponse.put("NA" + courseNumberResponse, entryOffline.getValue());
+                                    } else if (entryOffline.getKey().contains("offline")) {
+                                        mergedResponse.put("offline" + courseNumberResponse, entryOffline.getValue());
+                                    }
+                                }
+                                courseNumberOfflineResponse++;
+                            }
+                        }
+                    }else{
+                        mergedResponse.put(entry.getKey(), entry.getValue());
+                    }
+                    courseNumberResponse++;
+                }
+            /*ArrayList list1 = new ArrayList<>(Arrays.asList("64.2", "AVI3M1-01", "Visual Arts", "169"));
             response = new LinkedHashMap<>();
-            response.put("283098", list1);
-            response.put("283004", list2);
-            response.put("283001", list3);
-            response.put("283152", list4);
-            response.put("283003", list5);
-            response.put("283005", list6);
-            response.put("283006", list7);*/
-            if(response != null) {
-                settingsResponse = (LinkedHashMap<String, List<String>>) response.clone(); //stores original response for settings intent, if not clicking on settings will raise exception when you delete courses
-            }else{
-               return null;
-            }
-
-            Gson gson = new Gson();
-            String list = gson.toJson(response);
-            SharedPreferences sharedPreferences = getSharedPreferences(RESPONSE, MODE_PRIVATE);
-            SharedPreferences.Editor editor =   sharedPreferences.edit();
-            editor.putString(RESPONSE, list);
-            editor.apply();
-
-
+            response.put("283098", list1);*/
+            /*
             //register for notifications if not already registered
             final SharedPreferences sharedPreferencesNotifications = getSharedPreferences("notifications", MODE_PRIVATE);
             String token = sharedPreferencesNotifications.getString("token", "");
@@ -517,15 +506,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     json.put("platform", "ANDROID");
                     json.put("auth", "TAAPPYRDSB123!PASSWORD");
                     SendRequest sr = new SendRequest();
-                    /*if(sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", json.toString()) != null){
+                    if(sr.sendJsonNotifications("https://benjamintran.me/TeachassistAPI/", json.toString()) != null){
                         SharedPreferences.Editor editorNotifications =   sharedPreferencesNotifications.edit();
                         editorNotifications.putBoolean("hasRegistered", true);
                         editorNotifications.apply();
-                    }*/
+                    }
 
                 }catch (Exception e){}
             } else if(token.equals("")){
-                FirebaseInstanceId.getInstance().getInstanceId()
+                FirebaseInstanceId.initializeInstance().getInstanceId()
                         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                             @Override
                             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -541,17 +530,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         });
             }
-
-            return response;
-
+            */
+            response = mergedResponse;
+            System.out.println(response);
+                return response;
+            }
         }
-
-        protected void onProgressUpdate(Integer... progress) {}
-
-
         protected void onPostExecute(LinkedHashMap<String, List<String>> response) {
             // Set Average Text
-            Double average = ta.GetAverage(response);
+            Double average = ta.GetSemesterAverage(response);
             //check if connected to internet
             if(average == null || response == null){
                 new AlertDialog.Builder(context)
@@ -570,47 +557,125 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             if(response.size() == 0){
                 findViewById(R.id.noCoursesTV).setVisibility(View.VISIBLE);
-                TextView AverageInt = findViewById(R.id.AverageInt);
+                TextView AverageInt = findViewById(R.id.semesterAverageTV);
                 AverageInt.setText("");
+            }else {
+                TextView semesterAverageTV = findViewById(R.id.semesterAverageTV);
+                semesterAverageTV.setText(average + "%");
             }
-            TextView AverageInt = findViewById(R.id.AverageInt);
-            AverageInt.setText(average+"%");
-            System.out.println(response);
 
             int periodNum = 1;
             LinearLayout linearLayout = findViewById(R.id.CourseLinearLayout);
             for (Map.Entry<String, List<String>> entry : response.entrySet()) {
                 View relativeLayout = LayoutInflater.from(context).inflate(R.layout.course_layout, null);
                 linearLayout.addView(relativeLayout);
-                relativeLayout.setOnClickListener(new subject_click());
+                relativeLayout.setOnClickListener(new subjectClick());
                 String markString = "Please See Teacher For Current Mark In This Course";
-                String subjectAbrvString = "";
-                String subjectNameString = "";
+                String courseCode = "";
+                String courseName = "";
                 String roomNumber = "";
                 List<String> courseData = entry.getValue();
-                if (!entry.getKey().contains("NA")) {
-                    try {
-                        float mark = Float.parseFloat(entry.getValue().get(0));
-                        markString = mark == 100.0 ? "100%" : (mark + "%");
-                    } catch (Exception ignored) {}
-                    subjectAbrvString = getOrBlank(courseData, 1);
-                    subjectNameString = getOrBlank(courseData, 2);
-                    roomNumber = getOrBlank(courseData, 3);
-                } else {
-                    subjectAbrvString = getOrBlank(courseData, 0);
-                    if(subjectAbrvString.contains("SHAL")){ // this is almost always contained within the spare course code ex: SHAL.1-03
-                        subjectAbrvString = "Spare";
+                if (entry.getKey().contains("NA")) {
+                    courseCode = getOrBlank(courseData, 0);
+                    if(courseCode.contains("SHAL")){ // this is almost always contained within the spare course code ex: SHAL.1-03
+                        courseCode = "Spare";
                     }
-                    subjectNameString = getOrBlank(courseData, 1);
+                    courseName = getOrBlank(courseData, 1);
                     roomNumber = getOrBlank(courseData, 2);
                     final View ProgressBarAverage = relativeLayout.findViewById(R.id.SubjectBar);
                     ProgressBarAverage.setVisibility(View.INVISIBLE);
                     relativeLayout.setClickable(false);
+                } else {
+                    try {
+                        float mark = Float.parseFloat(entry.getValue().get(0));
+                        markString = mark == 100.0 ? "100%" : (mark + "%");
+                    } catch (Exception ignored) {}
+                    courseCode = getOrBlank(courseData, 1);
+                    courseName = getOrBlank(courseData, 2);
+                    roomNumber = getOrBlank(courseData, 3);
                 }
+                if(entry.getKey().contains("offline")){
+                    View offlineIndicator = relativeLayout.findViewById(R.id.offlineIndicator);
+                    offlineIndicator.setVisibility(View.VISIBLE);
+                    if(!offlineBannerIsDisplayed) {
+                        final RelativeLayout offlineIndicatorBanner = findViewById(R.id.offlineIndicatorBanner);
+                        if(hasInternetConnection) {
+                            ((TextView) offlineIndicatorBanner.findViewById(R.id.offlineIndicatorBannerTV))
+                                    .setText("Some courses are currently hidden, they may not be up to date.");
+                        }
+                        offlineIndicatorBanner.setVisibility(View.VISIBLE);
+                        offlineBannerIsDisplayed = true;
+                        new Thread(new Runnable() {
+                            public void run() {
+                                try {
+                                    Thread.sleep(10000);
+                                    offlineIndicatorBanner.post(new Runnable() {
+                                        public void run() {
+                                            ObjectAnimator animation = ObjectAnimator.ofFloat(offlineIndicatorBanner, "translationX", offlineIndicatorBanner.getWidth());
+                                            animation.setDuration(700);
+                                            animation.start();
+                                        }
+                                    });
+                                    Thread.sleep(1000);
+                                    offlineIndicatorBanner.post(new Runnable() {
+                                        public void run() {
+                                            offlineIndicatorBanner.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
+                                }catch (Exception ignored){}
+                            }
+                        }).start();
+                    }
+                }
+                // Write all the individual attributes of a course like the average, courseName etc. to the database
+                // Android requires that the action be performed within a thread
+                final String finalMarkString = markString;
+                final String finalCourseCode = courseCode;
+                final String finalCourseName = courseName;
+                final String finalRoomNumber = roomNumber;
+                final int finalPeriodNum = periodNum;
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                                AppDatabase.class, username).build();
+                        CoursesEntity courseEntity = db.coursesDao().getCourseByCourseCode(finalCourseCode);
+                        if(courseEntity == null){
+                            courseEntity = new CoursesEntity();
+                        }
+                        if(!finalMarkString.equals("Please See Teacher For Current Mark In This Course")) {
+                            courseEntity.average = Double.parseDouble(finalMarkString.replace("%", ""));
+                            courseEntity.subjectID = "offline"+finalPeriodNum;
+                            if(courseEntity.assignments == null){
+                                JSONObject returnValue = ta.GetAssignmentsHTML(finalPeriodNum-1);
+                                if(returnValue != null) {
+                                    courseEntity.assignments = returnValue.toString();
+                                }
+                            }
+                        }
+                        if(courseEntity.average == null){
+                            courseEntity.subjectID = "NA"+finalPeriodNum; //this means
+                            //coursesEntity.average = 2.0; //debugging code
+                        }
+                        //If there exists an actual subjectID that is not NA, it should not get overwritten because that unhidden course will have been stored in the database with its Subject ID
+                        courseEntity.periodNumber = finalPeriodNum;
+                        courseEntity.courseCode = finalCourseCode;
+                        courseEntity.courseName = finalCourseName;
+                        courseEntity.roomNumber = finalRoomNumber;
+                        if(db.coursesDao().getCourseByCourseCode(finalCourseCode) != null){ //exists
+                            db.coursesDao().updateCourse(courseEntity);
+                        }else { //does not exist
+                            db.coursesDao().insertAll(courseEntity);
+                        }
+                        db.close();
+                    }
+                });
+
+                //update layout
                 TextView SubjectAbrv = relativeLayout.findViewById(R.id.SubjectAbrv);
-                SubjectAbrv.setText(subjectAbrvString);
+                SubjectAbrv.setText(courseCode);
                 TextView SubjectName = relativeLayout.findViewById(R.id.SubjectName);
-                SubjectName.setText(subjectNameString);
+                SubjectName.setText(courseName);
                 TextView subjectInt = relativeLayout.findViewById(R.id.SubjectInt);
                 subjectInt.setText(markString);
                 if(markString.equals("Please See Teacher For Current Mark In This Course")){
@@ -628,43 +693,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             dialog.dismiss();
-
-            SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-            if(!sharedPreferences.getBoolean("didAskForRating", false)) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("didAskForRating", true);
-                editor.putBoolean("hasShownPopup", false); //reset the value from last popup
-                editor.apply();
-                // custom popup dialog
-                final Dialog dialog1 = new Dialog(context);
-                dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog1.setContentView(R.layout.custom_dialog);
-                Button dialogButton = (Button) dialog1.findViewById(R.id.dialogButtonOK);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog1.dismiss();
-                    }
-                });
-                Button dialogButtonRate = (Button) dialog1.findViewById(R.id.dialogButtonRate);
-                // if button is clicked, close the custom dialog
-                dialogButtonRate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                        try {
-                            startActivity(myAppLinkToMarket);
-                        } catch (ActivityNotFoundException e) {
-                            Toast.makeText(context, " unable to find market app", Toast.LENGTH_LONG).show();
-                        }
-                        dialog1.dismiss();
-                    }
-                });
-                dialog1.show();
-            }
+            showReleaseNotesDialogIfFirstLaunch(false);
             RunTasks(response);
         }
 
@@ -675,7 +704,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new Thread(new Runnable(){
                 public void run() {
                     TA ta = new TA();
-                    int roundedAvg = (int) Math.round(ta.GetAverage(response));
+                    int roundedAvg = (int) Math.round(ta.GetSemesterAverage(response));
                     final RingProgressBar ProgressBarAverage = findViewById(R.id.AverageBar);
 
                     try {
@@ -728,10 +757,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Refresh = false;
             }
         }
-
-
     }
-    private class unregisterFromNotificationServer extends AsyncTask<JSONObject, Object, Object[]> {
+
+    private void showReleaseNotesDialogIfFirstLaunch(boolean showIfNotFirstLaunch){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean("release notes 3.3.7", false) || showIfNotFirstLaunch) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("release notes 3.3.7", true);
+            editor.putBoolean("didAskForRating", false); //reset the value from last popup
+            editor.apply();
+            // custom popup dialog
+            final Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setContentView(R.layout.custom_dialog);
+            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            Button dialogButtonRate = (Button) dialog.findViewById(R.id.dialogButtonRate);
+            // if button is clicked, close the custom dialog
+            dialogButtonRate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckIfUserIsPremium userIsPremiumClass = new CheckIfUserIsPremium();
+                    userIsPremiumClass.check(context, MainActivity.this, true);
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
+    }
+    /*private class unregisterFromNotificationServer extends AsyncTask<JSONObject, Object, Object[]> {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
@@ -755,7 +816,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         }
-    }
+    }*/
 
     private String getOrBlank(List<String> list,int index){
         try {
