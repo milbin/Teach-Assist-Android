@@ -7,8 +7,8 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:src="@drawable/backdrops"
+        android:layout_height="200dp"
+        android:src="@drawable/adupdate"
         />
     <TextView
         android:id="@+id/TV1"
@@ -19,7 +19,7 @@
         style="@style/Subtitle1"
         android:textSize="18sp"
         android:textColor="@color/textColor"
-        android:text="The Inevitable Ad Update and More:"
+        android:text="A message from the developpers:"
         android:textAlignment="center"
         />
     <TextView
@@ -33,10 +33,9 @@
         android:textColor="@color/textColor"
         android:textSize="13dp"
         android:text="Unfortunately, we've decided that the next step in improving our app is to show banner ads. It's a sad day in the history of Teachassist.
-On the bright side, we wanted to soften the blow with a couple of new features: offline mode, and a statistics view. We also have a couple of other features that should arrive in the near future.
-But for those of you who can't stand this development, we've included an option to remove all ads for $1.99.
-
-Please accept our condolences, and we hope you enjoy :)"
+\n\n On the bright side, we wanted to soften the blow with a couple of new features: offline mode, and a statistics view. We also have a couple of other features that should arrive in the near future.
+\n\n But for those of you who can't stand this development, we've included an option to remove all ads for $1.99.
+\n\n Please accept our condolences, and we hope you enjoy :)"
         />
     <Button
         android:id="@+id/dialogButtonOK"

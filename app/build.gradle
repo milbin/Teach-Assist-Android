@@ -18,14 +18,6 @@ googleServices {
 }
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('C:\\Users\\mlbbe\\Documents\\android Keystore\\TeachAssist.jks')
-            storePassword '6hG7f6qCc64qKlZm'
-            keyAlias = 'key0'
-            keyPassword '6hG7f6qCc64qKlZm'
-        }
-    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.teachassist.teachassist"

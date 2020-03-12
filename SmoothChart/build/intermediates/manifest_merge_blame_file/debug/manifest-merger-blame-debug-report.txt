@@ -6,8 +6,8 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="21"
-8-->C:\Users\mlbbe\AndroidStudioProjects\TeachassistYRDSB\SmoothChart\src\main\AndroidManifest.xml
+8-->/Users/sarahtran/Documents/repos/Teach-Assist-Android/SmoothChart/src/main/AndroidManifest.xml
 9        android:targetSdkVersion="28" />
-9-->C:\Users\mlbbe\AndroidStudioProjects\TeachassistYRDSB\SmoothChart\src\main\AndroidManifest.xml
+9-->/Users/sarahtran/Documents/repos/Teach-Assist-Android/SmoothChart/src/main/AndroidManifest.xml
 10
 11</manifest>

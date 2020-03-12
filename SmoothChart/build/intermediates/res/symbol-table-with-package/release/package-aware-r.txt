@@ -1,9 +1,0 @@
-org.paoloconte.smoothchart
-dimen margin
-drawable ic_launcher
-id smoothChart
-id smoothChartES
-layout activity_main
-string app_name
-style AppBaseTheme
-style AppTheme
