@@ -81,14 +81,14 @@ public class CheckIfUserIsPremium {
                     editor.apply();
                     Toast.makeText(context, "Congratulations, it looks like you've already upgraded!", Toast.LENGTH_LONG).show();
                 }else{
-                    Toast.makeText(context, "Something went wrong while trying to launch Google Play Billing", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Something went wrong while trying to launch Google Play Billing", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onBillingServiceDisconnected() {
                 // Try to restart the connection on the next request to
                 // Google Play by calling the startConnection() method.
-                Toast.makeText(context, "Something went wrong while trying to connect", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Something went wrong while trying to connect", Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -155,7 +155,7 @@ public class CheckIfUserIsPremium {
         for (Purchase purchase : purchases) {
             long time= System.currentTimeMillis();
             long ONE_MINUTE = 60000;
-            if(true||purchase.getPurchaseState() == Purchase.PurchaseState.PENDING && (time-purchase.getPurchaseTime()) > ONE_MINUTE*60*24 ) {
+            if(purchase.getPurchaseState() == Purchase.PurchaseState.PENDING && (time-purchase.getPurchaseTime()) > ONE_MINUTE*60*24 ) {
                 ConsumeParams consumePurchaseParams =
                         ConsumeParams.newBuilder()
                                 .setPurchaseToken(purchase.getPurchaseToken())
@@ -164,7 +164,7 @@ public class CheckIfUserIsPremium {
                     @Override
                     public void onConsumeResponse(BillingResult billingResult, String s) {
                         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.ITEM_NOT_OWNED) {
-                            Toast.makeText(context, "Your purchase was declined with error code: " + billingResult.getResponseCode(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Your purchase was declined with error code: " + billingResult.getResponseCode()+". If you have already bought Teachassist pro and everything works fine you can ignore this message.", Toast.LENGTH_LONG).show();
                        }
                     }
                 });

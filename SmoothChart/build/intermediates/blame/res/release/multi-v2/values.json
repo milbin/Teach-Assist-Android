@@ -1,0 +1,120 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values\\values.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "56",
+                        "endColumns": "54",
+                        "endOffsets": "106"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "93",
+                        "endColumns": "54",
+                        "endOffsets": "143"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "6,15",
+                        "startColumns": "4,4",
+                        "startOffsets": "186,510",
+                        "endLines": "12,17",
+                        "endColumns": "12,12",
+                        "endOffsets": "472,665"
+                    },
+                    "to": {
+                        "startLines": "4,11",
+                        "startColumns": "4,4",
+                        "startOffsets": "148,439",
+                        "endLines": "10,13",
+                        "endColumns": "12,12",
+                        "endOffsets": "434,594"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\src\\main\\res\\values\\dimens.xml",
+                    "from": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "89",
+                        "endColumns": "37",
+                        "endOffsets": "122"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "37",
+                        "endOffsets": "88"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\build\\intermediates\\res\\merged\\release\\values\\values.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "56",
+                        "endColumns": "54",
+                        "endOffsets": "106"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "93",
+                        "endColumns": "54",
+                        "endOffsets": "143"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "6,15",
+                        "startColumns": "4,4",
+                        "startOffsets": "186,510",
+                        "endLines": "12,17",
+                        "endColumns": "12,12",
+                        "endOffsets": "472,665"
+                    },
+                    "to": {
+                        "startLines": "4,11",
+                        "startColumns": "4,4",
+                        "startOffsets": "148,439",
+                        "endLines": "10,13",
+                        "endColumns": "12,12",
+                        "endOffsets": "434,594"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mlbbe\\AndroidStudioProjects\\TeachassistYRDSB\\SmoothChart\\src\\main\\res\\values\\dimens.xml",
+                    "from": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "89",
+                        "endColumns": "37",
+                        "endOffsets": "122"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "37",
+                        "endOffsets": "88"
+                    }
+                }
+            ]
+        }
+    ]
+}

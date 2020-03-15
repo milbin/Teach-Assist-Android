@@ -259,6 +259,7 @@ public class AssignmentsFragment extends Fragment {
             // Android requires that the action be performed within a thread
             String jsonAssignmentString = Marks.toString();
             //it should not be possible for this call to return nothing since you need an unhidden course to click on it
+            CoursesEntity[] test = db.coursesDao().getAllCoureses();
             CoursesEntity coursesEntity = db.coursesDao().getCourseByCourseCode(courseCode);
             coursesEntity.assignments = jsonAssignmentString;
             db.coursesDao().updateCourse(coursesEntity);

@@ -30,6 +30,8 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -57,6 +59,8 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.mopub.common.MoPub;
+import com.mopub.common.SdkConfiguration;
 
 import org.json.JSONObject;
 
@@ -129,6 +133,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             findViewById(R.id.adView).setVisibility(View.GONE);
         }else{
             // initilize ads
+
+            //MoPub
+            SdkConfiguration sdkConfiguration =
+                    new SdkConfiguration.Builder("db7e11922adc40218eb92998315fbd50").build();
+
+            MoPub.initializeSdk(context, sdkConfiguration, null);
+
+            //AdMob
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
                 @Override
                 public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -150,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
         password = intent.getStringExtra("password");
+        doTasksOnFirstLaunch();
 
         Crashlytics.setUserIdentifier(username);
         Crashlytics.setString("username", username);
@@ -577,9 +590,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 List<String> courseData = entry.getValue();
                 if (entry.getKey().contains("NA")) {
                     courseCode = getOrBlank(courseData, 0);
-                    if(courseCode.contains("SHAL")){ // this is almost always contained within the spare course code ex: SHAL.1-03
-                        courseCode = "Spare";
-                    }
                     courseName = getOrBlank(courseData, 1);
                     roomNumber = getOrBlank(courseData, 2);
                     final View ProgressBarAverage = relativeLayout.findViewById(R.id.SubjectBar);
@@ -630,6 +640,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Write all the individual attributes of a course like the average, courseName etc. to the database
                 // Android requires that the action be performed within a thread
                 final String finalMarkString = markString;
+                //we strip the spaces when we pass this variable to the assignment view which causes
+                // an issue if we dont strip it here too since this is the primary key
                 final String finalCourseCode = courseCode;
                 final String finalCourseName = courseName;
                 final String finalRoomNumber = roomNumber;
@@ -639,7 +651,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void run() {
                         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                                 AppDatabase.class, username).build();
-                        CoursesEntity courseEntity = db.coursesDao().getCourseByCourseCode(finalCourseCode);
+                        CoursesEntity courseEntity = db.coursesDao().getCourseByCourseCode(finalCourseCode.replaceAll("\\s+", ""));
                         if(courseEntity == null){
                             courseEntity = new CoursesEntity();
                         }
@@ -659,10 +671,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         //If there exists an actual subjectID that is not NA, it should not get overwritten because that unhidden course will have been stored in the database with its Subject ID
                         courseEntity.periodNumber = finalPeriodNum;
-                        courseEntity.courseCode = finalCourseCode;
+                        courseEntity.courseCode = finalCourseCode.replaceAll("\\s+", "");
                         courseEntity.courseName = finalCourseName;
                         courseEntity.roomNumber = finalRoomNumber;
-                        if(db.coursesDao().getCourseByCourseCode(finalCourseCode) != null){ //exists
+                        if(db.coursesDao().getCourseByCourseCode(finalCourseCode.replaceAll("\\s+", "")) != null){ //exists
                             db.coursesDao().updateCourse(courseEntity);
                         }else { //does not exist
                             db.coursesDao().insertAll(courseEntity);
@@ -673,7 +685,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //update layout
                 TextView SubjectAbrv = relativeLayout.findViewById(R.id.SubjectAbrv);
-                SubjectAbrv.setText(courseCode);
+                if(courseCode.contains("SHAL")){ // this is almost always contained within the spare course code ex: SHAL.1-03
+                    SubjectAbrv.setText("Spare");
+                }else{
+                    SubjectAbrv.setText(courseCode);
+                }
                 TextView SubjectName = relativeLayout.findViewById(R.id.SubjectName);
                 SubjectName.setText(courseName);
                 TextView subjectInt = relativeLayout.findViewById(R.id.SubjectInt);
@@ -790,6 +806,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
             dialog.show();
+        }
+    }
+    private void doTasksOnFirstLaunch(){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean("4.0.1 didClearDB", false)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("4.0.1 didClearDB", true);
+            editor.apply();
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                            AppDatabase.class, username).build();
+                    CoursesEntity courseEntity = new CoursesEntity();
+                    db.clearAllTables();
+                    db.close();
+                    System.out.println("CLEARED ALL DATABASES");
+                }
+            });
+
         }
     }
     /*private class unregisterFromNotificationServer extends AsyncTask<JSONObject, Object, Object[]> {
