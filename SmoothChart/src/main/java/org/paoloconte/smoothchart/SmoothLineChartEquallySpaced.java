@@ -129,8 +129,6 @@ public class SmoothLineChartEquallySpaced extends View {
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
 
-		int size = mValues.length;
-
 		final float height = getMeasuredHeight() - 2*mBorder;
 		final float width = getMeasuredWidth() - 2*mBorder;
 
@@ -178,7 +176,7 @@ public class SmoothLineChartEquallySpaced extends View {
 			canvas.drawText("No Assignments Yet!", 90, y-5, textPaint);
 			return;
 		}
-
+		int size = mValues.length;
 				
 		// calculate point coordinates
 		List<PointF> points = new ArrayList<PointF>(size);		
