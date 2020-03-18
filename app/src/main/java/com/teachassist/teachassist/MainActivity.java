@@ -17,9 +17,12 @@ import android.os.AsyncTask;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
+import com.facebook.ads.AdSettings;
+import com.google.android.ads.mediationtestsuite.MediationTestSuite;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,6 +68,7 @@ import com.mopub.common.SdkConfiguration;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -130,10 +134,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 });
 
         if(isPremiumUser) {
-            findViewById(R.id.adView).setVisibility(View.GONE);
+            findViewById(R.id.adViewContainer).setVisibility(View.GONE);
         }else{
             // initilize ads
-
+            //new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("3FF2A492DE30FB700E4734A350C51D69"));
+            //AdSettings.addTestDevice("06b59e6e-0b42-438e-b0a3-e157a675d105");
+            //MediationTestSuite.launch(MainActivity.this);
             //MoPub
             SdkConfiguration sdkConfiguration =
                     new SdkConfiguration.Builder("db7e11922adc40218eb92998315fbd50").build();
@@ -149,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             adView = findViewById(R.id.adView);
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
+
         }
 
 
@@ -456,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if(sharedPreferences.getBoolean("isPremiumUser", false)){
             isPremiumUser = true;
-            findViewById(R.id.adView).setVisibility(View.GONE);
+            findViewById(R.id.adViewContainer).setVisibility(View.GONE);
             //Toast.makeText(context, "Your Purchase Has Been Restored", Toast.LENGTH_LONG).show();
         }
     }

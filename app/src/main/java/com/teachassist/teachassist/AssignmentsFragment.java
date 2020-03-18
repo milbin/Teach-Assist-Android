@@ -38,11 +38,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.ads.AdSettings;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.mopub.common.MoPub;
+import com.mopub.common.SdkConfiguration;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.json.JSONException;
@@ -102,6 +106,7 @@ public class AssignmentsFragment extends Fragment {
         fragment = getView();
         activity = (AppCompatActivity)getActivity();
 
+        initializeAds();
         //setup add assignment button
         addAssignmentButton = fragment.findViewById(R.id.addAssignmentButton);
         addAssignmentAdvancedModeButton = fragment.findViewById(R.id.addAssignmentAdvancedModeTV);
@@ -259,7 +264,6 @@ public class AssignmentsFragment extends Fragment {
             // Android requires that the action be performed within a thread
             String jsonAssignmentString = Marks.toString();
             //it should not be possible for this call to return nothing since you need an unhidden course to click on it
-            CoursesEntity[] test = db.coursesDao().getAllCoureses();
             CoursesEntity coursesEntity = db.coursesDao().getCourseByCourseCode(courseCode);
             coursesEntity.assignments = jsonAssignmentString;
             db.coursesDao().updateCourse(coursesEntity);
@@ -300,19 +304,19 @@ public class AssignmentsFragment extends Fragment {
                     if(!((CourseInfoActivity)activity).isPremiumUser) {
                         if (i == 0) {
                             View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
+                            linearLayout.addView(adRL);
                             AdView adView = adRL.findViewById(R.id.adView);
                             AdRequest adRequest = new AdRequest.Builder().build();
                             adView.loadAd(adRequest);
-                            linearLayout.addView(adRL);
                             adIndexList.add(i);
                             addAssignmentToLinearLayout(marks, i, isCancelled());//assignment should be added after
                         }else if (i == numberOfAssignments-1 && numberOfAssignments > 4) {
                             addAssignmentToLinearLayout(marks, i, isCancelled());//assignment should be added before
                             View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
+                            linearLayout.addView(adRL);
                             AdView adView = adRL.findViewById(R.id.adView);
                             AdRequest adRequest = new AdRequest.Builder().build();
                             adView.loadAd(adRequest);
-                            linearLayout.addView(adRL);
                             adIndexList.add(i);
                         }else{
                             addAssignmentToLinearLayout(marks, i, isCancelled());
@@ -1669,6 +1673,16 @@ public class AssignmentsFragment extends Fragment {
         RelativeLayout.LayoutParams barAverageRLParams = (RelativeLayout.LayoutParams) barAverageRL.getLayoutParams();
         barAverageRLParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         barAverageRL.setLayoutParams(barAverageRLParams);
+    }
+    private void initializeAds(){
+        // initilize ads
+        //new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("3FF2A492DE30FB700E4734A350C51D69"));
+        //AdSettings.addTestDevice("06b59e6e-0b42-438e-b0a3-e157a675d105");
+        //MoPub
+        SdkConfiguration sdkConfiguration =
+                new SdkConfiguration.Builder("f47d2088ccc445a19bc0c7c6e7a6409f").build();
+
+        MoPub.initializeSdk(context, sdkConfiguration, null);
     }
 
     private int dpToPx(double dp) {

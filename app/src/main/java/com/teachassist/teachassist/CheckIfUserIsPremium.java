@@ -61,7 +61,6 @@ public class CheckIfUserIsPremium {
                                 });
                     } else {
 
-                        System.out.println("HERE");
                         billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP, new PurchaseHistoryResponseListener() {
                             @Override
                             public void onPurchaseHistoryResponse(BillingResult billingResult, List<PurchaseHistoryRecord> list) {}

@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
                 android:background="?Background"
-                android:paddingBottom="50dp"
+                android:paddingBottom="60dp"
 
                 >
 
@@ -138,6 +138,13 @@
 
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <RelativeLayout
+            android:id="@+id/adViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            >
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
@@ -147,10 +154,14 @@
             android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
             ads:adUnitId="ca-app-pub-6294253616632635/8914209983">
-
-        <!-- ads:adUnitId="ca-app-pub-6294253616632635/8914209983"> //real ads -->
-            <!-- ads:adUnitId="ca-app-pub-3940256099942544/6300978111"> //test ads -->
+            <!--
+            //real
+            ads:adUnitId="ca-app-pub-6294253616632635/8914209983">
+            //test
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+            -->
         </com.google.android.gms.ads.AdView>
+        </RelativeLayout>
 
     </RelativeLayout>
 
