@@ -7,7 +7,7 @@
     android:focusable="true">
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="145dp"
+    android:layout_height="260dp"
     android:background="@drawable/button_bg_rectangle_solid"
     android:layout_gravity="top"
     android:layout_marginTop="3dp"
@@ -26,10 +26,10 @@
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         android:layout_centerInParent="true"
-        ads:adSize="FLUID"
+        ads:adSize="MEDIUM_RECTANGLE"
         ads:adUnitId="ca-app-pub-6294253616632635/4831009645">
 
         <!--

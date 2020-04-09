@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import com.facebook.ads.AdSettings;
 import com.google.android.ads.mediationtestsuite.MediationTestSuite;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
@@ -44,7 +45,9 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +55,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     boolean offlineBannerIsDisplayed = false;
     boolean hasInternetConnection = true;
     private AdView adView;
+    private RelativeLayout adContainerView;
     private boolean isPremiumUser = false;
 
 
@@ -137,14 +142,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             findViewById(R.id.adViewContainer).setVisibility(View.GONE);
         }else{
             // initilize ads
-            //new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("3FF2A492DE30FB700E4734A350C51D69"));
-            //AdSettings.addTestDevice("06b59e6e-0b42-438e-b0a3-e157a675d105");
-            //MediationTestSuite.launch(MainActivity.this);
-            //MoPub
+            AdSettings.addTestDevice("27a5d5ac-8abd-428e-a41a-33e9ef0c3f32");
+            new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("3FF2A492DE30FB700E4734A350C51D69"));
+
+            //MoPub main view banner
             SdkConfiguration sdkConfiguration =
                     new SdkConfiguration.Builder("db7e11922adc40218eb92998315fbd50").build();
-
             MoPub.initializeSdk(context, sdkConfiguration, null);
+
+            //MoPub assignments view banner
+            SdkConfiguration sdkConfigurationAssignments =
+                    new SdkConfiguration.Builder("90442790687e4d56975f4a1141d5e32c").build();
+
+            MoPub.initializeSdk(context, sdkConfigurationAssignments, null);
 
             //AdMob
             MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -152,9 +162,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onInitializationComplete(InitializationStatus initializationStatus) {
                 }
             });
-            adView = findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
+            adContainerView = findViewById(R.id.adViewContainer);
+            // Step 1 - Create an AdView and set the ad unit ID on it.
+            adView = new AdView(this);
+            adView.setAdUnitId("ca-app-pub-6294253616632635/8914209983");
+            adContainerView.addView(adView);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) adView.getLayoutParams();
+            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            adView.setLayoutParams(params);
+            loadBanner();
 
         }
 
@@ -234,6 +250,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showToast(String text){
         Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
+
+    private void loadBanner() {
+        // Create an ad request. Check your logcat output for the hashed device ID
+        // to get test ads on a physical device, e.g.,
+        // "Use AdRequest.Builder.addTestDevice("ABCDE0123") to get test ads on this
+        // device."
+        AdRequest adRequest =
+                new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                        .build();
+
+        AdSize adSize = getAdSize();
+        // Step 4 - Set the adaptive ad size on the ad view.
+        adView.setAdSize(adSize);
+
+        // Step 5 - Start loading the ad in the background.
+        adView.loadAd(adRequest);
+    }
+
+    private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
 
     public class subjectClick implements View.OnClickListener{
 

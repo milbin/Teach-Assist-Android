@@ -290,15 +290,6 @@ public class AssignmentsFragment extends Fragment {
                 numberOfAssignments = marks.length() - 1;
                 setupCourseBars(marks);
 
-                if(!((CourseInfoActivity)activity).isPremiumUser){
-                    //setup ads
-                    MobileAds.initialize(context, new OnInitializationCompleteListener() {
-                        @Override
-                        public void onInitializationComplete(InitializationStatus initializationStatus) {
-                        }
-                    });
-                }
-
                 //add assignments to lienar layout
                 for (int i = 0; i < numberOfAssignments; i++) {
                     if(!((CourseInfoActivity)activity).isPremiumUser) {
@@ -306,7 +297,7 @@ public class AssignmentsFragment extends Fragment {
                             View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
                             linearLayout.addView(adRL);
                             AdView adView = adRL.findViewById(R.id.adView);
-                            AdRequest adRequest = new AdRequest.Builder().build();
+                            AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
                             adView.loadAd(adRequest);
                             adIndexList.add(i);
                             addAssignmentToLinearLayout(marks, i, isCancelled());//assignment should be added after
@@ -315,7 +306,7 @@ public class AssignmentsFragment extends Fragment {
                             View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
                             linearLayout.addView(adRL);
                             AdView adView = adRL.findViewById(R.id.adView);
-                            AdRequest adRequest = new AdRequest.Builder().build();
+                            AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
                             adView.loadAd(adRequest);
                             adIndexList.add(i);
                         }else{
@@ -1675,14 +1666,8 @@ public class AssignmentsFragment extends Fragment {
         barAverageRL.setLayoutParams(barAverageRLParams);
     }
     private void initializeAds(){
-        // initilize ads
-        //new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("3FF2A492DE30FB700E4734A350C51D69"));
-        //AdSettings.addTestDevice("06b59e6e-0b42-438e-b0a3-e157a675d105");
-        //MoPub
-        SdkConfiguration sdkConfiguration =
-                new SdkConfiguration.Builder("f47d2088ccc445a19bc0c7c6e7a6409f").build();
+        // doesnt currently do anything
 
-        MoPub.initializeSdk(context, sdkConfiguration, null);
     }
 
     private int dpToPx(double dp) {
