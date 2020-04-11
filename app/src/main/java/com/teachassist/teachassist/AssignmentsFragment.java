@@ -250,7 +250,7 @@ public class AssignmentsFragment extends Fragment {
             JSONObject returnValue = ta.GetAssignmentsHTML(subjectNumber);
             AppDatabase db = Room.databaseBuilder(activity.getApplicationContext(),
                     AppDatabase.class, username).build();
-            if (returnValue == null) {
+            if (returnValue == null || returnValue.length() < 2) {
                 try {
                     Marks = new JSONObject(db.coursesDao().getCourseByCourseCode(courseCode).assignments);
                 } catch (Exception ignored) {
@@ -297,7 +297,7 @@ public class AssignmentsFragment extends Fragment {
                             View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
                             linearLayout.addView(adRL);
                             AdView adView = adRL.findViewById(R.id.adView);
-                            AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+                            AdRequest adRequest = new AdRequest.Builder().build();
                             adView.loadAd(adRequest);
                             adIndexList.add(i);
                             addAssignmentToLinearLayout(marks, i, isCancelled());//assignment should be added after
@@ -306,7 +306,7 @@ public class AssignmentsFragment extends Fragment {
                             View adRL = LayoutInflater.from(context).inflate(R.layout.assignment_ad_view, null);
                             linearLayout.addView(adRL);
                             AdView adView = adRL.findViewById(R.id.adView);
-                            AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+                            AdRequest adRequest = new AdRequest.Builder().build();
                             adView.loadAd(adRequest);
                             adIndexList.add(i);
                         }else{
@@ -547,6 +547,9 @@ public class AssignmentsFragment extends Fragment {
                         }
                     }
                 });
+            }
+            if(!isCancelled()) {
+                dialog.dismiss();
             }
         }
     }
@@ -1276,9 +1279,7 @@ public class AssignmentsFragment extends Fragment {
                 fragment.findViewById(R.id.BarAverage5).setBackground(context.getTheme().getDrawable(R.drawable.rounded_rectangle_bar_graph_premium));
             }
 
-            if(!isCancelled) {
-                dialog.dismiss();
-            }
+
 
 
         } catch (JSONException e) {

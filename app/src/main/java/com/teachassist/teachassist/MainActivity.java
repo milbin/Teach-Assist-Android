@@ -24,8 +24,11 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -71,6 +74,7 @@ import com.mopub.common.SdkConfiguration;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -142,8 +146,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             findViewById(R.id.adViewContainer).setVisibility(View.GONE);
         }else{
             // initilize ads
-            AdSettings.addTestDevice("27a5d5ac-8abd-428e-a41a-33e9ef0c3f32");
-            new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("3FF2A492DE30FB700E4734A350C51D69"));
+            //AdSettings.addTestDevice("27a5d5ac-8abd-428e-a41a-33e9ef0c3f32");
+            //new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("3FF2A492DE30FB700E4734A350C51D69"));
 
             //MoPub main view banner
             SdkConfiguration sdkConfiguration =
@@ -257,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // "Use AdRequest.Builder.addTestDevice("ABCDE0123") to get test ads on this
         // device."
         AdRequest adRequest =
-                new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                new AdRequest.Builder()
                         .build();
 
         AdSize adSize = getAdSize();
@@ -313,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             myIntent.putExtra("subjectNumber", subjectNumber + toSubtract);
             myIntent.putExtra("subject Mark", subjectMark);
             myIntent.putExtra("courseCode", courseCode);
+            //myIntent.putExtra()
             Crashlytics.log(Log.DEBUG, "subject Mark", subjectMark);
             startActivity(myIntent);
             dialog.dismiss();
@@ -521,6 +526,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TA ta = new TA();
         @Override
         protected LinkedHashMap<String, List<String>> doInBackground(String... params){
+
+
+            try {
+                AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(MainActivity.this.getApplicationContext());
+                System.out.println(adInfo);
+                System.out.println("ADVERTISING ID ABOVE ^^");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            }
+
+
             response = ta.GetCoursesHTML(username, password);
             LinkedHashMap<String, List<String>> offlineResponse = ta.GetCoursesOffline(username, getApplicationContext());
             if(response == null && offlineResponse.size() == 0){
@@ -866,16 +886,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void doTasksOnFirstLaunch(){
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        if(!sharedPreferences.getBoolean("4.0.1 didClearDB", false)) {
+        if(!sharedPreferences.getBoolean("4.0.9 didClearDB", false)) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("4.0.1 didClearDB", true);
+            editor.putBoolean("4.0.9 didClearDB", true);
             editor.apply();
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
                     AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                             AppDatabase.class, username).build();
-                    CoursesEntity courseEntity = new CoursesEntity();
                     db.clearAllTables();
                     db.close();
                     System.out.println("CLEARED ALL DATABASES");
