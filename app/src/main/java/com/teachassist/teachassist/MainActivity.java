@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Step 1 - Create an AdView and set the ad unit ID on it.
             adView = new AdView(this);
             adView.setAdUnitId("ca-app-pub-6294253616632635/8914209983");
+            //adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //TEST ADS
             adContainerView.addView(adView);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) adView.getLayoutParams();
             params.addRule(RelativeLayout.CENTER_HORIZONTAL);
